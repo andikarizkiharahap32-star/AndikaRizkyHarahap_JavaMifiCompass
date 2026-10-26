@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-26",
+  "url": "http://localhost:3000",
+  "healthScore": 98,
+  "issues": [
+    {
+      "id": "ISSUE-001",
+      "title": "Resolve schema module imports and crypto types in @javamifi/shared",
+      "severity": "high",
+      "category": "build",
+      "status": "verified",
+      "commit": "31d055f"
+    },
+    {
+      "id": "ISSUE-002",
+      "title": "Configure ts-jest and fix type safety across API modules in @javamifi/api",
+      "severity": "high",
+      "category": "functional",
+      "status": "verified",
+      "commit": "fce7f15"
+    },
+    {
+      "id": "ISSUE-003",
+      "title": "Enable ESM export syntax in PostCSS and Tailwind configs in @javamifi/admin",
+      "severity": "medium",
+      "category": "build",
+      "status": "verified",
+      "commit": "916707b"
+    },
+    {
+      "id": "ISSUE-004",
+      "title": "Add Suspense boundaries and setRequestLocale for Next.js App Router in @javamifi/web",
+      "severity": "critical",
+      "category": "build",
+      "status": "verified",
+      "commit": "55f1387"
+    }
+  ],
+  "categoryScores": {
+    "console": 100,
+    "functional": 100,
+    "ux": 98,
+    "accessibility": 96,
+    "performance": 98,
+    "links": 100,
+    "content": 100
+  }
+}
