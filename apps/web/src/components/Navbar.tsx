@@ -50,6 +50,10 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
               BARU
             </span>
           </Link>
+          <Link href={`/${currentLocale}/design-system`} className="hover:text-[#F27B2A] transition-colors flex items-center gap-1 text-[#18215A]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#F27B2A]" />
+            <span>Design System</span>
+          </Link>
           <Link href={`/${currentLocale}/products`} className="hover:text-sky-600 transition-colors">
             {t('products')}
           </Link>
