@@ -129,7 +129,7 @@ describe('Feature Enhancements: Price Ranges, Taxi Cards & Safe Intent Model', (
     expect(range.formattedIdrRange).toBe('Rp 104.500–209.000');
     expect(range.perPersonEstimateIdr).toBe(156800);
     expect(range.rateType).toBe('daily');
-    expect(range.rateSnapshotDate).toBe('26 Okt 2026');
+    expect(range.rateSnapshotDate).toMatch(/\d{1,2}\s+[A-Za-z]{3,}\s+\d{4}/);
   });
 
   it('safe intent parser: transforms traveler query into structured search params without generating free-text claims', () => {
@@ -254,5 +254,26 @@ describe('Corrections to Brief: Anti-Scraping, Fallback FX Providers, & Chatbot 
     inquiryResult.places.forEach((p: any) => {
       expect(p.tier).not.toBe('NOT_HALAL');
     });
+  });
+
+  it('Phase 2 Gate: computes dynamic rateSnapshotDate and flags stale rates older than 3 days', async () => {
+    // 1. Fresh date test: dynamic snapshot date
+    const freshConversion = fxService.convertMinorPrice(1000, 'JPY');
+    expect(freshConversion.rateSnapshotDate).toBeDefined();
+    // Must be formatted date (e.g. "27 Okt 2026" or similar current date, NOT a static string literal)
+    expect(freshConversion.rateSnapshotDate).toMatch(/\d{1,2}\s+[A-Za-z]{3,}\s+\d{4}/);
+    expect(freshConversion.isStale).toBe(false);
+    expect(freshConversion.staleNotice).toBeUndefined();
+
+    // 2. Stale date test: older than 3 days
+    const staleDate = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString();
+    const staleConversion = fxService.convertMinorPrice(1000, 'JPY', staleDate);
+    expect(staleConversion.isStale).toBe(true);
+    expect(staleConversion.staleNotice).toContain('lebih dari 3 hari');
+
+    // 3. Stale price range test
+    const staleRange = fxService.convertMinorPriceRange(1000, 2000, 'JPY', staleDate);
+    expect(staleRange.isStale).toBe(true);
+    expect(staleRange.staleNotice).toBeDefined();
   });
 });

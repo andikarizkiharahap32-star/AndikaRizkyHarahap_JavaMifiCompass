@@ -1,0 +1,110 @@
+{
+  "name": "09 - Dining Async AI Enrichment",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "javamifi/dining-enrichment",
+        "options": {}
+      },
+      "id": "node-webhook-dining-enrich",
+      "name": "Webhook: dining.enrichment",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst secret = process.env.DINING_WEBHOOK_SECRET || 'compass-dining-enrichment-secret-32chars';\nconst headers = $json.headers || {};\nconst timestamp = headers['x-javamifi-timestamp'] || '';\nconst signature = headers['x-javamifi-signature'] || '';\nconst rawBody = JSON.stringify($json.body);\n\nconst computed = crypto.createHmac('sha256', secret).update(timestamp + '.' + rawBody).digest('hex');\nconst isValid = (computed === signature);\n\nreturn { json: { ...$json.body, isHmacValid: isValid } };"
+      },
+      "id": "node-verify-hmac",
+      "name": "Code: Verify HMAC Signature",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={{ $env.GEMINI_API_KEY }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"role\": \"user\",\n      \"parts\": [\n        {\n          \"text\": \"Extract structured halal signals from this evidence: {{ $json.rawEvidence }}. Strict quote-or-abstain. Return JSON matching LlmSignalsOutput.\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"responseMimeType\": \"application/json\",\n    \"temperature\": 0.1\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "node-gemini-extract",
+      "name": "Gemini Flash: Extract Signals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [560, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://api:3001/dining/places/{{ $('node-verify-hmac').item.json.placeId }}/enrichment-callback",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Javamifi-Run-Id",
+              "value": "={{ $('node-verify-hmac').item.json.runId }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"runId\": \"{{ $('node-verify-hmac').item.json.runId }}\",\n  \"placeId\": \"{{ $('node-verify-hmac').item.json.placeId }}\",\n  \"signalsOutputJson\": {{ $json.candidates[0].content.parts[0].text }},\n  \"rawEvidenceText\": \"{{ $('node-verify-hmac').item.json.rawEvidence }}\"\n}",
+        "options": {}
+      },
+      "id": "node-api-callback",
+      "name": "API: Post Enrichment Callback",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [800, 300]
+    }
+  ],
+  "connections": {
+    "Webhook: dining.enrichment": {
+      "main": [
+        [
+          {
+            "node": "Code: Verify HMAC Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Verify HMAC Signature": {
+      "main": [
+        [
+          {
+            "node": "Gemini Flash: Extract Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Flash: Extract Signals": {
+      "main": [
+        [
+          {
+            "node": "API: Post Enrichment Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

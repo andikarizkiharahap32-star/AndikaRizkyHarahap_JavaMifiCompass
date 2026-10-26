@@ -105,4 +105,56 @@ describe('Phase P3: CMS Review Queue & User Dispute Triage', () => {
     // Prepended to the very front of the queue
     expect(queue[0]?.id).toBe(report.id);
   });
+
+  it('Phase 3 Gate: submitted report survives service restart and is queryable', () => {
+    const report = reviewService.submitReport({
+      placeId: 'restart-test-venue-42',
+      placeName: 'Kyoto Soba House',
+      disputeReason: 'ALCOHOL_SERVED',
+      userComment: 'Soba dashi broth contains sake without halal labeling.',
+      reporterEmail: 'restart-tester@javamifi.test',
+    });
+
+    expect(report.id).toBeDefined();
+
+    // Simulate complete API service restart by creating a new instance
+    const restartedService = new DiningReviewService();
+    const persistedQueue = restartedService.getReviewQueue();
+    const found = persistedQueue.find((item) => item.id === report.id);
+
+    expect(found).toBeDefined();
+    expect(found?.placeName).toBe('Kyoto Soba House');
+    expect(found?.reason).toContain('sake without halal labeling');
+  });
+
+  it('Phase 5 Gate: records immutable audit log on resolveItem tier override', async () => {
+    const mockAuditService = {
+      record: jest.fn().mockResolvedValue({ id: 'audit-001' }),
+    };
+
+    const serviceWithAudit = new DiningReviewService(undefined, mockAuditService as any, undefined);
+    const report = serviceWithAudit.submitReport({
+      placeId: 'audit-test-venue',
+      placeName: 'Ginza Tempura',
+      disputeReason: 'PORK_DETECTED',
+      userComment: 'Contaminant detected',
+    });
+
+    serviceWithAudit.resolveItem(report.id, {
+      action: 'OVERRIDE_TIER',
+      overrideTier: HalalTier.NOT_HALAL,
+      resolvedBy: 'auditor@javamifi.com',
+      notes: 'Confirmed non-halal oil used',
+    });
+
+    expect(mockAuditService.record).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: 'DINING_TIER_OVERRIDE',
+        resource: 'dining_review',
+        resourceId: report.id,
+        actorId: 'auditor@javamifi.com',
+        newValue: expect.objectContaining({ tier: HalalTier.NOT_HALAL, status: 'RESOLVED' }),
+      })
+    );
+  });
 });

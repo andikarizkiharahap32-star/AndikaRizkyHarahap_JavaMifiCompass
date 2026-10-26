@@ -10,6 +10,8 @@ export interface DualPriceProps {
     amount: number;
     approx?: boolean;
     rate_date: string;
+    isStale?: boolean;
+    staleNotice?: string;
   } | null;
   range?: {
     minMinor: number;
@@ -23,6 +25,8 @@ export interface DualPriceProps {
     formattedPerPersonIdr?: string;
     rateSnapshotDate: string;
     rateType?: string;
+    isStale?: boolean;
+    staleNotice?: string;
   };
   showInlineRateDate?: boolean;
   locale?: string;
@@ -87,8 +91,8 @@ export const DualPrice: React.FC<DualPriceProps> = ({
           )}
         </div>
 
-        {/* Sub-row: Per Person Estimate + Inline Daily Date */}
-        <div className="flex items-center gap-2 text-xs font-sans text-outline">
+        {/* Sub-row: Per Person Estimate + Inline Daily Date + Stale Rate Banner */}
+        <div className="flex flex-wrap items-center gap-2 text-xs font-sans text-outline">
           {hasValidIdrRange && range.formattedPerPersonIdr && (
             <span>
               Est. ~{range.formattedPerPersonIdr} {perPersonLabel}
@@ -97,6 +101,16 @@ export const DualPrice: React.FC<DualPriceProps> = ({
           {showInlineRateDate && (
             <span className={hasValidIdrRange && range.formattedPerPersonIdr ? 'border-l border-paper-edge pl-2' : ''}>
               ({snapshotDateLabel} {range.rateSnapshotDate})
+            </span>
+          )}
+          {range.isStale && (
+            <span
+              role="status"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-sans font-bold uppercase tracking-wider"
+              title={range.staleNotice}
+            >
+              <span aria-hidden="true">▲</span>
+              <span>{isIdLocale ? 'Kurs >3 hari' : 'Stale rate (>3d)'}</span>
             </span>
           )}
         </div>
@@ -129,6 +143,17 @@ export const DualPrice: React.FC<DualPriceProps> = ({
           {showInlineRateDate && (
             <span className="text-xs text-outline font-sans ml-1">
               ({snapshotDateLabel} {idr.rate_date})
+            </span>
+          )}
+
+          {idr.isStale && (
+            <span
+              role="status"
+              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-sans font-bold uppercase tracking-wider ml-1"
+              title={idr.staleNotice}
+            >
+              <span aria-hidden="true">▲</span>
+              <span>{isIdLocale ? 'Kurs >3 hari' : 'Stale rate (>3d)'}</span>
             </span>
           )}
 

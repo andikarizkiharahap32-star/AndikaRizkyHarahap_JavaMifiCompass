@@ -15,7 +15,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const text = ($json.body.subject + ' ' + $json.body.message).toLowerCase();\nlet priority = 'MEDIUM';\n\nif (text.includes('urgent') || text.includes('darurat') || text.includes('no signal') || text.includes('tidak ada sinyal') || text.includes('airport')) {\n  priority = 'URGENT';\n} else if (text.includes('refund') || text.includes('kembalikan dana') || text.includes('rusak') || text.includes('broken')) {\n  priority = 'HIGH';\n} else if (text.includes('tanya') || text.includes('faq') || text.includes('info')) {\n  priority = 'LOW';\n}\n\nreturn { json: { ...$json.body, calculatedPriority: priority } };"
+        "jsCode": "const text = ($json.body.subject + ' ' + $json.body.message).toLowerCase();\nlet priority = 'MEDIUM';\n\nif (text.includes('pork') || text.includes('babi') || text.includes('mirin') || text.includes('sake') || text.includes('expired') || text.includes('kadaluwarsa') || text.includes('non-halal') || text.includes('alkohol')) {\n  priority = 'CRITICAL_SAFETY';\n} else if (text.includes('urgent') || text.includes('darurat') || text.includes('no signal') || text.includes('tidak ada sinyal') || text.includes('airport')) {\n  priority = 'URGENT';\n} else if (text.includes('refund') || text.includes('kembalikan dana') || text.includes('rusak') || text.includes('broken')) {\n  priority = 'HIGH';\n} else if (text.includes('tanya') || text.includes('faq') || text.includes('info')) {\n  priority = 'LOW';\n}\n\nreturn { json: { ...$json.body, calculatedPriority: priority } };"
       },
       "id": "node-code-triage",
       "name": "Code: Keyword Triage",

@@ -15,9 +15,11 @@ export const minorPriceSchema = z.object({
   currency: z.string().length(3), // ISO 4217, e.g. JPY, SAR, USD
   decimals: z.number().int().min(0).max(3),
   formattedLocal: z.string(),
-  amountIdr: z.number().int().nonnegative(),
-  formattedIdr: z.string(),
+  amountIdr: z.number().int().nonnegative().nullable().optional(),
+  formattedIdr: z.string().nullable().optional(),
   rateSnapshotDate: z.string(),
+  isStale: z.boolean().default(false),
+  staleNotice: z.string().optional(),
 });
 export type MinorPrice = z.infer<typeof minorPriceSchema>;
 
@@ -28,14 +30,16 @@ export const priceRangeSchema = z.object({
   currency: z.string().length(3),
   decimals: z.number().int().min(0).max(3),
   formattedLocalRange: z.string(),
-  minIdr: z.number().int().nonnegative(),
-  maxIdr: z.number().int().nonnegative(),
-  formattedIdrRange: z.string(),
+  minIdr: z.number().int().nonnegative().nullable().optional(),
+  maxIdr: z.number().int().nonnegative().nullable().optional(),
+  formattedIdrRange: z.string().nullable().optional(),
   perPersonEstimateMinor: z.number().int().nonnegative(),
-  perPersonEstimateIdr: z.number().int().nonnegative(),
-  formattedPerPersonIdr: z.string(),
+  perPersonEstimateIdr: z.number().int().nonnegative().nullable().optional(),
+  formattedPerPersonIdr: z.string().nullable().optional(),
   rateSnapshotDate: z.string(),
   rateType: z.literal('daily').default('daily'),
+  isStale: z.boolean().default(false),
+  staleNotice: z.string().optional(),
 });
 export type PriceRange = z.infer<typeof priceRangeSchema>;
 

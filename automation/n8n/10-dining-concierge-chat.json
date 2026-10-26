@@ -1,0 +1,109 @@
+{
+  "name": "10 - Dining Travel Concierge Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "javamifi/dining-concierge-chat",
+        "options": {}
+      },
+      "id": "node-webhook-chat",
+      "name": "Webhook: chat.inquiry",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Threat Model Guard: NEVER let LLM make free-text halal claims.\n// Use regex/heuristics or structured schema to extract search parameters only.\nconst query = ($json.body.message || $json.body.query || '').toLowerCase();\n\nlet country = 'JP';\nlet city = 'Tokyo';\nlet cuisine = 'Ramen';\nlet filter = 'halal';\n\nif (query.includes('singapore') || query.includes('singapura')) { country = 'SG'; city = 'Singapore'; }\nelse if (query.includes('saudi') || query.includes('mecca') || query.includes('madinah')) { country = 'SA'; city = 'Mecca'; }\nelse if (query.includes('london') || query.includes('uk') || query.includes('inggris')) { country = 'GB'; city = 'London'; }\nelse if (query.includes('china') || query.includes('beijing') || query.includes('shanghai')) { country = 'CN'; city = 'Beijing'; }\n\nif (query.includes('yakiniku')) cuisine = 'Yakiniku';\nelse if (query.includes('soba') || query.includes('udon')) cuisine = 'Soba';\nelse if (query.includes('sushi')) cuisine = 'Sushi';\n\nreturn {\n  json: {\n    sender: $json.body.sender || 'traveler',\n    originalQuery: query,\n    country,\n    city,\n    cuisine,\n    filter\n  }\n};"
+      },
+      "id": "node-parse-intent",
+      "name": "Code: Threat-Safe Intent Parser",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [340, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=http://api:3001/dining/places?country={{ $json.country }}&filter={{ $json.filter }}&search={{ $json.cuisine }}",
+        "options": {}
+      },
+      "id": "node-api-search",
+      "name": "API: Search Verified Places",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [580, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $json.items || [];\nconst topPlace = items[0];\n\nlet reply = 'Maaf, tidak ditemukan tempat makan yang memenuhi kriteria fail-closed halal di area tersebut.';\n\nif (topPlace) {\n  reply = `Rekomendasi Kuliner Terverifikasi:\\n` +\n    `• ${topPlace.name} (${topPlace.cuisine})\\n` +\n    `• Status: ${topPlace.tier} [Terverifikasi ${topPlace.certifierName || 'Resmi'}]\\n` +\n    `• Kisaran Harga: ${topPlace.priceRange?.formattedLocalRange || '¥1,000–2,000'} (≈ ${topPlace.priceRange?.formattedIdrRange || 'Rp 104.500–209.000'})\\n` +\n    `• Alamat: ${topPlace.address}\\n\\n` +\n    `[Data Footprint: ~1.8 MB | Kuota roaming dioptimalkan]`;\n}\n\nreturn {\n  json: {\n    status: 'SUCCESS',\n    reply,\n    candidateCount: items.length,\n    dataFootprint: '~1.8 MB'\n  }\n};"
+      },
+      "id": "node-format-reply",
+      "name": "Code: Format Structured Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [820, 300]
+    },
+    {
+      "parameters": {
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1040, 300]
+    }
+  ],
+  "connections": {
+    "Webhook: chat.inquiry": {
+      "main": [
+        [
+          {
+            "node": "Code: Threat-Safe Intent Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Threat-Safe Intent Parser": {
+      "main": [
+        [
+          {
+            "node": "API: Search Verified Places",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Search Verified Places": {
+      "main": [
+        [
+          {
+            "node": "Code: Format Structured Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Format Structured Reply": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -46,6 +46,29 @@ export function formatDateID(date: Date | string): string {
 }
 
 /**
+ * Format date for daily FX snapshots: e.g. "26 Okt 2026"
+ */
+export function formatDateSnapshot(date: Date | string): string {
+  const d = new Date(date);
+  return new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(d);
+}
+
+/**
+ * Determine if an FX rate snapshot is older than the staleness threshold (~3 calendar days)
+ */
+export function isRateStale(rateDate: Date | string, thresholdDays = 3): boolean {
+  const targetTime = new Date(rateDate).getTime();
+  if (isNaN(targetTime)) return true;
+  const diffMs = Date.now() - targetTime;
+  const diffDays = diffMs / (1000 * 60 * 60 * 24);
+  return diffDays > thresholdDays;
+}
+
+/**
  * Format in English locale: e.g. "October 26, 2026"
  */
 export function formatDateEN(date: Date | string): string {

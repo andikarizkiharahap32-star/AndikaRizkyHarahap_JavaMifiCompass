@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { MinorPrice, PriceRange, getCurrencyDecimals } from '@javamifi/shared';
+import { MinorPrice, PriceRange, getCurrencyDecimals, formatDateSnapshot, isRateStale } from '@javamifi/shared';
+import { CurrencyClient } from '../integrations/currency/currency.client';
 
 export interface CurrencyConfig {
   code: string;
@@ -7,46 +8,77 @@ export interface CurrencyConfig {
   symbol: string;
   rateToIdr: number;
   provider: string;
+  rateDate?: string;
 }
 
 @Injectable()
 export class FxService {
   private readonly logger = new Logger(FxService.name);
+  private readonly currencyClient = new CurrencyClient();
 
   // FX Snapshot rates to IDR (European Central Bank + Central Bank Fallback Chain for Non-ECB Currencies)
-  // Non-ECB currencies: SAR, AED, EGP, MAD, TWD, QAR are covered by their respective Central Bank cross-rates.
-  // Rates as of Oct 26, 2026
+  // Seeded fallback table updated daily; live rates fetched dynamically via CurrencyClient.
   private readonly currencyRegistry: Record<string, CurrencyConfig> = {
-    JPY: { code: 'JPY', decimals: 0, symbol: '¥', rateToIdr: 104.5, provider: 'Frankfurter ECB' },
-    KRW: { code: 'KRW', decimals: 0, symbol: '₩', rateToIdr: 11.5, provider: 'Frankfurter ECB' },
-    VND: { code: 'VND', decimals: 0, symbol: '₫', rateToIdr: 0.63, provider: 'State Bank of Vietnam (SBV) / Regional Cross-Rate' },
-    USD: { code: 'USD', decimals: 2, symbol: '$', rateToIdr: 15850, provider: 'Frankfurter ECB' },
-    EUR: { code: 'EUR', decimals: 2, symbol: '€', rateToIdr: 17200, provider: 'Frankfurter ECB' },
-    GBP: { code: 'GBP', decimals: 2, symbol: '£', rateToIdr: 20600, provider: 'Frankfurter ECB' },
-    SGD: { code: 'SGD', decimals: 2, symbol: 'S$', rateToIdr: 12100, provider: 'Frankfurter ECB' },
-    MYR: { code: 'MYR', decimals: 2, symbol: 'RM', rateToIdr: 3650, provider: 'Frankfurter ECB' },
-    SAR: { code: 'SAR', decimals: 2, symbol: 'SAR', rateToIdr: 4225, provider: 'Saudi Central Bank (SAMA) / BI Cross-Rate' },
-    AED: { code: 'AED', decimals: 2, symbol: 'AED', rateToIdr: 4315, provider: 'Central Bank of UAE (CBUAE) / BI Cross-Rate' },
-    TRY: { code: 'TRY', decimals: 2, symbol: '₺', rateToIdr: 465, provider: 'Frankfurter ECB' },
-    THB: { code: 'THB', decimals: 2, symbol: '฿', rateToIdr: 460, provider: 'Frankfurter ECB' },
-    HKD: { code: 'HKD', decimals: 2, symbol: 'HK$', rateToIdr: 2040, provider: 'Frankfurter ECB' },
-    TWD: { code: 'TWD', decimals: 2, symbol: 'NT$', rateToIdr: 495, provider: 'Central Bank of ROC (CBC Taiwan) / Regional Cross-Rate' },
-    AUD: { code: 'AUD', decimals: 2, symbol: 'A$', rateToIdr: 10450, provider: 'Frankfurter ECB' },
-    CHF: { code: 'CHF', decimals: 2, symbol: 'CHF', rateToIdr: 18350, provider: 'Frankfurter ECB' },
-    EGP: { code: 'EGP', decimals: 2, symbol: 'E£', rateToIdr: 325, provider: 'Central Bank of Egypt (CBE) / BI Cross-Rate' },
-    MAD: { code: 'MAD', decimals: 2, symbol: 'MAD', rateToIdr: 1610, provider: 'Bank Al-Maghrib / Regional Cross-Rate' },
-    QAR: { code: 'QAR', decimals: 2, symbol: 'QR', rateToIdr: 4350, provider: 'Qatar Central Bank (QCB) / BI Cross-Rate' },
-    IDR: { code: 'IDR', decimals: 0, symbol: 'Rp', rateToIdr: 1, provider: 'Direct' },
+    JPY: { code: 'JPY', decimals: 0, symbol: '¥', rateToIdr: 104.5, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    KRW: { code: 'KRW', decimals: 0, symbol: '₩', rateToIdr: 11.5, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    VND: { code: 'VND', decimals: 0, symbol: '₫', rateToIdr: 0.63, provider: 'State Bank of Vietnam (SBV)', rateDate: new Date().toISOString() },
+    USD: { code: 'USD', decimals: 2, symbol: '$', rateToIdr: 15850, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    EUR: { code: 'EUR', decimals: 2, symbol: '€', rateToIdr: 17200, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    GBP: { code: 'GBP', decimals: 2, symbol: '£', rateToIdr: 20600, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    SGD: { code: 'SGD', decimals: 2, symbol: 'S$', rateToIdr: 12100, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    MYR: { code: 'MYR', decimals: 2, symbol: 'RM', rateToIdr: 3650, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    SAR: { code: 'SAR', decimals: 2, symbol: 'SAR', rateToIdr: 4225, provider: 'Saudi Central Bank (SAMA)', rateDate: new Date().toISOString() },
+    AED: { code: 'AED', decimals: 2, symbol: 'AED', rateToIdr: 4315, provider: 'Central Bank of UAE (CBUAE)', rateDate: new Date().toISOString() },
+    TRY: { code: 'TRY', decimals: 2, symbol: '₺', rateToIdr: 465, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    THB: { code: 'THB', decimals: 2, symbol: '฿', rateToIdr: 460, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    HKD: { code: 'HKD', decimals: 2, symbol: 'HK$', rateToIdr: 2040, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    TWD: { code: 'TWD', decimals: 2, symbol: 'NT$', rateToIdr: 495, provider: 'Central Bank of ROC (CBC Taiwan)', rateDate: new Date().toISOString() },
+    AUD: { code: 'AUD', decimals: 2, symbol: 'A$', rateToIdr: 10450, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    CHF: { code: 'CHF', decimals: 2, symbol: 'CHF', rateToIdr: 18350, provider: 'Frankfurter ECB', rateDate: new Date().toISOString() },
+    EGP: { code: 'EGP', decimals: 2, symbol: 'E£', rateToIdr: 325, provider: 'Central Bank of Egypt (CBE)', rateDate: new Date().toISOString() },
+    MAD: { code: 'MAD', decimals: 2, symbol: 'MAD', rateToIdr: 1610, provider: 'Bank Al-Maghrib', rateDate: new Date().toISOString() },
+    QAR: { code: 'QAR', decimals: 2, symbol: 'QR', rateToIdr: 4350, provider: 'Qatar Central Bank (QCB)', rateDate: new Date().toISOString() },
+    IDR: { code: 'IDR', decimals: 0, symbol: 'Rp', rateToIdr: 1, provider: 'Direct', rateDate: new Date().toISOString() },
   };
+
+  /**
+   * Asynchronously refresh rate from live CurrencyClient with fallback to currencyRegistry.
+   */
+  async refreshRate(currencyCode: string): Promise<CurrencyConfig | null> {
+    const upper = (currencyCode || '').toUpperCase().trim();
+    const config = this.currencyRegistry[upper];
+    if (!config) return null;
+
+    try {
+      const liveRate = await this.currencyClient.getExchangeRate(upper);
+      if (liveRate && liveRate.rate) {
+        config.rateToIdr = liveRate.rate;
+        config.rateDate = liveRate.date || new Date().toISOString();
+        config.provider = liveRate.isCached ? `${config.provider} (Cached)` : `${config.provider} (Live)`;
+      }
+    } catch (err: any) {
+      this.logger.warn(`CurrencyClient fallback active for ${upper}: ${err?.message}`);
+    }
+
+    return config;
+  }
 
   /**
    * Convert minor currency units into a Dual-Currency MinorPrice DTO.
    * Deterministic conversion formula: IDR = round((minor / 10^decimals) * rate, -2)
    * Fail-Closed Policy: If no fresh rate exists, returns null IDR instead of guessing.
+   * Dynamic Date: rateSnapshotDate is computed from actual rate date.
+   * Stale Banner Gate: rates older than 3 days set isStale=true with staleNotice.
    */
-  convertMinorPrice(amountMinor: number, currencyCode: string): MinorPrice {
-    const upper = (currencyCode || '').toUpperCase();
+  convertMinorPrice(amountMinor: number, currencyCode: string, overrideDate?: string): MinorPrice {
+    const upper = (currencyCode || '').toUpperCase().trim();
     const config = this.currencyRegistry[upper];
+    const effectiveDate = overrideDate || config?.rateDate || new Date().toISOString();
+    const formattedSnapshotDate = formatDateSnapshot(effectiveDate);
+    const stale = isRateStale(effectiveDate, 3);
+    const staleNotice = stale
+      ? 'Kurs berumur lebih dari 3 hari, harap verifikasi nilai tukar langsung.'
+      : undefined;
 
     if (!config || !config.rateToIdr) {
       this.logger.warn(
@@ -61,7 +93,9 @@ export class FxService {
         formattedLocal: `${upper} ${major.toFixed(decimals)}`,
         amountIdr: null as any,
         formattedIdr: null as any,
-        rateSnapshotDate: '26 Okt 2026',
+        rateSnapshotDate: formattedSnapshotDate,
+        isStale: stale,
+        staleNotice,
       };
     }
 
@@ -72,10 +106,8 @@ export class FxService {
     const rawIdr = majorAmount * config.rateToIdr;
     const roundedIdr = Math.round(rawIdr / 100) * 100;
 
-    // Format local currency representation
+    // Format representations
     const formattedLocal = this.formatCurrency(majorAmount, config);
-
-    // Format IDR representation
     const formattedIdr = `Rp ${roundedIdr.toLocaleString('id-ID')}`;
 
     return {
@@ -85,21 +117,31 @@ export class FxService {
       formattedLocal,
       amountIdr: roundedIdr,
       formattedIdr,
-      rateSnapshotDate: '26 Okt 2026',
+      rateSnapshotDate: formattedSnapshotDate,
+      isStale: stale,
+      staleNotice,
     };
   }
 
   /**
    * Convert a min-max price range into a dual-currency PriceRange DTO with per-person estimate.
    * Fail-Closed Policy: If no fresh rate exists, returns null IDR range instead of guessing.
+   * Dynamic Date: rateSnapshotDate computed from actual rate date.
    */
   convertMinorPriceRange(
     minMinor: number,
     maxMinor: number,
-    currencyCode: string
+    currencyCode: string,
+    overrideDate?: string
   ): PriceRange {
-    const upper = (currencyCode || '').toUpperCase();
+    const upper = (currencyCode || '').toUpperCase().trim();
     const config = this.currencyRegistry[upper];
+    const effectiveDate = overrideDate || config?.rateDate || new Date().toISOString();
+    const formattedSnapshotDate = formatDateSnapshot(effectiveDate);
+    const stale = isRateStale(effectiveDate, 3);
+    const staleNotice = stale
+      ? 'Kurs berumur lebih dari 3 hari, harap verifikasi nilai tukar langsung.'
+      : undefined;
 
     if (!config || !config.rateToIdr) {
       this.logger.warn(
@@ -121,8 +163,10 @@ export class FxService {
         perPersonEstimateMinor: Math.round((minMinor + maxMinor) / 2),
         perPersonEstimateIdr: null as any,
         formattedPerPersonIdr: null as any,
-        rateSnapshotDate: '26 Okt 2026',
+        rateSnapshotDate: formattedSnapshotDate,
         rateType: 'daily',
+        isStale: stale,
+        staleNotice,
       };
     }
 
@@ -152,8 +196,10 @@ export class FxService {
       perPersonEstimateMinor: perPersonMinor,
       perPersonEstimateIdr: perPersonIdr,
       formattedPerPersonIdr: `Rp ${perPersonIdr.toLocaleString('id-ID')}`,
-      rateSnapshotDate: '26 Okt 2026',
+      rateSnapshotDate: formattedSnapshotDate,
       rateType: 'daily',
+      isStale: stale,
+      staleNotice,
     };
   }
 

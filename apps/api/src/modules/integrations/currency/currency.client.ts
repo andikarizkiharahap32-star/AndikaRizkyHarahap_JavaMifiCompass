@@ -16,7 +16,7 @@ const COUNTRY_CURRENCIES: Record<string, string> = {
   ID: 'IDR',
 };
 
-// Fallback rates if API unreachable: 1 unit in IDR
+// Fallback rates if API unreachable: 1 unit in IDR across all 20 supported destinations
 const FALLBACK_RATES_IDR: Record<string, number> = {
   JPY: 104.5,
   CNY: 2210.0,
@@ -28,6 +28,16 @@ const FALLBACK_RATES_IDR: Record<string, number> = {
   EUR: 17150.0,
   GBP: 20250.0,
   USD: 15650.0,
+  VND: 0.63,
+  AED: 4315.0,
+  TRY: 465.0,
+  HKD: 2040.0,
+  TWD: 495.0,
+  AUD: 10450.0,
+  CHF: 18350.0,
+  EGP: 325.0,
+  MAD: 1610.0,
+  QAR: 4350.0,
 };
 
 export class CurrencyClient {
@@ -35,9 +45,10 @@ export class CurrencyClient {
   private readonly circuitBreaker = new CircuitBreaker('Frankfurter', { timeoutMs: 4000 });
   private readonly cache = new Map<string, { data: ExchangeRate; expiresAt: number }>();
 
-  async getExchangeRate(countryCode: string): Promise<ExchangeRate | null> {
-    const code = countryCode.toUpperCase();
-    const currency = COUNTRY_CURRENCIES[code] || 'USD';
+  async getExchangeRate(countryOrCurrencyCode: string): Promise<ExchangeRate | null> {
+    const code = (countryOrCurrencyCode || '').toUpperCase().trim();
+    // Resolve either country code (e.g. JP, SG) or direct 3-letter currency code (e.g. JPY, SGD)
+    const currency = COUNTRY_CURRENCIES[code] || (FALLBACK_RATES_IDR[code] ? code : (code.length === 3 ? code : 'USD'));
 
     if (currency === 'IDR') {
       return null; // Local currency, no conversion needed

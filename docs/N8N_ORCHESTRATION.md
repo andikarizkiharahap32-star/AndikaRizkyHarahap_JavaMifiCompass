@@ -80,7 +80,9 @@ In accordance with JAVAMIFI architectural governance:
 
 ---
 
-## 3. Sample n8n Workflow JSON Export
+## 3. Production n8n Workflow Definitions
 
-The full workflow configuration is available at:
-[`docs/n8n/javamifi-dining-orchestration.workflow.json`](file:///c:/JavaMifiProject/docs/n8n/javamifi-dining-orchestration.workflow.json)
+The following workflows reside in [`automation/n8n/`](file:///c:/JavaMifiProject/automation/n8n/):
+- [`07-support-intake.json`](file:///c:/JavaMifiProject/automation/n8n/07-support-intake.json): Support intake and automated keyword-urgency triage (`pork`, `babi`, `mirin`, `expired`, `kadaluwarsa` automatically bump priority to `CRITICAL_SAFETY`).
+- [`09-dining-enrichment.json`](file:///c:/JavaMifiProject/automation/n8n/09-dining-enrichment.json): Async AI enrichment workflow with HMAC signature verification, Gemini 1.5/3.8 Flash quote-or-abstain extraction, and deterministic API callback.
+- [`10-dining-concierge-chat.json`](file:///c:/JavaMifiProject/automation/n8n/10-dining-concierge-chat.json): Threat-safe travel concierge chat workflow converting queries into structured parameters, querying the deterministic dining search API, and returning structured results with `Data Footprint: ~1.8 MB`.

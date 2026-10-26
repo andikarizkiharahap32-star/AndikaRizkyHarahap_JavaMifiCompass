@@ -233,5 +233,30 @@ describe('Phase P1: Dining Validation Pipeline & Security Tests', () => {
       const isTamperedValid = outboxService.verifyIncomingCallback(tamperedPayloadString, timestamp, signature);
       expect(isTamperedValid).toBe(false);
     });
+
+    it('Phase 7: should explicitly fail closed to UNKNOWN when contradictory evidence is detected', () => {
+      const conflictingSignals: LlmSignalsOutput = {
+        hasCertificate: false,
+        certifierName: undefined,
+        certNumber: undefined,
+        certExpiry: undefined,
+        halalClaims: [{ quote: 'Owner claims halal poultry', source: 'Instagram', claimedBy: 'OWNER' }],
+        porkFlags: [],
+        alcoholFlags: [],
+        cookwareNotes: null,
+        rawQuoteReferences: ['Owner claims halal poultry'],
+      };
+
+      const result = evaluateHalalTier({
+        signals: conflictingSignals,
+        porkDetected: false,
+        alcoholDetected: false,
+        quotesVerified: true,
+        rawEvidenceText: 'Owner claims halal poultry. Notice: restaurant explicitly does not offer halal options on weekends and serves non-halal broths.',
+      });
+
+      expect(result.tier).toBe(HalalTier.UNKNOWN);
+      expect(result.reason).toContain('Bukti kontradiktif terdeteksi');
+    });
   });
 });

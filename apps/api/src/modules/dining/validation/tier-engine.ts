@@ -121,6 +121,21 @@ export function evaluateHalalTier(input: TierEvaluationInput): TierEvaluationRes
     };
   }
 
+  // Phase 7: Explicit Conflicting Evidence Detection
+  // If positive claims exist alongside conflicting negative statements (e.g. halal claim contradicted by non-halal evidence)
+  const hasConflictingEvidence =
+    (signals.halalClaims.length > 0 && hasNegativeHalalStatement) ||
+    ((signals.hasCertificate || rawLower.includes('halal certified')) && hasNegativeHalalStatement);
+
+  if (hasConflictingEvidence) {
+    return {
+      tier: HalalTier.UNKNOWN,
+      dietaryFlags: flags,
+      reason: 'Bukti kontradiktif terdeteksi (klaim halal bertentangan dengan informasi lapangan). Status dikunci fail-closed ke UNKNOWN untuk verifikasi manual.',
+      isAccreditedCertifier: false,
+    };
+  }
+
   // Check if certifier matches accredited list
   const certifierUpper = (signals.certifierName || '').toUpperCase();
   const isAccredited = ACCREDITED_CERTIFIERS.some((cert) =>
