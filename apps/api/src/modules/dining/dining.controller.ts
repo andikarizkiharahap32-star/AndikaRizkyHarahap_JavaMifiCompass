@@ -15,6 +15,7 @@ import { FxService } from './fx.service';
 import { ValidationPipelineService } from './validation/pipeline.service';
 import { GeminiFlashProvider } from './providers/gemini-flash.provider';
 import { DiningOutboxService } from './dining-outbox.service';
+import { GoldenSetRunnerService } from './evaluation/golden-set-runner';
 import { DiningFilterMode } from '@javamifi/shared';
 
 @ApiTags('Dining (Compass Rasa)')
@@ -25,7 +26,8 @@ export class DiningController {
     private readonly fxService: FxService,
     private readonly validationPipeline: ValidationPipelineService,
     private readonly geminiFlash: GeminiFlashProvider,
-    private readonly diningOutbox: DiningOutboxService
+    private readonly diningOutbox: DiningOutboxService,
+    private readonly goldenSetRunner: GoldenSetRunnerService
   ) {}
 
   @Get('countries')
@@ -152,5 +154,12 @@ export class DiningController {
       extractedMenu: menuOutput,
       validationResult,
     };
+  }
+
+  @Post('evaluation/run')
+  @ApiOperation({ summary: 'Run Phase P2 Golden-Set benchmark evaluation across 100 labeled venues' })
+  @ApiResponse({ status: 200, description: 'Evaluation report summary with quality gate metrics' })
+  async runEvaluation() {
+    return this.goldenSetRunner.runEvaluation();
   }
 }

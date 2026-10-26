@@ -16,6 +16,7 @@ export interface RawEnrichmentPayload {
   expectedCurrency: string;
   signalsOutputJson: any;
   menuOutputJson?: any;
+  placeName?: string;
 }
 
 // Security patterns for detecting prompt injection in inputs or outputs
@@ -51,7 +52,7 @@ export class ValidationPipelineService {
    * Execute the 6-stage post-model deterministic validation pipeline.
    */
   validateEnrichment(payload: RawEnrichmentPayload): ValidationResult {
-    const { rawEvidenceText, expectedCurrency, signalsOutputJson, menuOutputJson } = payload;
+    const { rawEvidenceText, expectedCurrency, signalsOutputJson, menuOutputJson, placeName } = payload;
     const reviewReasons: string[] = [];
     const injectionFlags: string[] = [];
 
@@ -121,6 +122,8 @@ export class ValidationPipelineService {
       porkDetected: lexiconResult.porkDetected,
       alcoholDetected: lexiconResult.alcoholDetected,
       quotesVerified,
+      rawEvidenceText,
+      placeName,
     });
 
     // ── STAGE 5: Price Sanity & Currency Bands ──────────────────
@@ -171,9 +174,17 @@ export class ValidationPipelineService {
       reviewReasons.length > 0 ||
       tierEvaluation.tier === HalalTier.UNKNOWN;
 
+    // Fail-Closed Security Policy: If prompt injection / adversarial attack is detected,
+    // never certify or claim halal. Fail closed to UNKNOWN (or NOT_HALAL if pork detected).
+    let finalTier = tierEvaluation.tier;
+    if (injectionFlags.length > 0) {
+      finalTier = lexiconResult.porkDetected ? HalalTier.NOT_HALAL : HalalTier.UNKNOWN;
+      reviewReasons.push('SECURITY ALERT: Adversarial prompt injection detected. Tier forced to fail-closed.');
+    }
+
     return {
       isValid: injectionFlags.length === 0,
-      assignedTier: tierEvaluation.tier,
+      assignedTier: finalTier,
       dietaryFlags: tierEvaluation.dietaryFlags,
       certifierName: signals.certifierName || undefined,
       certNumber: signals.certNumber || undefined,

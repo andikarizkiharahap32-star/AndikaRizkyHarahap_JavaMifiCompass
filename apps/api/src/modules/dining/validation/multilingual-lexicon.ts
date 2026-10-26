@@ -60,7 +60,7 @@ const LEXICON_ENTRIES: LexiconEntry[] = [
 
   // ── 11. English (EN) ──
   { category: 'PORK', language: 'English', pattern: /\b(?:pork|bacon|ham|lard|prosciutto|pancetta|carnitas|pork\s*chops|pepperoni\s*\(pork\))\b/i },
-  { category: 'ALCOHOL', language: 'English', pattern: /\b(?:wine|beer|alcohol|rum|vodka|whiskey|bourbon|brandy|sake|mirin|liqueur|champagne)\b/i },
+  { category: 'ALCOHOL', language: 'English', pattern: /\b(?:wine|beer|alcohol|rum|vodka|whiskey|bourbon|brandy|sake|mirin|liqueur|champagne|cocktail|cocktails|byob|bring-your-own-bottle|ales|ciders)\b/i },
 
   // ── 12. Spanish (ES) ──
   { category: 'PORK', language: 'Spanish', pattern: /\b(?:cerdo|carne\s*de\s*cerdo|tocino|jamon|jamón|manteca\s*de\s*cerdo|chorizo)\b/i },
@@ -80,6 +80,35 @@ export function normalizeInspectionText(text: string): string {
 }
 
 /**
+ * Check if a dietary match is explicitly negated in the surrounding context.
+ * e.g. "without mirin or sake", "No pork or lard", "pork-free", "无猪油", "zero pork".
+ */
+export function isTermNegated(fullText: string, matchIndex: number, termLength: number): boolean {
+  // 1. Check immediate suffix (e.g. "pork-free", "alcohol-free", "豚肉不使用")
+  const suffix = fullText.slice(matchIndex + termLength, matchIndex + termLength + 15);
+  if (/^-(?:free|frei|libre)/i.test(suffix)) return true;
+  if (/^(?:\s*不使用|\s*なし|\s*抜き|\s*없음|\s*불포함)/.test(suffix)) return true;
+
+  // 2. Check preceding context within the same sentence/clause (up to 80 chars)
+  const lastBoundary = Math.max(
+    0,
+    fullText.lastIndexOf('.', matchIndex),
+    fullText.lastIndexOf(';', matchIndex),
+    fullText.lastIndexOf('!', matchIndex)
+  );
+  const prefix = fullText.slice(Math.max(lastBoundary, matchIndex - 80), matchIndex);
+
+  // CJK direct negation prefix (e.g. 无猪油, (无猪油), 不含酒精)
+  if (/(?:无|無|不含|零)[(\s]*$/i.test(prefix.trim())) return true;
+
+  // Latin negation phrases (e.g. "without mirin or sake", "no pork or lard", "they dont serve pork", "zero pork or alcohol")
+  const latinNegationRegex = /\b(?:no|not|dont|don't|doesnt|doesn't|do\s*not|does\s*not|didnt|didn't|did\s*not|without|zero|never|tanpa|tidak|bukan|bebas|strict\s*no|free\s*from|free\s*of|neither|nor)\b[\w\s,/(/)]*$/i;
+  if (latinNegationRegex.test(prefix)) return true;
+
+  return false;
+}
+
+/**
  * Scan raw text against the 12-language lexicon.
  * Returns all detected pork and alcohol occurrences with language & category.
  */
@@ -95,7 +124,12 @@ export function scanDietaryLexicon(rawText: string): {
     const globalPattern = new RegExp(entry.pattern.source, 'gi');
     const allMatches = normalized.matchAll(globalPattern);
     for (const match of allMatches) {
-      if (match[0]) {
+      if (match[0] && match.index !== undefined) {
+        // Skip match if it is explicitly negated in the text
+        if (isTermNegated(normalized, match.index, match[0].length)) {
+          continue;
+        }
+
         matches.push({
           term: match[0],
           category: entry.category,

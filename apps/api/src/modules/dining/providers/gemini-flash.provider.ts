@@ -6,6 +6,7 @@ import {
   llmSignalsOutputSchema,
   llmMenuOutputSchema,
 } from '@javamifi/shared';
+import { scanDietaryLexicon } from '../validation/multilingual-lexicon';
 
 export interface LlmDiningProvider {
   extractSignals(rawEvidenceText: string, placeName: string): Promise<LlmSignalsOutput>;
@@ -134,31 +135,164 @@ ${endDelimiter}
   }
 
   /**
-   * Deterministic mock extractor for testing and offline development
+   * Deterministic mock extractor for testing and offline development.
+   * Accurately extracts verbatim signals present in the source text.
    */
   private mockExtractSignals(text: string): LlmSignalsOutput {
-    const certMatch = text.match(/(?:certificate|sertifikat)\s+([A-Z0-9-]+)/i);
-    const hasCert = /certified|sertifikasi|halal\s+certificate/i.test(text);
-    const certNumber = certMatch ? certMatch[1] : hasCert ? 'JHF-2025-0891' : undefined;
+    const rawLower = text.toLowerCase();
 
-    const halalQuotes: string[] = [];
-    const hMatch = text.match(/([^\n.?!]*halal[^\n.?!]*)/i);
-    if (hMatch) halalQuotes.push(hMatch[0].trim());
+    // 1. Identify accredited certifier present in text
+    let detectedCertifier: string | null = null;
+    let hasCert = false;
+
+    const certifierMap: [RegExp, string][] = [
+      [/sfda|saudi\s*food\s*and\s*drug|saudi\s*commercial\s*laws?|masjid\s*al\s*haram|haram\s*zone/i, 'Saudi Food and Drug Authority (SFDA)'],
+      [/muis/i, 'Majlis Ugama Islam Singapura (MUIS)'],
+      [/jakim/i, 'JAKIM Malaysia'],
+      [/hmc/i, 'Halal Monitoring Committee (HMC)'],
+      [/hfa/i, 'Halal Food Authority (HFA)'],
+      [/uk\s*muslim\s*authorities/i, 'UK Muslim Authorities'],
+      [/certified\s*qingzhen|清真认证/i, 'China Islamic Association (Qingzhen)'],
+      [/niujie/i, 'Niujie Islamic Committee'],
+      [/japan\s*halal\s*foundation|jhf/i, 'Japan Halal Foundation (JHF)'],
+      [/nippon\s*asia\s*halal|naha/i, 'Nippon Asia Halal Association (NAHA)'],
+      [/japan\s*halal\s*association|jha/i, 'Japan Halal Association (JHA)'],
+      [/korea\s*muslim\s*federation|kmf/i, 'Korea Muslim Federation (KMF)'],
+      [/cicot/i, 'CICOT Thailand'],
+      [/gimdes/i, 'GIMDES Turkey'],
+      [/shaanxi\s*islamic\s*association/i, 'Shaanxi Islamic Association'],
+      [/shenzhen\s*islamic\s*association/i, 'Shenzhen Islamic Association'],
+      [/beijing\s*islamic\s*association/i, 'Beijing Islamic Association'],
+      [/china\s*islamic\s*association|islamic\s*association|muslim\s*association/i, 'China Islamic Association'],
+      [/huaisheng\s*mosque/i, 'Huaisheng Mosque Committee'],
+      [/halal\s*green\s*certificate/i, 'Halal Green Certificate'],
+    ];
+
+    for (const [regex, name] of certifierMap) {
+      if (regex.test(text)) {
+        detectedCertifier = name;
+        hasCert = true;
+        break;
+      }
+    }
+
+    // Cert number pattern (e.g. JHF-2025-0891, SFDA-KSA-9921)
+    const certNumMatch = text.match(/\b([A-Z]{2,4}-[A-Z0-9-]+)\b/);
+    const certNumber = certNumMatch ? certNumMatch[1] : null;
+
+    // Expiry date pattern
+    const expMatch = text.match(/\b(202[5-9]-[0-1][0-9]-[0-3][0-9])\b/);
+    const certExpiry = expMatch ? expMatch[1] : null;
+
+    // 2. Extract quotes for Halal claims
+    const halalClaims: { quote: string; source: string; claimedBy: 'OWNER' | 'REGISTRY' | 'REVIEWER' | 'THIRD_PARTY' }[] = [];
+    const sentences = text.split(/(?<=[.?!])\s+/);
+
+    for (const sentence of sentences) {
+      const sTrim = sentence.trim();
+      if (!sTrim) continue;
+      const sLower = sTrim.toLowerCase();
+
+      // Skip explicit negative claims (e.g. "does not offer halal")
+      const isNegativeClaim =
+        sLower.includes('does not offer halal') ||
+        sLower.includes("doesn't offer halal") ||
+        sLower.includes('not offer halal') ||
+        sLower.includes('not_halal') ||
+        sLower.includes('no halal') ||
+        sLower.includes('non-halal');
+
+      if (isNegativeClaim) {
+        continue;
+      }
+
+      const isHalalRelevant =
+        sLower.includes('halal') ||
+        sLower.includes('清真') ||
+        sLower.includes('qingzhen') ||
+        sLower.includes('sfda') ||
+        sLower.includes('muis') ||
+        sLower.includes('jakim') ||
+        sLower.includes('hmc') ||
+        sLower.includes('hfa') ||
+        sLower.includes('muslim-owned') ||
+        sLower.includes('muslim owned') ||
+        sLower.includes('permissible') ||
+        sLower.includes('islamic') ||
+        sLower.includes('saudi commercial') ||
+        sLower.includes('masjid al haram') ||
+        sLower.includes('certified') ||
+        sLower.includes('certificate') ||
+        (sLower.includes('alcohol-free') && (sLower.includes('no pork') || sLower.includes('pure')));
+
+      if (isHalalRelevant) {
+        let claimedBy: 'OWNER' | 'REGISTRY' | 'REVIEWER' | 'THIRD_PARTY' = 'OWNER';
+        if (
+          sLower.includes('tourist') ||
+          sLower.includes('review') ||
+          sLower.includes('told me') ||
+          sLower.includes('forum') ||
+          sLower.includes('anonymous')
+        ) {
+          claimedBy = 'REVIEWER';
+        } else if (
+          hasCert ||
+          sLower.includes('registry') ||
+          sLower.includes('official') ||
+          sLower.includes('sfda') ||
+          sLower.includes('muis') ||
+          sLower.includes('jakim') ||
+          sLower.includes('hmc') ||
+          sLower.includes('hfa')
+        ) {
+          claimedBy = 'REGISTRY';
+        } else {
+          claimedBy = 'OWNER';
+        }
+
+        halalClaims.push({
+          quote: sTrim,
+          source: 'Extracted Source',
+          claimedBy,
+        });
+      }
+    }
+
+    // 3. Extract Pork and Alcohol flags using dietary lexicon
+    const porkFlags: { quote: string; dishOrIngredient: string }[] = [];
+    const alcoholFlags: { quote: string; detail: string }[] = [];
+
+    const sentenceScan = scanDietaryLexicon(text);
+    for (const match of sentenceScan.matches) {
+      if (match.category === 'PORK') {
+        porkFlags.push({ quote: match.term, dishOrIngredient: match.term });
+      } else if (match.category === 'ALCOHOL') {
+        alcoholFlags.push({ quote: match.term, detail: match.term });
+      }
+    }
+
+    const cookwareNotes = rawLower.includes('cookware') || rawLower.includes('separate grill') || rawLower.includes('separate fryer')
+      ? 'Dedicated pork-free cookware noted'
+      : null;
+
+    // Collect verified quote references
+    const rawQuoteReferences = [
+      ...halalClaims.map((c) => c.quote),
+      ...porkFlags.map((p) => p.quote),
+      ...alcoholFlags.map((a) => a.quote),
+    ];
+    if (certNumber) rawQuoteReferences.push(certNumber);
 
     return {
       hasCertificate: hasCert,
-      certifierName: hasCert ? 'Japan Halal Foundation (JHF)' : null,
-      certNumber: certNumber || null,
-      certExpiry: hasCert ? '2027-08-31' : null,
-      halalClaims: halalQuotes.map((q) => ({
-        quote: q,
-        source: 'Seeded Documentation',
-        claimedBy: 'REGISTRY',
-      })),
-      porkFlags: [],
-      alcoholFlags: [],
-      cookwareNotes: text.toLowerCase().includes('cookware') ? 'Dedicated cookware' : null,
-      rawQuoteReferences: halalQuotes,
+      certifierName: detectedCertifier,
+      certNumber,
+      certExpiry,
+      halalClaims,
+      porkFlags,
+      alcoholFlags,
+      cookwareNotes,
+      rawQuoteReferences,
     };
   }
 

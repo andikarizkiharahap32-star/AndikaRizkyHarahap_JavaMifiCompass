@@ -5,6 +5,7 @@ import { FxService } from './fx.service';
 import { ValidationPipelineService } from './validation/pipeline.service';
 import { GeminiFlashProvider } from './providers/gemini-flash.provider';
 import { DiningOutboxService } from './dining-outbox.service';
+import { GoldenSetRunnerService } from './evaluation/golden-set-runner';
 
 @Module({
   controllers: [DiningController],
@@ -14,6 +15,7 @@ import { DiningOutboxService } from './dining-outbox.service';
     ValidationPipelineService,
     GeminiFlashProvider,
     DiningOutboxService,
+    GoldenSetRunnerService,
   ],
   exports: [
     DiningService,
@@ -21,6 +23,7 @@ import { DiningOutboxService } from './dining-outbox.service';
     ValidationPipelineService,
     GeminiFlashProvider,
     DiningOutboxService,
+    GoldenSetRunnerService,
   ],
 })
 export class DiningModule {}

@@ -93,6 +93,21 @@ describe('Phase P1: Dining Validation Pipeline & Security Tests', () => {
       expect(scanDietaryLexicon(germanText).porkDetected).toBe(true);
     });
 
+    it('should ignore explicitly negated terms across languages', () => {
+      const s1 = scanDietaryLexicon('Zero pork or alcohol on premises.');
+      console.log('s1 matches:', s1.matches);
+      expect(s1.porkDetected).toBe(false);
+      expect(s1.alcoholDetected).toBe(false);
+
+      const s2 = scanDietaryLexicon('Famous prawn tempura. No pork or lard. Permissible.');
+      console.log('s2 matches:', s2.matches);
+      expect(s2.porkDetected).toBe(false);
+
+      const s3 = scanDietaryLexicon('Uses 100% pure vegetable oil, no pork lard (无猪油).');
+      console.log('s3 matches:', s3.matches);
+      expect(s3.porkDetected).toBe(false);
+    });
+
     it('should pass completely clean on certified halal poultry and beef descriptions', () => {
       const halalText = 'Slow-braised halal lamb shank with saffron rice, grilled vegetables, and fresh mint tea.';
       const scan = scanDietaryLexicon(halalText);
