@@ -2,12 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import { Wifi, QrCode, Smartphone, Zap, ArrowRight, ShieldCheck } from 'lucide-react';
 import { EsimCompatibilityChecker } from '../../../components/EsimCompatibilityChecker';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
 export default function ProductsPage({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
+  unstable_setRequestLocale(locale);
   const products = [
     {
       type: 'WIFI_RENTAL',

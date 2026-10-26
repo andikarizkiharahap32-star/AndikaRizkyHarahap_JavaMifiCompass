@@ -1,16 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { ShoppingCart, Tag, ShieldCheck, ArrowRight, User, Mail, Phone, MapPin } from 'lucide-react';
 import { apiClient } from '../../../lib/api';
 
-export default function CheckoutPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+function CheckoutContent({ locale }: { locale: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -298,5 +294,17 @@ export default function CheckoutPage({
         </div>
       </form>
     </div>
+  );
+}
+
+export default function CheckoutPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  return (
+    <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-16 text-center text-slate-400">Loading checkout...</div>}>
+      <CheckoutContent locale={locale} />
+    </Suspense>
   );
 }

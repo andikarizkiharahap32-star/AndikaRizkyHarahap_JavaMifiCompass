@@ -1,11 +1,13 @@
 import React from 'react';
 import { PlannerWizard } from '../../../components/PlannerWizard';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
 export default function PlannerPage({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
+  unstable_setRequestLocale(locale);
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       <div className="text-center max-w-3xl mx-auto mb-10 space-y-2">

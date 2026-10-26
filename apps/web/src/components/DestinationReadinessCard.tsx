@@ -1,6 +1,6 @@
 import React from 'react';
 import { CloudSun, Coins, Globe2, ShieldCheck, Zap, Info } from 'lucide-react';
-import { DestinationReadinessCard as ReadinessCardType } from '../../../api/src/modules/integrations/integrations.types';
+import { DestinationReadinessCard as ReadinessCardType } from '@javamifi/shared';
 
 export const DestinationReadinessCard = ({
   data,

@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import {
   Compass,
   Wifi,
@@ -20,6 +20,7 @@ export default async function HomePage({
 }: {
   params: { locale: string };
 }) {
+  unstable_setRequestLocale(locale);
   const t = await getTranslations('hero');
   const tNav = await getTranslations('nav');
 

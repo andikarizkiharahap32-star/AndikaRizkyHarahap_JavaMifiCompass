@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Globe2, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
 const DESTINATIONS = [
   {
@@ -54,6 +55,7 @@ export default function DestinationsPage({
 }: {
   params: { locale: string };
 }) {
+  unstable_setRequestLocale(locale);
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
       <div className="max-w-3xl space-y-2">

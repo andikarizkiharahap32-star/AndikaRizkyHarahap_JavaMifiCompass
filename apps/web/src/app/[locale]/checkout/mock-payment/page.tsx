@@ -1,14 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { MockPaymentSimulator } from '../../../../components/MockPaymentSimulator';
 
-export default function MockPaymentPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+function MockPaymentContent({ locale }: { locale: string }) {
   const searchParams = useSearchParams();
 
   const paymentId = searchParams.get('paymentId') || `mock-${Date.now()}`;
@@ -17,14 +13,26 @@ export default function MockPaymentPage({
   const customer = searchParams.get('customer') || 'Budi Santoso';
 
   return (
+    <MockPaymentSimulator
+      paymentId={paymentId}
+      orderNumber={orderNumber}
+      amount={amount}
+      customerName={customer}
+      locale={locale}
+    />
+  );
+}
+
+export default function MockPaymentPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
-      <MockPaymentSimulator
-        paymentId={paymentId}
-        orderNumber={orderNumber}
-        amount={amount}
-        customerName={customer}
-        locale={locale}
-      />
+      <Suspense fallback={<div className="text-center py-12 text-slate-400">Loading payment simulator...</div>}>
+        <MockPaymentContent locale={locale} />
+      </Suspense>
     </div>
   );
 }

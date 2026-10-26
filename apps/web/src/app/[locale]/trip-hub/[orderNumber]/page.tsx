@@ -1,11 +1,13 @@
 import React from 'react';
 import { TripHubView } from '../../../../components/TripHubView';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
 export default function TripHubPage({
   params: { locale, orderNumber },
 }: {
   params: { locale: string; orderNumber: string };
 }) {
+  unstable_setRequestLocale(locale);
   // Construct realistic Trip Hub view data
   const sampleOrderData = {
     orderNumber,
