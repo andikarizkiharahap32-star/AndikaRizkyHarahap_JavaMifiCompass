@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { MinorPrice, PriceRange } from '@javamifi/shared';
+import { MinorPrice, PriceRange, getCurrencyDecimals } from '@javamifi/shared';
 
 export interface CurrencyConfig {
   code: string;
@@ -13,43 +13,57 @@ export interface CurrencyConfig {
 export class FxService {
   private readonly logger = new Logger(FxService.name);
 
-  // FX Snapshot rates to IDR (European Central Bank + Gulf & Asian Fallback Chain)
+  // FX Snapshot rates to IDR (European Central Bank + Central Bank Fallback Chain for Non-ECB Currencies)
+  // Non-ECB currencies: SAR, AED, EGP, MAD, TWD, QAR are covered by their respective Central Bank cross-rates.
   // Rates as of Oct 26, 2026
   private readonly currencyRegistry: Record<string, CurrencyConfig> = {
     JPY: { code: 'JPY', decimals: 0, symbol: '¥', rateToIdr: 104.5, provider: 'Frankfurter ECB' },
     KRW: { code: 'KRW', decimals: 0, symbol: '₩', rateToIdr: 11.5, provider: 'Frankfurter ECB' },
-    VND: { code: 'VND', decimals: 0, symbol: '₫', rateToIdr: 0.63, provider: 'Regional Bank Fallback' },
+    VND: { code: 'VND', decimals: 0, symbol: '₫', rateToIdr: 0.63, provider: 'State Bank of Vietnam (SBV) / Regional Cross-Rate' },
     USD: { code: 'USD', decimals: 2, symbol: '$', rateToIdr: 15850, provider: 'Frankfurter ECB' },
     EUR: { code: 'EUR', decimals: 2, symbol: '€', rateToIdr: 17200, provider: 'Frankfurter ECB' },
     GBP: { code: 'GBP', decimals: 2, symbol: '£', rateToIdr: 20600, provider: 'Frankfurter ECB' },
     SGD: { code: 'SGD', decimals: 2, symbol: 'S$', rateToIdr: 12100, provider: 'Frankfurter ECB' },
     MYR: { code: 'MYR', decimals: 2, symbol: 'RM', rateToIdr: 3650, provider: 'Frankfurter ECB' },
-    SAR: { code: 'SAR', decimals: 2, symbol: 'SAR', rateToIdr: 4225, provider: 'SAMA / BI Cross-Rate' },
-    AED: { code: 'AED', decimals: 2, symbol: 'AED', rateToIdr: 4315, provider: 'CBUAE / BI Cross-Rate' },
+    SAR: { code: 'SAR', decimals: 2, symbol: 'SAR', rateToIdr: 4225, provider: 'Saudi Central Bank (SAMA) / BI Cross-Rate' },
+    AED: { code: 'AED', decimals: 2, symbol: 'AED', rateToIdr: 4315, provider: 'Central Bank of UAE (CBUAE) / BI Cross-Rate' },
     TRY: { code: 'TRY', decimals: 2, symbol: '₺', rateToIdr: 465, provider: 'Frankfurter ECB' },
     THB: { code: 'THB', decimals: 2, symbol: '฿', rateToIdr: 460, provider: 'Frankfurter ECB' },
     HKD: { code: 'HKD', decimals: 2, symbol: 'HK$', rateToIdr: 2040, provider: 'Frankfurter ECB' },
-    TWD: { code: 'TWD', decimals: 2, symbol: 'NT$', rateToIdr: 495, provider: 'Regional Bank Fallback' },
+    TWD: { code: 'TWD', decimals: 2, symbol: 'NT$', rateToIdr: 495, provider: 'Central Bank of ROC (CBC Taiwan) / Regional Cross-Rate' },
     AUD: { code: 'AUD', decimals: 2, symbol: 'A$', rateToIdr: 10450, provider: 'Frankfurter ECB' },
     CHF: { code: 'CHF', decimals: 2, symbol: 'CHF', rateToIdr: 18350, provider: 'Frankfurter ECB' },
-    EGP: { code: 'EGP', decimals: 2, symbol: 'E£', rateToIdr: 325, provider: 'CBE / BI Cross-Rate' },
-    MAD: { code: 'MAD', decimals: 2, symbol: 'MAD', rateToIdr: 1610, provider: 'Regional Bank Fallback' },
-    QAR: { code: 'QAR', decimals: 2, symbol: 'QR', rateToIdr: 4350, provider: 'QCB / BI Cross-Rate' },
+    EGP: { code: 'EGP', decimals: 2, symbol: 'E£', rateToIdr: 325, provider: 'Central Bank of Egypt (CBE) / BI Cross-Rate' },
+    MAD: { code: 'MAD', decimals: 2, symbol: 'MAD', rateToIdr: 1610, provider: 'Bank Al-Maghrib / Regional Cross-Rate' },
+    QAR: { code: 'QAR', decimals: 2, symbol: 'QR', rateToIdr: 4350, provider: 'Qatar Central Bank (QCB) / BI Cross-Rate' },
     IDR: { code: 'IDR', decimals: 0, symbol: 'Rp', rateToIdr: 1, provider: 'Direct' },
   };
 
   /**
    * Convert minor currency units into a Dual-Currency MinorPrice DTO.
    * Deterministic conversion formula: IDR = round((minor / 10^decimals) * rate, -2)
+   * Fail-Closed Policy: If no fresh rate exists, returns null IDR instead of guessing.
    */
   convertMinorPrice(amountMinor: number, currencyCode: string): MinorPrice {
-    const config = this.currencyRegistry[currencyCode.toUpperCase()] || {
-      code: currencyCode,
-      decimals: 2,
-      symbol: currencyCode,
-      rateToIdr: 15850,
-      provider: 'Default USD-Peg',
-    };
+    const upper = (currencyCode || '').toUpperCase();
+    const config = this.currencyRegistry[upper];
+
+    if (!config || !config.rateToIdr) {
+      this.logger.warn(
+        `No fresh daily FX rate available for currency '${currencyCode}'. Fail-closed: returning null IDR instead of guessing.`
+      );
+      const decimals = getCurrencyDecimals(upper);
+      const major = amountMinor / Math.pow(10, decimals);
+      return {
+        amountMinor,
+        currency: upper,
+        decimals,
+        formattedLocal: `${upper} ${major.toFixed(decimals)}`,
+        amountIdr: null as any,
+        formattedIdr: null as any,
+        rateSnapshotDate: '26 Okt 2026',
+      };
+    }
 
     // Calculate major unit from minor
     const majorAmount = amountMinor / Math.pow(10, config.decimals);
@@ -77,19 +91,40 @@ export class FxService {
 
   /**
    * Convert a min-max price range into a dual-currency PriceRange DTO with per-person estimate.
+   * Fail-Closed Policy: If no fresh rate exists, returns null IDR range instead of guessing.
    */
   convertMinorPriceRange(
     minMinor: number,
     maxMinor: number,
     currencyCode: string
   ): PriceRange {
-    const config = this.currencyRegistry[currencyCode.toUpperCase()] || {
-      code: currencyCode,
-      decimals: 2,
-      symbol: currencyCode,
-      rateToIdr: 15850,
-      provider: 'Default USD-Peg',
-    };
+    const upper = (currencyCode || '').toUpperCase();
+    const config = this.currencyRegistry[upper];
+
+    if (!config || !config.rateToIdr) {
+      this.logger.warn(
+        `No fresh daily FX rate range available for currency '${currencyCode}'. Fail-closed: returning null IDR range instead of guessing.`
+      );
+      const decimals = getCurrencyDecimals(upper);
+      const factor = Math.pow(10, decimals);
+      const minMajor = minMinor / factor;
+      const maxMajor = maxMinor / factor;
+      return {
+        minMinor,
+        maxMinor,
+        currency: upper,
+        decimals,
+        formattedLocalRange: `${upper} ${minMajor.toFixed(decimals)}–${maxMajor.toFixed(decimals)}`,
+        minIdr: null as any,
+        maxIdr: null as any,
+        formattedIdrRange: null as any,
+        perPersonEstimateMinor: Math.round((minMinor + maxMinor) / 2),
+        perPersonEstimateIdr: null as any,
+        formattedPerPersonIdr: null as any,
+        rateSnapshotDate: '26 Okt 2026',
+        rateType: 'daily',
+      };
+    }
 
     const factor = Math.pow(10, config.decimals);
     const minMajor = minMinor / factor;

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { DiningController } from './dining.controller';
 import { DiningService } from './dining.service';
 import { FxService } from './fx.service';
+import { PlacesProviderService } from './places-provider.service';
 import { ValidationPipelineService } from './validation/pipeline.service';
 import { GeminiFlashProvider } from './providers/gemini-flash.provider';
 import { DiningOutboxService } from './dining-outbox.service';
@@ -13,6 +14,7 @@ import { DiningReviewService } from './dining-review.service';
   providers: [
     DiningService,
     FxService,
+    PlacesProviderService,
     ValidationPipelineService,
     GeminiFlashProvider,
     DiningOutboxService,
@@ -22,6 +24,7 @@ import { DiningReviewService } from './dining-review.service';
   exports: [
     DiningService,
     FxService,
+    PlacesProviderService,
     ValidationPipelineService,
     GeminiFlashProvider,
     DiningOutboxService,

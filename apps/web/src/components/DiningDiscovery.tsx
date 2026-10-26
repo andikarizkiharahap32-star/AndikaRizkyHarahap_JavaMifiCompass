@@ -520,6 +520,60 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           </div>
         )}
 
+        {/* Data Provenance, Licensing & Terms Attribution Card */}
+        <div className="bg-paper border border-paper-edge border-b-2 rounded p-5 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-paper-edge pb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-primary" />
+              <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold text-primary m-0">
+                Transparansi Data, Sumber API & Kepatuhan Lisensi
+              </h4>
+            </div>
+            <span className="text-xs font-mono text-outline bg-surface px-2 py-0.5 rounded border border-paper-edge">
+              Anti-Scraping Policy Enforced
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-sans">
+            <div className="p-3 rounded bg-surface border border-paper-edge space-y-1">
+              <div className="font-bold text-primary flex items-center justify-between">
+                <span>Google Places API (New)</span>
+                <span className="text-xs font-mono text-success font-semibold">Field Mask</span>
+              </div>
+              <p className="text-secondary text-xs m-0 leading-relaxed">
+                Data tempat, jam buka, dan rating diakses via Google Places API (New) dengan field mask terverifikasi. Tidak melakukan scraping HTML Google Maps. Caching mematuhi batas ToS Google (maks 30 hari untuk atribut tempat; ID tempat disimpan permanen).
+              </p>
+            </div>
+
+            <div className="p-3 rounded bg-surface border border-paper-edge space-y-1">
+              <div className="font-bold text-primary flex items-center justify-between">
+                <span>Open Data & Geocoding</span>
+                <span className="text-xs font-mono text-primary font-semibold">ODbL & CDLA</span>
+              </div>
+              <p className="text-secondary text-xs m-0 leading-relaxed">
+                Geodata dan tag <code className="font-mono text-xs bg-paper px-1 rounded border border-paper-edge">diet:halal</code> bersumber dari <strong>OpenStreetMap (© OpenStreetMap contributors)</strong> dan <strong>Overture Maps Foundation</strong>. Public Nominatim dibatasi (tidak digunakan untuk bulk query).
+              </p>
+            </div>
+
+            <div className="p-3 rounded bg-surface border border-paper-edge space-y-1">
+              <div className="font-bold text-primary flex items-center justify-between">
+                <span>Kurs Harian (Bukan Real-time FX)</span>
+                <span className="text-xs font-mono text-secondary font-semibold">Daily Banking</span>
+              </div>
+              <p className="text-secondary text-xs m-0 leading-relaxed">
+                Kurs harian diterbitkan setiap hari kerja dari European Central Bank (ECB) serta fallback Bank Sentral (SAMA, CBUAE, CBE, Bank Al-Maghrib, CBC Taiwan, QCB). Jika kurs tidak tersedia, sistem menampilkan status tidak tersedia tanpa menebak nilai tukar.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-3 rounded bg-sunken border border-paper-edge text-xs text-secondary leading-relaxed flex items-start gap-2">
+            <span className="text-sm font-bold text-outline shrink-0 mt-0.5">🛡️</span>
+            <p className="m-0">
+              <strong>Model Keamanan Chatbot:</strong> Input pencarian pengguna hanya dikonversi oleh model bahasa menjadi parameter pencarian terstruktur (negara, kota, jenis kuliner, batas anggaran, radius). Sistem backend deterministik yang mengeksekusi pencarian fail-closed. AI tidak pernah menghasilkan klaim status halal dalam bentuk teks bebas.
+            </p>
+          </div>
+        </div>
+
         {/* Place Detail Modal */}
         {selectedPlace && (
           <RestaurantDetailModal

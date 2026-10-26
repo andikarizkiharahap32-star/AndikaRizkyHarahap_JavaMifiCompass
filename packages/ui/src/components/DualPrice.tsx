@@ -51,6 +51,11 @@ export const DualPrice: React.FC<DualPriceProps> = ({
 
   // If range prop is provided, render range with per-person estimate
   if (range) {
+    const hasValidIdrRange =
+      range.minIdr !== null &&
+      range.minIdr !== undefined &&
+      Boolean(range.formattedIdrRange);
+
     return (
       <div
         className={`inline-flex flex-col gap-0.5 font-numeric-md tnum select-text ${className}`}
@@ -60,26 +65,37 @@ export const DualPrice: React.FC<DualPriceProps> = ({
           {/* Local Range */}
           <span className="font-semibold text-primary">{range.formattedLocalRange}</span>
 
-          {/* IDR Range */}
-          <span className="inline-flex items-baseline gap-1 text-secondary font-medium text-xs">
-            <span className="text-outline text-xs select-none">≈</span>
-            <span>
-              <span className="text-xs font-sans font-bold uppercase tracking-wider">Rp</span>
-              <span>&thinsp;</span>
-              <span className="font-semibold text-primary">{range.formattedIdrRange.replace(/^Rp\s*/, '')}</span>
+          {/* IDR Range or Stale-Rate Fallback */}
+          {hasValidIdrRange ? (
+            <span className="inline-flex items-baseline gap-1 text-secondary font-medium text-xs">
+              <span className="text-outline text-xs select-none">≈</span>
+              <span>
+                <span className="text-xs font-sans font-bold uppercase tracking-wider">Rp</span>
+                <span>&thinsp;</span>
+                <span className="font-semibold text-primary">
+                  {range.formattedIdrRange!.replace(/^Rp\s*/, '')}
+                </span>
+              </span>
             </span>
-          </span>
+          ) : (
+            <span
+              className="text-xs font-sans text-outline italic"
+              title={unavailableText}
+            >
+              ({unavailableText})
+            </span>
+          )}
         </div>
 
         {/* Sub-row: Per Person Estimate + Inline Daily Date */}
         <div className="flex items-center gap-2 text-xs font-sans text-outline">
-          {range.formattedPerPersonIdr && (
+          {hasValidIdrRange && range.formattedPerPersonIdr && (
             <span>
               Est. ~{range.formattedPerPersonIdr} {perPersonLabel}
             </span>
           )}
           {showInlineRateDate && (
-            <span className="border-l border-paper-edge pl-2">
+            <span className={hasValidIdrRange && range.formattedPerPersonIdr ? 'border-l border-paper-edge pl-2' : ''}>
               ({snapshotDateLabel} {range.rateSnapshotDate})
             </span>
           )}
