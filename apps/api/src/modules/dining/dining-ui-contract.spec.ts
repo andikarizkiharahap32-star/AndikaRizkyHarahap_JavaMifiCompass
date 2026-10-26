@@ -110,3 +110,48 @@ describe('Prompt 5: HalalBadge Contract & Non-Color Distinguishability', () => {
     expect(halalResults.every((p) => p.tier === 'CERTIFIED' || p.tier === 'CLAIMED')).toBe(true);
   });
 });
+
+describe('Feature Enhancements: Price Ranges, Taxi Cards & Safe Intent Model', () => {
+  const { FxService } = require('./fx.service');
+  const { DiningService } = require('./dining.service');
+  const fxService = new FxService();
+  const diningService = new DiningService(fxService);
+
+  it('converts price ranges deterministically into IDR and per-person estimates', () => {
+    const range = fxService.convertMinorPriceRange(1000, 2000, 'JPY');
+    expect(range.minMinor).toBe(1000);
+    expect(range.maxMinor).toBe(2000);
+    expect(range.currency).toBe('JPY');
+    expect(range.formattedLocalRange).toContain('1,000');
+    expect(range.formattedLocalRange).toContain('2,000');
+    expect(range.minIdr).toBe(104500);
+    expect(range.maxIdr).toBe(209000);
+    expect(range.formattedIdrRange).toBe('Rp 104.500–209.000');
+    expect(range.perPersonEstimateIdr).toBe(156800);
+    expect(range.rateType).toBe('daily');
+    expect(range.rateSnapshotDate).toBe('26 Okt 2026');
+  });
+
+  it('safe intent parser: transforms traveler query into structured search params without generating free-text claims', () => {
+    const intent = diningService.parseSearchIntent('halal ramen in tokyo under 2000 yen within 2km');
+    expect(intent.country).toBe('JP');
+    expect(intent.city).toBe('Tokyo');
+    expect(intent.cuisine).toBe('Ramen');
+    expect(intent.budgetMaxMinor).toBe(2000);
+    expect(intent.radiusKm).toBe(2);
+    expect(intent.filter).toBe('HALAL');
+
+    // Threat model check: Intent output must be structured search params, NOT generated text
+    expect((intent as any).freeTextHalalClaim).toBeUndefined();
+    expect((intent as any).generatedResponse).toBeUndefined();
+  });
+
+  it('alcohol proof rule: verifies Yakiniku venue is NOT marked alcohol-free without explicit evidence quote', () => {
+    const pangaSummary = diningService.getPlaceDetail('jp-tokyo-panga');
+    expect(pangaSummary).toBeDefined();
+    expect(pangaSummary.alcoholStatus).toBe('NOT_MENTIONED');
+    expect(pangaSummary.dietaryFlags.includes('ALCOHOL_FREE')).toBe(false);
+    expect(pangaSummary.postalCode).toBe('〒110-0016');
+    expect(pangaSummary.addressLocalScript).toBe('東京都台東区台東3-27-9');
+  });
+});

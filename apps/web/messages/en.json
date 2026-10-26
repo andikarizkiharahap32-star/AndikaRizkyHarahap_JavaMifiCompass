@@ -147,8 +147,38 @@
       "unverified": "Unverified (checking)",
       "empty": "No certified or claimed restaurants found in this radius.",
       "rateUnavailable": "IDR rate unavailable",
-      "rateTooltip": "Indicative; card and ATM rates differ.",
-      "verifyNotice": "Verify with the restaurant. Halal standards differ by certifier and country."
+      "rateTooltip": "Indicative; daily card and ATM rates differ.",
+      "verifyNotice": "Verify with the restaurant. Halal standards differ by certifier and country.",
+      "trustBanner": "Halal status based on evidence you can check directly.",
+      "trustBannerAction": "Open Evidence Panel",
+      "dailyRateBadge": "Daily Rate",
+      "simulatedNotice": "Simulated Data (System Test)"
+    },
+    "taxiCard": {
+      "title": "Taxi Driver Address Card",
+      "copyBtn": "Copy Local Script Address",
+      "copied": "Copied to Clipboard!",
+      "plusCode": "Plus Code",
+      "postalCode": "Postal Code"
+    },
+    "phraseCard": {
+      "title": "Mirin, Sake & Pork Dietary Card",
+      "subtitle": "Show this screen directly to restaurant staff or chefs",
+      "action": "Show Dietary Phrase Card",
+      "notice": "Human-reviewed standardized phrasing to clarify broths containing mirin or cooking sake."
+    },
+    "budgetCard": {
+      "title": "Trip Food Cash Estimator",
+      "subtitle": "Calculated alongside your Compass pocket-WiFi group and days",
+      "groupSize": "Group Size",
+      "duration": "Duration",
+      "perPersonEst": "Per Person Estimate",
+      "cashOnlyNotice": "Note: In Japan & Germany, authentic noodle bars and bistros are frequently cash only."
+    },
+    "prayer": {
+      "heading": "Nearest Prayer Time",
+      "remainingMinutes": "mins remaining",
+      "walkContext": "Safe walking window before prayer begins."
     },
     "tier": {
       "certified": "Officially Halal Certified",

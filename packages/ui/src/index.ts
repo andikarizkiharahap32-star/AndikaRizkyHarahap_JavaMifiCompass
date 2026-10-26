@@ -14,3 +14,5 @@ export * from './components/BreakEvenSchematicCard';
 export * from './components/PerforatedReceiptChit';
 export * from './components/SandboxGatewaySimulator';
 export * from './components/DualPrice';
+export * from './components/TaxiAddressCard';
+export * from './components/DietaryPhraseCard';

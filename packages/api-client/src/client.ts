@@ -262,6 +262,18 @@ export class JavaMifiApiClient {
       );
     },
     getPlaceDetail: (id: string) => this.request<any>(`/v1/dining/places/${id}`),
+    parseSearchIntent: (query: string) =>
+      this.request<{
+        country?: string;
+        city?: string;
+        cuisine?: string;
+        filter: string;
+        budgetMaxMinor?: number;
+        radiusKm?: number;
+      }>('/v1/dining/parse-intent', {
+        method: 'POST',
+        body: JSON.stringify({ query }),
+      }),
     submitReport: (payload: {
       placeId: string;
       placeName: string;

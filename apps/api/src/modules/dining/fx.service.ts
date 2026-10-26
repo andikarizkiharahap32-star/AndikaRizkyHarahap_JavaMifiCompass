@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { MinorPrice } from '@javamifi/shared';
+import { MinorPrice, PriceRange } from '@javamifi/shared';
 
 export interface CurrencyConfig {
   code: string;
@@ -72,6 +72,53 @@ export class FxService {
       amountIdr: roundedIdr,
       formattedIdr,
       rateSnapshotDate: '26 Okt 2026',
+    };
+  }
+
+  /**
+   * Convert a min-max price range into a dual-currency PriceRange DTO with per-person estimate.
+   */
+  convertMinorPriceRange(
+    minMinor: number,
+    maxMinor: number,
+    currencyCode: string
+  ): PriceRange {
+    const config = this.currencyRegistry[currencyCode.toUpperCase()] || {
+      code: currencyCode,
+      decimals: 2,
+      symbol: currencyCode,
+      rateToIdr: 15850,
+      provider: 'Default USD-Peg',
+    };
+
+    const factor = Math.pow(10, config.decimals);
+    const minMajor = minMinor / factor;
+    const maxMajor = maxMinor / factor;
+
+    const minIdr = Math.round((minMajor * config.rateToIdr) / 100) * 100;
+    const maxIdr = Math.round((maxMajor * config.rateToIdr) / 100) * 100;
+
+    const perPersonMinor = Math.round((minMinor + maxMinor) / 2);
+    const perPersonMajor = perPersonMinor / factor;
+    const perPersonIdr = Math.round((perPersonMajor * config.rateToIdr) / 100) * 100;
+
+    const minLocalStr = this.formatCurrency(minMajor, config);
+    const maxLocalStr = this.formatCurrency(maxMajor, config);
+
+    return {
+      minMinor,
+      maxMinor,
+      currency: config.code,
+      decimals: config.decimals,
+      formattedLocalRange: `${minLocalStr}–${maxLocalStr}`,
+      minIdr,
+      maxIdr,
+      formattedIdrRange: `Rp ${minIdr.toLocaleString('id-ID')}–${maxIdr.toLocaleString('id-ID')}`,
+      perPersonEstimateMinor: perPersonMinor,
+      perPersonEstimateIdr: perPersonIdr,
+      formattedPerPersonIdr: `Rp ${perPersonIdr.toLocaleString('id-ID')}`,
+      rateSnapshotDate: '26 Okt 2026',
+      rateType: 'daily',
     };
   }
 

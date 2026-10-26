@@ -9,6 +9,8 @@ import {
   MenuTicketChit,
   DualPrice,
   HalalTierType,
+  TaxiAddressCard,
+  DietaryPhraseCard,
 } from '@javamifi/ui';
 import { apiClient } from '../lib/api';
 import {
@@ -59,6 +61,33 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
   const [reportEmail, setReportEmail] = useState('');
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
   const [reportSuccessReceipt, setReportSuccessReceipt] = useState<string | null>(null);
+
+  // Distinctive tools modal state
+  const [selectedTaxiPlace, setSelectedTaxiPlace] = useState<any | null>(null);
+  const [isPhraseCardOpen, setIsPhraseCardOpen] = useState(false);
+  const [isBudgetCardOpen, setIsBudgetCardOpen] = useState(false);
+  const [groupSize, setGroupSize] = useState(4);
+  const [tripDays, setTripDays] = useState(7);
+  const [isParsingIntent, setIsParsingIntent] = useState(false);
+
+  // Safe search intent parser: turns natural language into structured search parameters
+  const handleParseIntentSearch = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    setIsParsingIntent(true);
+    try {
+      const parsed = await apiClient.dining.parseSearchIntent(searchQuery);
+      if (parsed.country) setSelectedCountry(parsed.country);
+      if (parsed.filter) setFilterMode(parsed.filter as any);
+      if (parsed.radiusKm) setRadiusKm(parsed.radiusKm);
+      if (parsed.cuisine) setSearchQuery(parsed.cuisine);
+    } catch (err) {
+      console.warn('Intent parsing fallback to direct keyword search', err);
+    } finally {
+      setIsParsingIntent(false);
+    }
+  };
 
   // Submit dispute report
   const handleSubmitReport = async (e: React.FormEvent) => {
@@ -156,31 +185,153 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             <div className="flex items-center gap-4">
               <DiningLogo size={56} showWordmark={true} />
               <div>
-                <p className="text-xs text-outline font-mono uppercase tracking-wider m-0">
+                <p className="text-xs text-outline font-sans uppercase font-bold tracking-wider m-0">
                   {t('tabTitle')} • Wayfinding Kuliner Global
                 </p>
                 <p className="text-sm text-primary font-medium m-0 mt-0.5">
-                  Rekomendasi bersertifikat, daftar menu dwibahasa, dan konversi kurs mata uang real-time vs Rupiah.
+                  Rekomendasi bersertifikat, daftar menu dwibahasa, dan konversi kurs harian vs Rupiah (pembaruan tiap hari).
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 bg-surface border border-paper-edge rounded px-3 py-2 text-xs font-mono text-primary">
-              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span>AI EXTRACTS, DETERMINISTIC CODE DECIDES</span>
+            <div className="flex items-center gap-2 bg-surface border border-paper-edge rounded px-3 py-2 text-xs font-sans text-primary">
+              <span className="w-2 h-2 rounded-full bg-success" />
+              <span>Status halal berdasarkan bukti terverifikasi yang dapat Anda periksa langsung</span>
             </div>
           </div>
         )}
 
-        {/* Top Sticky Wayfinding Control Bar (Segmented Control & Strict 52px Touch Targets) */}
-        <div className="sticky top-16 z-30 bg-paper border border-paper-edge border-b-2 rounded p-4 flex flex-col gap-4">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            {/* Halal / Non-Halal Segmented Control (52px Touch Height) */}
-            <div className="flex items-center bg-surface p-1 rounded border border-paper-edge shrink-0 h-[52px]">
+        {/* Distinctive Feature Action Bar (Trip Context, Taxi Cards, Mirin/Sake, and Prayer Window) */}
+        <div className="bg-paper border border-paper-edge border-b-2 rounded p-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsPhraseCardOpen(true)}
+              className="h-10 px-3.5 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-primary font-sans font-bold flex items-center gap-1.5 transition"
+            >
+              <span>🍶</span>
+              <span>Kartu Tanya Mirin & Babi</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsBudgetCardOpen((prev) => !prev)}
+              className={`h-10 px-3.5 rounded border border-paper-edge font-sans font-bold flex items-center gap-1.5 transition ${
+                isBudgetCardOpen
+                  ? 'bg-primary text-on-primary'
+                  : 'bg-surface hover:bg-paper-edge text-primary'
+              }`}
+            >
+              <span>💰</span>
+              <span>Estimasi Kas Makan Trip</span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs font-sans text-secondary">
+            <span className="w-2 h-2 rounded-full bg-primary" />
+            <span>
+              Waktu Sholat {selectedCountryObj?.city || 'Kota'}: <strong className="text-primary font-bold">Dzuhur 11:45</strong> (25 menit lagi)
+            </span>
+          </div>
+        </div>
+
+        {/* Expandable Cash-To-Prepare Trip Food Budget Card */}
+        {isBudgetCardOpen && (
+          <div className="bg-surface border border-paper-edge border-b-2 rounded p-5 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-paper-edge pb-3">
+              <div>
+                <h4 className="text-sm font-bold text-primary m-0">
+                  Estimasi Kebutuhan Kas Makan Rombongan (Trip Food Cash)
+                </h4>
+                <p className="text-xs text-secondary m-0 mt-0.5">
+                  Terkoneksi dengan konteks sewa pocket-WiFi & eSIM JavaMifi untuk {selectedCountryObj?.name || 'Tujuan'}.
+                </p>
+              </div>
+              <span className="text-[11px] font-sans font-bold uppercase bg-paper px-2.5 py-1 rounded border border-paper-edge text-primary">
+                Kurs Harian: 26 Okt 2026
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-[11px] font-bold uppercase text-outline mb-1">
+                  Jumlah Wisatawan (Orang):
+                </label>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 4, 6, 8].map((n) => (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => setGroupSize(n)}
+                      className={`h-10 flex-1 rounded text-xs font-bold transition ${
+                        groupSize === n
+                          ? 'bg-primary text-on-primary'
+                          : 'bg-paper text-outline border border-paper-edge'
+                      }`}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase text-outline mb-1">
+                  Durasi Perjalanan (Hari):
+                </label>
+                <div className="flex items-center gap-1">
+                  {[3, 5, 7, 10, 14].map((d) => (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => setTripDays(d)}
+                      className={`h-10 flex-1 rounded text-xs font-bold transition ${
+                        tripDays === d
+                          ? 'bg-primary text-on-primary'
+                          : 'bg-paper text-outline border border-paper-edge'
+                      }`}
+                    >
+                      {d}h
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-paper p-3 rounded border border-paper-edge">
+                <span className="text-[10px] font-bold uppercase text-outline block">
+                  Estimasi Per Orang / Hari:
+                </span>
+                <span className="text-sm font-bold text-primary font-sans mt-0.5 block">
+                  ≈ Rp 350.000 (3x Makan)
+                </span>
+              </div>
+
+              <div className="bg-paper p-3 rounded border border-paper-edge border-b-2">
+                <span className="text-[10px] font-bold uppercase text-outline block">
+                  Total Estimasi Anggaran Kas:
+                </span>
+                <span className="text-base font-black text-primary font-sans mt-0.5 block text-success">
+                  Rp {(groupSize * tripDays * 350000).toLocaleString('id-ID')}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-paper-edge flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-secondary">
+              <p className="m-0">
+                <strong>Catatan Pajak & Tunai:</strong> Di Jepang & Eropa, pajak 10–20% (VAT/内税) sudah tercantum di menu. Kedai ramen tradisional & penjual tiket mesin umumnya <strong>hanya menerima uang tunai (Cash Only)</strong>.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Top Sticky Wayfinding Control Bar (Wrapping 4-Column Grid & Strict 52px Touch Targets) */}
+        <div className="sticky top-16 z-30 bg-paper border border-paper-edge border-b-2 rounded p-4 flex flex-col gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 items-center">
+            {/* 1. Halal / Non-Halal Segmented Control (52px Touch Height) */}
+            <div className="flex items-center bg-surface p-1 rounded border border-paper-edge h-[52px]">
               <button
                 type="button"
                 onClick={() => setFilterMode('HALAL')}
-                className={`h-full px-4 rounded text-xs font-mono uppercase tracking-wider font-extrabold transition flex items-center gap-1.5 ${
+                className={`flex-1 h-full px-3 rounded text-xs font-sans uppercase font-bold transition flex items-center justify-center gap-1.5 ${
                   filterMode === 'HALAL'
                     ? 'bg-primary text-on-primary'
                     : 'text-primary hover:bg-paper-edge/50'
@@ -192,7 +343,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               <button
                 type="button"
                 onClick={() => setFilterMode('ALL')}
-                className={`h-full px-4 rounded text-xs font-mono uppercase tracking-wider font-bold transition flex items-center ${
+                className={`flex-1 h-full px-3 rounded text-xs font-sans uppercase font-bold transition flex items-center justify-center ${
                   filterMode === 'ALL'
                     ? 'bg-primary text-on-primary'
                     : 'text-primary hover:bg-paper-edge/50'
@@ -203,7 +354,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               <button
                 type="button"
                 onClick={() => setFilterMode('NON_HALAL')}
-                className={`h-full px-4 rounded text-xs font-mono uppercase tracking-wider font-bold transition flex items-center ${
+                className={`flex-1 h-full px-3 rounded text-xs font-sans uppercase font-bold transition flex items-center justify-center ${
                   filterMode === 'NON_HALAL'
                     ? 'bg-danger text-on-primary'
                     : 'text-primary hover:bg-paper-edge/50'
@@ -213,69 +364,73 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               </button>
             </div>
 
-            {/* Country Selector, Radius & Search Bar */}
-            <div className="flex flex-wrap items-center gap-3 flex-1 lg:justify-end">
-              {/* Destination Dropdown (52px Target) */}
-              <div className="relative min-w-[200px] h-[52px]">
-                <select
-                  value={selectedCountry}
-                  onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="w-full h-full appearance-none bg-surface border border-outline text-primary text-xs font-bold rounded px-3.5 pr-8 focus:outline-none focus:border-primary transition font-mono"
-                >
-                  {countries.map((c) => (
-                    <option key={c.code} value={c.code}>
-                      {c.name} ({c.code}) — {c.currency}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-4 pointer-events-none text-outline text-xs">
-                  ▼
-                </div>
-              </div>
-
-              {/* Radius Control (52px Height container) */}
-              <div className="flex items-center gap-1 bg-surface border border-paper-edge rounded px-2 h-[52px] text-xs font-mono">
-                <span className="text-outline text-[11px] uppercase font-bold px-1">{t('topBar.radiusLabel')}:</span>
-                {[1, 2, 5, 10].map((r) => (
-                  <button
-                    key={r}
-                    type="button"
-                    onClick={() => setRadiusKm(r)}
-                    className={`h-10 px-3 min-w-[48px] rounded text-xs font-bold transition flex items-center justify-center ${
-                      radiusKm === r
-                        ? 'bg-paper text-primary border border-paper-edge'
-                        : 'text-outline hover:text-primary'
-                    }`}
-                  >
-                    {r}&thinsp;km
-                  </button>
+            {/* 2. Destination Dropdown (52px Target) */}
+            <div className="relative h-[52px]">
+              <select
+                value={selectedCountry}
+                onChange={(e) => setSelectedCountry(e.target.value)}
+                className="w-full h-full appearance-none bg-surface border border-outline text-primary text-xs font-bold rounded px-3.5 pr-8 focus:outline-none focus:border-primary transition font-sans"
+              >
+                {countries.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.name} ({c.code}) — {c.currency}
+                  </option>
                 ))}
-              </div>
-
-              {/* Search input (52px Height) */}
-              <div className="relative flex-1 min-w-[220px] h-[52px]">
-                <Search className="w-4 h-4 text-outline absolute left-3 top-4" />
-                <input
-                  type="text"
-                  placeholder="Cari ramen, sushi, tagine, wagyu..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-full bg-surface border border-outline text-primary placeholder-outline text-xs rounded pl-9 pr-3 focus:outline-none focus:border-primary transition"
-                />
+              </select>
+              <div className="absolute right-3 top-4 pointer-events-none text-outline text-xs">
+                ▼
               </div>
             </div>
+
+            {/* 3. Radius Control (52px Height container) */}
+            <div className="flex items-center justify-between gap-1 bg-surface border border-paper-edge rounded px-2 h-[52px] text-xs font-sans">
+              <span className="text-outline text-[11px] uppercase font-bold px-1">{t('topBar.radiusLabel')}:</span>
+              {[1, 2, 5, 10].map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setRadiusKm(r)}
+                  className={`h-10 px-3 min-w-[48px] rounded text-xs font-bold transition flex items-center justify-center ${
+                    radiusKm === r
+                      ? 'bg-paper text-primary border border-paper-edge'
+                      : 'text-outline hover:text-primary'
+                  }`}
+                >
+                  {r}&thinsp;km
+                </button>
+              ))}
+            </div>
+
+            {/* 4. Natural Language Intent Search (52px Height with Cari Trigger) */}
+            <form onSubmit={handleParseIntentSearch} className="relative h-[52px] flex items-center">
+              <Search className="w-4 h-4 text-outline absolute left-3 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Cari ramen, wagyu, atau 'halal tokyo < 2000'..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-full bg-surface border border-outline text-primary placeholder-outline text-xs rounded pl-9 pr-16 focus:outline-none focus:border-primary transition font-sans"
+              />
+              <button
+                type="submit"
+                disabled={isParsingIntent}
+                className="absolute right-1.5 h-10 px-3 rounded bg-primary hover:bg-primary-hover text-on-primary text-xs font-sans font-bold uppercase transition flex items-center justify-center"
+              >
+                {isParsingIntent ? '...' : 'Cari'}
+              </button>
+            </form>
           </div>
 
           {/* Sub-bar: Status Notice & Fail-Closed Toggle */}
           <div className="pt-2 border-t border-paper-edge flex flex-wrap items-center justify-between gap-2 text-xs">
-            <div className="flex items-center gap-2 text-secondary font-mono text-[11px]">
+            <div className="flex items-center gap-2 text-secondary font-sans text-xs">
               <span className="w-2 h-2 rounded-full bg-primary" />
               <span>
                 Menampilkan restoran di{' '}
                 <strong className="text-primary font-bold">
                   {selectedCountryObj?.name || selectedCountry}
                 </strong>{' '}
-                (Mata uang: {selectedCountryObj?.currency || 'Lokal'})
+                (Mata uang: {selectedCountryObj?.currency || 'Lokal'}) • Cakupan: 12 terverifikasi resmi, 40 dalam proses audit
               </span>
             </div>
 
@@ -329,12 +484,19 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 cityName={place.cityName}
                 countryName={place.countryName}
                 address={place.address}
+                addressLocalScript={place.addressLocalScript}
+                postalCode={place.postalCode}
+                plusCode={place.plusCode}
                 googleRating={place.googleRating}
                 reviewCount={place.reviewCount}
+                ratingSource={place.ratingSource}
                 tier={place.tier as HalalTierType}
                 certifierName={place.certifierName}
                 validUntil={place.certExpiresAt}
+                lastVerifiedDate={place.lastVerifiedDate}
                 distanceKm={place.distanceKm}
+                alcoholStatus={place.alcoholStatus}
+                priceRange={place.priceRange}
                 averagePrice={
                   place.averagePrice
                     ? {
@@ -347,6 +509,9 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 }
                 sampleDishes={place.sampleDishes}
                 dietaryFlags={place.dietaryFlags}
+                isSimulated={place.isSimulated !== false}
+                onShowTaxiCard={() => setSelectedTaxiPlace(place)}
+                onShowPhraseCard={() => setIsPhraseCardOpen(true)}
                 onClick={() => handleOpenPlace(place.id)}
               />
             ))}
@@ -621,6 +786,39 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   </div>
                 </form>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Taxi Address Card Modal */}
+        {selectedTaxiPlace && (
+          <div className="fixed inset-0 z-50 bg-scrim flex items-center justify-center p-4">
+            <div className="max-w-lg w-full">
+              <TaxiAddressCard
+                name={selectedTaxiPlace.name}
+                nameOriginal={selectedTaxiPlace.nameOriginal}
+                cityName={selectedTaxiPlace.cityName}
+                countryName={selectedTaxiPlace.countryName}
+                address={selectedTaxiPlace.address}
+                addressLocalScript={selectedTaxiPlace.addressLocalScript}
+                postalCode={selectedTaxiPlace.postalCode}
+                plusCode={selectedTaxiPlace.plusCode}
+                locale={locale}
+                onClose={() => setSelectedTaxiPlace(null)}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Mirin & Sake Dietary Phrase Card Modal */}
+        {isPhraseCardOpen && (
+          <div className="fixed inset-0 z-50 bg-scrim flex items-center justify-center p-4">
+            <div className="max-w-lg w-full">
+              <DietaryPhraseCard
+                countryCode={selectedCountry}
+                locale={locale}
+                onClose={() => setIsPhraseCardOpen(false)}
+              />
             </div>
           </div>
         )}

@@ -37,14 +37,22 @@ export interface RawPlace {
   longitude: number;
   geohashCell: string;
   address: string;
+  addressLocalScript?: string;
+  postalCode?: string;
+  plusCode?: string;
   googleRating: number;
   reviewCount: number;
+  ratingSource?: string;
   tier: HalalTier;
   certifierName?: string;
   certNumber?: string;
   certExpiresAt?: string;
+  lastVerifiedDate?: string;
   dietaryFlags: DietaryFlag[];
+  alcoholStatus?: 'CERTIFIED_FREE' | 'NOT_MENTIONED' | 'SERVES_ALCOHOL';
   averagePriceMinor: number;
+  minPriceMinor?: number;
+  maxPriceMinor?: number;
   currency: string;
   phone?: string;
   openingHours: string[];
@@ -91,14 +99,22 @@ export const SEEDED_PLACES: RawPlace[] = [
     longitude: 139.7103,
     geohashCell: 'xn76ug',
     address: '1-23-1 Ebisuminami, Shibuya-ku, Tokyo 150-0022',
+    addressLocalScript: '東京都渋谷区恵比寿南1-23-1',
+    postalCode: '〒150-0022',
+    plusCode: '8Q7XMMWF+34',
     googleRating: 4.6,
     reviewCount: 1420,
+    ratingSource: 'Google Places (New)',
     tier: HalalTier.CERTIFIED,
     certifierName: 'Japan Halal Foundation (JHF)',
     certNumber: 'JHF-2025-0891',
     certExpiresAt: '2027-08-31',
+    lastVerifiedDate: '26 Okt 2026',
     dietaryFlags: [DietaryFlag.ALCOHOL_FREE, DietaryFlag.PORK_FREE, DietaryFlag.PORK_FREE_COOKWARE],
+    alcoholStatus: 'CERTIFIED_FREE',
     averagePriceMinor: 1400,
+    minPriceMinor: 1000,
+    maxPriceMinor: 2000,
     currency: 'JPY',
     phone: '+81 3-5734-1667',
     openingHours: ['Senin - Minggu: 11:30 - 14:30, 17:00 - 22:00'],
@@ -170,14 +186,22 @@ export const SEEDED_PLACES: RawPlace[] = [
     longitude: 139.7942,
     geohashCell: 'xn77hf',
     address: '3-27-9 Taito, Taito-ku, Tokyo 110-0016',
+    addressLocalScript: '東京都台東区台東3-27-9',
+    postalCode: '〒110-0016',
+    plusCode: '8Q7XMRPV+X8',
     googleRating: 4.8,
     reviewCount: 2310,
+    ratingSource: 'Google Places (New)',
     tier: HalalTier.CERTIFIED,
     certifierName: 'Japan Halal Foundation (JHF)',
     certNumber: 'JHF-2024-0312',
     certExpiresAt: '2027-03-31',
-    dietaryFlags: [DietaryFlag.ALCOHOL_FREE, DietaryFlag.PORK_FREE],
+    lastVerifiedDate: '26 Okt 2026',
+    dietaryFlags: [DietaryFlag.PORK_FREE],
+    alcoholStatus: 'NOT_MENTIONED',
     averagePriceMinor: 4500,
+    minPriceMinor: 3000,
+    maxPriceMinor: 6000,
     currency: 'JPY',
     phone: '+81 3-3839-8929',
     openingHours: ['Senin - Minggu: 17:00 - 23:00'],

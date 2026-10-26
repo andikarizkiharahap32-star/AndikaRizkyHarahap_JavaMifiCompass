@@ -147,8 +147,38 @@
       "unverified": "Belum terverifikasi (sedang dicek)",
       "empty": "Tidak ada restoran yang memenuhi kriteria di radius ini.",
       "rateUnavailable": "Kurs IDR tidak tersedia",
-      "rateTooltip": "Perkiraan indikatif; kurs kartu dan ATM bank mungkin berbeda.",
-      "verifyNotice": "Harap verifikasi langsung ke pihak restoran. Standar halal berbeda menurut certifier dan negara."
+      "rateTooltip": "Perkiraan indikatif; kurs harian kartu dan ATM bank mungkin berbeda.",
+      "verifyNotice": "Harap verifikasi langsung ke pihak restoran. Standar halal berbeda menurut certifier dan negara.",
+      "trustBanner": "Status halal berdasarkan bukti terverifikasi yang dapat Anda periksa langsung.",
+      "trustBannerAction": "Buka Panel Bukti",
+      "dailyRateBadge": "Kurs Harian",
+      "simulatedNotice": "Data Simulasi (Pengujian Sistem)"
+    },
+    "taxiCard": {
+      "title": "Kartu Alamat untuk Supir Taksi",
+      "copyBtn": "Salin Alamat Bahasa Asli",
+      "copied": "Tersalin ke Clipboard!",
+      "plusCode": "Plus Code",
+      "postalCode": "Kode Pos"
+    },
+    "phraseCard": {
+      "title": "Kartu Tanya Mirin, Sake & Babi",
+      "subtitle": "Tunjukkan layar ini langsung kepada pelayan atau staf restoran",
+      "action": "Tunjukkan Kartu Pertanyaan",
+      "notice": "Terjemahan baku dan terverifikasi untuk membedakan kaldu olahan beralkohol."
+    },
+    "budgetCard": {
+      "title": "Estimasi Kas Makan Perjalanan (Trip Budget)",
+      "subtitle": "Kalkulasi patungan makan kelompok sesuai durasi sewa WiFi/eSIM Compass",
+      "groupSize": "Ukuran Grup",
+      "duration": "Durasi",
+      "perPersonEst": "Estimasi Per Orang",
+      "cashOnlyNotice": "Catatan: Di Jepang & Jerman, kedai mie/bistro autentik seringkali hanya menerima uang tunai (Cash Only)."
+    },
+    "prayer": {
+      "heading": "Waktu Sholat Terdekat",
+      "remainingMinutes": "menit lagi",
+      "walkContext": "Waktu jalan kaki aman sebelum waktu sholat tiba."
     },
     "tier": {
       "certified": "Tersertifikasi Halal Resmi",

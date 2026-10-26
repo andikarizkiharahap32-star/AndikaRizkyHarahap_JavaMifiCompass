@@ -21,6 +21,24 @@ export const minorPriceSchema = z.object({
 });
 export type MinorPrice = z.infer<typeof minorPriceSchema>;
 
+/** Dual-currency price range with per-person estimate. */
+export const priceRangeSchema = z.object({
+  minMinor: z.number().int().nonnegative(),
+  maxMinor: z.number().int().nonnegative(),
+  currency: z.string().length(3),
+  decimals: z.number().int().min(0).max(3),
+  formattedLocalRange: z.string(),
+  minIdr: z.number().int().nonnegative(),
+  maxIdr: z.number().int().nonnegative(),
+  formattedIdrRange: z.string(),
+  perPersonEstimateMinor: z.number().int().nonnegative(),
+  perPersonEstimateIdr: z.number().int().nonnegative(),
+  formattedPerPersonIdr: z.string(),
+  rateSnapshotDate: z.string(),
+  rateType: z.literal('daily').default('daily'),
+});
+export type PriceRange = z.infer<typeof priceRangeSchema>;
+
 /** Individual dish in a dining menu. */
 export const menuItemSchema = z.object({
   id: z.string().min(1),
@@ -73,9 +91,22 @@ export const diningPlaceSummarySchema = z.object({
   dietaryFlags: z.array(dietaryFlagSchema),
   distanceKm: z.number().optional(),
   averagePrice: minorPriceSchema.optional(),
+  priceRange: priceRangeSchema.optional(),
+  addressLocalScript: z.string().optional(),
+  postalCode: z.string().optional(),
+  plusCode: z.string().optional(),
+  ratingSource: z.string().optional(),
+  lastVerifiedDate: z.string().optional(),
+  alcoholStatus: z.enum(['CERTIFIED_FREE', 'NOT_MENTIONED', 'SERVES_ALCOHOL']).optional(),
   sampleDishes: z.array(z.string()).default([]),
   primaryPhotoUrl: z.string().url().optional(),
   isSimulated: z.boolean().default(true),
+  prayerContext: z.object({
+    nearestPrayerName: z.string(),
+    nearestPrayerTime: z.string(),
+    minutesRemaining: z.number(),
+    statusText: z.string(),
+  }).optional(),
 });
 export type DiningPlaceSummary = z.infer<typeof diningPlaceSummarySchema>;
 

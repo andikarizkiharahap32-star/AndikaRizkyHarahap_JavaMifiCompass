@@ -86,6 +86,15 @@ export class DiningController {
     return this.diningService.getPlaceDetail(id);
   }
 
+  @Post('parse-intent')
+  @ApiOperation({ summary: 'Threat-model safe query parser: turns traveler prompt into structured search params' })
+  parseSearchIntent(@Body() body: { query: string }) {
+    if (!body || !body.query) {
+      throw new BadRequestException('Query string is required');
+    }
+    return this.diningService.parseSearchIntent(body.query);
+  }
+
   @Post('callbacks/enrichment')
   @ApiOperation({ summary: 'HMAC-SHA256 signed callback for background n8n enrichment' })
   @ApiHeader({ name: 'x-javamifi-signature', required: true })

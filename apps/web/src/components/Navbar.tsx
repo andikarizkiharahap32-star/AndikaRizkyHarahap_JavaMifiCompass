@@ -19,65 +19,76 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800">
+    <header className="sticky top-0 z-50 bg-paper border-b border-paper-edge">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href={`/${currentLocale}`} className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-sky-700 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
-            <Compass className="w-6 h-6 animate-spin-slow" />
+        {/* Brand Logo (Using Canonical #18215A Primary Container Token) */}
+        <Link href={`/${currentLocale}`} className="flex items-center gap-2.5 group">
+          <div className="w-10 h-10 rounded bg-primary-container text-on-primary flex items-center justify-center group-hover:bg-primary-hover transition-colors">
+            <Compass className="w-5 h-5" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-lg leading-tight tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
-              JavaMifi <span className="text-sky-600 font-extrabold text-sm">COMPASS</span>
+            <span className="font-bold text-base leading-tight tracking-tight text-primary flex items-center gap-1">
+              JavaMifi <span className="text-secondary font-extrabold text-xs uppercase tracking-wider">COMPASS</span>
             </span>
-            <span className="text-[10px] text-slate-500 font-medium">#AntiSusahSinyal</span>
+            <span className="text-[10px] text-outline font-medium">#AntiSusahSinyal</span>
           </div>
         </Link>
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600 dark:text-slate-300">
-          <Link href={`/${currentLocale}/planner`} className="hover:text-sky-600 transition-colors flex items-center gap-1.5">
-            <Compass className="w-4 h-4 text-sky-500" />
-            {t('planner')}
+        {/* Desktop Nav Links (Uniform Flex Centering, Removed Design System in Prod) */}
+        <nav className="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-secondary h-full">
+          <Link
+            href={`/${currentLocale}/planner`}
+            className="hover:text-primary transition-colors flex items-center gap-1.5 h-full"
+          >
+            <Compass className="w-4 h-4 text-outline" />
+            <span>{t('planner')}</span>
           </Link>
-          <Link href={`/${currentLocale}/destinations`} className="hover:text-sky-600 transition-colors">
-            {t('destinations')}
+          <Link
+            href={`/${currentLocale}/destinations`}
+            className="hover:text-primary transition-colors flex items-center h-full"
+          >
+            <span>{t('destinations')}</span>
           </Link>
-          <Link href={`/${currentLocale}/dining`} className="hover:text-[#059669] transition-colors flex items-center gap-1.5 text-[#18215A] font-bold">
-            <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse" />
+          <Link
+            href={`/${currentLocale}/dining`}
+            className="text-primary hover:text-primary-hover transition-colors flex items-center gap-1.5 font-extrabold h-full"
+          >
+            <span className="w-2 h-2 rounded-full bg-success" />
             <span>Kuliner Halal</span>
-            <span className="text-[9px] font-mono uppercase bg-[#D1FAE5] text-[#047857] px-1.5 py-0.2 rounded font-extrabold">
+            <span className="text-[10px] font-sans font-bold bg-success-surface text-success px-1.5 py-0.5 rounded border border-success/30">
               BARU
             </span>
           </Link>
-          <Link href={`/${currentLocale}/design-system`} className="hover:text-[#F27B2A] transition-colors flex items-center gap-1 text-[#18215A]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#F27B2A]" />
-            <span>Design System</span>
+          <Link
+            href={`/${currentLocale}/products`}
+            className="hover:text-primary transition-colors flex items-center h-full"
+          >
+            <span>{t('products')}</span>
           </Link>
-          <Link href={`/${currentLocale}/products`} className="hover:text-sky-600 transition-colors">
-            {t('products')}
-          </Link>
-          <Link href={`/${currentLocale}/support`} className="hover:text-sky-600 transition-colors">
-            {t('support')}
+          <Link
+            href={`/${currentLocale}/support`}
+            className="hover:text-primary transition-colors flex items-center h-full"
+          >
+            <span>{t('support')}</span>
           </Link>
         </nav>
 
         {/* Actions & Locale Switcher */}
         <div className="flex items-center gap-3">
           {/* Language Switcher */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-1 text-xs font-semibold">
+          <div className="flex items-center bg-surface border border-paper-edge rounded p-0.5 text-xs font-semibold">
             <button
               onClick={() => switchLocale('id')}
-              className={`px-2 py-1 rounded ${
-                currentLocale === 'id' ? 'bg-white dark:bg-slate-700 text-sky-600 shadow-xs' : 'text-slate-500'
+              className={`px-2.5 py-1 rounded transition ${
+                currentLocale === 'id' ? 'bg-paper text-primary border border-paper-edge font-bold' : 'text-outline hover:text-primary'
               }`}
             >
               ID
             </button>
             <button
               onClick={() => switchLocale('en')}
-              className={`px-2 py-1 rounded ${
-                currentLocale === 'en' ? 'bg-white dark:bg-slate-700 text-sky-600 shadow-xs' : 'text-slate-500'
+              className={`px-2.5 py-1 rounded transition ${
+                currentLocale === 'en' ? 'bg-paper text-primary border border-paper-edge font-bold' : 'text-outline hover:text-primary'
               }`}
             >
               EN
@@ -86,10 +97,10 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
 
           <Link
             href={`/${currentLocale}/planner`}
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-700 text-white transition-colors shadow-sm"
+            className="hidden sm:inline-flex items-center gap-1.5 px-4 h-10 rounded text-xs font-bold uppercase tracking-wider bg-primary hover:bg-primary-hover text-on-primary transition-colors"
           >
             <Wifi className="w-3.5 h-3.5" />
-            {t('planner')}
+            <span>{t('planner')}</span>
           </Link>
         </div>
       </div>

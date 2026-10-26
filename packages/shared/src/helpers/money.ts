@@ -124,3 +124,24 @@ export function formatIdrInteger(amount: number): string {
     maximumFractionDigits: 0,
   }).format(Math.round(amount));
 }
+
+/**
+ * Formats a local price range: e.g. 1000 minor and 2000 minor in JPY -> "¥1,000–2,000"
+ */
+export function formatLocalPriceRange(
+  minMinor: number,
+  maxMinor: number,
+  currency: string,
+  locale: string = 'en-US'
+): string {
+  const minFormatted = formatLocalAmount(minMinor, currency, locale);
+  const maxFormatted = formatLocalAmount(maxMinor, currency, locale);
+  return `${minFormatted}–${maxFormatted}`;
+}
+
+/**
+ * Formats an IDR price range: e.g. 104500 and 209000 -> "Rp 104.500–209.000"
+ */
+export function formatIdrPriceRange(minIdr: number, maxIdr: number): string {
+  return `Rp ${formatIdrInteger(minIdr)}–${formatIdrInteger(maxIdr)}`;
+}
