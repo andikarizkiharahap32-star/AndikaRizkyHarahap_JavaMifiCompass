@@ -194,9 +194,15 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-2 bg-surface border border-paper-edge rounded px-3 py-2 text-xs font-sans text-primary">
-              <span className="w-2 h-2 rounded-full bg-success" />
-              <span>Status halal berdasarkan bukti yang bisa Anda periksa</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-2 bg-surface border border-paper-edge rounded px-3 py-2 text-xs font-sans text-primary">
+                <span className="w-2 h-2 rounded-full bg-success" />
+                <span>Status halal berdasarkan bukti yang bisa Anda periksa</span>
+              </div>
+              <div className="flex items-center gap-1.5 bg-surface border border-paper-edge rounded px-2.5 py-2 text-xs font-mono text-secondary">
+                <span className="text-[10px] uppercase font-bold text-outline">Data Footprint:</span>
+                <span className="font-bold text-primary tnum">~1.8 MB</span>
+              </div>
             </div>
           </div>
         )}

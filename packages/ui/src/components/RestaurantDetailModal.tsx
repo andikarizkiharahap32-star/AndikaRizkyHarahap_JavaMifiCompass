@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HalalBadge, HalalTierType } from './HalalBadge';
 import { MenuTicketChit } from './MenuTicketChit';
+import { HalalCustomsStamp } from './HalalCustomsStamp';
 import { DiningPlaceDetail } from '@javamifi/shared';
 
 export interface RestaurantDetailModalProps {
@@ -259,21 +260,34 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
             )}
           </div>
 
-          {/* 6. Evidence Trust Panel: "Why We Think This Is Halal" */}
-          <div className="border border-paper-edge bg-surface rounded p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-base text-success" aria-hidden="true">
-                🛡️
-              </span>
-              <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold text-primary m-0">
-                {isId ? 'Landasan Bukti Status Halal' : 'Halal Evidence Verification'}{' '}
-                [{place.tier}]:
-              </h4>
+          {/* 6. Evidence Trust Panel: "Why We Think This Is Halal" & Halal Customs Stamp */}
+          <div className="border border-paper-edge bg-surface rounded p-4 space-y-4">
+            <HalalCustomsStamp
+              tier={place.tier as HalalTierType}
+              venueName={place.name}
+              certifierName={place.certifierName}
+              certNumber={place.certNumber}
+              certExpiresAt={place.certExpiresAt}
+              lastVerifiedDate={place.lastVerifiedDate}
+              alcoholStatus={place.alcoholStatus}
+              locale={locale}
+            />
+
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-base text-success" aria-hidden="true">
+                  🛡️
+                </span>
+                <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold text-primary m-0">
+                  {isId ? 'Landasan Bukti Status Halal' : 'Halal Evidence Verification'}{' '}
+                  [{place.tier}]:
+                </h4>
+              </div>
+              <p className="text-xs text-secondary leading-relaxed m-0">
+                {place.whyHalalExplanation ||
+                  'Restoran ini memenuhi kriteria verifikasi status kepatuhan sistem JavaMifi Compass.'}
+              </p>
             </div>
-            <p className="text-xs text-secondary leading-relaxed m-0">
-              {place.whyHalalExplanation ||
-                'Restoran ini memenuhi kriteria verifikasi status kepatuhan sistem JavaMifi Compass.'}
-            </p>
 
             {/* Verbatim Quotes Evidence (Rendered as safe plain text) */}
             {place.evidence?.length > 0 && (
