@@ -86,47 +86,47 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           onClick?.();
         }
       }}
-      className={`group relative bg-paper border border-paper-edge border-b-2 hover:border-primary rounded p-4 transition-colors cursor-pointer flex flex-col justify-between gap-3 min-h-[180px] ${className}`}
+      className={`group relative bg-paper border border-paper-edge border-b-2 hover:border-primary rounded p-4 transition-colors cursor-pointer flex flex-col justify-between gap-3 min-h-48 ${className}`}
     >
-      <div className="flex flex-col gap-2.5">
-        {/* Top Wayfinding Context Header */}
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-          {/* Waypoint Station Plate (Non-clipping 'T' transit mark) */}
+      <div className="flex flex-col gap-3">
+        {/* Row 1: Waypoint Station Header Bar (Non-clipping 'T' transit mark & status) */}
+        <div className="flex items-center justify-between gap-2 w-full">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="w-5 h-5 rounded bg-primary text-on-primary font-mono font-bold text-[10px] flex items-center justify-center shrink-0">
+            <span
+              className="w-6 h-6 rounded bg-primary text-on-primary font-mono font-bold text-xs flex items-center justify-center shrink-0"
+              aria-hidden="true"
+            >
               T
-            </div>
-            <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-              <span className="text-xs font-sans font-bold text-primary truncate">
-                {cityName}, {countryName}
+            </span>
+            <span className="text-xs font-sans font-bold text-primary truncate">
+              {cityName}, {countryName}
+            </span>
+            {distanceKm !== undefined && (
+              <span className="text-xs font-mono text-outline bg-surface px-1.5 py-0.5 rounded border border-paper-edge shrink-0 tnum">
+                {distanceKm.toFixed(1)}&thinsp;km
               </span>
-              {distanceKm !== undefined && (
-                <span className="text-[10px] font-mono text-outline bg-surface px-1.5 py-0.5 rounded border border-paper-edge">
-                  {distanceKm.toFixed(1)}&thinsp;km
-                </span>
-              )}
-              {isSimulated && (
-                <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-outline bg-sunken px-1.5 py-0.5 rounded border border-paper-edge">
-                  Simulasi Data
-                </span>
-              )}
-            </div>
+            )}
           </div>
-
-          {/* Halal Badge (Single clean line) */}
-          <div className="shrink-0">
-            <HalalBadge
-              tier={tier}
-              certifier={certifierName}
-              validUntil={validUntil || certExpiresAt}
-              lastVerified={lastVerifiedDate}
-              alcoholStatus={alcoholStatus}
-              badges={dietaryFlags}
-            />
-          </div>
+          {isSimulated && (
+            <span className="text-xs font-sans font-semibold uppercase tracking-wider text-outline bg-sunken px-2 py-0.5 rounded border border-paper-edge shrink-0">
+              Simulasi Data
+            </span>
+          )}
         </div>
 
-        {/* Restaurant Title */}
+        {/* Row 2: Halal Tier & Dietary Badges (Dedicated Full-Width Row) */}
+        <div className="w-full">
+          <HalalBadge
+            tier={tier}
+            certifier={certifierName}
+            validUntil={validUntil || certExpiresAt}
+            lastVerified={lastVerifiedDate}
+            alcoholStatus={alcoholStatus}
+            badges={dietaryFlags}
+          />
+        </div>
+
+        {/* Row 3: Restaurant Title */}
         <div>
           <h3 className="text-base font-bold text-primary leading-snug m-0">
             {name}{' '}
@@ -138,39 +138,39 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           </h3>
         </div>
 
-        {/* Cuisine & Rating Plate with Source Attribution */}
+        {/* Row 4: Cuisine & Rating Plate with Source Attribution */}
         <div className="flex flex-wrap items-center gap-2 text-xs text-secondary">
           <span className="font-semibold text-primary bg-surface px-2 py-0.5 rounded border border-paper-edge">
             {cuisine}
           </span>
           <div className="flex items-center gap-1 font-sans text-xs">
             <span className="text-warning">★</span>
-            <span className="font-bold text-primary">{googleRating.toFixed(1)}</span>
-            <span className="text-outline">
+            <span className="font-bold text-primary tnum">{googleRating.toFixed(1)}</span>
+            <span className="text-outline tnum">
               ({reviewCount.toLocaleString('id-ID')} ulasan via {ratingSource})
             </span>
           </div>
         </div>
 
-        {/* Physical Address & Postal Code */}
+        {/* Row 5: Physical Address & Postal Code */}
         <div className="text-xs text-secondary leading-snug">
           <p className="m-0 line-clamp-1">{address}</p>
           {addressLocalScript && (
-            <p className="m-0 text-[11px] text-outline font-sans line-clamp-1 mt-0.5">
+            <p className="m-0 text-xs text-outline font-sans line-clamp-1 mt-0.5">
               {addressLocalScript} {postalCode && `(${postalCode})`}
             </p>
           )}
         </div>
 
-        {/* Quick Action Tools: Taxi Address & Mirin/Sake Card */}
+        {/* Row 6: Quick Action Tools: Taxi Address & Mirin/Sake Card (48px interactive touch targets) */}
         <div className="flex items-center gap-2 pt-1" onClick={(e) => e.stopPropagation()}>
           {onShowTaxiCard && (
             <button
               type="button"
               onClick={onShowTaxiCard}
-              className="px-2.5 py-1 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-[11px] font-sans font-semibold text-primary flex items-center gap-1 transition"
+              className="h-12 px-3 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-semibold text-primary flex items-center gap-1.5 transition"
             >
-              <span>🚕</span>
+              <span aria-hidden="true">🚕</span>
               <span>Kartu Taksi</span>
             </button>
           )}
@@ -178,19 +178,19 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
             <button
               type="button"
               onClick={onShowPhraseCard}
-              className="px-2.5 py-1 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-[11px] font-sans font-semibold text-primary flex items-center gap-1 transition"
+              className="h-12 px-3 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-semibold text-primary flex items-center gap-1.5 transition"
             >
-              <span>🍶</span>
+              <span aria-hidden="true">🍶</span>
               <span>Cek Mirin/Sake</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* Dual-Price Range Indication */}
+      {/* Row 7: Dual-Price Range Indication */}
       {(priceRange || averagePrice) && (
         <div className="mt-1 pt-2.5 border-t border-paper-edge flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-          <span className="text-[11px] font-sans text-outline uppercase font-semibold">
+          <span className="text-xs font-sans text-outline uppercase font-semibold">
             {priceRange ? 'Rentang Harga & Estimasi:' : 'Estimasi Rata-rata:'}
           </span>
           <DualPrice

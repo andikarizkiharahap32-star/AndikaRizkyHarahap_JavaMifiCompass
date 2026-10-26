@@ -62,32 +62,32 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
 
         {/* 2. Orthogonal Dietary Chips */}
         {isAlcoholCertifiedFree && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-low text-primary border border-paper-edge text-[11px] font-sans font-medium">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-low text-primary border border-paper-edge text-xs font-sans font-medium">
             <span aria-hidden="true">◎</span>
             <span>{isId ? 'Bebas Alkohol' : 'Alcohol-Free'}</span>
           </span>
         )}
         {isAlcoholServed && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-warning-surface/70 text-warning border border-warning/30 text-[11px] font-sans font-medium">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-warning-surface text-warning border border-warning text-xs font-sans font-medium">
             <span aria-hidden="true">▲</span>
             <span>{isId ? 'Menyajikan Alkohol' : 'Serves Alcohol'}</span>
           </span>
         )}
         {isAlcoholNotMentioned && tier !== 'NOT_HALAL' && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface text-outline border border-paper-edge text-[10px] font-sans">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface text-outline border border-paper-edge text-xs font-sans">
             <span aria-hidden="true">▲</span>
             <span>{isId ? 'Alkohol: Belum Disebutkan' : 'Alcohol: Not Mentioned'}</span>
           </span>
         )}
 
         {porkFree && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-low text-primary border border-paper-edge text-[11px] font-sans font-medium">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-low text-primary border border-paper-edge text-xs font-sans font-medium">
             <span aria-hidden="true">◎</span>
             <span>{isId ? 'Dapur Bebas Babi' : 'Pork-Free'}</span>
           </span>
         )}
         {porkOnMenu && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-danger-surface text-danger border border-danger/40 text-[11px] font-sans font-medium">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-danger-surface text-danger border border-danger text-xs font-sans font-medium">
             <span aria-hidden="true">✕</span>
             <span>{isId ? 'Ada Menu Babi' : 'Pork on Menu'}</span>
           </span>
@@ -96,7 +96,7 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
 
       {/* 2. Dedicated Metadata Line Below the Badge (Prevents 4-line compressed wrapping) */}
       {(certifier || validUntil || lastVerified) && (
-        <div className="flex flex-wrap items-center gap-2 text-[11px] font-sans text-outline leading-tight">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-sans text-outline leading-tight mt-0.5 tnum">
           {certifier && (
             <span className="font-semibold text-primary">
               {certifier}
@@ -108,7 +108,7 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
             </span>
           )}
           {lastVerified && (
-            <span className="text-[10px] text-outline">
+            <span className="text-outline">
               ({isId ? 'Diverifikasi:' : 'Verified:'} {lastVerified})
             </span>
           )}
