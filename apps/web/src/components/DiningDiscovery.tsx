@@ -11,14 +11,11 @@ import {
   HalalTierType,
   TaxiAddressCard,
   DietaryPhraseCard,
+  RestaurantDetailModal,
 } from '@javamifi/ui';
 import { apiClient } from '../lib/api';
 import {
   Search,
-  MapPin,
-  Clock,
-  Phone,
-  ShieldCheck,
   AlertCircle,
   X,
   Compass,
@@ -246,14 +243,14 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   Terkoneksi dengan konteks sewa pocket-WiFi & eSIM JavaMifi untuk {selectedCountryObj?.name || 'Tujuan'}.
                 </p>
               </div>
-              <span className="text-[11px] font-sans font-bold uppercase bg-paper px-2.5 py-1 rounded border border-paper-edge text-primary">
+              <span className="text-xs font-sans font-bold uppercase bg-paper px-2.5 py-1 rounded border border-paper-edge text-primary">
                 Kurs Harian: 26 Okt 2026
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <div>
-                <label className="block text-[11px] font-bold uppercase text-outline mb-1">
+                <label className="block text-xs font-bold uppercase text-outline mb-1">
                   Jumlah Wisatawan (Orang):
                 </label>
                 <div className="flex items-center gap-1">
@@ -275,7 +272,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold uppercase text-outline mb-1">
+                <label className="block text-xs font-bold uppercase text-outline mb-1">
                   Durasi Perjalanan (Hari):
                 </label>
                 <div className="flex items-center gap-1">
@@ -297,25 +294,25 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               </div>
 
               <div className="bg-paper p-3 rounded border border-paper-edge">
-                <span className="text-[10px] font-bold uppercase text-outline block">
+                <span className="text-xs font-bold uppercase text-outline block">
                   Estimasi Per Orang / Hari:
                 </span>
-                <span className="text-sm font-bold text-primary font-sans mt-0.5 block">
+                <span className="text-sm font-bold text-primary font-sans mt-0.5 block tnum">
                   ≈ Rp 350.000 (3x Makan)
                 </span>
               </div>
 
               <div className="bg-paper p-3 rounded border border-paper-edge border-b-2">
-                <span className="text-[10px] font-bold uppercase text-outline block">
+                <span className="text-xs font-bold uppercase text-outline block">
                   Total Estimasi Anggaran Kas:
                 </span>
-                <span className="text-base font-black text-primary font-sans mt-0.5 block text-success">
+                <span className="text-base font-black text-primary font-sans mt-0.5 block text-success tnum">
                   Rp {(groupSize * tripDays * 350000).toLocaleString('id-ID')}
                 </span>
               </div>
             </div>
 
-            <div className="pt-2 border-t border-paper-edge flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-secondary">
+            <div className="pt-2 border-t border-paper-edge flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-secondary">
               <p className="m-0">
                 <strong>Catatan Pajak & Tunai:</strong> Di Jepang & Eropa, pajak 10–20% (VAT/内税) sudah tercantum di menu. Kedai ramen tradisional & penjual tiket mesin umumnya <strong>hanya menerima uang tunai (Cash Only)</strong>.
               </p>
@@ -327,7 +324,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
         <div className="sticky top-16 z-30 bg-paper border border-paper-edge border-b-2 rounded p-4 flex flex-col gap-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 items-center">
             {/* 1. Halal / Non-Halal Segmented Control (52px Touch Height) */}
-            <div className="flex items-center bg-surface p-1 rounded border border-paper-edge h-[52px]">
+            <div className="flex items-center bg-surface p-1 rounded border border-paper-edge h-13">
               <button
                 type="button"
                 onClick={() => setFilterMode('HALAL')}
@@ -365,7 +362,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
 
             {/* 2. Destination Dropdown (52px Target) */}
-            <div className="relative h-[52px]">
+            <div className="relative h-13">
               <select
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
@@ -383,14 +380,14 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
 
             {/* 3. Radius Control (52px Height container) */}
-            <div className="flex items-center justify-between gap-1 bg-surface border border-paper-edge rounded px-2 h-[52px] text-xs font-sans">
-              <span className="text-outline text-[11px] uppercase font-bold px-1">{t('topBar.radiusLabel')}:</span>
+            <div className="flex items-center justify-between gap-1 bg-surface border border-paper-edge rounded px-2 h-13 text-xs font-sans">
+              <span className="text-outline text-xs uppercase font-bold px-1">{t('topBar.radiusLabel')}:</span>
               {[1, 2, 5, 10].map((r) => (
                 <button
                   key={r}
                   type="button"
                   onClick={() => setRadiusKm(r)}
-                  className={`h-10 px-3 min-w-[48px] rounded text-xs font-bold transition flex items-center justify-center ${
+                  className={`h-10 px-3 min-w-12 rounded text-xs font-bold transition flex items-center justify-center ${
                     radiusKm === r
                       ? 'bg-paper text-primary border border-paper-edge'
                       : 'text-outline hover:text-primary'
@@ -402,7 +399,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
 
             {/* 4. Natural Language Intent Search (52px Height with Cari Trigger) */}
-            <form onSubmit={handleParseIntentSearch} className="relative h-[52px] flex items-center">
+            <form onSubmit={handleParseIntentSearch} className="relative h-13 flex items-center">
               <Search className="w-4 h-4 text-outline absolute left-3 pointer-events-none" />
               <input
                 type="text"
@@ -518,168 +515,16 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           </div>
         )}
 
-        {/* Place Detail Modal (Using Strict Solid Tint Scrim Token, NO Blur) */}
+        {/* Place Detail Modal */}
         {selectedPlace && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim overflow-y-auto">
-            <div className="bg-paper border border-paper-edge border-b-2 rounded max-w-3xl w-full max-h-[90vh] overflow-y-auto flex flex-col">
-              {/* Modal Wayfinding Header */}
-              <div className="sticky top-0 bg-paper border-b border-paper-edge p-5 flex items-start justify-between gap-4 z-10">
-                <div className="flex items-start gap-3">
-                  <DiningLogo size={44} />
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[11px] font-mono uppercase bg-surface text-primary px-2 py-0.5 rounded border border-paper-edge font-bold">
-                        {selectedPlace.cityName}, {selectedPlace.countryName}
-                      </span>
-                      <HalalBadge
-                        tier={selectedPlace.tier as HalalTierType}
-                        certifier={selectedPlace.certifierName}
-                        validUntil={selectedPlace.certExpiresAt}
-                        badges={selectedPlace.dietaryFlags}
-                      />
-                    </div>
-                    <h2 className="text-xl font-bold text-primary leading-tight m-0">
-                      {selectedPlace.name}
-                    </h2>
-                    {selectedPlace.nameOriginal && (
-                      <p className="text-xs text-outline mt-0.5 m-0 font-mono">
-                        {selectedPlace.nameOriginal}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedPlace(null)}
-                  className="w-12 h-12 rounded bg-surface hover:bg-paper-edge flex items-center justify-center text-primary transition border border-paper-edge"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Modal Content Body */}
-              <div className="p-6 space-y-6">
-                {/* Basic Meta (Address, Phone, Hours) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-surface rounded p-4 text-xs border border-paper-edge">
-                  <div className="flex items-start gap-2 text-secondary">
-                    <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                    <span>{selectedPlace.address}</span>
-                  </div>
-                  {selectedPlace.phone && (
-                    <div className="flex items-center gap-2 text-secondary">
-                      <Phone className="w-4 h-4 text-primary shrink-0" />
-                      <span>{selectedPlace.phone}</span>
-                    </div>
-                  )}
-                  {selectedPlace.openingHours?.length > 0 && (
-                    <div className="flex items-start gap-2 text-secondary sm:col-span-2">
-                      <Clock className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                      <span>{selectedPlace.openingHours.join(' · ')}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Evidence Panel: "Why We Think This Is Halal" */}
-                <div className="border border-paper-edge bg-surface rounded p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <ShieldCheck className="w-4 h-4 text-success" />
-                    <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold text-primary m-0">
-                      {t('detail.evidenceTitle')} {selectedPlace.tier}:
-                    </h4>
-                  </div>
-                  <p className="text-xs text-secondary leading-relaxed m-0">
-                    {selectedPlace.whyHalalExplanation ||
-                      'Restoran ini memenuhi kriteria verifikasi status kepatuhan sistem JavaMifi Compass.'}
-                  </p>
-
-                  {/* Verbatim Quotes Evidence (Rendered as plain text safely) */}
-                  {selectedPlace.evidence?.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-paper-edge space-y-2">
-                      {selectedPlace.evidence.map((ev: any) => (
-                        <div
-                          key={ev.id}
-                          className="bg-paper rounded p-3 text-[11px] font-mono border border-paper-edge"
-                        >
-                          <div className="text-[10px] uppercase font-bold text-outline mb-1">
-                            Kutipan Sumber ({ev.attributionNotice}):
-                          </div>
-                          <p className="italic text-primary m-0">"{ev.quoteText}"</p>
-                          <div className="text-[10px] text-outline mt-1">
-                            Diakses: {ev.retrievedAt} · Bahasa: {ev.language}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Full Categorized Menu with Dual Prices */}
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-mono uppercase tracking-wider font-extrabold text-primary m-0">
-                      {t('detail.menuTitle')}
-                    </h3>
-                    <span className="text-[10px] font-mono text-outline">
-                      Tarif lokal & perkiraan Rupiah
-                    </span>
-                  </div>
-
-                  {selectedPlace.menuCategories?.length === 0 ? (
-                    <p className="text-xs text-outline italic m-0">
-                      Daftar menu sedang diperbarui oleh sistem verifikasi.
-                    </p>
-                  ) : (
-                    <div className="space-y-4">
-                      {selectedPlace.menuCategories.map((cat: any) => (
-                        <div key={cat.category} className="space-y-2">
-                          <h4 className="text-xs font-bold text-primary uppercase tracking-wide border-b border-paper-edge pb-1 m-0">
-                            {cat.category}
-                          </h4>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {cat.items.map((item: any) => (
-                              <MenuTicketChit
-                                key={item.id}
-                                id={item.id}
-                                nameOriginal={item.nameOriginal}
-                                nameId={item.nameId}
-                                nameEn={item.nameEn}
-                                category={item.category}
-                                sourceDescription={item.sourceDescription}
-                                explainerId={item.explainerId}
-                                amountMinor={item.price.amountMinor}
-                                currency={item.price.currency}
-                                amountIdr={item.price.amountIdr}
-                                rateDate={item.price.rateSnapshotDate}
-                                isHalal={item.isHalal}
-                                flags={item.flags}
-                                locale={locale}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Persistent Notice & Report Button */}
-                <div className="pt-4 border-t border-paper-edge flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-secondary">
-                  <p className="text-[11px] max-w-lg leading-relaxed m-0">
-                    {t('status.verifyNotice')}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setIsReportOpen(true)}
-                    className="shrink-0 h-12 px-4 rounded border border-danger/40 bg-danger-surface hover:bg-danger-surface/80 text-danger font-mono text-xs font-bold transition flex items-center gap-1.5"
-                  >
-                    <AlertCircle className="w-4 h-4 text-danger" />
-                    <span>{t('detail.reportBtn')}</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <RestaurantDetailModal
+            place={selectedPlace}
+            locale={locale}
+            onClose={() => setSelectedPlace(null)}
+            onOpenReport={() => setIsReportOpen(true)}
+            onShowTaxiCard={() => setSelectedTaxiPlace(selectedPlace)}
+            onShowPhraseCard={() => setIsPhraseCardOpen(true)}
+          />
         )}
 
         {/* User Dispute / Correction Dialog Modal */}
@@ -772,14 +617,14 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                     <button
                       type="button"
                       onClick={() => setIsReportOpen(false)}
-                      className="h-12 px-4 rounded text-xs font-bold text-outline hover:text-primary min-w-[48px]"
+                      className="h-12 px-4 rounded text-xs font-bold text-outline hover:text-primary min-w-12"
                     >
                       {tCommon('close')}
                     </button>
                     <button
                       type="submit"
                       disabled={isSubmittingReport}
-                      className="h-12 px-5 rounded bg-primary hover:bg-primary-hover text-on-primary text-xs font-mono font-bold tracking-wider uppercase transition disabled:opacity-50 min-w-[48px]"
+                      className="h-12 px-5 rounded bg-primary hover:bg-primary-hover text-on-primary text-xs font-mono font-bold tracking-wider uppercase transition disabled:opacity-50 min-w-12"
                     >
                       {isSubmittingReport ? 'Mengirim...' : 'Kirim Laporan Audit'}
                     </button>

@@ -7,6 +7,9 @@ module.exports = {
   darkMode: ['class', '[data-theme="night"]'],
   theme: {
     extend: {
+      spacing: {
+        13: '3.25rem', // 52px transit form inputs and CTAs per DESIGN.md
+      },
       colors: {
         surface: 'var(--color-surface)',
         'surface-dim': 'var(--color-surface-dim)',
