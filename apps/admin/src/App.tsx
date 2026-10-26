@@ -11,6 +11,7 @@ import {
   Sliders,
   LogOut,
   User,
+  UtensilsCrossed,
 } from 'lucide-react';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { OrdersScreen } from './screens/OrdersScreen';
@@ -21,6 +22,7 @@ import { AuditLogScreen } from './screens/AuditLogScreen';
 import { IntegrationsHealthScreen } from './screens/IntegrationsHealthScreen';
 import { SupportTicketsScreen } from './screens/SupportTicketsScreen';
 import { LoginScreen } from './screens/LoginScreen';
+import { DiningReviewQueueScreen } from './screens/DiningReviewQueueScreen';
 
 export const App = () => {
   const [user, setUser] = useState<any>({
@@ -30,7 +32,7 @@ export const App = () => {
   });
 
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'orders' | 'devices' | 'content' | 'automation' | 'audit' | 'integrations' | 'support'
+    'dashboard' | 'dining' | 'orders' | 'devices' | 'content' | 'automation' | 'audit' | 'integrations' | 'support'
   >('dashboard');
 
   if (!user) {
@@ -39,6 +41,7 @@ export const App = () => {
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { id: 'dining', label: 'Audit Halal & AI Discovery', icon: <UtensilsCrossed className="w-4 h-4 text-emerald-400" /> },
     { id: 'orders', label: 'Pesanan & Ledger', icon: <Package className="w-4 h-4" /> },
     { id: 'devices', label: 'Armada Modem WiFi', icon: <Wifi className="w-4 h-4" /> },
     { id: 'content', label: 'Editor Konten CMS', icon: <FileText className="w-4 h-4" /> },
@@ -108,6 +111,7 @@ export const App = () => {
       {/* Main Screen Content */}
       <main className="flex-1 p-6 sm:p-10 overflow-y-auto">
         {activeTab === 'dashboard' && <DashboardScreen />}
+        {activeTab === 'dining' && <DiningReviewQueueScreen />}
         {activeTab === 'orders' && <OrdersScreen />}
         {activeTab === 'devices' && <DevicesScreen />}
         {activeTab === 'content' && <ContentEditorScreen />}

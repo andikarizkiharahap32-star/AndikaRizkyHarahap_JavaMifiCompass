@@ -217,3 +217,51 @@ export const validationResultSchema = z.object({
 });
 export type ValidationResult = z.infer<typeof validationResultSchema>;
 
+/** User Dispute / Correction Report Schema */
+export const disputeReasonSchema = z.enum([
+  'PORK_DETECTED',
+  'ALCOHOL_SERVED',
+  'CERTIFICATE_EXPIRED',
+  'PRICING_INCORRECT',
+  'OTHER',
+]);
+export type DisputeReason = z.infer<typeof disputeReasonSchema>;
+
+export const diningReportCreateSchema = z.object({
+  placeId: z.string().min(1),
+  placeName: z.string().min(1),
+  disputeReason: disputeReasonSchema,
+  suggestedTier: halalTierSchema.optional(),
+  userComment: z.string().min(3),
+  reporterEmail: z.string().email().optional(),
+});
+export type DiningReportCreateDto = z.infer<typeof diningReportCreateSchema>;
+
+export const diningReviewItemSchema = z.object({
+  id: z.string().min(1),
+  placeId: z.string().min(1),
+  placeName: z.string().min(1),
+  countryIso2: z.string().length(2),
+  type: z.enum(['ADVERSARIAL_ALERT', 'QUOTE_MISMATCH', 'PRICE_OUTLIER', 'USER_DISPUTE']),
+  currentTier: halalTierSchema,
+  reason: z.string().min(1),
+  status: z.enum(['PENDING', 'RESOLVED', 'DISMISSED']),
+  createdAt: z.string(),
+  resolvedAt: z.string().optional(),
+  resolvedBy: z.string().optional(),
+  actionTaken: z.string().optional(),
+});
+export type DiningReviewItem = z.infer<typeof diningReviewItemSchema>;
+
+export const diningSafetyStatusSchema = z.object({
+  isAiEnrichmentEnabled: z.boolean(),
+  dailyTokenBudget: z.number().int(),
+  tokensUsedToday: z.number().int(),
+  dailyRequestLimit: z.number().int(),
+  requestsUsedToday: z.number().int(),
+  killSwitchActive: z.boolean(),
+  lastResetAt: z.string(),
+});
+export type DiningSafetyStatus = z.infer<typeof diningSafetyStatusSchema>;
+
+

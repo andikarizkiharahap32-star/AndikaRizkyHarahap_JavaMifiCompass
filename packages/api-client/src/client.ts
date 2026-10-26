@@ -262,5 +262,41 @@ export class JavaMifiApiClient {
       );
     },
     getPlaceDetail: (id: string) => this.request<any>(`/v1/dining/places/${id}`),
+    submitReport: (payload: {
+      placeId: string;
+      placeName: string;
+      disputeReason: string;
+      suggestedTier?: string;
+      userComment: string;
+      reporterEmail?: string;
+    }) =>
+      this.request<any>('/v1/dining/reports', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
+    getReviewQueue: () => this.request<any[]>('/v1/dining/admin/review-queue'),
+    resolveReviewItem: (
+      id: string,
+      payload: {
+        action: 'OVERRIDE_TIER' | 'DISMISS';
+        overrideTier?: string;
+        resolvedBy: string;
+        notes?: string;
+      }
+    ) =>
+      this.request<any>(`/v1/dining/admin/review-queue/${id}/resolve`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
+    getSafetyStatus: () => this.request<any>('/v1/dining/admin/safety-status'),
+    toggleKillSwitch: (active: boolean) =>
+      this.request<any>('/v1/dining/admin/safety-toggle', {
+        method: 'POST',
+        body: JSON.stringify({ active }),
+      }),
+    runGoldenSetEvaluation: () =>
+      this.request<any>('/v1/dining/evaluation/run', {
+        method: 'POST',
+      }),
   };
 }

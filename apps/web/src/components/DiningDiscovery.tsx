@@ -44,6 +44,45 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
   const [selectedPlace, setSelectedPlace] = useState<any | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
 
+  // User dispute report state
+  const [isReportOpen, setIsReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState<string>('PORK_DETECTED');
+  const [suggestedTier, setSuggestedTier] = useState<string>('NOT_HALAL');
+  const [reportComment, setReportComment] = useState('');
+  const [reportEmail, setReportEmail] = useState('');
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+  const [reportSuccessReceipt, setReportSuccessReceipt] = useState<string | null>(null);
+
+  // Submit dispute report
+  const handleSubmitReport = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedPlace || !reportComment.trim()) return;
+
+    setIsSubmittingReport(true);
+    try {
+      const res = await apiClient.dining.submitReport({
+        placeId: selectedPlace.id,
+        placeName: selectedPlace.name,
+        disputeReason: reportReason,
+        suggestedTier,
+        userComment: reportComment,
+        reporterEmail: reportEmail || undefined,
+      });
+      setReportSuccessReceipt(res.id);
+      setTimeout(() => {
+        setIsReportOpen(false);
+        setReportSuccessReceipt(null);
+        setReportComment('');
+        setReportEmail('');
+      }, 2500);
+    } catch (err: any) {
+      console.error('Failed to submit report', err);
+      alert('Gagal mengirim laporan. Silakan coba lagi.');
+    } finally {
+      setIsSubmittingReport(false);
+    }
+  };
+
   // Load countries catalog
   useEffect(() => {
     apiClient.dining
@@ -434,13 +473,150 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   </p>
                   <button
                     type="button"
-                    onClick={() => alert('Terima kasih. Laporan Anda telah diteruskan ke antrean review CMS.')}
-                    className="shrink-0 px-3 py-1.5 rounded-lg border border-[#D8DDD9] hover:bg-[#EDF0EE] text-[#18215A] font-mono text-[11px] font-bold transition"
+                    onClick={() => setIsReportOpen(true)}
+                    className="shrink-0 px-3 py-1.5 rounded-lg border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-800 font-mono text-[11px] font-bold transition flex items-center gap-1.5"
                   >
+                    <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
                     Laporkan Data Salah
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* User Dispute / Correction Dialog Modal (Transit Wayfinding Design) */}
+        {isReportOpen && selectedPlace && (
+          <div className="fixed inset-0 z-50 bg-[#000846]/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white border-2 border-[#18215A] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsReportOpen(false);
+                  setReportSuccessReceipt(null);
+                }}
+                className="absolute top-4 right-4 p-1 rounded-full text-[#6B7570] hover:text-[#18215A] hover:bg-[#EDF0EE]"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-2 h-2 rounded-full bg-rose-500" />
+                <span className="text-[10px] font-mono uppercase tracking-widest text-rose-600 font-extrabold">
+                  Dispute & Review Ticket
+                </span>
+              </div>
+
+              <h3 className="text-lg font-bold text-[#18215A]">
+                Laporkan Koreksi Data Restoran
+              </h3>
+              <p className="text-xs text-[#6B7570] mb-4">
+                {selectedPlace.name} ({selectedPlace.cityName}, {selectedPlace.countryName})
+              </p>
+
+              {reportSuccessReceipt ? (
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2">
+                  <ShieldCheck className="w-8 h-8 text-emerald-600 mx-auto" />
+                  <p className="text-sm font-bold text-emerald-900">
+                    Laporan Berhasil Diterima!
+                  </p>
+                  <p className="text-xs text-emerald-700 font-mono">
+                    Nomor Tiket Antrean CMS: <strong>{reportSuccessReceipt}</strong>
+                  </p>
+                  <p className="text-[11px] text-[#6B7570]">
+                    Tim kurasi & verifikator JavaMifi akan meninjau data ini. Terima kasih telah membantu sesama traveler.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmitReport} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-mono font-bold text-[#18215A] uppercase mb-1">
+                      Alasan Masalah
+                    </label>
+                    <select
+                      value={reportReason}
+                      onChange={(e) => setReportReason(e.target.value)}
+                      className="w-full text-xs font-medium bg-[#EDF0EE] border border-[#D8DDD9] rounded-xl px-3 py-2 text-[#18215A] focus:outline-none focus:border-[#059669]"
+                    >
+                      <option value="PORK_DETECTED">Menu Mengandung Babi / Olahan Babi (Pork Detected)</option>
+                      <option value="ALCOHOL_SERVED">Menyajikan Minuman Beralkohol / Arak Masak</option>
+                      <option value="CERTIFICATE_EXPIRED">Sertifikat Halal Kedaluwarsa / Palsu</option>
+                      <option value="PRICING_INCORRECT">Harga atau Konversi Kurs Mata Uang Tidak Akurat</option>
+                      <option value="OTHER">Lainnya / Perubahan Status Restoran</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold text-[#18215A] uppercase mb-1">
+                      Usulan Status Halal Baru
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { id: 'NOT_HALAL', label: 'TIDAK HALAL' },
+                        { id: 'OPTIONS', label: 'OPTIONS (Dapur Campur)' },
+                        { id: 'UNKNOWN', label: 'BELUM TERVERIFIKASI' },
+                      ].map((t) => (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => setSuggestedTier(t.id)}
+                          className={`px-2 py-1.5 rounded-lg text-[10px] font-mono font-bold border transition ${
+                            suggestedTier === t.id
+                              ? 'bg-[#18215A] text-white border-[#18215A]'
+                              : 'bg-white text-[#18215A] border-[#D8DDD9] hover:bg-[#EDF0EE]'
+                          }`}
+                        >
+                          {t.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold text-[#18215A] uppercase mb-1">
+                      Rincian Temuan / Bukti Lapangan <span className="text-rose-500">*</span>
+                    </label>
+                    <textarea
+                      required
+                      rows={3}
+                      value={reportComment}
+                      onChange={(e) => setReportComment(e.target.value)}
+                      placeholder="Contoh: Menu ramen seasonal menggunakan kaldu babi, atau pelayan mengonfirmasi tidak ada sertifikat halal resmi..."
+                      className="w-full text-xs bg-white border border-[#D8DDD9] rounded-xl p-2.5 text-[#18215A] focus:outline-none focus:border-[#059669]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold text-[#18215A] uppercase mb-1">
+                      Email Anda (Opsional, untuk notifikasi status)
+                    </label>
+                    <input
+                      type="email"
+                      value={reportEmail}
+                      onChange={(e) => setReportEmail(e.target.value)}
+                      placeholder="traveler@example.com"
+                      className="w-full text-xs bg-white border border-[#D8DDD9] rounded-xl px-3 py-2 text-[#18215A] focus:outline-none focus:border-[#059669]"
+                    />
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsReportOpen(false)}
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-[#6B7570] hover:bg-[#EDF0EE] transition"
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingReport || !reportComment.trim()}
+                      className="px-5 py-2 rounded-xl text-xs font-bold bg-[#059669] hover:bg-[#047857] text-white transition disabled:opacity-50"
+                    >
+                      {isSubmittingReport ? 'Mengirim...' : 'Kirim Laporan Koreksi'}
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
         )}

@@ -16,7 +16,8 @@ import { ValidationPipelineService } from './validation/pipeline.service';
 import { GeminiFlashProvider } from './providers/gemini-flash.provider';
 import { DiningOutboxService } from './dining-outbox.service';
 import { GoldenSetRunnerService } from './evaluation/golden-set-runner';
-import { DiningFilterMode } from '@javamifi/shared';
+import { DiningReviewService } from './dining-review.service';
+import { DiningFilterMode, DiningReportCreateDto, HalalTier } from '@javamifi/shared';
 
 @ApiTags('Dining (Compass Rasa)')
 @Controller('v1/dining')
@@ -27,7 +28,8 @@ export class DiningController {
     private readonly validationPipeline: ValidationPipelineService,
     private readonly geminiFlash: GeminiFlashProvider,
     private readonly diningOutbox: DiningOutboxService,
-    private readonly goldenSetRunner: GoldenSetRunnerService
+    private readonly goldenSetRunner: GoldenSetRunnerService,
+    private readonly diningReview: DiningReviewService
   ) {}
 
   @Get('countries')
@@ -161,5 +163,57 @@ export class DiningController {
   @ApiResponse({ status: 200, description: 'Evaluation report summary with quality gate metrics' })
   async runEvaluation() {
     return this.goldenSetRunner.runEvaluation();
+  }
+
+  // ── PHASE P3: CMS Review Queue & User Dispute Triage ──────
+
+  @Post('reports')
+  @ApiOperation({ summary: 'Submit user dispute or incorrect data report' })
+  @ApiResponse({ status: 201, description: 'Report accepted into review queue' })
+  submitReport(@Body() dto: DiningReportCreateDto) {
+    if (!dto.placeId || !dto.placeName || !dto.userComment || !dto.disputeReason) {
+      throw new BadRequestException('placeId, placeName, disputeReason, and userComment are required');
+    }
+    return this.diningReview.submitReport(dto);
+  }
+
+  @Get('admin/review-queue')
+  @ApiOperation({ summary: 'Get flagged enrichment jobs and user dispute tickets' })
+  @ApiResponse({ status: 200, description: 'List of review items' })
+  getReviewQueue() {
+    return this.diningReview.getReviewQueue();
+  }
+
+  @Post('admin/review-queue/:id/resolve')
+  @ApiOperation({ summary: 'Resolve or dismiss a review item' })
+  resolveReviewItem(
+    @Param('id') id: string,
+    @Body()
+    body: {
+      action: 'OVERRIDE_TIER' | 'DISMISS';
+      overrideTier?: HalalTier;
+      resolvedBy: string;
+      notes?: string;
+    }
+  ) {
+    if (!body.action || !body.resolvedBy) {
+      throw new BadRequestException('action and resolvedBy are required');
+    }
+    return this.diningReview.resolveItem(id, body);
+  }
+
+  @Get('admin/safety-status')
+  @ApiOperation({ summary: 'Get AI discovery token budget and kill-switch status' })
+  getSafetyStatus() {
+    return this.diningReview.getSafetyStatus();
+  }
+
+  @Post('admin/safety-toggle')
+  @ApiOperation({ summary: 'Toggle kill-switch for AI discovery enrichment' })
+  toggleKillSwitch(@Body() body: { active: boolean }) {
+    if (typeof body.active !== 'boolean') {
+      throw new BadRequestException('active boolean is required');
+    }
+    return this.diningReview.toggleKillSwitch(body.active);
   }
 }
