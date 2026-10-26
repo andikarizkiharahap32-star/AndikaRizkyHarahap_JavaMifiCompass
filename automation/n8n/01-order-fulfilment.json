@@ -1,0 +1,134 @@
+{
+  "name": "01 - Order Fulfilment",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "javamifi/order-paid",
+        "options": {}
+      },
+      "id": "node-webhook-1",
+      "name": "Webhook: order.paid",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.body.fulfillmentType }}",
+              "value2": "DIGITAL"
+            }
+          ]
+        }
+      },
+      "id": "node-if-fulfillment-type",
+      "name": "Is Digital eSIM?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:3001/fulfillment/esim/provision",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"orderNumber\": \"{{ $json.body.orderNumber }}\",\n  \"customerEmail\": \"{{ $json.body.customerEmail }}\"\n}",
+        "options": {}
+      },
+      "id": "node-provision-esim",
+      "name": "API: Provision eSIM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [560, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:3001/fulfillment/device/queue-shipment",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"orderNumber\": \"{{ $json.body.orderNumber }}\",\n  \"shippingAddress\": {{ JSON.stringify($json.body.shippingAddress) }}\n}",
+        "options": {}
+      },
+      "id": "node-queue-shipment",
+      "name": "API: Queue Physical Shipment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [560, 420]
+    },
+    {
+      "parameters": {
+        "fromEmail": "orders@javamifi.com",
+        "toEmail": "={{ $json.body.customerEmail }}",
+        "subject": "=[JavaMifi Compass] Your Connection is Ready! (Order #{{ $json.body.orderNumber }})",
+        "text": "=Halo {{ $json.body.contactName }},\n\nPesanan JavaMifi Anda #{{ $json.body.orderNumber }} telah berhasil dikonfirmasi!\n\nAkses Trip Hub Anda untuk panduan aktivasi QR dan informasi koneksi:\nhttp://localhost:3000/trip-hub/{{ $json.body.orderNumber }}\n\n#AntiSusahSinyal\nTim JavaMifi",
+        "options": {}
+      },
+      "id": "node-email-customer",
+      "name": "Mailpit: Send Trip Hub & QR",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [800, 300]
+    }
+  ],
+  "connections": {
+    "Webhook: order.paid": {
+      "main": [
+        [
+          {
+            "node": "Is Digital eSIM?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Digital eSIM?": {
+      "main": [
+        [
+          {
+            "node": "API: Provision eSIM",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "API: Queue Physical Shipment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Provision eSIM": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: Send Trip Hub & QR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Queue Physical Shipment": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: Send Trip Hub & QR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

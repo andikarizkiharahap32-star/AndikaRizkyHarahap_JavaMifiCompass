@@ -1,0 +1,94 @@
+{
+  "name": "07 - Support Intake and Triage",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "javamifi/ticket-created",
+        "options": {}
+      },
+      "id": "node-webhook-ticket",
+      "name": "Webhook: ticket.created",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = ($json.body.subject + ' ' + $json.body.message).toLowerCase();\nlet priority = 'MEDIUM';\n\nif (text.includes('urgent') || text.includes('darurat') || text.includes('no signal') || text.includes('tidak ada sinyal') || text.includes('airport')) {\n  priority = 'URGENT';\n} else if (text.includes('refund') || text.includes('kembalikan dana') || text.includes('rusak') || text.includes('broken')) {\n  priority = 'HIGH';\n} else if (text.includes('tanya') || text.includes('faq') || text.includes('info')) {\n  priority = 'LOW';\n}\n\nreturn { json: { ...$json.body, calculatedPriority: priority } };"
+      },
+      "id": "node-code-triage",
+      "name": "Code: Keyword Triage",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=http://api:3001/support/tickets/{{ $json.ticketId }}/priority",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"priority\": \"{{ $json.calculatedPriority }}\"\n}",
+        "options": {}
+      },
+      "id": "node-patch-priority",
+      "name": "API: Update Ticket Priority",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "support-bot@javamifi.com",
+        "toEmail": "support-oncall@javamifi.com",
+        "subject": "=[Support Ticket Alert] Priority: {{ $json.calculatedPriority }} — {{ $json.subject }}",
+        "text": "=New support ticket intake:\n\nTicket ID: {{ $json.ticketId }}\nFrom: {{ $json.name }} ({{ $json.email }})\nPriority: {{ $json.calculatedPriority }}\nSubject: {{ $json.subject }}\nMessage:\n{{ $json.message }}\n\nView in Support Console: http://localhost:3002/support",
+        "options": {}
+      },
+      "id": "node-email-oncall",
+      "name": "Mailpit: Notify On-Call Agent",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [760, 300]
+    }
+  ],
+  "connections": {
+    "Webhook: ticket.created": {
+      "main": [
+        [
+          {
+            "node": "Code: Keyword Triage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Keyword Triage": {
+      "main": [
+        [
+          {
+            "node": "API: Update Ticket Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Update Ticket Priority": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: Notify On-Call Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

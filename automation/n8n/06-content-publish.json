@@ -1,0 +1,47 @@
+{
+  "name": "06 - Content Publish Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "javamifi/article-published",
+        "options": {}
+      },
+      "id": "node-webhook-article",
+      "name": "Webhook: article.published",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "content@javamifi.com",
+        "toEmail": "marketing@javamifi.com",
+        "subject": "=[New Guide Published] Draft Social & Newsletter: {{ $json.body.titleEn }}",
+        "text": "=A new destination guide or blog has been published on JavaMifi Compass!\n\nTitle (EN): {{ $json.body.titleEn }}\nTitle (ID): {{ $json.body.titleId }}\nSlug: {{ $json.body.slug }}\nURL: http://localhost:3000/destinations/{{ $json.body.slug }}\n\nDraft newsletter campaign ready for review in CMS.",
+        "options": {}
+      },
+      "id": "node-notify-marketing",
+      "name": "Mailpit: Social / Newsletter Draft",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [360, 300]
+    }
+  ],
+  "connections": {
+    "Webhook: article.published": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: Social / Newsletter Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

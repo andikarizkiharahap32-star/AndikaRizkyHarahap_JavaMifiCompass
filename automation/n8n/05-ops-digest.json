@@ -1,0 +1,75 @@
+{
+  "name": "05 - Ops Daily Digest (08:00 WIB)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 1 * * *"
+            }
+          ]
+        }
+      },
+      "id": "node-schedule-08wib",
+      "name": "Cron: 08:00 WIB (01:00 UTC)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://api:3001/admin/dashboard/digest",
+        "options": {}
+      },
+      "id": "node-fetch-digest",
+      "name": "API: Fetch Daily Ops Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "ops-bot@javamifi.com",
+        "toEmail": "ops-team@javamifi.com",
+        "subject": "=JavaMifi Daily Ops Digest — {{ new Date().toISOString().split('T')[0] }}",
+        "text": "=JavaMifi Compass Daily Ops Digest:\n\n• Today's Shipments Due: {{ $json.shipmentsDueToday }}\n• Pocket WiFi Devices In-Use: {{ $json.devicesInUse }}\n• Overdue Returns: {{ $json.overdueReturns }}\n• Yesterday's Revenue: Rp {{ $json.yesterdayRevenueIdr.toLocaleString('id-ID') }}\n• Dead-Letter Errors: {{ $json.deadLetterCount }}\n\nOpen Admin CMS Dashboard: http://localhost:3002",
+        "options": {}
+      },
+      "id": "node-email-ops",
+      "name": "Mailpit: Send Daily Ops Digest",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [560, 300]
+    }
+  ],
+  "connections": {
+    "Cron: 08:00 WIB (01:00 UTC)": {
+      "main": [
+        [
+          {
+            "node": "API: Fetch Daily Ops Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Fetch Daily Ops Summary": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: Send Daily Ops Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

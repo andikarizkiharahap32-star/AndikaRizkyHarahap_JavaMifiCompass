@@ -1,0 +1,177 @@
+# ═══════════════════════════════════════════════════════════════
+# JavaMifi Compass — Docker Compose
+# ═══════════════════════════════════════════════════════════════
+# Usage:
+#   docker compose up -d          # start all services
+#   docker compose up postgres redis mailpit  # infra only
+#   docker compose logs -f api    # tail API logs
+#   docker compose down -v        # stop & remove volumes
+# ═══════════════════════════════════════════════════════════════
+
+version: "3.9"
+
+services:
+  # ── PostgreSQL ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: javamifi-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: javamifi
+      POSTGRES_PASSWORD: javamifi_dev
+      POSTGRES_DB: javamifi_compass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U javamifi -d javamifi_compass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - javamifi-network
+
+  # ── Redis ───────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: javamifi-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - javamifi-network
+
+  # ── Mailpit (dev email) ────────────────────────────────────
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: javamifi-mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"   # Web UI
+      - "1025:1025"   # SMTP
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "true"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+    networks:
+      - javamifi-network
+
+  # ── n8n (workflow automation) ──────────────────────────────
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: javamifi-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: admin
+      N8N_BASIC_AUTH_PASSWORD: admin
+      WEBHOOK_URL: http://localhost:5678
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: javamifi_compass
+      DB_POSTGRESDB_USER: javamifi
+      DB_POSTGRESDB_PASSWORD: javamifi_dev
+      N8N_DEFAULT_BINARY_DATA_MODE: filesystem
+      GENERIC_TIMEZONE: Asia/Jakarta
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./automation/n8n:/home/node/n8n-workflows
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - javamifi-network
+
+  # ── API (NestJS) ───────────────────────────────────────────
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: javamifi-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://javamifi:javamifi_dev@postgres:5432/javamifi_compass
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    volumes:
+      - api_uploads:/app/uploads
+    networks:
+      - javamifi-network
+
+  # ── Web (Next.js) ──────────────────────────────────────────
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: javamifi-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      API_URL: http://api:3001
+    depends_on:
+      - api
+    networks:
+      - javamifi-network
+
+  # ── Admin (Vite React) ─────────────────────────────────────
+  admin:
+    build:
+      context: ./apps/admin
+      dockerfile: Dockerfile
+    container_name: javamifi-admin
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    env_file:
+      - .env
+    depends_on:
+      - api
+    networks:
+      - javamifi-network
+
+# ── Volumes ────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  n8n_data:
+    driver: local
+  api_uploads:
+    driver: local
+
+# ── Networks ───────────────────────────────────────────────────
+networks:
+  javamifi-network:
+    driver: bridge
+    name: javamifi-network

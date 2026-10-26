@@ -1,0 +1,104 @@
+{
+  "name": "03 - Device Lifecycle & Return Management",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "node-schedule-daily",
+      "name": "Cron: 09:00 Daily",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://api:3001/fulfillment/device/rentals/active",
+        "options": {}
+      },
+      "id": "node-fetch-rentals",
+      "name": "API: Get Active Device Rentals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.daysUntilDue }}",
+              "operation": "equal",
+              "value2": 2
+            }
+          ]
+        }
+      },
+      "id": "node-if-2-days-due",
+      "name": "2 Days Before Return Due?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "logistics@javamifi.com",
+        "toEmail": "={{ $json.contactEmail }}",
+        "subject": "=[JavaMifi Reminder] Device Return Instructions for Order #{{ $json.orderNumber }}",
+        "text": "=Halo {{ $json.contactName }},\n\nPerjalanan Anda segera berakhir! Pengingat untuk mengembalikan Pocket WiFi JavaMifi dalam 2 hari ke depan.\n\nInstruksi pengembalian & lokasi drop-box airport:\nhttp://localhost:3000/trip-hub/{{ $json.orderNumber }}\n\nDeposit sebesar Rp {{ $json.depositIdr }} akan segera kami proses setelah perangkat diterima & diinspeksi.\n\nTerima kasih,\nTim JavaMifi",
+        "options": {}
+      },
+      "id": "node-send-return-reminder",
+      "name": "Mailpit: Return Reminder",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [780, 240]
+    }
+  ],
+  "connections": {
+    "Cron: 09:00 Daily": {
+      "main": [
+        [
+          {
+            "node": "API: Get Active Device Rentals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Get Active Device Rentals": {
+      "main": [
+        [
+          {
+            "node": "2 Days Before Return Due?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2 Days Before Return Due?": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: Return Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

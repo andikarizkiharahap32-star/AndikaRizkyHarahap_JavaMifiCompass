@@ -1,0 +1,104 @@
+{
+  "name": "04 - Usage and Expiry Alerts",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "node-schedule-usage",
+      "name": "Cron: Every 6 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://api:3001/fulfillment/esim/active-usage-checks",
+        "options": {}
+      },
+      "id": "node-fetch-usage",
+      "name": "API: Poll eSIM Usage Quotas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.percentageUsed }}",
+              "operation": "largerEqual",
+              "value2": 80
+            }
+          ]
+        }
+      },
+      "id": "node-if-80-pct",
+      "name": "Usage >= 80%?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "alerts@javamifi.com",
+        "toEmail": "={{ $json.customerEmail }}",
+        "subject": "=[JavaMifi Alert] You have used 80% of your data quota",
+        "text": "=Halo {{ $json.customerName }},\n\nPenggunaan data untuk eSIM Anda telah mencapai {{ $json.percentageUsed }}% ({{ $json.dataUsedMb }} MB dari {{ $json.dataLimitMb }} MB).\n\nUntuk menghindari gangguan koneksi, Anda dapat melakukan top-up langsung melalui Trip Hub:\nhttp://localhost:3000/trip-hub/{{ $json.orderNumber }}#topup\n\n#AntiSusahSinyal\nJavaMifi",
+        "options": {}
+      },
+      "id": "node-send-usage-alert",
+      "name": "Mailpit: 80% Quota Alert & Top-up Link",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [780, 240]
+    }
+  ],
+  "connections": {
+    "Cron: Every 6 Hours": {
+      "main": [
+        [
+          {
+            "node": "API: Poll eSIM Usage Quotas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Poll eSIM Usage Quotas": {
+      "main": [
+        [
+          {
+            "node": "Usage >= 80%?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Usage >= 80%?": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: 80% Quota Alert & Top-up Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

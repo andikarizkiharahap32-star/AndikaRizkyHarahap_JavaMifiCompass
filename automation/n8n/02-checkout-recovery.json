@@ -1,0 +1,126 @@
+{
+  "name": "02 - Checkout Recovery",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "node-schedule-checkout",
+      "name": "Cron: Every 15 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://api:3001/orders/pending-recovery-candidates",
+        "options": {}
+      },
+      "id": "node-fetch-pending",
+      "name": "API: Get Pending Orders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.ageHours }}",
+              "operation": "largerEqual",
+              "value2": 24
+            }
+          ]
+        }
+      },
+      "id": "node-if-expired",
+      "name": "Age >= 24 Hours?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:3001/automation/callbacks/order-expired",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"orderNumber\": \"{{ $json.orderNumber }}\",\n  \"reason\": \"Automated 24-hour expiration window exceeded\"\n}",
+        "options": {}
+      },
+      "id": "node-expire-order",
+      "name": "API: Expire Order & Release Stock",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [780, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "reminders@javamifi.com",
+        "toEmail": "={{ $json.contactEmail }}",
+        "subject": "=[JavaMifi] Complete your connectivity reservation for {{ $json.destinationName }}",
+        "text": "=Halo {{ $json.contactName }},\n\nPesanan koneksi Anda masih tersimpan di keranjang. Selesaikan pembayaran sebelum batas waktu 24 jam untuk menjamin ketersediaan kuota dan perangkat:\n\nhttp://localhost:3000/checkout?order={{ $json.orderNumber }}\n\n#AntiSusahSinyal\nJavaMifi",
+        "options": {}
+      },
+      "id": "node-send-reminder",
+      "name": "Mailpit: Send Cart Reminder",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [780, 420]
+    }
+  ],
+  "connections": {
+    "Cron: Every 15 Minutes": {
+      "main": [
+        [
+          {
+            "node": "API: Get Pending Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Get Pending Orders": {
+      "main": [
+        [
+          {
+            "node": "Age >= 24 Hours?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Age >= 24 Hours?": {
+      "main": [
+        [
+          {
+            "node": "API: Expire Order & Release Stock",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mailpit: Send Cart Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

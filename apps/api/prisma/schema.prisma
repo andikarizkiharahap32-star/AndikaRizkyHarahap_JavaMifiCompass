@@ -1,0 +1,696 @@
+// ═══════════════════════════════════════════════════════════════
+// JavaMifi Compass — Prisma Schema
+// ~30 core tables grouped by module
+// ═══════════════════════════════════════════════════════════════
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Identity Module ──────────────────────────────────────────
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  phone          String?
+  passwordHash   String    @map("password_hash")
+  fullName       String    @map("full_name")
+  locale         String    @default("id")
+  totpSecret     String?   @map("totp_secret")
+  totpEnabled    Boolean   @default(false) @map("totp_enabled")
+  isActive       Boolean   @default(true) @map("is_active")
+  lastLoginAt    DateTime? @map("last_login_at")
+  loginAttempts  Int       @default(0) @map("login_attempts")
+  lockedUntil    DateTime? @map("locked_until")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  roles          UserRole[]
+  sessions       Session[]
+  trips          Trip[]
+  orders         Order[]
+  tickets        Ticket[]
+  auditLogs      AuditLog[]   @relation("AuditActor")
+
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique // SUPER_ADMIN, EDITOR, OPS, FINANCE, SUPPORT, CUSTOMER
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  permissions RolePermission[]
+  users       UserRole[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  resource    String   // e.g. "orders", "content", "devices"
+  action      String   // e.g. "create", "read", "update", "delete"
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  roles       RolePermission[]
+
+  @@unique([resource, action])
+  @@map("permissions")
+}
+
+model UserRole {
+  userId    String   @map("user_id")
+  roleId    String   @map("role_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model RolePermission {
+  roleId       String   @map("role_id")
+  permissionId String   @map("permission_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  refreshToken String   @unique @map("refresh_token")
+  userAgent    String?  @map("user_agent")
+  ipAddress    String?  @map("ip_address")
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+// ── Catalog Module ───────────────────────────────────────────
+
+model Destination {
+  id           String   @id @default(uuid())
+  countryCode  String   @unique @map("country_code") // ISO 3166-1 alpha-2
+  nameId       String   @map("name_id") // Indonesian name
+  nameEn       String   @map("name_en") // English name
+  slug         String   @unique
+  descriptionId String? @map("description_id")
+  descriptionEn String? @map("description_en")
+  flagEmoji    String?  @map("flag_emoji")
+  timezone     String?
+  callingCode  String?  @map("calling_code")
+  currency     String?  // local currency code
+  needsVpn     Boolean  @default(false) @map("needs_vpn")
+  isPopular    Boolean  @default(false) @map("is_popular")
+  imageUrl     String?  @map("image_url")
+  tipsId       String?  @map("tips_id") // CMS curated tips in Indonesian
+  tipsEn       String?  @map("tips_en") // CMS curated tips in English
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  plans        Plan[]
+  trips        TripDestination[]
+
+  @@map("destinations")
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  type         String   // WIFI_RENTAL, ESIM, SIM_CARD, PRO_SUBSCRIPTION
+  nameId       String   @map("name_id")
+  nameEn       String   @map("name_en")
+  slug         String   @unique
+  descriptionId String? @map("description_id")
+  descriptionEn String? @map("description_en")
+  imageUrl     String?  @map("image_url")
+  features     Json?    // JSON array of feature keys
+  isActive     Boolean  @default(true) @map("is_active")
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  plans        Plan[]
+  orderItems   OrderItem[]
+
+  @@map("products")
+}
+
+model Plan {
+  id              String   @id @default(uuid())
+  productId       String   @map("product_id")
+  destinationId   String?  @map("destination_id") // null = global plan
+  nameId          String   @map("name_id")
+  nameEn          String   @map("name_en")
+  slug            String   @unique
+  descriptionId   String?  @map("description_id")
+  descriptionEn   String?  @map("description_en")
+  priceIdr        Int      @map("price_idr") // integer rupiah
+  pricingType     String   @map("pricing_type") // PER_DAY, PER_PACKAGE, PER_MONTH
+  durationDays    Int?     @map("duration_days") // for PER_PACKAGE
+  dataLimitMb     Int?     @map("data_limit_mb") // null = unlimited
+  speedMbps       Int?     @map("speed_mbps")
+  maxDevices      Int      @default(1) @map("max_devices")
+  includesVpn     Boolean  @default(false) @map("includes_vpn")
+  depositIdr      Int      @default(0) @map("deposit_idr") // for physical devices
+  isActive        Boolean  @default(true) @map("is_active")
+  sortOrder       Int      @default(0) @map("sort_order")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  product     Product      @relation(fields: [productId], references: [id])
+  destination Destination? @relation(fields: [destinationId], references: [id])
+  orderItems  OrderItem[]
+
+  @@map("plans")
+}
+
+model PromoCode {
+  id             String    @id @default(uuid())
+  code           String    @unique
+  descriptionId  String?   @map("description_id")
+  descriptionEn  String?   @map("description_en")
+  discountType   String    @map("discount_type") // PERCENTAGE, FIXED_AMOUNT
+  discountValue  Int       @map("discount_value") // percentage (0-100) or fixed IDR
+  minOrderIdr    Int       @default(0) @map("min_order_idr")
+  maxDiscountIdr Int?      @map("max_discount_idr") // cap for percentage
+  maxUses        Int?      @map("max_uses")
+  currentUses    Int       @default(0) @map("current_uses")
+  validFrom      DateTime  @map("valid_from")
+  validUntil     DateTime  @map("valid_until")
+  isActive       Boolean   @default(true) @map("is_active")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  orders         Order[]
+
+  @@map("promo_codes")
+}
+
+// ── Trip Module ──────────────────────────────────────────────
+
+model Trip {
+  id             String   @id @default(uuid())
+  userId         String?  @map("user_id") // null for guest
+  guestToken     String?  @unique @map("guest_token") // for guest checkout
+  startDate      DateTime @map("start_date")
+  endDate        DateTime @map("end_date")
+  travelerCount  Int      @map("traveler_count")
+  deviceCount    Int      @map("device_count")
+  usageProfile   String   @map("usage_profile") // LIGHT, MODERATE, HEAVY, WORK
+  needsVpn       Boolean  @default(false) @map("needs_vpn")
+  esimCompatible Boolean  @default(true) @map("esim_compatible")
+  recommendation Json?    // stored recommendation result
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  user         User?            @relation(fields: [userId], references: [id])
+  destinations TripDestination[]
+  travelers    TripTraveler[]
+  orders       Order[]
+
+  @@index([userId])
+  @@index([guestToken])
+  @@map("trips")
+}
+
+model TripDestination {
+  tripId        String @map("trip_id")
+  destinationId String @map("destination_id")
+  sortOrder     Int    @default(0) @map("sort_order")
+
+  trip        Trip        @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id])
+
+  @@id([tripId, destinationId])
+  @@map("trip_destinations")
+}
+
+model TripTraveler {
+  id       String  @id @default(uuid())
+  tripId   String  @map("trip_id")
+  name     String
+  email    String?
+  phone    String?
+  isLead   Boolean @default(false) @map("is_lead")
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@map("trip_travelers")
+}
+
+// ── Orders Module ────────────────────────────────────────────
+
+model Order {
+  id              String   @id @default(uuid())
+  orderNumber     String   @unique @map("order_number") // JMF-XXXXXXXX
+  userId          String?  @map("user_id")
+  tripId          String?  @map("trip_id")
+  promoCodeId     String?  @map("promo_code_id")
+  status          String   @default("DRAFT") // OrderStatus enum
+  fulfillmentType String   @map("fulfillment_type") // DIGITAL, PHYSICAL, HYBRID
+  subtotalIdr     Int      @map("subtotal_idr")
+  discountIdr     Int      @default(0) @map("discount_idr")
+  depositIdr      Int      @default(0) @map("deposit_idr")
+  totalIdr        Int      @map("total_idr")
+  currency        String   @default("IDR")
+  contactName     String   @map("contact_name")
+  contactEmail    String   @map("contact_email")
+  contactPhone    String   @map("contact_phone")
+  shippingAddress Json?    @map("shipping_address")
+  notes           String?
+  expiresAt       DateTime? @map("expires_at")
+  paidAt          DateTime? @map("paid_at")
+  completedAt     DateTime? @map("completed_at")
+  cancelledAt     DateTime? @map("cancelled_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user            User?      @relation(fields: [userId], references: [id])
+  trip            Trip?      @relation(fields: [tripId], references: [id])
+  promoCode       PromoCode? @relation(fields: [promoCodeId], references: [id])
+  items           OrderItem[]
+  statusHistory   OrderStatusHistory[]
+  payments        Payment[]
+  deviceRentals   DeviceRental[]
+  esimAssets      EsimAsset[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([orderNumber])
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String @id @default(uuid())
+  orderId     String @map("order_id")
+  productId   String @map("product_id")
+  planId      String @map("plan_id")
+  quantity    Int    @default(1)
+  unitPriceIdr Int   @map("unit_price_idr")
+  totalPriceIdr Int  @map("total_price_idr")
+  durationDays Int?  @map("duration_days")
+  metadata    Json?  // extra info like destination, dates
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+  plan    Plan    @relation(fields: [planId], references: [id])
+
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id        String   @id @default(uuid())
+  orderId   String   @map("order_id")
+  fromStatus String? @map("from_status")
+  toStatus  String   @map("to_status")
+  reason    String?
+  actorId   String?  @map("actor_id") // user or system
+  actorType String   @default("SYSTEM") @map("actor_type") // USER, SYSTEM, AUTOMATION
+  createdAt DateTime @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@map("order_status_history")
+}
+
+// ── Payments Module ──────────────────────────────────────────
+
+model Payment {
+  id              String   @id @default(uuid())
+  orderId         String   @map("order_id")
+  idempotencyKey  String   @unique @map("idempotency_key")
+  gatewayMode     String   @map("gateway_mode") // MOCK, MIDTRANS_SANDBOX, MIDTRANS_PRODUCTION
+  gatewayRef      String?  @map("gateway_ref") // transaction id from gateway
+  method          String?  // CREDIT_CARD, BANK_TRANSFER, etc.
+  amountIdr       Int      @map("amount_idr")
+  currency        String   @default("IDR")
+  status          String   @default("PENDING") // PaymentStatus enum
+  snapToken       String?  @map("snap_token") // Midtrans Snap token
+  snapRedirectUrl String?  @map("snap_redirect_url")
+  paidAt          DateTime? @map("paid_at")
+  expiresAt       DateTime? @map("expires_at")
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  order         Order          @relation(fields: [orderId], references: [id])
+  webhookEvents WebhookEvent[]
+  ledgerEntries LedgerEntry[]
+
+  @@index([orderId])
+  @@index([gatewayRef])
+  @@map("payments")
+}
+
+model WebhookEvent {
+  id            String   @id @default(uuid())
+  paymentId     String   @map("payment_id")
+  eventId       String   @unique @map("event_id") // unique from gateway, prevents duplicates
+  source        String   // MIDTRANS, MOCK
+  eventType     String   @map("event_type")
+  payload       Json
+  signature     String?
+  verified      Boolean  @default(false)
+  processedAt   DateTime? @map("processed_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+
+  @@index([paymentId])
+  @@map("webhook_events")
+}
+
+model LedgerEntry {
+  id          String   @id @default(uuid())
+  paymentId   String   @map("payment_id")
+  type        String   // CHARGE, REFUND, DEPOSIT_HOLD, DEPOSIT_RELEASE
+  amountIdr   Int      @map("amount_idr") // positive for charges, negative for refunds
+  currency    String   @default("IDR")
+  balanceIdr  Int      @map("balance_idr") // running balance
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+
+  @@index([paymentId])
+  @@map("ledger_entries")
+}
+
+// ── Fulfillment Module ───────────────────────────────────────
+
+model EsimAsset {
+  id             String    @id @default(uuid())
+  orderId        String    @map("order_id")
+  providerRef    String?   @map("provider_ref") // Airalo package id or mock ref
+  iccid          String?   @unique
+  activationCode String?   @map("activation_code") // QR code data
+  installUrl     String?   @map("install_url")
+  status         String    @default("PENDING") // PENDING, PROVISIONED, INSTALLED, ACTIVE, EXPIRED
+  dataUsedMb     Int       @default(0) @map("data_used_mb")
+  dataLimitMb    Int?      @map("data_limit_mb")
+  expiresAt      DateTime? @map("expires_at")
+  provisionedAt  DateTime? @map("provisioned_at")
+  installedAt    DateTime? @map("installed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+  @@map("esim_assets")
+}
+
+model Device {
+  id            String   @id @default(uuid())
+  serialNumber  String   @unique @map("serial_number")
+  model         String   // device model name
+  status        String   @default("AVAILABLE") // DeviceStatus enum
+  condition     String   @default("GOOD") // GOOD, FAIR, POOR
+  batteryHealth Int      @default(100) @map("battery_health")
+  notes         String?
+  lastCheckedAt DateTime? @map("last_checked_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  rentals DeviceRental[]
+
+  @@map("devices")
+}
+
+model DeviceRental {
+  id              String    @id @default(uuid())
+  orderId         String    @map("order_id")
+  deviceId        String?   @map("device_id") // assigned when prepared
+  status          String    @default("PENDING") // PENDING, PREPARED, SHIPPED, DELIVERED, IN_USE, RETURN_PENDING, RETURNED, INSPECTED
+  depositIdr      Int       @map("deposit_idr")
+  depositStatus   String    @default("HELD") @map("deposit_status") // HELD, REFUND_PENDING, REFUNDED, FORFEITED
+  shippingTracker String?   @map("shipping_tracker")
+  dueDate         DateTime? @map("due_date")
+  shippedAt       DateTime? @map("shipped_at")
+  deliveredAt     DateTime? @map("delivered_at")
+  returnedAt      DateTime? @map("returned_at")
+  inspectedAt     DateTime? @map("inspected_at")
+  inspectionNotes String?   @map("inspection_notes")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  order  Order   @relation(fields: [orderId], references: [id])
+  device Device? @relation(fields: [deviceId], references: [id])
+
+  @@index([orderId])
+  @@index([deviceId])
+  @@map("device_rentals")
+}
+
+// ── Content Module ───────────────────────────────────────────
+
+model Page {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  titleId     String   @map("title_id")
+  titleEn     String   @map("title_en")
+  type        String   @default("PAGE") // PAGE, BLOG, GUIDE, FAQ_PAGE
+  status      String   @default("DRAFT") // ContentStatus enum
+  publishedAt DateTime? @map("published_at")
+  scheduledAt DateTime? @map("scheduled_at")
+  seoTitleId  String?  @map("seo_title_id")
+  seoTitleEn  String?  @map("seo_title_en")
+  seoDescId   String?  @map("seo_desc_id")
+  seoDescEn   String?  @map("seo_desc_en")
+  authorId    String?  @map("author_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  versions PageVersion[]
+  blocks   PageBlock[]
+
+  @@map("pages")
+}
+
+model PageVersion {
+  id         String   @id @default(uuid())
+  pageId     String   @map("page_id")
+  version    Int
+  contentId  Json     @map("content_id") // blocks snapshot in Indonesian
+  contentEn  Json     @map("content_en") // blocks snapshot in English
+  status     String   // DRAFT, IN_REVIEW, PUBLISHED
+  authorId   String?  @map("author_id")
+  reviewerId String?  @map("reviewer_id")
+  reviewNote String?  @map("review_note")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, version])
+  @@map("page_versions")
+}
+
+model PageBlock {
+  id        String @id @default(uuid())
+  pageId    String @map("page_id")
+  type      String // HERO, TEXT, IMAGE, CTA, FAQ, BANNER, PRODUCT_GRID, DESTINATION_GRID
+  contentId Json   @map("content_id")
+  contentEn Json   @map("content_en")
+  sortOrder Int    @map("sort_order")
+  settings  Json?  // block-specific settings (bg color, layout, etc.)
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId])
+  @@map("page_blocks")
+}
+
+model MediaAsset {
+  id           String   @id @default(uuid())
+  filename     String   // randomized filename
+  originalName String   @map("original_name")
+  mimeType     String   @map("mime_type")
+  sizeBytes    Int      @map("size_bytes")
+  url          String
+  altTextId    String?  @map("alt_text_id")
+  altTextEn    String?  @map("alt_text_en")
+  uploadedById String?  @map("uploaded_by_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("media_assets")
+}
+
+model Banner {
+  id          String    @id @default(uuid())
+  titleId     String    @map("title_id")
+  titleEn     String    @map("title_en")
+  subtitleId  String?   @map("subtitle_id")
+  subtitleEn  String?   @map("subtitle_en")
+  imageUrl    String    @map("image_url")
+  linkUrl     String?   @map("link_url")
+  position    String    @default("HOME_HERO") // HOME_HERO, HOME_SECONDARY, SIDEBAR
+  sortOrder   Int       @default(0) @map("sort_order")
+  isActive    Boolean   @default(true) @map("is_active")
+  startsAt    DateTime? @map("starts_at")
+  endsAt      DateTime? @map("ends_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("banners")
+}
+
+model Faq {
+  id         String  @id @default(uuid())
+  questionId String  @map("question_id")
+  questionEn String  @map("question_en")
+  answerId   String  @map("answer_id")
+  answerEn   String  @map("answer_en")
+  category   String  @default("GENERAL")
+  sortOrder  Int     @default(0) @map("sort_order")
+  isActive   Boolean @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("faqs")
+}
+
+// ── Support Module ───────────────────────────────────────────
+
+model Ticket {
+  id         String    @id @default(uuid())
+  userId     String?   @map("user_id")
+  orderId    String?   @map("order_id")
+  subject    String
+  status     String    @default("OPEN") // TicketStatus enum
+  priority   String    @default("MEDIUM") // TicketPriority enum
+  category   String    @default("GENERAL")
+  assigneeId String?   @map("assignee_id")
+  resolvedAt DateTime? @map("resolved_at")
+  closedAt   DateTime? @map("closed_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  user     User?           @relation(fields: [userId], references: [id])
+  messages TicketMessage[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("tickets")
+}
+
+model TicketMessage {
+  id        String   @id @default(uuid())
+  ticketId  String   @map("ticket_id")
+  senderId  String?  @map("sender_id") // null = system message
+  content   String
+  isInternal Boolean @default(false) @map("is_internal") // internal note
+  createdAt DateTime @default(now()) @map("created_at")
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@map("ticket_messages")
+}
+
+// ── Automation Module ────────────────────────────────────────
+
+model OutboxEvent {
+  id          String    @id @default(uuid())
+  eventType   String    @map("event_type") // e.g. order.paid, ticket.created
+  aggregateId String    @map("aggregate_id") // e.g. order id
+  payload     Json
+  status      String    @default("PENDING") // PENDING, DELIVERED, FAILED, DEAD_LETTER
+  retryCount  Int       @default(0) @map("retry_count")
+  maxRetries  Int       @default(5) @map("max_retries")
+  lastError   String?   @map("last_error")
+  deliveredAt DateTime? @map("delivered_at")
+  nextRetryAt DateTime? @map("next_retry_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([eventType])
+  @@map("outbox_events")
+}
+
+model AutomationRun {
+  id           String    @id @default(uuid())
+  workflowName String    @map("workflow_name")
+  eventId      String?   @map("event_id") // outbox event that triggered it
+  status       String    @default("RUNNING") // RUNNING, SUCCESS, FAILED
+  startedAt    DateTime  @default(now()) @map("started_at")
+  completedAt  DateTime? @map("completed_at")
+  durationMs   Int?      @map("duration_ms")
+  inputData    Json?     @map("input_data")
+  outputData   Json?     @map("output_data")
+  errorMessage String?   @map("error_message")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  @@index([workflowName])
+  @@index([status])
+  @@map("automation_runs")
+}
+
+// ── Audit Module ─────────────────────────────────────────────
+// Append-only: no UPDATE or DELETE allowed at application level
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  actorId     String?  @map("actor_id")
+  actorType   String   @default("USER") @map("actor_type") // USER, SYSTEM, AUTOMATION
+  action      String   // AuditAction enum value
+  resource    String   // e.g. "orders", "payments"
+  resourceId  String   @map("resource_id")
+  oldValue    Json?    @map("old_value")
+  newValue    Json?    @map("new_value")
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  metadata    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  actor User? @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([actorId])
+  @@index([resource, resourceId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ── Journey Presets ──────────────────────────────────────────
+
+model JourneyPreset {
+  id            String  @id @default(uuid())
+  slug          String  @unique
+  nameId        String  @map("name_id")
+  nameEn        String  @map("name_en")
+  descriptionId String? @map("description_id")
+  descriptionEn String? @map("description_en")
+  imageUrl      String? @map("image_url")
+  destinations  Json    // array of country codes
+  defaultDays   Int     @map("default_days")
+  defaultUsage  String  @map("default_usage") // UsageProfile
+  needsVpn      Boolean @default(false) @map("needs_vpn")
+  isActive      Boolean @default(true) @map("is_active")
+  sortOrder     Int     @default(0) @map("sort_order")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("journey_presets")
+}

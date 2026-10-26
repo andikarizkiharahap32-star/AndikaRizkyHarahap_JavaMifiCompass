@@ -1,0 +1,71 @@
+{
+  "name": "08 - Global Workflow Error Handler",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "node-error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:3001/admin/automation/runs/record-error",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflowName\": \"{{ $json.execution.workflowName }}\",\n  \"status\": \"FAILED\",\n  \"errorMessage\": \"{{ $json.execution.error.message }}\",\n  \"inputData\": {{ JSON.stringify($json.execution) }}\n}",
+        "options": {}
+      },
+      "id": "node-record-dead-letter",
+      "name": "API: Record in Dead-Letter Log",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [340, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "alerts@javamifi.com",
+        "toEmail": "devops@javamifi.com",
+        "subject": "=[CRITICAL] n8n Automation Failure: {{ $json.execution.workflowName }}",
+        "text": "=An n8n workflow execution failed:\n\nWorkflow: {{ $json.execution.workflowName }}\nExecution ID: {{ $json.execution.id }}\nError: {{ $json.execution.error.message }}\nTimestamp: {{ new Date().toISOString() }}\n\nReview & Retry in CMS Automation Console: http://localhost:3002/automation",
+        "options": {}
+      },
+      "id": "node-alert-devops",
+      "name": "Mailpit: Alert DevOps & Admins",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [580, 300]
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "API: Record in Dead-Letter Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Record in Dead-Letter Log": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: Alert DevOps & Admins",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
