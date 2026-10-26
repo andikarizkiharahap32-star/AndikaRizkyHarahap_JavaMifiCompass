@@ -59,20 +59,33 @@ export class DiningReviewService {
   }
 
   submitReport(dto: DiningReportCreateDto): DiningReviewItem {
+    // Keyword-Urgency Triage: bump priority on safety-critical keywords
+    const safetyKeywords = ['pork', 'babi', 'mirin', 'sake', 'expired', 'kadaluwarsa', 'closed', 'tutup', 'non-halal', 'alkohol'];
+    const commentLower = (dto.userComment + ' ' + dto.disputeReason).toLowerCase();
+    const hasCriticalKeyword = safetyKeywords.some((kw) => commentLower.includes(kw));
+
+    // Fail-closed tier assignment for safety disputes
+    const assignedTier = hasCriticalKeyword
+      ? (dto.suggestedTier === HalalTier.NOT_HALAL ? HalalTier.NOT_HALAL : HalalTier.UNKNOWN)
+      : (dto.suggestedTier || HalalTier.UNKNOWN);
+
+    const reasonPrefix = hasCriticalKeyword ? '[CRITICAL_SAFETY: Contaminant/Halal Alert] ' : '';
+
     const newItem: DiningReviewItem = {
       id: `rev-${Date.now().toString(36)}`,
       placeId: dto.placeId,
       placeName: dto.placeName,
       countryIso2: 'JP', // default
       type: 'USER_DISPUTE',
-      currentTier: dto.suggestedTier || HalalTier.UNKNOWN,
-      reason: `[${dto.disputeReason}] ${dto.userComment}${
+      currentTier: assignedTier,
+      reason: `${reasonPrefix}[${dto.disputeReason}] ${dto.userComment}${
         dto.reporterEmail ? ` (Dilaporkan oleh: ${dto.reporterEmail})` : ''
       }`,
       status: 'PENDING',
       createdAt: new Date().toISOString(),
     };
 
+    // Critical safety items are prepended at the head of the review queue
     this.reviewQueue.unshift(newItem);
     return newItem;
   }

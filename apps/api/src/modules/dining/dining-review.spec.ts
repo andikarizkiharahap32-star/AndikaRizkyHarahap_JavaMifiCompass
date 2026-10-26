@@ -86,4 +86,23 @@ describe('Phase P3: CMS Review Queue & User Dispute Triage', () => {
     expect(safety.killSwitchActive).toBe(false);
     expect(safety.isAiEnrichmentEnabled).toBe(true);
   });
+
+  it('should auto-triage reports with critical keywords (pork/babi/mirin) as CRITICAL_SAFETY and enforce fail-closed tier', () => {
+    const report = reviewService.submitReport({
+      placeId: 'shinjuku-ramen-01',
+      placeName: 'Shinjuku Tonkotsu Specialty',
+      disputeReason: 'PORK_DETECTED',
+      suggestedTier: HalalTier.OPTIONS, // user mistakenly suggests OPTIONS despite pork
+      userComment: 'Restoran ini memakai mirin dan babi cincang di topping sup.',
+      reporterEmail: 'auditor@traveler.id',
+    });
+
+    expect(report.reason).toContain('[CRITICAL_SAFETY: Contaminant/Halal Alert]');
+    // Fail-closed tier: cannot remain OPTIONS when pork is reported
+    expect(report.currentTier).toBe(HalalTier.UNKNOWN);
+
+    const queue = reviewService.getReviewQueue();
+    // Prepended to the very front of the queue
+    expect(queue[0]?.id).toBe(report.id);
+  });
 });

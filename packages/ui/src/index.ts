@@ -17,3 +17,4 @@ export * from './components/DualPrice';
 export * from './components/TaxiAddressCard';
 export * from './components/DietaryPhraseCard';
 export * from './components/RestaurantDetailModal';
+export * from './components/HalalCustomsStamp';

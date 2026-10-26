@@ -14,8 +14,11 @@ import {
   PhoneCall,
   Download,
   Utensils,
+  MapPin,
+  Compass,
+  Database,
 } from 'lucide-react';
-import { SignalBadge, SignalMeter, RouteLine, TripBoardingPass } from '@javamifi/ui';
+import { SignalBadge, SignalMeter, RouteLine, TripBoardingPass, HalalCustomsStamp } from '@javamifi/ui';
 
 export const TripHubView = ({
   orderData,
@@ -248,36 +251,86 @@ export const TripHubView = ({
         </div>
       </div>
 
-      {/* Station: Eat // Compass Rasa Integration */}
-      <div className="p-6 sm:p-8 bg-paper border border-paper-edge border-b-2 rounded-2xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-xl bg-success flex items-center justify-center text-white shrink-0">
+      {/* Station: Eat // Compass Rasa Integration (Zero-Click Destination Context & Return Proximity) */}
+      <div className="p-6 sm:p-8 bg-paper border border-paper-edge border-b-2 rounded-2xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-paper-edge pb-5">
+          <div className="flex items-start gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center text-white shrink-0">
               <Utensils className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono uppercase tracking-wider font-extrabold text-success">
+                <span className="text-xs font-mono uppercase tracking-wider font-extrabold text-emerald-800">
                   STATION: EAT // COMPASS RASA
                 </span>
-                <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               </div>
-              <h3 className="text-lg font-bold text-primary">
+              <h3 className="text-lg font-bold text-primary mt-0.5">
                 Rekomendasi Kuliner Halal di Destinasi Anda
               </h3>
-              <p className="text-xs text-secondary">
-                Temukan restoran halal terdekat, terjemahan menu lokal, serta konversi harga langsung ke Rupiah.
+              <p className="text-xs text-secondary mt-0.5">
+                Terintegrasi otomatis dengan titik pengembalian modem dan kuota roaming Anda.
               </p>
             </div>
           </div>
 
-          <Link
-            href={`/${locale}/dining`}
-            className="inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl bg-success hover:bg-success/90 text-white text-xs font-mono font-bold tracking-wider uppercase transition shrink-0"
-          >
-            <span>Buka Radar Kuliner</span>
-            <span>→</span>
-          </Link>
+          {/* Roaming Data Footprint Indicator */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface border border-paper-edge self-start sm:self-auto shrink-0 font-mono text-xs">
+            <Database className="w-3.5 h-3.5 text-secondary" />
+            <span className="text-secondary">Data Footprint:</span>
+            <span className="font-bold text-primary tnum">~1.8 MB</span>
+          </div>
+        </div>
+
+        {/* Embedded Customs Stamp & Waypoint Card */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left: Halal Customs Stamp Component */}
+          <div>
+            <HalalCustomsStamp
+              tier="CERTIFIED"
+              venueName="Halal Sakura Ginza"
+              certifierName="Japan Islamic Trust (JIT)"
+              certNumber="JIT-2026-HAL-0842"
+              certExpiresAt="31 Des 2026"
+              lastVerifiedDate="26 Okt 2026"
+              alcoholStatus="CERTIFIED_FREE"
+              locale={locale}
+            />
+          </div>
+
+          {/* Right: Return Logistics Proximity Cross-Sell */}
+          <div className="flex flex-col justify-between bg-surface rounded-2xl p-5 border border-paper-edge space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono font-bold text-emerald-800 uppercase tracking-wide flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4 text-emerald-600" />
+                  Dekat Titik Drop-Off Router
+                </span>
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold tnum">
+                  400m (5 mnt jalan kaki)
+                </span>
+              </div>
+              <h4 className="text-sm font-bold text-primary">
+                Booth Pengembalian Modem JavaMifi: Shibuya Station
+              </h4>
+              <p className="text-xs text-secondary mt-1 leading-relaxed">
+                Kembalikan router JavaMifi Anda di drop-off booth Shibuya (Pintu Keluar Hachiko) sebelum pukul 21:00. Nikmati makan malam yakiniku halal resmi di <strong>Halal Sakura Ginza</strong> tepat di sebelah barat stasiun tanpa khawatir terlambat pengembalian.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-paper-edge">
+              <span className="text-xs font-mono text-secondary tnum">
+                Bebas alkohol • Daging bersertifikat halal
+              </span>
+              <Link
+                href={`/${locale}/dining`}
+                className="inline-flex items-center justify-center gap-2 px-4 h-10 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono font-bold tracking-wider uppercase transition shrink-0"
+              >
+                <span>Buka Radar Lengkap</span>
+                <span>→</span>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

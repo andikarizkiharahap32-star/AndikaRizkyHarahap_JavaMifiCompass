@@ -14,6 +14,8 @@ export interface BreakEvenSchematicProps {
   alternativeTotalCostIdr?: number;
   breakEvenDayText?: string;
   ruleExplanation?: string;
+  estimatedDiningSpendPerDayIdr?: number;
+  estimatedDiningSpendTotalIdr?: number;
   onSelectLead?: () => void;
   onSelectAlternative?: () => void;
   theme?: 'light' | 'night';
@@ -33,12 +35,17 @@ export const BreakEvenSchematicCard: React.FC<BreakEvenSchematicProps> = ({
   alternativeTotalCostIdr = 956000,
   breakEvenDayText = 'Titik Impas Rombongan: H-1',
   ruleExplanation = 'Untuk 1 traveler solo, eSIM lebih hemat hingga hari ke-4. Namun untuk rombongan 4 traveler, 1 unit WiFi router langsung lebih hemat sejak hari pertama tiba di destinasi.',
+  estimatedDiningSpendPerDayIdr = 250000,
+  estimatedDiningSpendTotalIdr,
   onSelectLead,
   onSelectAlternative,
   theme = 'light',
 }) => {
   const isWifiLead = leadProductType === 'WIFI_RENTAL';
   const isNight = theme === 'night';
+  const calculatedDiningSpend =
+    estimatedDiningSpendTotalIdr ?? estimatedDiningSpendPerDayIdr * tripDays * travelerCount;
+  const grandTotalTripCash = totalCostIdr + calculatedDiningSpend;
 
   return (
     <div
@@ -263,6 +270,55 @@ export const BreakEvenSchematicCard: React.FC<BreakEvenSchematicProps> = ({
               </span>
               <span className="font-mono text-xs text-secondary">Total Rombongan</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Unified Trip Food & Connectivity Cash Budget */}
+      <section className="bg-paper rounded-xl p-6 flex flex-col border border-paper-edge border-b-2">
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs font-mono">
+              R
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-xs text-primary font-mono uppercase tracking-wide">
+                ANGGARAN KAS TERPADU // TRIP CASH BUDGET
+              </span>
+              <span className="font-mono text-[11px] text-secondary">
+                Line 05 • Konektivitas + Estimasi Konsumsi Kuliner Halal
+              </span>
+            </div>
+          </div>
+          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold uppercase tracking-wider">
+            Fail-Closed Budget
+          </span>
+        </div>
+
+        <p className="text-xs text-secondary mb-4">
+          Estimasi total dana kas tunai yang diperlukan selama {tripDays} hari untuk {travelerCount} orang traveler di destinasi ({routeText}).
+        </p>
+
+        <div className="flex flex-col bg-surface rounded-lg p-4 border border-paper-edge divide-y divide-paper-edge text-xs">
+          <div className="flex items-center justify-between py-2">
+            <span className="text-secondary font-medium">1. Sewa Konektivitas ({isWifiLead ? 'Pocket WiFi' : 'eSIM'})</span>
+            <span className="font-mono font-bold text-primary tnum">
+              Rp {totalCostIdr.toLocaleString('id-ID')}
+            </span>
+          </div>
+          <div className="flex items-center justify-between py-2">
+            <span className="text-secondary font-medium">
+              2. Estimasi Makan Halal ({travelerCount} pax × {tripDays} hari)
+            </span>
+            <span className="font-mono font-bold text-emerald-800 tnum">
+              Rp {calculatedDiningSpend.toLocaleString('id-ID')}
+            </span>
+          </div>
+          <div className="flex items-center justify-between pt-2.5 font-bold text-sm">
+            <span className="text-primary">Total Estimasi Kebutuhan Kas</span>
+            <span className="font-mono text-base font-extrabold text-primary tnum">
+              Rp {grandTotalTripCash.toLocaleString('id-ID')}
+            </span>
           </div>
         </div>
       </section>
