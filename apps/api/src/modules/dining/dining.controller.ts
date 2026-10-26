@@ -225,4 +225,29 @@ export class DiningController {
     }
     return this.diningReview.toggleKillSwitch(body.active);
   }
+
+  // ── PHASE P4: n8n Orchestration Contracts (Schedules, Fan-Out, Chat Webhook) ──
+
+  @Get('orchestration/expiring-venues')
+  @ApiOperation({ summary: 'n8n Scheduled Trigger: Fetch venues requiring audit or expiring soon' })
+  getExpiringVenues(@Query('daysAhead') daysAhead?: number) {
+    const days = daysAhead ? Number(daysAhead) : 90;
+    return this.diningService.getVenuesForAudit(days);
+  }
+
+  @Post('orchestration/chat-webhook')
+  @ApiOperation({ summary: 'n8n Chatbot Webhook: Parses query and returns structured fail-closed restaurant results' })
+  handleChatbotWebhook(
+    @Body()
+    body: {
+      userMessage: string;
+      userId?: string;
+      channel?: string;
+    }
+  ) {
+    if (!body || !body.userMessage) {
+      throw new BadRequestException('userMessage is required');
+    }
+    return this.diningService.handleChatbotInquiry(body.userMessage, body.channel || 'web');
+  }
 }

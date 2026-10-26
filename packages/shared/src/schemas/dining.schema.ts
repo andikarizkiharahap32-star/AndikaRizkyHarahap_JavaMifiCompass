@@ -68,12 +68,31 @@ export const halalEvidenceSchema = z.object({
 });
 export type HalalEvidenceDto = z.infer<typeof halalEvidenceSchema>;
 
+/** Verified venue photo asset. */
+export const venueImageSchema = z.object({
+  url: z.string(),
+  caption: z.string().optional(),
+  type: z.enum(['STOREFRONT', 'INTERIOR', 'DISH', 'CERTIFICATE']).default('STOREFRONT'),
+});
+export type VenueImage = z.infer<typeof venueImageSchema>;
+
+/** Pocket-WiFi & eSIM pickup booth context at destination airport. */
+export const wifiPickupBoothSchema = z.object({
+  airportCode: z.string().length(3), // e.g. NRT, HND, SIN, KIX, ICN, LHR
+  airportName: z.string(),
+  terminal: z.string(),
+  counterLocation: z.string(),
+  operatingHours: z.string(),
+});
+export type WifiPickupBooth = z.infer<typeof wifiPickupBoothSchema>;
+
 /** Summary of a dining place for directory listings and cards. */
 export const diningPlaceSummarySchema = z.object({
   id: z.string().min(1),
   placeRef: z.string().min(1),
   name: z.string().min(1),
   nameOriginal: z.string().optional(),
+  description: z.string().optional(),
   countryIso2: z.string().length(2),
   countryName: z.string().min(1),
   cityName: z.string().min(1),
@@ -99,7 +118,9 @@ export const diningPlaceSummarySchema = z.object({
   lastVerifiedDate: z.string().optional(),
   alcoholStatus: z.enum(['CERTIFIED_FREE', 'NOT_MENTIONED', 'SERVES_ALCOHOL']).optional(),
   sampleDishes: z.array(z.string()).default([]),
-  primaryPhotoUrl: z.string().url().optional(),
+  primaryPhotoUrl: z.string().optional(),
+  images: z.array(venueImageSchema).default([]),
+  wifiPickupBooth: wifiPickupBoothSchema.optional(),
   isSimulated: z.boolean().default(true),
   prayerContext: z.object({
     nearestPrayerName: z.string(),

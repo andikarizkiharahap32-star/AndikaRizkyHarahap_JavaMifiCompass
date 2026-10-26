@@ -173,6 +173,93 @@ export class DiningService {
   }
 
   /**
+   * n8n Chatbot Assistant Handler:
+   * 1. Turns traveler query into deterministic parameters via parseSearchIntent.
+   * 2. Executes searchPlaces with fail-closed guarantee (UNKNOWN never under Halal).
+   * 3. Formats deterministic plain-text response safe for WhatsApp/Telegram.
+   */
+  handleChatbotInquiry(userMessage: string, channel: string = 'web') {
+    const parsedIntent = this.parseSearchIntent(userMessage);
+
+    const searchResult = this.searchPlaces({
+      country: parsedIntent.country,
+      city: parsedIntent.city,
+      search: parsedIntent.cuisine,
+      filter: parsedIntent.filter,
+      radiusKm: parsedIntent.radiusKm || 5,
+      includeUnverified: false, // Strict fail-closed: UNKNOWN never appears!
+      page: 1,
+      limit: 3,
+    });
+
+    const lines: string[] = [];
+    const countryName = parsedIntent.country || 'tujuan Anda';
+    lines.push(`🔍 *JavaMifi Compass Rasa* — Hasil Pencarian Kuliner Terverifikasi:`);
+    lines.push(`📍 Filter: ${parsedIntent.filter} | Wilayah: ${countryName}`);
+    lines.push('');
+
+    if (searchResult.items.length === 0) {
+      lines.push('Maaf, tidak ditemukan restoran yang memenuhi kriteria halal terverifikasi.');
+      lines.push('💡 Tip: Gunakan opsi filter "Semua Menu" untuk melihat opsi ramah muslim lainnya.');
+    } else {
+      searchResult.items.forEach((p, idx) => {
+        lines.push(`${idx + 1}. *${p.name}*`);
+        lines.push(`   🏷️ Status: [${p.tier}] (${p.certifierName || 'Sertifikasi Terverifikasi'})`);
+        lines.push(`   🍜 Jenis: ${p.cuisine} | ⭐ Rating: ${p.googleRating.toFixed(1)}`);
+        lines.push(`   📍 Alamat: ${p.address}`);
+        if (p.priceRange) {
+          lines.push(`   💰 Estimasi: ${p.priceRange.formattedLocalRange} (${p.priceRange.formattedIdrRange})`);
+        }
+        if (p.wifiPickupBooth) {
+          lines.push(`   📶 Booth WiFi Terdekat: ${p.wifiPickupBooth.airportName} (${p.wifiPickupBooth.counterLocation})`);
+        }
+        lines.push('');
+      });
+      lines.push('ℹ️ _Status halal didasarkan pada kutipan bukti resmi yang diverifikasi deterministik._');
+    }
+
+    return {
+      channel,
+      intent: parsedIntent,
+      totalMatches: searchResult.total,
+      places: searchResult.items,
+      formattedMessage: lines.join('\n'),
+    };
+  }
+
+  /**
+   * n8n Scheduled Audit Query:
+   * Returns venues needing review or expiring within daysAhead days.
+   */
+  getVenuesForAudit(daysAhead: number = 90) {
+    const now = new Date();
+    const thresholdDate = new Date(now.getTime() + daysAhead * 24 * 60 * 60 * 1000);
+
+    const candidates = SEEDED_PLACES.filter((p) => {
+      if (!p.certExpiresAt) return false;
+      const expiry = new Date(p.certExpiresAt);
+      return expiry <= thresholdDate;
+    });
+
+    return {
+      daysAhead,
+      totalCount: candidates.length,
+      venues: candidates.map((p) => ({
+        id: p.id,
+        name: p.name,
+        countryIso2: p.countryIso2,
+        certifierName: p.certifierName,
+        certNumber: p.certNumber,
+        certExpiresAt: p.certExpiresAt,
+        daysUntilExpiry: Math.round(
+          (new Date(p.certExpiresAt!).getTime() - now.getTime()) / (24 * 60 * 60 * 1000)
+        ),
+        lastVerifiedDate: p.lastVerifiedDate,
+      })),
+    };
+  }
+
+  /**
    * Get single venue detail including full categorized menu and evidence.
    */
   getPlaceDetail(id: string): DiningPlaceDetail {
@@ -237,6 +324,10 @@ export class DiningService {
       priceRange: priceRange,
       prayerContext: prayerContext,
       sampleDishes: p.menuItems.slice(0, 3).map((m) => m.nameId || m.nameEn),
+      description: p.description,
+      primaryPhotoUrl: p.images?.[0]?.url,
+      images: p.images || [],
+      wifiPickupBooth: p.wifiPickupBooth,
       isSimulated: true,
     };
   }

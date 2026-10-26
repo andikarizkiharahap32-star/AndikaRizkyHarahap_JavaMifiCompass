@@ -29,6 +29,7 @@ export interface RawPlace {
   placeRef: string;
   name: string;
   nameOriginal?: string;
+  description?: string;
   countryIso2: string;
   countryName: string;
   cityName: string;
@@ -59,6 +60,18 @@ export interface RawPlace {
   whyHalalExplanation?: string;
   evidence: RawEvidence[];
   menuItems: RawPlaceItem[];
+  images?: Array<{
+    url: string;
+    caption?: string;
+    type: 'STOREFRONT' | 'INTERIOR' | 'DISH' | 'CERTIFICATE';
+  }>;
+  wifiPickupBooth?: {
+    airportCode: string;
+    airportName: string;
+    terminal: string;
+    counterLocation: string;
+    operatingHours: string;
+  };
 }
 
 export const COUNTRIES_CATALOG = [
@@ -84,7 +97,7 @@ export const COUNTRIES_CATALOG = [
   { code: 'QA', name: 'Qatar', flag: '🇶🇦', currency: 'QAR', city: 'Doha' },
 ];
 
-export const SEEDED_PLACES: RawPlace[] = [
+const RAW_SEEDED_PLACES: RawPlace[] = [
   // 1. JAPAN (JP)
   {
     id: 'jp-tokyo-honolu',
@@ -1345,3 +1358,314 @@ export const SEEDED_PLACES: RawPlace[] = [
     ],
   },
 ];
+
+export const COUNTRY_WIFI_BOOTHS: Record<
+  string,
+  {
+    airportCode: string;
+    airportName: string;
+    terminal: string;
+    counterLocation: string;
+    operatingHours: string;
+  }
+> = {
+  JP: {
+    airportCode: 'NRT',
+    airportName: 'Narita International Airport',
+    terminal: 'Terminal 1 & 2',
+    counterLocation: 'Lantai 1 Arrival Hall - JavaMifi Waypoint Counter #3',
+    operatingHours: '06:30 - 23:00 (Setiap Hari)',
+  },
+  SA: {
+    airportCode: 'JED',
+    airportName: "King Abdulaziz Int'l Airport",
+    terminal: 'Terminal 1 (Hajj & Umrah Concourse)',
+    counterLocation: 'Kedatangan Internasional Gate 4 - JavaMifi Booth',
+    operatingHours: '24 Jam Penuh',
+  },
+  SG: {
+    airportCode: 'SIN',
+    airportName: 'Singapore Changi Airport',
+    terminal: 'Terminal 3',
+    counterLocation: 'Level 1 Public Arrival Area, Unit #01-22',
+    operatingHours: '24 Jam Penuh',
+  },
+  MY: {
+    airportCode: 'KUL',
+    airportName: 'Kuala Lumpur International Airport',
+    terminal: 'KLIA Terminal 1',
+    counterLocation: 'Level 3 Arrival Hall Gate 2',
+    operatingHours: '24 Jam Penuh',
+  },
+  KR: {
+    airportCode: 'ICN',
+    airportName: 'Incheon International Airport',
+    terminal: 'Terminal 1',
+    counterLocation: '1F Arrival Concourse antara Gate 6 & 7',
+    operatingHours: '24 Jam Penuh',
+  },
+  TR: {
+    airportCode: 'IST',
+    airportName: 'Istanbul Airport',
+    terminal: 'Main Terminal',
+    counterLocation: 'International Arrivals Exit Gate 13',
+    operatingHours: '24 Jam Penuh',
+  },
+  GB: {
+    airportCode: 'LHR',
+    airportName: 'London Heathrow Airport',
+    terminal: 'Terminal 2 & 3',
+    counterLocation: 'Underground & Arrival Concourse Desk A',
+    operatingHours: '06:00 - 23:00 (Setiap Hari)',
+  },
+  AE: {
+    airportCode: 'DXB',
+    airportName: 'Dubai International Airport',
+    terminal: 'Terminal 3',
+    counterLocation: 'Arrival Hall Exit 2 Counter 14',
+    operatingHours: '24 Jam Penuh',
+  },
+  TH: {
+    airportCode: 'BKK',
+    airportName: 'Suvarnabhumi Airport Bangkok',
+    terminal: 'Main Passenger Terminal',
+    counterLocation: 'Level 2 Arrival Hall Gate 4 Kiosk B',
+    operatingHours: '24 Jam Penuh',
+  },
+  HK: {
+    airportCode: 'HKG',
+    airportName: 'Hong Kong International Airport',
+    terminal: 'Terminal 1',
+    counterLocation: 'Arrival Hall Area A Desk A09',
+    operatingHours: '07:00 - 23:00 (Setiap Hari)',
+  },
+  TW: {
+    airportCode: 'TPE',
+    airportName: 'Taiwan Taoyuan International Airport',
+    terminal: 'Terminal 1 & 2',
+    counterLocation: 'Arrival Concourse Service Counter #1',
+    operatingHours: '06:00 - 23:30 (Setiap Hari)',
+  },
+  AU: {
+    airportCode: 'SYD',
+    airportName: 'Sydney Kingsford Smith Airport',
+    terminal: 'Terminal 1',
+    counterLocation: 'International Arrivals Concourse Gate B',
+    operatingHours: '06:00 - 22:00 (Setiap Hari)',
+  },
+  FR: {
+    airportCode: 'CDG',
+    airportName: 'Paris Charles de Gaulle Airport',
+    terminal: 'Terminal 2E',
+    counterLocation: 'Arrival Level Gate 5 Information Kiosk',
+    operatingHours: '06:30 - 22:30 (Setiap Hari)',
+  },
+  DE: {
+    airportCode: 'FRA',
+    airportName: 'Frankfurt Airport',
+    terminal: 'Terminal 1',
+    counterLocation: 'Arrival Concourse B Level 1',
+    operatingHours: '06:00 - 22:00 (Setiap Hari)',
+  },
+  IT: {
+    airportCode: 'FCO',
+    airportName: 'Rome Fiumicino Airport',
+    terminal: 'Terminal 3',
+    counterLocation: 'International Arrivals Desk 8',
+    operatingHours: '07:00 - 22:00 (Setiap Hari)',
+  },
+  NL: {
+    airportCode: 'AMS',
+    airportName: 'Amsterdam Airport Schiphol',
+    terminal: 'Schiphol Plaza',
+    counterLocation: 'Arrivals 3 Central Meeting Point Desk',
+    operatingHours: '07:00 - 22:00 (Setiap Hari)',
+  },
+  CH: {
+    airportCode: 'ZRH',
+    airportName: 'Zurich Airport',
+    terminal: 'Arrival 1',
+    counterLocation: 'Airside Center Information Desk',
+    operatingHours: '06:30 - 21:30 (Setiap Hari)',
+  },
+  EG: {
+    airportCode: 'CAI',
+    airportName: 'Cairo International Airport',
+    terminal: 'Terminal 3',
+    counterLocation: 'Arrival Hall Customer Service Concourse',
+    operatingHours: '24 Jam Penuh',
+  },
+  MA: {
+    airportCode: 'RAK',
+    airportName: 'Marrakech Menara Airport',
+    terminal: 'Terminal 1',
+    counterLocation: 'Arrival Hall Desk C',
+    operatingHours: '08:00 - 22:00 (Setiap Hari)',
+  },
+  QA: {
+    airportCode: 'DOH',
+    airportName: 'Hamad International Airport Doha',
+    terminal: 'Main Passenger Terminal',
+    counterLocation: 'Ground Floor Arrival Concourse Kiosk #4',
+    operatingHours: '24 Jam Penuh',
+  },
+};
+
+export const PLACE_DESCRIPTIONS: Record<string, string> = {
+  'jp-tokyo-honolu':
+    'Kedai ramen halal legendaris di kawasan Ebisu, Tokyo. Terkenal dengan kaldu ayam paitan kental yang direbus perlahan selama 8 jam tanpa mirin atau sake. Menjadi rujukan utama pelancong muslim dunia dengan fasilitas ruang sholat bersih di lantai 2.',
+  'jp-tokyo-panga':
+    'Restoran yakiniku daging sapi wagyu hitam Jepang A5 bersertifikasi halal resmi di Asakusa. Daging dipanggang arang bambu tradisional dengan racikan saus tare khusus tanpa kandungan alkohol atau ekstrak babi.',
+  'sa-makkah-albaik':
+    'Jaringan restoran ayam goreng krispi paling ikonik di Tanah Suci. Terletak di food court Abraj Al-Bait Mall Makkah, diawasi langsung di bawah regulasi SFDA Arab Saudi dengan standar 100% halal nasional.',
+  'sa-madinah-najd':
+    'Penyedia hidangan ayam panggang arang dan nasi mandi aromatik khas Hijaz, berlokasi beberapa langkah dari halaman utara Masjid Nabawi di Madinah Al-Munawwarah.',
+  'sg-kampong-zamzam':
+    'Restoran legendaris bersejarah yang didirikan sejak 1908 di seberang Masjid Sultan Kampong Glam Singapura. Terkenal dengan martabak daging domba bersertifikat Halal MUIS dan kari otentik.',
+  'my-kl-villagepark':
+    'Restoran spesialis Nasi Lemak ayam goreng rempah paling populer di Damansara Utama. Sangat ramai dikunjungi warga lokal dan wisatawan, menggunakan bahan halal dari peternakan bersertifikat JAKIM.',
+  'kr-seoul-halalkitchen':
+    'Restoran masakan otentik Korea pertama yang bersertifikat Halal KMF resmi di kawasan Samcheong-dong, Seoul. Menyajikan Bulgogi, Tteokbokki, dan Dakgalbi tanpa mirin atau soju.',
+  'tr-istanbul-sultanahmet':
+    'Restoran bakso daging bakar legendaris di Sultanahmet Istanbul yang telah beroperasi sejak 1920. Daging sapi murni diproses dengan standar Halal Turki serta disajikan dengan piyaz salad kacang.',
+  'gb-london-dishoom':
+    'Restoran bergaya kafe Irani legendaris di Covent Garden London. Menyajikan menu ayam dan domba bersertifikasi Halal yang dimasak terpisah, dengan penandaan menu yang transparan.',
+  'ae-dubai-alsafadi':
+    'Restoran keluarga Lebanon premium di Sheikh Zayed Road Dubai. Menyajikan aneka mezze segar, panggangan daging domba, dan roti pita panggang kayu bersertifikat Halal resmi UEA.',
+  'th-bkk-yana':
+    'Restoran masakan otentik Thailand bersertifikasi Halal CICOT resmi di lantai 5 MBK Center Bangkok. Terkenal dengan Tom Yum Goong pedas asam dan Pad Thai udang segar.',
+  'hk-wanchai-islamic':
+    'Kantin dim sum halal paling terkenal di Hong Kong, bertempat di Islamic Centre Wan Chai. Menyajikan Har Gow, Siu Mai, dan roti kukus halal terverifikasi oleh The Incorporated Trustees of the Islamic Community Fund of HK.',
+  'tw-taipei-chang':
+    'Kedai sup mi daging sapi legendaris bersertifikat Halal CMA resmi di Zhongzheng Taipei. Kuah kaldu bening direbus dengan rempah herbal pilihan dan potongan daging sapi lembut.',
+  'au-sydney-fishmarket':
+    'Gerai boga bahari segar di Sydney Fish Market. Khusus menyajikan tiram segar, lobster panggang mentega, dan ikan laut tanpa kandungan daging atau minyak babi.',
+  'fr-paris-lebutcher':
+    'Kedai burger gourmet Prancis di rue de Berri dekat Champs-Élysées Paris. Seluruh daging sapi artisanal bersertifikasi Halal Prancis dengan keju melted lokal berkualitas tinggi.',
+  'de-berlin-mustafa':
+    "Kedai doner kebab sayur panggang paling populer di Kreuzberg Berlin. Daging ayam berbumbu kaya rempah disajikan bersama sayuran panggang karamelisasi dan roti renyah.",
+  'it-rome-vatican':
+    'Restoran Italia bersertifikat Halal resmi di Roma. Menyajikan pasta artisanal, pizza oven kayu halal, dan hidangan daging sapi tanpa minyak babi maupun alkohol dalam proses memasak.',
+  'nl-amsterdam-kartika':
+    'Restoran masakan nusantara halal otentik di Overtoom Amsterdam. Terkenal dengan rijsttafel lengkap, rendang daging empuk, dan sate ayam bumbu kacang gurih.',
+  'ch-zurich-bebek':
+    'Restoran Mediterania dan Timur Tengah bergaya modern di Kalkbreite Zurich. Menyajikan pilihan daging ayam halal, aneka hummus segar, dan falafel renyah tanpa minyak babi.',
+  'eg-cairo-aboutarek':
+    'Kuil Koshary paling legendaris di Kairo Downtown Mesir. Hidangan vegetarian nasional perpaduan beras, makaroni, miju-miju, buncis, dan bawang goreng renyah saus tomat asam gurih.',
+  'ma-marrakech-nomad':
+    'Restoran rooftop modern di jantung pasar rempah Rahba Kedima Marrakech. Menyajikan masakan Maroko kontemporer seperti Tajine domba plum dan couscous sayuran segar.',
+  'qa-doha-sukarpasha':
+    'Lounge Ottoman megah di Katara Cultural Village Doha Qatar. Menyajikan santapan daging panggang para sultan, teh apel aromatik, dan hidangan penutup baklava otentik.',
+};
+
+function escapeXml(unsafe: string): string {
+  return (unsafe || '').replace(/[<>&'"]/g, (c) => {
+    switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case "'": return '&apos;';
+      case '"': return '&quot;';
+      default: return c;
+    }
+  });
+}
+
+export function generateTactileStorefrontSvg(name: string, city: string, country: string, cuisine: string): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
+  <rect width="600" height="340" fill="#18215A"/>
+  <rect x="12" y="12" width="576" height="316" rx="4" fill="#FFFFFF" stroke="#CDD4D0" stroke-width="2"/>
+  <rect x="24" y="24" width="552" height="36" fill="#F7FAF8" stroke="#CDD4D0"/>
+  <rect x="36" y="32" width="20" height="20" rx="3" fill="#18215A"/>
+  <text x="46" y="46" fill="#FFFFFF" font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle">T</text>
+  <text x="68" y="47" fill="#18215A" font-family="sans-serif" font-size="12" font-weight="bold">${escapeXml(city)}, ${escapeXml(country)} WAYPOINT</text>
+  <text x="560" y="47" fill="#6B7570" font-family="sans-serif" font-size="10" font-weight="bold" text-anchor="end">FASAD RESMI</text>
+  <text x="36" y="110" fill="#18215A" font-family="sans-serif" font-size="22" font-weight="bold">${escapeXml(name)}</text>
+  <rect x="36" y="125" width="160" height="26" rx="13" fill="#D7EBDF" stroke="#176B40"/>
+  <text x="116" y="142" fill="#176B40" font-family="sans-serif" font-size="11" font-weight="bold" text-anchor="middle">${escapeXml(cuisine)}</text>
+  <line x1="36" y1="170" x2="564" y2="170" stroke="#CDD4D0" stroke-dasharray="4 4"/>
+  <text x="36" y="210" fill="#6B7570" font-family="sans-serif" font-size="13">Verifikasi Lokasi Transit Wayfinding JavaMifi Compass</text>
+  <text x="36" y="235" fill="#6B7570" font-family="sans-serif" font-size="12">Fasilitas ramah pelancong muslim &amp; terkoneksi WiFi JavaMifi</text>
+  <rect x="24" y="276" width="552" height="52" fill="#E1E6E3"/>
+  <text x="40" y="306" fill="#18215A" font-family="monospace" font-size="11" font-weight="bold">AUTENTIKASI RASA &bull; DIJAMIN OLEH BUKTI KUTIPAN KATA PER KATA</text>
+</svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+export function generateTactileDishSvg(dishName: string, nameId: string, priceText: string, currency: string): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
+  <rect width="600" height="340" fill="#F7FAF8"/>
+  <rect x="12" y="12" width="576" height="316" rx="4" fill="#FFFFFF" stroke="#CDD4D0" stroke-width="2"/>
+  <rect x="24" y="24" width="552" height="36" fill="#18215A"/>
+  <text x="40" y="47" fill="#FFFFFF" font-family="sans-serif" font-size="12" font-weight="bold">MENU ANDALAN (SIGNATURE DISH)</text>
+  <text x="560" y="47" fill="#EDF0EE" font-family="monospace" font-size="11" text-anchor="end">${escapeXml(currency)} TIKET MAKAN</text>
+  <text x="40" y="115" fill="#18215A" font-family="sans-serif" font-size="20" font-weight="bold">${escapeXml(dishName)}</text>
+  <text x="40" y="145" fill="#6B7570" font-family="sans-serif" font-size="14">${escapeXml(nameId)}</text>
+  <rect x="40" y="165" width="110" height="24" rx="4" fill="#D7EBDF" stroke="#176B40"/>
+  <text x="95" y="181" fill="#176B40" font-family="sans-serif" font-size="11" font-weight="bold" text-anchor="middle">&check; BEBAS BABI</text>
+  <line x1="40" y1="210" x2="560" y2="210" stroke="#CDD4D0" stroke-dasharray="4 4"/>
+  <text x="40" y="245" fill="#6B7570" font-family="sans-serif" font-size="12">Estimasi Tarif Terverifikasi:</text>
+  <text x="40" y="280" fill="#176B40" font-family="sans-serif" font-size="24" font-weight="bold">${escapeXml(priceText)}</text>
+</svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+export function generateTactileCertSvg(certifier: string, certNumber?: string, expiry?: string): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
+  <rect width="600" height="340" fill="#18215A"/>
+  <rect x="12" y="12" width="576" height="316" rx="4" fill="#FFFFFF" stroke="#CDD4D0" stroke-width="2"/>
+  <rect x="24" y="24" width="552" height="36" fill="#D7EBDF" stroke="#176B40"/>
+  <text x="40" y="47" fill="#176B40" font-family="sans-serif" font-size="13" font-weight="bold">&check; BUKTI SERTIFIKASI HALAL RESMI</text>
+  <text x="40" y="110" fill="#18215A" font-family="sans-serif" font-size="18" font-weight="bold">${escapeXml(certifier)}</text>
+  <text x="40" y="145" fill="#6B7570" font-family="monospace" font-size="13">No. Registrasi: ${escapeXml(certNumber || 'TERDAFTAR RESMI')}</text>
+  <text x="40" y="175" fill="#6B7570" font-family="sans-serif" font-size="13">Masa Berlaku: ${escapeXml(expiry || 'Hingga Akhir Periode Aktif')}</text>
+  <rect x="40" y="205" width="220" height="32" rx="4" fill="#18215A"/>
+  <text x="150" y="226" fill="#FFFFFF" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">STATUS: VALID &bull; AKTIF</text>
+  <line x1="24" y1="260" x2="576" y2="260" stroke="#CDD4D0"/>
+  <text x="40" y="295" fill="#6B7570" font-family="sans-serif" font-size="11">Diverifikasi secara deterministik oleh JavaMifi Compass Pipeline</text>
+</svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+// Automatically enrich all seeded places with descriptions, images, and WiFi counter info
+RAW_SEEDED_PLACES.forEach((p) => {
+  if (!p.description) {
+    p.description =
+      PLACE_DESCRIPTIONS[p.id] ||
+      `Restoran ${p.cuisine} terkemuka di ${p.cityName}, ${p.countryName}. Menyediakan hidangan pilihan terverifikasi dan memenuhi standar kepatuhan JavaMifi Compass Rasa.`;
+  }
+  if (!p.wifiPickupBooth) {
+    p.wifiPickupBooth = COUNTRY_WIFI_BOOTHS[p.countryIso2.toUpperCase()];
+  }
+  if (!p.images || p.images.length === 0) {
+    const firstDish = p.menuItems[0];
+    p.images = [
+      {
+        url: generateTactileStorefrontSvg(p.name, p.cityName, p.countryName, p.cuisine),
+        caption: `Fasad Transit Wayfinding & Suasana ${p.name}`,
+        type: 'STOREFRONT',
+      },
+      {
+        url: generateTactileDishSvg(
+          firstDish ? firstDish.nameEn : p.name,
+          firstDish ? firstDish.nameId : p.cuisine,
+          `${p.currency} ${p.averagePriceMinor}`,
+          p.currency
+        ),
+        caption: `Menu Andalan: ${firstDish ? firstDish.nameId : p.name}`,
+        type: 'DISH',
+      },
+      {
+        url: generateTactileCertSvg(
+          p.certifierName || 'Lembaga Audit Halal Terakreditasi',
+          p.certNumber,
+          p.certExpiresAt
+        ),
+        caption: `Papan Sertifikasi Halal Resmi ${p.certifierName || ''}`,
+        type: 'CERTIFICATE',
+      },
+    ];
+  }
+});
+
+export const SEEDED_PLACES: RawPlace[] = RAW_SEEDED_PLACES;
