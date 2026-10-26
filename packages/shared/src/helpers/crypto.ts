@@ -2,6 +2,9 @@
 // Cryptography helpers — HMAC signatures, hashing, tokens
 // ─────────────────────────────────────────────────────────────
 
+declare const require: any;
+declare const Buffer: any;
+
 /**
  * Constant-time comparison to prevent timing attacks
  */

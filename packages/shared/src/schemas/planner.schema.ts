@@ -2,8 +2,8 @@
 // Planner schemas — connectivity recommendation engine input
 // ─────────────────────────────────────────────────────────────
 import { z } from 'zod';
-import { UsageProfile } from '../enums/index.js';
-import { countryCodeSchema, moneySchema } from './index.js';
+import { UsageProfile } from '../enums';
+import { countryCodeSchema, moneySchema } from './index';
 
 /**
  * Input for the smart connectivity planner.

@@ -2,7 +2,7 @@
 // Auth schemas
 // ─────────────────────────────────────────────────────────────
 import { z } from 'zod';
-import { emailSchema, passwordSchema, phoneSchema } from './index.js';
+import { emailSchema, passwordSchema, phoneSchema } from './index';
 
 /** Login request body. */
 export const loginSchema = z.object({

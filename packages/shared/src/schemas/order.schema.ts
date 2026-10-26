@@ -2,8 +2,8 @@
 // Order schemas
 // ─────────────────────────────────────────────────────────────
 import { z } from 'zod';
-import { OrderStatus, PaymentMethod } from '../enums/index.js';
-import { idSchema, moneySchema, emailSchema, phoneSchema } from './index.js';
+import { OrderStatus, PaymentMethod } from '../enums';
+import { idSchema, moneySchema, emailSchema, phoneSchema } from './index';
 
 /** Create a new order (manual / admin). */
 export const createOrderSchema = z.object({

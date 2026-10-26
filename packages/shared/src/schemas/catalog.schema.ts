@@ -2,14 +2,14 @@
 // Catalog schemas — destinations, products, plans, promos
 // ─────────────────────────────────────────────────────────────
 import { z } from 'zod';
-import { ProductType } from '../enums/index.js';
+import { ProductType } from '../enums';
 import {
   idSchema,
   countryCodeSchema,
   moneySchema,
   localeSchema,
   currencyCodeSchema,
-} from './index.js';
+} from './index';
 
 // ── Destination ──────────────────────────────────────────────
 

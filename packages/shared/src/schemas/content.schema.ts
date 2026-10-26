@@ -2,8 +2,8 @@
 // Content / CMS schemas
 // ─────────────────────────────────────────────────────────────
 import { z } from 'zod';
-import { ContentStatus } from '../enums/index.js';
-import { localeSchema } from './index.js';
+import { ContentStatus } from '../enums';
+import { localeSchema } from './index';
 
 const localizedStringSchema = z.object({
   id: z.string().min(1),

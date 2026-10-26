@@ -5,6 +5,7 @@
     "moduleResolution": "bundler",
     "lib": ["dom", "dom.iterable", "ES2022"],
     "strict": true,
+    "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
