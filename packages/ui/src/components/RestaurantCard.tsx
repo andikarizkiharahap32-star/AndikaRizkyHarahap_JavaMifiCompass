@@ -6,6 +6,7 @@ export interface RestaurantCardProps {
   id: string;
   name: string;
   nameOriginal?: string;
+  description?: string;
   cuisine: string;
   cityName: string;
   countryName: string;
@@ -33,6 +34,11 @@ export interface RestaurantCardProps {
   priceRange?: any;
   sampleDishes?: string[];
   dietaryFlags?: string[];
+  images?: Array<{
+    url: string;
+    caption?: string;
+    type: string;
+  }>;
   isSimulated?: boolean;
   onShowTaxiCard?: () => void;
   onShowPhraseCard?: () => void;
@@ -48,6 +54,7 @@ export interface RestaurantCardProps {
 export const RestaurantCard: React.FC<RestaurantCardProps> = ({
   name,
   nameOriginal,
+  description,
   cuisine,
   cityName,
   countryName,
@@ -57,7 +64,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
   plusCode,
   googleRating,
   reviewCount,
-  ratingSource = 'Google Places (New)',
+  ratingSource = 'Google Places & Tabelog',
   tier,
   certifierName,
   validUntil,
@@ -69,12 +76,15 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
   priceRange,
   sampleDishes = [],
   dietaryFlags = [],
+  images = [],
   isSimulated = true,
   onShowTaxiCard,
   onShowPhraseCard,
   onClick,
   className = '',
 }) => {
+  const thumbnail = images && images.length > 0 ? images[0] : null;
+
   return (
     <div
       onClick={onClick}
@@ -86,14 +96,14 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           onClick?.();
         }
       }}
-      className={`group relative bg-paper border border-paper-edge border-b-2 hover:border-primary rounded p-4 transition-colors cursor-pointer flex flex-col justify-between gap-3 min-h-48 ${className}`}
+      className={`group relative bg-paper border border-paper-edge border-b-2 hover:border-primary rounded p-4 transition-colors cursor-pointer flex flex-col justify-between gap-3.5 min-h-48 ${className}`}
     >
       <div className="flex flex-col gap-3">
         {/* Row 1: Waypoint Station Header Bar (Non-clipping 'T' transit mark & status) */}
         <div className="flex items-center justify-between gap-2 w-full">
           <div className="flex items-center gap-2 min-w-0">
             <span
-              className="w-6 h-6 rounded bg-primary text-on-primary font-mono font-bold text-xs flex items-center justify-center shrink-0"
+              className="w-8 h-8 rounded bg-primary text-on-primary font-mono font-bold text-sm flex items-center justify-center shrink-0 leading-none select-none"
               aria-hidden="true"
             >
               T
@@ -108,13 +118,13 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
             )}
           </div>
           {isSimulated && (
-            <span className="text-xs font-sans font-semibold uppercase tracking-wider text-outline bg-sunken px-2 py-0.5 rounded border border-paper-edge shrink-0">
-              Simulasi Data
+            <span className="text-xs font-sans font-bold uppercase tracking-wider text-outline bg-sunken px-2.5 py-1 rounded border border-paper-edge shrink-0">
+              Data simulasi
             </span>
           )}
         </div>
 
-        {/* Row 2: Halal Tier & Dietary Badges (Dedicated Full-Width Row) */}
+        {/* Row 2: Halal Tier Badge with Certifier & Validity on Dedicated Line */}
         <div className="w-full">
           <HalalBadge
             tier={tier}
@@ -126,7 +136,30 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           />
         </div>
 
-        {/* Row 3: Restaurant Title */}
+        {/* Row 3: Photo Thumbnail (Visual Evidence) */}
+        {thumbnail && (
+          <div className="w-full h-36 rounded overflow-hidden border border-paper-edge bg-surface relative">
+            <img
+              src={thumbnail.url}
+              alt={thumbnail.caption || name}
+              className="w-full h-full object-cover select-none"
+            />
+            <div className="absolute top-2 right-2 bg-primary text-on-primary text-xs font-sans font-bold px-2 py-0.5 rounded uppercase">
+              {thumbnail.type === 'STOREFRONT'
+                ? 'Fasad Depan'
+                : thumbnail.type === 'DISH'
+                ? 'Menu Andalan'
+                : 'Sertifikat'}
+            </div>
+            {thumbnail.caption && (
+              <div className="absolute bottom-0 inset-x-0 bg-primary/90 text-on-primary px-2.5 py-1 text-xs font-sans truncate">
+                {thumbnail.caption}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Row 4: Restaurant Title */}
         <div>
           <h3 className="text-base font-bold text-primary leading-snug m-0">
             {name}{' '}
@@ -138,7 +171,14 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           </h3>
         </div>
 
-        {/* Row 4: Cuisine & Rating Plate with Source Attribution */}
+        {/* Row 5: Venue Culinary Description */}
+        {description && (
+          <p className="text-xs font-sans text-secondary line-clamp-2 leading-relaxed m-0">
+            {description}
+          </p>
+        )}
+
+        {/* Row 6: Cuisine & Rating Plate with Source Attribution */}
         <div className="flex flex-wrap items-center gap-2 text-xs text-secondary">
           <span className="font-semibold text-primary bg-surface px-2 py-0.5 rounded border border-paper-edge">
             {cuisine}
@@ -152,7 +192,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           </div>
         </div>
 
-        {/* Row 5: Physical Address & Postal Code */}
+        {/* Row 7: Physical Address */}
         <div className="text-xs text-secondary leading-snug">
           <p className="m-0 line-clamp-1">{address}</p>
           {addressLocalScript && (
@@ -162,7 +202,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           )}
         </div>
 
-        {/* Row 6: Quick Action Tools: Taxi Address & Mirin/Sake Card (48px interactive touch targets) */}
+        {/* Row 8: Quick Action Tools: Taxi Address & Mirin/Sake Card (48px interactive touch targets) */}
         <div className="flex items-center gap-2 pt-1" onClick={(e) => e.stopPropagation()}>
           {onShowTaxiCard && (
             <button
@@ -185,9 +225,17 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
             </button>
           )}
         </div>
+
+        {/* Row 9: Persistent "Verify with Restaurant" Notice */}
+        <div className="p-2.5 rounded bg-sunken border border-paper-edge text-xs font-sans text-secondary leading-snug flex items-start gap-1.5">
+          <span className="text-outline font-bold" aria-hidden="true">ℹ</span>
+          <p className="m-0">
+            Harap selalu konfirmasi status kehalalan bahan dan alat masak langsung ke staf restoran sebelum memesan.
+          </p>
+        </div>
       </div>
 
-      {/* Row 7: Dual-Price Range Indication */}
+      {/* Row 10: Dual-Price Range Indication with Per-Person Estimate */}
       {(priceRange || averagePrice) && (
         <div className="mt-1 pt-2.5 border-t border-paper-edge flex flex-col sm:flex-row sm:items-center justify-between gap-1">
           <span className="text-xs font-sans text-outline uppercase font-semibold">

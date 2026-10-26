@@ -37,35 +37,27 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
 
   const destText = destinations.join(' / ') || 'TYO/OSA';
 
-  const cardBg = isNight ? 'bg-[#171F54]' : 'bg-white';
-  const cardBorder = isNight ? 'border-[#2B357A]' : 'border-[#CDD4D0]';
-  const textColor = isNight ? 'text-[#E9ECF8]' : 'text-[#000846]';
-  const subtextColor = isNight ? 'text-[#A7AFD6]' : 'text-[#464650]';
-  const mutedColor = isNight ? 'text-[#A7AFD6]' : 'text-[#6B7570]';
-  const ribbonBg = isNight ? 'bg-[#0E1438]' : 'bg-[#f1f4f2]';
-  const notchBg = isNight ? 'bg-[#0E1438]' : 'bg-[#f7faf8]';
-  const stubBg = isNight ? 'bg-[#0E1438]/60' : 'bg-[#f1f4f2]/70';
-
   return (
     <div
-      className={`relative ${cardBg} rounded-2xl shadow-sm border ${cardBorder} overflow-hidden ${textColor} ${className}`}
+      data-theme={isNight ? 'night' : undefined}
+      className={`relative bg-paper text-primary rounded-2xl border border-paper-edge border-b-2 overflow-hidden ${className}`}
     >
       {/* Top Wayfinding Context Ribbon */}
-      <div className={`${ribbonBg} px-6 py-3 border-b ${cardBorder} flex items-center justify-between gap-3`}>
+      <div className="bg-surface px-6 py-3 border-b border-paper-edge flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           {/* 4-Bar Signal Indicator */}
-          <div className="flex items-end gap-[2px] h-3">
-            <span className="w-[3px] h-1.5 rounded-sm bg-[#176B40]" />
-            <span className="w-[3px] h-2 rounded-sm bg-[#176B40]" />
-            <span className="w-[3px] h-2.5 rounded-sm bg-[#176B40]" />
-            <span className="w-[3px] h-3 rounded-sm bg-[#176B40]" />
+          <div className="flex items-end gap-0.5 h-3">
+            <span className="w-1 h-1.5 rounded-sm bg-success inline-block" />
+            <span className="w-1 h-2 rounded-sm bg-success inline-block" />
+            <span className="w-1 h-2.5 rounded-sm bg-success inline-block" />
+            <span className="w-1 h-3 rounded-sm bg-success inline-block" />
           </div>
-          <span className="font-mono text-[11px] font-bold text-[#176B40] uppercase tracking-wide">
+          <span className="font-mono text-xs font-bold text-success uppercase tracking-wide tnum">
             TIKET AKTIF / TERKONFIRMASI ({status})
           </span>
         </div>
 
-        <div className={`flex items-center gap-1.5 ${mutedColor} font-mono text-[10px]`}>
+        <div className="flex items-center gap-1.5 text-outline font-mono text-xs">
           <span>● Offline Mode Ready</span>
         </div>
       </div>
@@ -75,24 +67,28 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
         {/* Left Flight-Route Section */}
         <div className="flex-1 p-6 flex flex-col justify-between gap-5">
           {/* Header Strip */}
-          <div className={`flex items-start justify-between border-b ${cardBorder}/40 pb-3`}>
+          <div className="flex items-start justify-between border-b border-paper-edge/50 pb-3">
             <div className="flex flex-col">
-              <span className={`font-mono text-[10px] ${mutedColor} uppercase tracking-wider`}>
+              <span className="font-mono text-xs text-outline uppercase tracking-wider">
                 KODE TIKET PESANAN
               </span>
-              <span className={`font-mono text-base font-bold ${textColor} tracking-wider`}>
+              <span className="font-mono text-base font-bold text-primary tracking-wider tnum">
                 {orderNumber}
               </span>
             </div>
-            <div className={`flex items-center gap-2 px-2.5 py-1 rounded-lg ${ribbonBg} border ${cardBorder}/60`}>
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-surface border border-paper-edge">
               <span
-                className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-xs font-mono ${
-                  isWifi ? 'bg-[#F27B2A] text-[#000846]' : 'bg-[#4C97FF] text-white'
+                className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs font-mono ${
+                  isWifi
+                    ? 'bg-line-wifi text-primary'
+                    : isEsim
+                      ? 'bg-line-esim text-on-primary'
+                      : 'bg-line-sim text-on-primary'
                 }`}
               >
                 {isWifi ? 'W' : isEsim ? 'E' : 'S'}
               </span>
-              <span className={`font-mono text-xs font-bold ${textColor}`}>
+              <span className="font-mono text-xs font-bold text-primary">
                 {isWifi ? 'Pocket WiFi' : isEsim ? 'Digital eSIM' : 'Travel SIM'}
               </span>
             </div>
@@ -102,24 +98,24 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
           <div className="py-2 flex items-center justify-between">
             {/* Origin */}
             <div className="flex flex-col">
-              <span className={`font-mono text-[10px] ${mutedColor} uppercase`}>ORIGIN</span>
-              <span className={`text-3xl font-extrabold ${textColor} leading-none tracking-tight font-mono`}>
+              <span className="font-mono text-xs text-outline uppercase">ORIGIN</span>
+              <span className="text-3xl font-extrabold text-primary leading-none tracking-tight font-display-md tnum">
                 CGK
               </span>
-              <span className={`text-xs ${subtextColor} font-medium`}>Jakarta (T3)</span>
+              <span className="text-xs text-secondary font-medium">Jakarta (T3)</span>
             </div>
 
             {/* Schematic Transit Path */}
             <div className="flex-1 px-4 flex flex-col items-center justify-center">
               <div className="w-full flex items-center relative">
-                <span className={`w-2.5 h-2.5 rounded-full ${isNight ? 'bg-[#4C97FF]' : 'bg-[#18215A]'} z-10 shrink-0`} />
-                <div className={`flex-1 h-1 ${isNight ? 'bg-[#4C97FF]' : 'bg-[#18215A]'} relative flex items-center justify-center`}>
-                  <span className="w-2 h-2 rotate-45 border-t-2 border-r-2 border-[#F27B2A] absolute" />
+                <span className="w-2.5 h-2.5 rounded-full bg-primary z-10 shrink-0" />
+                <div className="flex-1 h-1 bg-primary relative flex items-center justify-center">
+                  <span className="w-2 h-2 rotate-45 border-t-2 border-r-2 border-line-wifi absolute" />
                 </div>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#F27B2A] z-10 shrink-0" />
+                <span className="w-2.5 h-2.5 rounded-full bg-line-wifi z-10 shrink-0" />
               </div>
               <div className="mt-1 flex items-center gap-1">
-                <span className={`font-mono text-[10px] ${mutedColor} font-bold`}>
+                <span className="font-mono text-xs text-outline font-bold tnum">
                   GA874 • HND / KIX
                 </span>
               </div>
@@ -127,40 +123,40 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
 
             {/* Destination */}
             <div className="flex flex-col items-end text-right">
-              <span className={`font-mono text-[10px] ${mutedColor} uppercase`}>DESTINASI</span>
-              <span className={`text-3xl font-extrabold ${textColor} leading-none tracking-tight font-mono truncate max-w-[140px]`}>
+              <span className="font-mono text-xs text-outline uppercase">DESTINASI</span>
+              <span className="text-3xl font-extrabold text-primary leading-none tracking-tight font-display-md truncate max-w-36 tnum">
                 {destText}
               </span>
-              <span className={`text-xs ${subtextColor} font-medium`}>Jepang Multi-City</span>
+              <span className="text-xs text-secondary font-medium">Jepang Multi-City</span>
             </div>
           </div>
 
           {/* Passenger & Schedule Grid */}
-          <div className={`grid grid-cols-2 gap-3 ${ribbonBg} p-3.5 rounded-xl border ${cardBorder}/50 font-mono text-xs`}>
+          <div className="grid grid-cols-2 gap-3 bg-surface p-3.5 rounded-xl border border-paper-edge font-mono text-xs">
             <div>
-              <span className={`text-[10px] ${mutedColor} uppercase block`}>PEMEGANG UNIT</span>
-              <span className={`font-bold ${textColor} block truncate`}>{travelerName}</span>
-              <span className={`text-[10px] ${mutedColor}`}>4 Wisatawan • 4 Perangkat</span>
+              <span className="text-xs text-outline uppercase block">PEMEGANG UNIT</span>
+              <span className="font-bold text-primary block truncate tnum">{travelerName}</span>
+              <span className="text-xs text-outline tnum">4 Wisatawan • 4 Perangkat</span>
             </div>
             <div className="text-right">
-              <span className={`text-[10px] ${mutedColor} uppercase block`}>JADWAL AMBIL UNIT</span>
-              <span className={`font-bold ${textColor} block`}>{startDate}</span>
-              <span className={`text-[10px] ${mutedColor}`}>s/d {endDate}</span>
+              <span className="text-xs text-outline uppercase block">JADWAL AMBIL UNIT</span>
+              <span className="font-bold text-primary block tnum">{startDate}</span>
+              <span className="text-xs text-outline tnum">s/d {endDate}</span>
             </div>
           </div>
         </div>
 
         {/* Perforated Vertical Divider (Notches) */}
-        <div className={`relative hidden md:flex flex-col items-center justify-between w-6 ${notchBg} border-x border-dashed ${cardBorder}`}>
-          <div className={`w-4 h-4 -mt-2 rounded-full ${notchBg} border-b ${cardBorder}`} />
-          <div className={`h-full border-r border-dashed ${cardBorder}`} />
-          <div className={`w-4 h-4 -mb-2 rounded-full ${notchBg} border-t ${cardBorder}`} />
+        <div className="relative hidden md:flex flex-col items-center justify-between w-6 bg-surface border-x border-dashed border-paper-edge">
+          <div className="w-4 h-4 -mt-2 rounded-full bg-surface border-b border-paper-edge" />
+          <div className="h-full border-r border-dashed border-paper-edge" />
+          <div className="w-4 h-4 -mb-2 rounded-full bg-surface border-t border-paper-edge" />
         </div>
 
         {/* Right Stub: Barcode & Quick Access */}
-        <div className={`w-full md:w-56 ${stubBg} p-6 flex flex-col items-center justify-center text-center border-t md:border-t-0 ${cardBorder}`}>
+        <div className="w-full md:w-56 bg-surface p-6 flex flex-col items-center justify-center text-center border-t md:border-t-0 md:border-l border-paper-edge">
           {qrCodeUrl ? (
-            <div className="p-2 bg-white rounded-xl border border-[#CDD4D0] shadow-sm mb-2">
+            <div className="p-2 bg-white rounded-xl border border-paper-edge mb-2">
               <img
                 src={qrCodeUrl}
                 alt="Ticket QR Code"
@@ -168,16 +164,16 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
               />
             </div>
           ) : (
-            <div className={`w-28 h-28 rounded-xl border-2 border-dashed ${cardBorder} ${isNight ? 'bg-[#171F54]' : 'bg-white'} flex flex-col items-center justify-center mb-2`}>
+            <div className="w-28 h-28 rounded-xl border-2 border-dashed border-paper-edge bg-paper flex flex-col items-center justify-center mb-2">
               <span className="text-2xl">📱</span>
-              <span className={`font-mono text-[10px] ${mutedColor} mt-1`}>Ready</span>
+              <span className="font-mono text-xs text-outline mt-1">Ready</span>
             </div>
           )}
 
-          <span className={`font-mono text-xs font-bold ${textColor} tracking-wider`}>
+          <span className="font-mono text-xs font-bold text-primary tracking-wider tnum">
             {orderNumber.slice(-8)}
           </span>
-          <span className={`text-[10px] ${mutedColor} font-mono mt-0.5`}>
+          <span className="text-xs text-outline font-mono mt-0.5">
             Tunjukkan di Booth Bandara
           </span>
 
@@ -185,7 +181,7 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
             <button
               type="button"
               onClick={onActionClick}
-              className="mt-3 w-full py-2 rounded-lg bg-[#18215a] hover:bg-[#2B3A8C] text-white font-mono text-xs font-bold transition shadow-sm"
+              className="mt-3 w-full h-12 rounded-xl bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary font-mono text-xs font-bold transition flex items-center justify-center"
             >
               {actionLabel}
             </button>

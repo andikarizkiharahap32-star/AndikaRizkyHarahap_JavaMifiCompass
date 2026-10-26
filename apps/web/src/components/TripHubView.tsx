@@ -249,23 +249,23 @@ export const TripHubView = ({
       </div>
 
       {/* Station: Eat // Compass Rasa Integration */}
-      <div className="p-6 sm:p-8 bg-gradient-to-br from-[#D1FAE5]/30 via-white to-white dark:from-[#059669]/10 dark:via-slate-900 dark:to-slate-900 border border-[#10B981]/30 rounded-3xl shadow-sm space-y-4">
+      <div className="p-6 sm:p-8 bg-paper border border-paper-edge border-b-2 rounded-2xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-[#059669] flex items-center justify-center text-white shadow-sm shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-success flex items-center justify-center text-white shrink-0">
               <Utensils className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[#059669]">
+                <span className="text-xs font-mono uppercase tracking-wider font-extrabold text-success">
                   STATION: EAT // COMPASS RASA
                 </span>
-                <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
               </div>
-              <h3 className="text-lg font-bold text-[#18215A] dark:text-white">
+              <h3 className="text-lg font-bold text-primary">
                 Rekomendasi Kuliner Halal di Destinasi Anda
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-secondary">
                 Temukan restoran halal terdekat, terjemahan menu lokal, serta konversi harga langsung ke Rupiah.
               </p>
             </div>
@@ -273,7 +273,7 @@ export const TripHubView = ({
 
           <Link
             href={`/${locale}/dining`}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-xs font-mono font-bold tracking-wider uppercase transition shadow-sm shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-5 h-12 rounded-xl bg-success hover:bg-success/90 text-white text-xs font-mono font-bold tracking-wider uppercase transition shrink-0"
           >
             <span>Buka Radar Kuliner</span>
             <span>→</span>

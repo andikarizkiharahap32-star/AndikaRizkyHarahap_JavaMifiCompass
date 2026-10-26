@@ -61,18 +61,18 @@ export const RouteLine: React.FC<RouteLineProps> = ({
             <div
               className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-xs mb-1.5 transition-all ${
                 stop.status === 'current'
-                  ? 'bg-sky-500 border-sky-500 text-white ring-4 ring-sky-100 dark:ring-sky-950 shadow-md'
+                  ? 'bg-primary border-primary text-on-primary ring-4 ring-sunken'
                   : stop.status === 'past'
-                  ? 'bg-emerald-500 border-emerald-500 text-white'
-                  : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500'
+                  ? 'bg-success border-success text-white'
+                  : 'bg-paper border-paper-edge text-secondary'
               }`}
             >
               {stop.flag || idx + 1}
             </div>
-            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[90px]">
+            <span className="text-xs font-semibold text-primary truncate max-w-[90px]">
               {stop.name}
             </span>
-            {stop.dates && <span className="text-[10px] text-slate-500">{stop.dates}</span>}
+            {stop.dates && <span className="text-xs text-outline">{stop.dates}</span>}
           </div>
 
           {idx < stops.length - 1 && (

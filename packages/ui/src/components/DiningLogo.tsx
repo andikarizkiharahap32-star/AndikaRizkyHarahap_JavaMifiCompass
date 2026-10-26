@@ -27,18 +27,18 @@ export const DiningLogo: React.FC<DiningLogoProps> = ({
         className="flex-shrink-0"
       >
         {/* Outer Station Interchange Ring */}
-        <circle cx="32" cy="32" r="30" stroke="#18215A" strokeWidth="3.5" fill="#FFFFFF" />
+        <circle cx="32" cy="32" r="30" stroke="var(--color-primary, #18215A)" strokeWidth="3.5" fill="var(--color-paper, #FFFFFF)" />
         {/* Dedicated Dining Emerald Transit Line Ring */}
-        <circle cx="32" cy="32" r="23" stroke="#059669" strokeWidth="2.5" fill="#D1FAE5" />
+        <circle cx="32" cy="32" r="23" stroke="var(--color-success, #176B40)" strokeWidth="2.5" fill="var(--color-success-surface, #D7EBDF)" />
         {/* Wayfinding Compass Crosshair Axis */}
-        <path d="M32 12V52M12 32H52" stroke="#18215A" strokeWidth="1.5" strokeDasharray="3 2" />
+        <path d="M32 12V52M12 32H52" stroke="var(--color-primary, #18215A)" strokeWidth="1.5" strokeDasharray="3 2" />
         {/* Modern Geometric Cloche & Fork Silhouette */}
         <path
           d="M23 27C23 22.0294 27.0294 18 32 18C36.9706 18 41 22.0294 41 27H23Z"
-          fill="#18215A"
+          fill="var(--color-primary, #18215A)"
         />
-        <rect x="21" y="28" width="22" height="2.5" rx="1.25" fill="#047857" />
-        <circle cx="32" cy="16" r="2.5" fill="#059669" />
+        <rect x="21" y="28" width="22" height="2.5" rx="1.25" fill="var(--color-success, #176B40)" />
+        <circle cx="32" cy="16" r="2.5" fill="var(--color-success, #176B40)" />
         {/* Central 'D' Transit Glyph */}
         <text
           x="32"
@@ -46,7 +46,7 @@ export const DiningLogo: React.FC<DiningLogoProps> = ({
           fontFamily="system-ui, -apple-system, sans-serif"
           fontSize="14"
           fontWeight="800"
-          fill="#18215A"
+          fill="var(--color-primary, #18215A)"
           textAnchor="middle"
           letterSpacing="0.05em"
         >
@@ -56,12 +56,12 @@ export const DiningLogo: React.FC<DiningLogoProps> = ({
       {showWordmark && (
         <div className="flex flex-col leading-none">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] tracking-[0.2em] font-extrabold uppercase text-[#059669]">
+            <span className="text-xs font-mono tracking-[0.2em] font-extrabold uppercase text-success">
               STATION: EAT
             </span>
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#059669]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-success" />
           </div>
-          <span className="text-base font-black text-[#18215A] tracking-tight font-sans">
+          <span className="text-base font-black text-primary tracking-tight font-sans">
             Compass Rasa
           </span>
         </div>

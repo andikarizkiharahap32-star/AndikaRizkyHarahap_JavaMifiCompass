@@ -46,7 +46,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
   const disclaimerText = isIdLocale
     ? 'Perkiraan indikatif; kurs harian kartu dan ATM bank mungkin berbeda.'
     : 'Indicative; daily card and ATM rates differ.';
-  const snapshotDateLabel = isIdLocale ? 'Kurs Harian per' : 'Daily rate as of';
+  const snapshotDateLabel = isIdLocale ? 'Kurs harian' : 'Daily rate';
   const perPersonLabel = isIdLocale ? 'per orang' : 'per person';
 
   // If range prop is provided, render range with per-person estimate
@@ -61,10 +61,10 @@ export const DualPrice: React.FC<DualPriceProps> = ({
           <span className="font-semibold text-primary">{range.formattedLocalRange}</span>
 
           {/* IDR Range */}
-          <span className="inline-flex items-baseline gap-1 text-on-surface-variant font-medium text-xs">
+          <span className="inline-flex items-baseline gap-1 text-secondary font-medium text-xs">
             <span className="text-outline text-xs select-none">≈</span>
             <span>
-              <span className="text-[0.65em] font-sans font-bold uppercase tracking-wider">Rp</span>
+              <span className="text-xs font-sans font-bold uppercase tracking-wider">Rp</span>
               <span>&thinsp;</span>
               <span className="font-semibold text-primary">{range.formattedIdrRange.replace(/^Rp\s*/, '')}</span>
             </span>
@@ -72,7 +72,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
         </div>
 
         {/* Sub-row: Per Person Estimate + Inline Daily Date */}
-        <div className="flex items-center gap-2 text-[10px] font-sans text-outline">
+        <div className="flex items-center gap-2 text-xs font-sans text-outline">
           {range.formattedPerPersonIdr && (
             <span>
               Est. ~{range.formattedPerPersonIdr} {perPersonLabel}
@@ -80,7 +80,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
           )}
           {showInlineRateDate && (
             <span className="border-l border-paper-edge pl-2">
-              {snapshotDateLabel} {range.rateSnapshotDate}
+              ({snapshotDateLabel} {range.rateSnapshotDate})
             </span>
           )}
         </div>
@@ -102,17 +102,17 @@ export const DualPrice: React.FC<DualPriceProps> = ({
 
       {/* 2. Dual IDR Equivalent or Stale-Rate Fallback */}
       {idr && idr.amount !== null && idr.amount !== undefined ? (
-        <span className="inline-flex items-baseline gap-1 text-on-surface-variant font-medium text-sm">
+        <span className="inline-flex items-baseline gap-1 text-secondary font-medium text-sm">
           <span className="text-outline text-xs select-none">≈</span>
           <span>
-            <span className="text-[0.6em] font-sans font-bold uppercase tracking-wider">Rp</span>
+            <span className="text-xs font-sans font-bold uppercase tracking-wider">Rp</span>
             <span>&thinsp;</span>
             <span className="font-semibold text-primary">{formatIdrInteger(idr.amount)}</span>
           </span>
 
           {showInlineRateDate && (
-            <span className="text-[10px] text-outline font-sans ml-1">
-              ({idr.rate_date})
+            <span className="text-xs text-outline font-sans ml-1">
+              ({snapshotDateLabel} {idr.rate_date})
             </span>
           )}
 
@@ -130,7 +130,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
               onBlur={() => setTooltipOpen(false)}
               className="relative p-3.5 -m-3.5 min-w-[48px] min-h-[48px] inline-flex items-center justify-center focus:outline-none"
             >
-              <span className="w-4 h-4 rounded-full bg-sunken text-outline hover:text-primary hover:bg-paper-edge flex items-center justify-center text-[10px] font-mono leading-none transition-colors cursor-help">
+              <span className="w-4 h-4 rounded-full bg-sunken text-outline hover:text-primary hover:bg-paper-edge flex items-center justify-center text-xs font-mono leading-none transition-colors cursor-help">
                 ℹ
               </span>
             </button>
@@ -143,7 +143,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
                 className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-2.5 bg-paper text-primary text-xs font-sans rounded border border-paper-edge border-b-2 z-30 pointer-events-none"
               >
                 <p className="m-0 leading-snug">{disclaimerText}</p>
-                <p className="m-0 mt-1 font-mono text-[10px] text-outline">
+                <p className="m-0 mt-1 font-mono text-xs text-outline">
                   {snapshotDateLabel}: {idr.rate_date}
                 </p>
               </div>

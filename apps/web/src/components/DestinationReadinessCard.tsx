@@ -107,22 +107,22 @@ export const DestinationReadinessCard = ({
       </div>
 
       {/* Eat / Halal Food Discovery Banner */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-[#D1FAE5]/60 to-white dark:from-[#059669]/10 dark:to-slate-900 border border-[#10B981]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-5 rounded-2xl bg-paper border border-paper-edge border-b-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#059669] flex items-center justify-center text-white shrink-0 shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-success flex items-center justify-center text-white shrink-0">
             <Utensils className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[#059669]">
+              <span className="text-xs font-mono uppercase tracking-wider font-extrabold text-success">
                 STATION: EAT // COMPASS RASA
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-success" />
             </div>
-            <h4 className="text-sm font-bold text-[#18215A] dark:text-white">
+            <h4 className="text-sm font-bold text-primary">
               Kuliner & Restoran Halal Terverifikasi di {countryInfo.name}
             </h4>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-secondary">
               Cek daftar menu, kisaran harga dalam Rupiah, dan status sertifikasi resmi.
             </p>
           </div>
@@ -130,7 +130,7 @@ export const DestinationReadinessCard = ({
 
         <Link
           href={`/${locale}/dining?country=${countryInfo.countryCode}`}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-xs font-mono font-bold tracking-wider uppercase transition shadow-sm shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-4 h-12 rounded-xl bg-success hover:bg-success/90 text-white text-xs font-mono font-bold tracking-wider uppercase transition shrink-0"
         >
           <span>Eksplorasi Kuliner</span>
           <span>→</span>

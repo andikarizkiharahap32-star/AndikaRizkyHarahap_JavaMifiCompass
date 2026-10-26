@@ -18,8 +18,8 @@ export const Button: React.FC<ButtonProps> = ({
   const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
-    primary: 'bg-sky-600 hover:bg-sky-700 text-white focus:ring-sky-500 shadow-sm active:scale-[0.98]',
-    secondary: 'bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 active:scale-[0.98]',
+    primary: 'bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary focus:ring-primary',
+    secondary: 'bg-secondary hover:bg-secondary/90 text-on-secondary active:scale-[0.98]',
     outline: 'border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-slate-400',
     ghost: 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:ring-slate-400',
     danger: 'bg-rose-600 hover:bg-rose-700 text-white focus:ring-rose-500',

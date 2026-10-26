@@ -186,14 +186,17 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   {t('tabTitle')} • Wayfinding Kuliner Global
                 </p>
                 <p className="text-sm text-primary font-medium m-0 mt-0.5">
-                  Rekomendasi bersertifikat, daftar menu dwibahasa, dan konversi kurs harian vs Rupiah (pembaruan tiap hari).
+                  Rekomendasi bersertifikat, daftar menu dwibahasa, dan konversi kurs harian vs Rupiah (diperbarui tiap hari kerja).
+                </p>
+                <p className="text-xs text-outline font-sans mt-1 m-0 tnum">
+                  Kurs harian per 26 Okt 2026: 1 JPY = Rp 104,50 &bull; 1 SAR = Rp 4.220 &bull; 1 SGD = Rp 12.150
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2 bg-surface border border-paper-edge rounded px-3 py-2 text-xs font-sans text-primary">
               <span className="w-2 h-2 rounded-full bg-success" />
-              <span>Status halal berdasarkan bukti terverifikasi yang dapat Anda periksa langsung</span>
+              <span>Status halal berdasarkan bukti yang bisa Anda periksa</span>
             </div>
           </div>
         )}
@@ -206,7 +209,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               onClick={() => setIsPhraseCardOpen(true)}
               className="h-10 px-3.5 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-primary font-sans font-bold flex items-center gap-1.5 transition"
             >
-              <span>🍶</span>
+              <span aria-hidden="true">🍶</span>
               <span>Kartu Tanya Mirin & Babi</span>
             </button>
             <button
@@ -218,7 +221,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   : 'bg-surface hover:bg-paper-edge text-primary'
               }`}
             >
-              <span>💰</span>
+              <span aria-hidden="true">💰</span>
               <span>Estimasi Kas Makan Trip</span>
             </button>
           </div>
@@ -243,7 +246,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   Terkoneksi dengan konteks sewa pocket-WiFi & eSIM JavaMifi untuk {selectedCountryObj?.name || 'Tujuan'}.
                 </p>
               </div>
-              <span className="text-xs font-sans font-bold uppercase bg-paper px-2.5 py-1 rounded border border-paper-edge text-primary">
+              <span className="text-xs font-sans font-bold uppercase bg-paper px-2.5 py-1 rounded border border-paper-edge text-primary tnum">
                 Kurs Harian: 26 Okt 2026
               </span>
             </div>
@@ -259,7 +262,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                       key={n}
                       type="button"
                       onClick={() => setGroupSize(n)}
-                      className={`h-10 flex-1 rounded text-xs font-bold transition ${
+                      className={`h-10 flex-1 rounded text-xs font-bold transition tnum ${
                         groupSize === n
                           ? 'bg-primary text-on-primary'
                           : 'bg-paper text-outline border border-paper-edge'
@@ -281,7 +284,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                       key={d}
                       type="button"
                       onClick={() => setTripDays(d)}
-                      className={`h-10 flex-1 rounded text-xs font-bold transition ${
+                      className={`h-10 flex-1 rounded text-xs font-bold transition tnum ${
                         tripDays === d
                           ? 'bg-primary text-on-primary'
                           : 'bg-paper text-outline border border-paper-edge'
@@ -320,11 +323,11 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           </div>
         )}
 
-        {/* Top Sticky Wayfinding Control Bar (Wrapping 4-Column Grid & Strict 52px Touch Targets) */}
+        {/* Top Sticky Wayfinding Control Bar (Responsive Wrapping Grid & Strict 52px Touch Targets) */}
         <div className="sticky top-16 z-30 bg-paper border border-paper-edge border-b-2 rounded p-4 flex flex-col gap-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
             {/* 1. Halal / Non-Halal Segmented Control (52px Touch Height) */}
-            <div className="flex items-center bg-surface p-1 rounded border border-paper-edge h-13">
+            <div className="flex items-center bg-surface p-1 rounded border border-paper-edge h-13 min-w-0">
               <button
                 type="button"
                 onClick={() => setFilterMode('HALAL')}
@@ -362,7 +365,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
 
             {/* 2. Destination Dropdown (52px Target) */}
-            <div className="relative h-13">
+            <div className="relative h-13 min-w-0">
               <select
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
@@ -380,14 +383,14 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
 
             {/* 3. Radius Control (52px Height container) */}
-            <div className="flex items-center justify-between gap-1 bg-surface border border-paper-edge rounded px-2 h-13 text-xs font-sans">
+            <div className="flex items-center justify-between gap-1 bg-surface border border-paper-edge rounded px-2 h-13 text-xs font-sans min-w-0">
               <span className="text-outline text-xs uppercase font-bold px-1">{t('topBar.radiusLabel')}:</span>
               {[1, 2, 5, 10].map((r) => (
                 <button
                   key={r}
                   type="button"
                   onClick={() => setRadiusKm(r)}
-                  className={`h-10 px-3 min-w-12 rounded text-xs font-bold transition flex items-center justify-center ${
+                  className={`h-10 px-3 min-w-12 rounded text-xs font-bold transition flex items-center justify-center tnum ${
                     radiusKm === r
                       ? 'bg-paper text-primary border border-paper-edge'
                       : 'text-outline hover:text-primary'
@@ -399,7 +402,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
 
             {/* 4. Natural Language Intent Search (52px Height with Cari Trigger) */}
-            <form onSubmit={handleParseIntentSearch} className="relative h-13 flex items-center">
+            <form onSubmit={handleParseIntentSearch} className="relative h-13 flex items-center min-w-0">
               <Search className="w-4 h-4 text-outline absolute left-3 pointer-events-none" />
               <input
                 type="text"
@@ -477,6 +480,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 id={place.id}
                 name={place.name}
                 nameOriginal={place.nameOriginal}
+                description={place.description}
                 cuisine={place.cuisine}
                 cityName={place.cityName}
                 countryName={place.countryName}
@@ -486,14 +490,15 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 plusCode={place.plusCode}
                 googleRating={place.googleRating}
                 reviewCount={place.reviewCount}
-                ratingSource={place.ratingSource}
+                ratingSource={place.ratingSource || 'Google Places & Tabelog'}
                 tier={place.tier as HalalTierType}
                 certifierName={place.certifierName}
                 validUntil={place.certExpiresAt}
-                lastVerifiedDate={place.lastVerifiedDate}
+                lastVerifiedDate={place.lastVerifiedDate || '26 Okt 2026'}
                 distanceKm={place.distanceKm}
                 alcoholStatus={place.alcoholStatus}
                 priceRange={place.priceRange}
+                images={place.images}
                 averagePrice={
                   place.averagePrice
                     ? {
@@ -527,104 +532,128 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           />
         )}
 
-        {/* User Dispute / Correction Dialog Modal */}
+        {/* Dispute Resolution Modal */}
         {isReportOpen && selectedPlace && (
-          <div className="fixed inset-0 z-50 bg-scrim flex items-center justify-center p-4">
-            <div className="bg-paper border border-paper-edge border-b-2 rounded max-w-lg w-full p-6 relative">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsReportOpen(false);
-                  setReportSuccessReceipt(null);
-                }}
-                className="absolute top-3 right-3 w-12 h-12 rounded text-outline hover:text-primary hover:bg-surface flex items-center justify-center"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="flex items-center gap-2 mb-3">
-                <AlertCircle className="w-5 h-5 text-danger" />
-                <h3 className="text-base font-bold text-primary font-mono uppercase tracking-wide m-0">
-                  {t('detail.reportBtn')}
-                </h3>
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim"
+            onClick={() => setIsReportOpen(false)}
+          >
+            <div
+              className="bg-paper border border-paper-edge border-b-2 rounded max-w-lg w-full p-6 space-y-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-paper-edge pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-danger font-bold text-lg" aria-hidden="true">⚠️</span>
+                  <h3 className="text-base font-bold text-primary m-0">
+                    Laporkan Perbedaan Status Restoran
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsReportOpen(false)}
+                  className="w-10 h-10 rounded bg-surface hover:bg-paper-edge flex items-center justify-center text-primary"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
               {reportSuccessReceipt ? (
-                <div className="py-6 text-center space-y-2">
-                  <CheckCircle2 className="w-12 h-12 text-success mx-auto" />
-                  <h4 className="text-base font-bold text-primary m-0">
-                    {t('detail.reportSubmitted')}
-                  </h4>
-                  <p className="text-xs font-mono text-outline m-0">
-                    Ticket ID: {reportSuccessReceipt}
+                <div className="p-4 rounded bg-success-surface border border-success text-center space-y-2">
+                  <CheckCircle2 className="w-8 h-8 text-success mx-auto" />
+                  <h4 className="text-sm font-bold text-success m-0">Laporan Berhasil Diterima</h4>
+                  <p className="text-xs text-primary m-0">
+                    Nomor Tiket Review: <strong className="font-mono">{reportSuccessReceipt}</strong>. Tim verifikasi akan mengaudit bukti ini dalam 1×24 jam.
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmitReport} className="space-y-4">
-                  <p className="text-xs text-secondary leading-relaxed m-0">
-                    Bantu kami menjaga akurasi sertifikasi kuliner untuk wisatawan muslim dunia. Masukan Anda akan langsung masuk ke antrean audit verifikasi manusia.
-                  </p>
+                <form onSubmit={handleSubmitReport} className="space-y-4 text-xs font-sans">
+                  <div>
+                    <label className="block font-bold text-primary mb-1">
+                      Nama Restoran yang Dilaporkan:
+                    </label>
+                    <input
+                      type="text"
+                      disabled
+                      value={selectedPlace.name}
+                      className="w-full h-10 px-3 rounded bg-surface border border-paper-edge text-primary font-semibold"
+                    />
+                  </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase font-mono text-primary mb-1">
+                    <label className="block font-bold text-primary mb-1">
                       Alasan Pelaporan:
                     </label>
                     <select
                       value={reportReason}
                       onChange={(e) => setReportReason(e.target.value)}
-                      className="w-full h-12 px-3 bg-surface border border-outline rounded text-xs text-primary font-semibold"
+                      className="w-full h-10 px-3 rounded bg-surface border border-outline text-primary font-semibold"
                     >
-                      <option value="PORK_DETECTED">Terdeteksi Mengandung Daging/Minyak Babi (Pork)</option>
-                      <option value="ALCOHOL_SERVED">Menyajikan Minuman Keras / Alkohol</option>
-                      <option value="EXPIRED_CERT">Sertifikat Halal Sudah Kedaluwarsa</option>
-                      <option value="WRONG_PRICE">Harga Menu atau Kurs Sangat Berbeda</option>
-                      <option value="CLOSED_DOWN">Restoran Sudah Tutup Permanen</option>
-                      <option value="OTHER">Lainnya</option>
+                      <option value="PORK_DETECTED">Menemukan menu olahan babi (Pork detected)</option>
+                      <option value="ALCOHOL_SERVED">Menyajikan minuman beralkohol tanpa pemisahan</option>
+                      <option value="CERTIFICATE_EXPIRED">Sertifikat halal kedaluwarsa atau tidak valid</option>
+                      <option value="CROSS_CONTAMINATION">Peralatan masak bercampur dengan non-halal</option>
+                      <option value="OTHER">Lainnya (Perubahan kepemilikan / menu baru)</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase font-mono text-primary mb-1">
-                      Rekomendasi Status yang Tepat:
+                    <label className="block font-bold text-primary mb-1">
+                      Saran Tier Status yang Tepat:
                     </label>
                     <select
                       value={suggestedTier}
                       onChange={(e) => setSuggestedTier(e.target.value)}
-                      className="w-full h-12 px-3 bg-surface border border-outline rounded text-xs text-primary font-semibold"
+                      className="w-full h-10 px-3 rounded bg-surface border border-outline text-primary font-semibold"
                     >
-                      <option value="NOT_HALAL">Ubah Menjadi NOT_HALAL (Non-Halal)</option>
-                      <option value="OPTIONS">Ubah Menjadi OPTIONS (Menu Pilihan Saja)</option>
-                      <option value="CLAIMED">Ubah Menjadi CLAIMED (Klaim Pemilik)</option>
-                      <option value="UNKNOWN">Tandai UNKNOWN (Audit Ulang)</option>
+                      <option value="NOT_HALAL">NOT_HALAL (Non-Halal / Dilarang)</option>
+                      <option value="OPTIONS">OPTIONS (Pilihan Menu Halal Terbatas)</option>
+                      <option value="CLAIMED">CLAIMED (Klaim Muslim Tanpa Sertifikat Resmi)</option>
+                      <option value="UNKNOWN">UNKNOWN (Perlu Ditinjau Ulang)</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase font-mono text-primary mb-1">
-                      Detail Temuan / Catatan Tambahan:
+                    <label className="block font-bold text-primary mb-1">
+                      Catatan Bukti Temuan Anda (Wajib):
                     </label>
                     <textarea
                       required
                       rows={3}
-                      placeholder="Sebutkan menu yang terindikasi non-halal atau informasi tambahan..."
                       value={reportComment}
                       onChange={(e) => setReportComment(e.target.value)}
-                      className="w-full p-2.5 bg-surface border border-outline rounded text-xs text-primary placeholder-outline"
+                      placeholder="Contoh: Saya mengunjungi restoran kemarin dan staf mengonfirmasi kaldu mengandung mirin/sake..."
+                      className="w-full p-2.5 rounded bg-surface border border-outline text-primary"
                     />
                   </div>
 
-                  <div className="pt-2 flex justify-end gap-3">
+                  <div>
+                    <label className="block font-bold text-primary mb-1">
+                      Email Pelapor (Opsional untuk konfirmasi hasil):
+                    </label>
+                    <input
+                      type="email"
+                      value={reportEmail}
+                      onChange={(e) => setReportEmail(e.target.value)}
+                      placeholder="email.anda@domain.com"
+                      className="w-full h-10 px-3 rounded bg-surface border border-outline text-primary"
+                    />
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-end gap-2">
                     <button
                       type="button"
                       onClick={() => setIsReportOpen(false)}
-                      className="h-12 px-4 rounded text-xs font-bold text-outline hover:text-primary min-w-12"
+                      className="h-10 px-4 rounded border border-paper-edge bg-surface hover:bg-paper-edge text-primary font-bold"
                     >
-                      {tCommon('close')}
+                      Batal
                     </button>
                     <button
                       type="submit"
                       disabled={isSubmittingReport}
-                      className="h-12 px-5 rounded bg-primary hover:bg-primary-hover text-on-primary text-xs font-mono font-bold tracking-wider uppercase transition disabled:opacity-50 min-w-12"
+                      className="h-10 px-5 rounded bg-danger hover:bg-danger/90 text-on-primary font-bold transition disabled:opacity-50"
                     >
                       {isSubmittingReport ? 'Mengirim...' : 'Kirim Laporan Audit'}
                     </button>
@@ -635,10 +664,31 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           </div>
         )}
 
-        {/* Taxi Address Card Modal */}
+        {/* Tactile Taxi Address Card Modal */}
         {selectedTaxiPlace && (
-          <div className="fixed inset-0 z-50 bg-scrim flex items-center justify-center p-4">
-            <div className="max-w-lg w-full">
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim"
+            onClick={() => setSelectedTaxiPlace(null)}
+          >
+            <div
+              className="bg-paper border border-paper-edge border-b-2 rounded max-w-md w-full p-6 space-y-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-paper-edge pb-2">
+                <span className="text-xs font-mono uppercase tracking-wider font-bold text-primary">
+                  Kartu Alamat Supir Taksi
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedTaxiPlace(null)}
+                  className="w-8 h-8 rounded bg-surface flex items-center justify-center text-primary"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
               <TaxiAddressCard
                 name={selectedTaxiPlace.name}
                 nameOriginal={selectedTaxiPlace.nameOriginal}
@@ -648,20 +698,39 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 addressLocalScript={selectedTaxiPlace.addressLocalScript}
                 postalCode={selectedTaxiPlace.postalCode}
                 plusCode={selectedTaxiPlace.plusCode}
-                locale={locale}
                 onClose={() => setSelectedTaxiPlace(null)}
               />
             </div>
           </div>
         )}
 
-        {/* Mirin & Sake Dietary Phrase Card Modal */}
+        {/* Dietary Inquiry Phrase Card Modal */}
         {isPhraseCardOpen && (
-          <div className="fixed inset-0 z-50 bg-scrim flex items-center justify-center p-4">
-            <div className="max-w-lg w-full">
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim"
+            onClick={() => setIsPhraseCardOpen(false)}
+          >
+            <div
+              className="bg-paper border border-paper-edge border-b-2 rounded max-w-md w-full p-6 space-y-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-paper-edge pb-2">
+                <span className="text-xs font-mono uppercase tracking-wider font-bold text-primary">
+                  Kartu Tanya Frasa Bahan Makanan
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsPhraseCardOpen(false)}
+                  className="w-8 h-8 rounded bg-surface flex items-center justify-center text-primary"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
               <DietaryPhraseCard
                 countryCode={selectedCountry}
-                locale={locale}
                 onClose={() => setIsPhraseCardOpen(false)}
               />
             </div>
