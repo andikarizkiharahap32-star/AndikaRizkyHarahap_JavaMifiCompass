@@ -55,7 +55,7 @@ export class CurrencyClient {
         const res = await fetch(url);
         if (!res.ok) throw new Error(`Frankfurter error: ${res.statusText}`);
 
-        const data = await res.json();
+        const data = (await res.json()) as any;
         // Base rate in IDR using USD cross
         const usdRate = data.rates?.USD || 1;
         const idrRate = Math.round(usdRate * (FALLBACK_RATES_IDR['USD'] || 15650) * 10) / 10;
@@ -65,7 +65,7 @@ export class CurrencyClient {
           targetCurrency: 'IDR',
           rate: idrRate,
           formatted: `1 ${currency} ≈ Rp ${idrRate.toLocaleString('id-ID')}`,
-          date: data.date || new Date().toISOString().split('T')[0],
+          date: (data.date as string) || new Date().toISOString().slice(0, 10),
           isCached: false,
         };
 
@@ -81,7 +81,7 @@ export class CurrencyClient {
           targetCurrency: 'IDR',
           rate,
           formatted: `1 ${currency} ≈ Rp ${rate.toLocaleString('id-ID')}`,
-          date: new Date().toISOString().split('T')[0],
+          date: new Date().toISOString().slice(0, 10),
           isCached: true,
         };
       },

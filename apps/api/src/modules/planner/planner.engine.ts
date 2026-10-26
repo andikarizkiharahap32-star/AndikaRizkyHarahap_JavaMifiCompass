@@ -181,7 +181,7 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
     opt.isPrimary = idx === 0;
   });
 
-  const recommended = options[0];
+  const recommended = options[0]!;
   const alternatives = options.slice(1);
 
   // Break-even analysis explanation
@@ -189,7 +189,7 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
   let crossOverGroupSize = 2;
 
   if (recommended.type === 'WIFI_RENTAL') {
-    breakEvenDescription = `WiFi rental is your #1 choice because with ${travelers} traveler(s) and ${devices} device(s), sharing one connection drops your cost to Rp ${wifiPerPersonPerDay.toLocaleString('id-ID')} / person / day. If you were traveling alone, a digital eSIM would be more affordable.`;
+    breakEvenDescription = `WiFi rental is your #1 choice because for a group of ${travelers} traveler(s) and ${devices} device(s), sharing one connection drops your cost to Rp ${wifiPerPersonPerDay.toLocaleString('id-ID')} / person / day. If you were traveling alone, a digital eSIM would be more affordable.`;
     crossOverGroupSize = 2;
   } else if (recommended.type === 'ESIM') {
     breakEvenDescription = `Digital eSIM is your #1 choice because for ${travelers} traveler(s) on a ${tripDays}-day journey, it offers instant activation with zero physical return logistics. At 3 or more travelers, Pocket WiFi becomes more cost-effective.`;

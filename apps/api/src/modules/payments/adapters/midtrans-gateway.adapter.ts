@@ -68,7 +68,7 @@ export class MidtransGatewayAdapter implements PaymentGatewayPort {
         throw new Error(`Midtrans API error: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as any;
       return {
         paymentId,
         gatewayMode: this.isProduction ? 'midtrans_production' : 'midtrans_sandbox',

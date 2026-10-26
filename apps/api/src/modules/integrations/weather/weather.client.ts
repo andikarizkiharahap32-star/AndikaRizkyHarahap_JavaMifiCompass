@@ -36,7 +36,7 @@ export class WeatherClient {
         const res = await fetch(url);
         if (!res.ok) throw new Error(`Open-Meteo error: ${res.statusText}`);
 
-        const data = await res.json();
+        const data = (await res.json()) as any;
         const cur = data.current_weather;
 
         const weatherCode = cur?.weathercode ?? 0;

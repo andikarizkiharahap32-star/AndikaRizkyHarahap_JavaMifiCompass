@@ -80,7 +80,7 @@ export class CountriesClient {
         const res = await fetch(url);
         if (!res.ok) throw new Error(`REST Countries error: ${res.statusText}`);
 
-        const data = await res.json();
+        const data = (await res.json()) as any;
         const rootCallingCode = data.idd?.root || '';
         const suffixes = data.idd?.suffixes || [];
         const fullCallingCode = rootCallingCode + (suffixes.length === 1 ? suffixes[0] : '');

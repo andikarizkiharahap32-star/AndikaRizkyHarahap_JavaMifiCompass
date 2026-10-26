@@ -132,7 +132,7 @@ export class FulfillmentService {
       'DEPOSIT_REFUNDED',
       'Device inspected and security deposit refunded',
       undefined,
-      'OPS',
+      'USER',
     );
 
     return updated;
