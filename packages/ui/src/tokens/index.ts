@@ -5,7 +5,7 @@
 
 export const tokens = {
   colors: {
-    // JavaMifi brand cyan / blue / orange
+    // JavaMifi brand cyan / blue / orange / nila
     brand: {
       primary: '#0284C7', // Sky 600 - Connectivity Blue
       primaryHover: '#0369A1',
@@ -13,6 +13,32 @@ export const tokens = {
       accent: '#F97316', // Orange 500 - #AntiSusahSinyal energy
       accentHover: '#EA580C',
       light: '#F0F9FF', // Sky 50
+      nila: '#000846', // Stitch Deep Nila Indigo
+      nilaLight: '#18215A', // Stitch Wayfinding Ink
+    },
+    // Google Stitch Transit Wayfinding material ground
+    ground: {
+      base: '#EDF0EE', // Architectural tactile paper ground
+      paper: '#FFFFFF', // Card stock
+      line: '#D8DDD9', // Subtle ticket border
+    },
+    // Transit Line product colorways
+    transitLine: {
+      wifi: '#F27B2A',
+      esim: '#4C97FF',
+      sim: '#E96BB0',
+      pro: '#18215A',
+      dining: '#059669', // Emerald Jade
+      diningStroke: '#047857',
+      diningSurface: '#D1FAE5',
+    },
+    // Halal status tier colorways (Fail-closed)
+    halalTier: {
+      certified: { bg: '#D1FAE5', text: '#047857', border: '#10B981', label: 'CERTIFIED HALAL' },
+      claimed: { bg: '#E0F2FE', text: '#0284C7', border: '#38BDF8', label: 'HALAL CLAIMED' },
+      options: { bg: '#FEF3C7', text: '#B45309', border: '#F59E0B', label: 'HALAL OPTIONS' },
+      notHalal: { bg: '#FEE2E2', text: '#B91C1C', border: '#EF4444', label: 'NON-HALAL' },
+      unknown: { bg: '#E1E6E3', text: '#6B7570', border: '#CBD5E1', label: 'UNVERIFIED' },
     },
     // Semantic feedback
     status: {

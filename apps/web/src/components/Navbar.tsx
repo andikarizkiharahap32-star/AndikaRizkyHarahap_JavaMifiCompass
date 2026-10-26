@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Wifi, Compass, Globe, User, ShieldCheck } from 'lucide-react';
+import { Wifi, Compass, Globe, User, ShieldCheck, Utensils } from 'lucide-react';
 
 export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
   const t = useTranslations('nav');
@@ -42,6 +42,13 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
           </Link>
           <Link href={`/${currentLocale}/destinations`} className="hover:text-sky-600 transition-colors">
             {t('destinations')}
+          </Link>
+          <Link href={`/${currentLocale}/dining`} className="hover:text-[#059669] transition-colors flex items-center gap-1.5 text-[#18215A] font-bold">
+            <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse" />
+            <span>Kuliner Halal</span>
+            <span className="text-[9px] font-mono uppercase bg-[#D1FAE5] text-[#047857] px-1.5 py-0.2 rounded font-extrabold">
+              BARU
+            </span>
           </Link>
           <Link href={`/${currentLocale}/products`} className="hover:text-sky-600 transition-colors">
             {t('products')}

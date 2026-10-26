@@ -160,3 +160,39 @@ export enum AuditAction {
   STATUS_CHANGE = 'STATUS_CHANGE',
   PERMISSION_CHANGE = 'PERMISSION_CHANGE',
 }
+
+/** 5-tier Halal compliance status deterministically assigned by code. */
+export enum HalalTier {
+  CERTIFIED = 'CERTIFIED',
+  CLAIMED = 'CLAIMED',
+  OPTIONS = 'OPTIONS',
+  NOT_HALAL = 'NOT_HALAL',
+  UNKNOWN = 'UNKNOWN',
+}
+
+/** Orthogonal dietary badges. */
+export enum DietaryFlag {
+  ALCOHOL_FREE = 'ALCOHOL_FREE',
+  SERVES_ALCOHOL = 'SERVES_ALCOHOL',
+  PORK_FREE = 'PORK_FREE',
+  PORK_ON_MENU = 'PORK_ON_MENU',
+  PORK_FREE_COOKWARE = 'PORK_FREE_COOKWARE',
+  VEGAN_OPTIONS = 'VEGAN_OPTIONS',
+  VEGETARIAN = 'VEGETARIAN',
+  SEAFOOD_ONLY = 'SEAFOOD_ONLY',
+}
+
+/** Filter selection for food discovery top bar. */
+export enum DiningFilterMode {
+  HALAL = 'HALAL',
+  NON_HALAL = 'NON_HALAL',
+  ALL = 'ALL',
+}
+
+/** Price indicator type for menu items. */
+export enum DiningPriceType {
+  FIXED = 'FIXED',
+  ESTIMATE = 'ESTIMATE',
+  RANGE = 'RANGE',
+}
+

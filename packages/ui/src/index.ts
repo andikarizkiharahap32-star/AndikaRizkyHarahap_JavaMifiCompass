@@ -6,3 +6,7 @@ export * from './components/RouteLine';
 export * from './components/TripBoardingPass';
 export * from './components/Button';
 export * from './components/Card';
+export * from './components/DiningLogo';
+export * from './components/HalalBadge';
+export * from './components/MenuTicketChit';
+export * from './components/RestaurantCard';

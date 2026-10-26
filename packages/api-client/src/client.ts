@@ -231,4 +231,36 @@ export class JavaMifiApiClient {
         method: 'POST',
       }),
   };
+
+  // ── Dining / Food Discovery (Compass Rasa) ──────────────────
+  dining = {
+    getCountries: () => this.request<any[]>('/v1/dining/countries'),
+    getRates: () => this.request<any[]>('/v1/dining/rates'),
+    getPlaces: (params?: {
+      country?: string;
+      city?: string;
+      filter?: string;
+      search?: string;
+      radiusKm?: number;
+      includeUnverified?: boolean;
+      page?: number;
+      limit?: number;
+    }) => {
+      const q = new URLSearchParams();
+      if (params?.country) q.set('country', params.country);
+      if (params?.city) q.set('city', params.city);
+      if (params?.filter) q.set('filter', params.filter);
+      if (params?.search) q.set('search', params.search);
+      if (params?.radiusKm) q.set('radiusKm', String(params.radiusKm));
+      if (params?.includeUnverified !== undefined)
+        q.set('includeUnverified', String(params.includeUnverified));
+      if (params?.page) q.set('page', String(params.page));
+      if (params?.limit) q.set('limit', String(params.limit));
+      const qs = q.toString();
+      return this.request<{ items: any[]; total: number; page: number; limit: number }>(
+        `/v1/dining/places${qs ? `?${qs}` : ''}`
+      );
+    },
+    getPlaceDetail: (id: string) => this.request<any>(`/v1/dining/places/${id}`),
+  };
 }

@@ -9,6 +9,7 @@ export * from './schemas/catalog.schema';
 export * from './schemas/order.schema';
 export * from './schemas/planner.schema';
 export * from './schemas/content.schema';
+export * from './schemas/dining.schema';
 export * from './helpers/money';
 export * from './helpers/date';
 export * from './helpers/crypto';
