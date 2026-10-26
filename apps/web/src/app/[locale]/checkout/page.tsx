@@ -4,6 +4,7 @@ import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { ShoppingCart, Tag, ShieldCheck, ArrowRight, User, Mail, Phone, MapPin } from 'lucide-react';
+import { PerforatedReceiptChit } from '@javamifi/ui';
 import { apiClient } from '../../../lib/api';
 
 function CheckoutContent({ locale }: { locale: string }) {
@@ -206,24 +207,24 @@ function CheckoutContent({ locale }: { locale: string }) {
           </div>
         </div>
 
-        {/* Right Col: Cart Summary & Total */}
+        {/* Right Col: Google Stitch Perforated Receipt Ticket Chit */}
         <div className="space-y-6">
-          <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm space-y-4">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-sky-600" />
-              Ringkasan Pesanan
-            </h3>
+          <PerforatedReceiptChit
+            orderNumber={`JMC-2610-${Math.floor(1000 + Math.random() * 9000)}`}
+            routeTitle={`CGK ➔ ${destCode}`}
+            productName={isWifi ? 'Pocket WiFi Router Unlimited (3GB/hari FUP)' : 'Digital Travel eSIM High-Speed'}
+            productType={productType}
+            durationDays={durationDays}
+            dateRangeText="26 Okt – 01 Nov 2026"
+            travelerCount={travelers}
+            subtotalIdr={calculatedSubtotal}
+            discountIdr={discountIdr}
+            depositIdr={depositIdr}
+            totalIdr={totalAmountIdr}
+            isDepositRefundable={isWifi}
+          />
 
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 space-y-2 text-xs">
-              <div className="flex justify-between font-bold text-slate-900 dark:text-white">
-                <span>{isWifi ? 'Pocket WiFi Rental' : 'Digital Travel eSIM'}</span>
-                <span>Rp {calculatedSubtotal.toLocaleString('id-ID')}</span>
-              </div>
-              <p className="text-slate-500">
-                Destinasi: {destCode} • {durationDays} Hari • {travelers} Traveler
-              </p>
-            </div>
-
+          <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm space-y-4">
             {/* Promo Code Input */}
             <div>
               <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5 flex items-center gap-1">
@@ -253,39 +254,10 @@ function CheckoutContent({ locale }: { locale: string }) {
               )}
             </div>
 
-            {/* Calculations Breakdown */}
-            <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
-              <div className="flex justify-between text-slate-500">
-                <span>Subtotal</span>
-                <span>Rp {calculatedSubtotal.toLocaleString('id-ID')}</span>
-              </div>
-
-              {discountIdr > 0 && (
-                <div className="flex justify-between text-emerald-600 font-semibold">
-                  <span>Diskon Promo</span>
-                  <span>- Rp {discountIdr.toLocaleString('id-ID')}</span>
-                </div>
-              )}
-
-              {depositIdr > 0 && (
-                <div className="flex justify-between text-slate-600 dark:text-slate-400">
-                  <span>Deposit Modem (Dapat Dikembalikan)</span>
-                  <span>+ Rp {depositIdr.toLocaleString('id-ID')}</span>
-                </div>
-              )}
-
-              <div className="flex justify-between items-baseline pt-3 border-t border-slate-200 dark:border-slate-700">
-                <span className="font-bold text-sm text-slate-900 dark:text-white">Total Tagihan</span>
-                <span className="text-xl font-black text-sky-600">
-                  Rp {totalAmountIdr.toLocaleString('id-ID')}
-                </span>
-              </div>
-            </div>
-
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-98"
+              className="w-full py-3.5 rounded-xl bg-[#18215A] hover:bg-[#2B3A8C] text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-98"
             >
               <span>{isSubmitting ? 'Memproses Pesanan...' : 'Lanjut ke Pembayaran'}</span>
               <ArrowRight className="w-4 h-4" />

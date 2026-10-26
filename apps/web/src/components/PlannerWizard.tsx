@@ -16,7 +16,7 @@ import {
   Split,
   ChevronRight,
 } from 'lucide-react';
-import { SignalBadge } from '@javamifi/ui';
+import { SignalBadge, BreakEvenSchematicCard } from '@javamifi/ui';
 import { calculatePlannerRecommendation } from '../../../api/src/modules/planner/planner.engine';
 import { PlannerInput, PlannerResult, RecommendationOption } from '../../../api/src/modules/planner/planner.types';
 
@@ -282,81 +282,33 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
             </div>
           )}
 
-          {/* Primary Recommendation Card */}
-          <div className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-white to-sky-50/50 dark:from-slate-900 dark:to-slate-800/80 border-2 border-sky-500 shadow-md">
-            <div className="absolute -top-3 left-6 px-3 py-1 rounded-full bg-sky-600 text-white font-bold text-[10px] tracking-widest uppercase">
-              ★ {t('primaryChoice')}
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mt-2">
-              <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                  {result.recommendedOption.title}
-                </h3>
-                <p className="text-xs text-slate-500 mt-1">
-                  {result.tripDays} Hari Perjalanan • {result.travelerCount} Traveler • {result.deviceCount} Perangkat
-                </p>
-              </div>
-
-              <div className="text-left sm:text-right">
-                <span className="text-xs text-slate-500 block">{t('costPerPersonPerDay')}</span>
-                <span className="text-2xl font-extrabold text-sky-600">
-                  Rp {result.recommendedOption.pricePerPersonPerDayIdr.toLocaleString('id-ID')}
-                </span>
-                <span className="text-[11px] text-slate-400 block mt-0.5">
-                  Total est: Rp {result.recommendedOption.totalEstimatedPriceIdr.toLocaleString('id-ID')}
-                </span>
-              </div>
-            </div>
-
-            {/* Reasons List */}
-            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-2">
-                {t('whyRecommended')}
-              </span>
-              <ul className="space-y-2">
-                {result.recommendedOption.reasons.map((r, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
-                    <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span>{r}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Specs Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 text-xs">
-              <div className="p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 block">Kuota Data</span>
-                <span className="font-bold text-slate-800 dark:text-slate-200">{result.recommendedOption.features.dataLimit}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 block">Kecepatan</span>
-                <span className="font-bold text-slate-800 dark:text-slate-200">{result.recommendedOption.features.speed}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 block">Koneksi Gadget</span>
-                <span className="font-bold text-slate-800 dark:text-slate-200">{result.recommendedOption.features.deviceSharing}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 block">Bypass VPN</span>
-                <span className="font-bold text-slate-800 dark:text-slate-200">
-                  {result.recommendedOption.features.vpnIncluded ? 'Ya, Bawaan' : 'Tidak Perlu'}
-                </span>
-              </div>
-            </div>
-
-            {/* CTA */}
-            <div className="mt-8 flex justify-end">
-              <button
-                onClick={() => handleSelectPlan(result.recommendedOption)}
-                className="w-full sm:w-auto px-8 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
-              >
-                <span>{t('selectAndBook')}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          {/* Primary Recommendation Card: Authentic Google Stitch Break-Even Schematic */}
+          <BreakEvenSchematicCard
+            routeText={`CGK → ${destinations.join(' & ')}`}
+            tripDays={result.tripDays}
+            travelerCount={result.travelerCount}
+            deviceCount={result.deviceCount}
+            leadProductTitle={result.recommendedOption.title}
+            leadProductType={result.recommendedOption.type}
+            costPerPersonPerDayIdr={result.recommendedOption.pricePerPersonPerDayIdr}
+            totalCostIdr={result.recommendedOption.totalEstimatedPriceIdr}
+            comparisonSavingsPct={55}
+            alternativeProductTitle={result.alternativeOptions[0]?.title || '4× eSIM Roaming Terpisah'}
+            alternativeTotalCostIdr={result.alternativeOptions[0]?.totalEstimatedPriceIdr || 956000}
+            breakEvenDayText={
+              result.breakEvenAnalysis?.crossOverGroupSize
+                ? `Titik Impas Rombongan: ${result.breakEvenAnalysis.crossOverGroupSize} Orang`
+                : 'Titik Impas Rombongan: H-1'
+            }
+            ruleExplanation={
+              result.breakEvenAnalysis?.breakEvenDescription ||
+              'Untuk 1 traveler solo, eSIM lebih hemat hingga hari ke-4. Namun untuk rombongan 4 traveler, 1 unit WiFi router langsung lebih hemat sejak hari pertama tiba di destinasi.'
+            }
+            onSelectLead={() => handleSelectPlan(result.recommendedOption)}
+            onSelectAlternative={() =>
+              result.alternativeOptions[0] && handleSelectPlan(result.alternativeOptions[0])
+            }
+          />
 
           {/* Group Split Calculator (Requirement W11: Could) */}
           {result.travelerCount > 1 && (

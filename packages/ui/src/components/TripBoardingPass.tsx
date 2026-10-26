@@ -1,5 +1,4 @@
 import React from 'react';
-import { SignalBadge } from './SignalBadge';
 
 export interface TripBoardingPassProps {
   orderNumber: string;
@@ -30,125 +29,156 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
   onActionClick,
   actionLabel = 'View Trip Hub',
 }) => {
-  const getProductBadge = () => {
-    switch (productType) {
-      case 'WIFI_RENTAL':
-        return { label: 'Pocket WiFi', bg: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
-      case 'ESIM':
-        return { label: 'Digital eSIM', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
-      case 'SIM_CARD':
-        return { label: 'Travel SIM', bg: 'bg-amber-50 text-amber-700 border-amber-200' };
-      default:
-        return { label: productType, bg: 'bg-slate-50 text-slate-700 border-slate-200' };
-    }
-  };
+  const isWifi = productType === 'WIFI_RENTAL';
+  const isEsim = productType === 'ESIM';
 
-  const badge = getProductBadge();
+  const destText = destinations.join(' / ') || 'TYO/OSA';
 
   return (
     <div
-      className={`relative flex flex-col md:flex-row bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow ${className}`}
+      className={`relative bg-white rounded-2xl shadow-sm border border-[#CDD4D0] overflow-hidden text-[#000846] ${className}`}
     >
-      {/* Left main ticket body */}
-      <div className="flex-1 p-6 flex flex-col justify-between">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold tracking-wider text-sky-600 dark:text-sky-400 uppercase">
-                JavaMifi Boarding Pass
+      {/* Top Wayfinding Context Ribbon */}
+      <div className="bg-[#f1f4f2] px-6 py-3 border-b border-[#CDD4D0] flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          {/* 4-Bar Signal Indicator */}
+          <div className="flex items-end gap-[2px] h-3">
+            <span className="w-[3px] h-1.5 rounded-sm bg-[#176B40]" />
+            <span className="w-[3px] h-2 rounded-sm bg-[#176B40]" />
+            <span className="w-[3px] h-2.5 rounded-sm bg-[#176B40]" />
+            <span className="w-[3px] h-3 rounded-sm bg-[#176B40]" />
+          </div>
+          <span className="font-mono text-[11px] font-bold text-[#176B40] uppercase tracking-wide">
+            TIKET AKTIF / TERKONFIRMASI ({status})
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1.5 text-[#6B7570] font-mono text-[10px]">
+          <span>● Offline Mode Ready</span>
+        </div>
+      </div>
+
+      {/* Main Ticket Body */}
+      <div className="flex flex-col md:flex-row">
+        {/* Left Flight-Route Section */}
+        <div className="flex-1 p-6 flex flex-col justify-between gap-5">
+          {/* Header Strip */}
+          <div className="flex items-start justify-between border-b border-[#CDD4D0]/40 pb-3">
+            <div className="flex flex-col">
+              <span className="font-mono text-[10px] text-[#6B7570] uppercase tracking-wider">
+                KODE TIKET PESANAN
               </span>
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${badge.bg}`}>
-                {badge.label}
+              <span className="font-mono text-base font-bold text-[#000846] tracking-wider">
+                {orderNumber}
               </span>
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">
-              {destinations.join(' ➔ ') || 'Global Connection'}
-            </h3>
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#f1f4f2] border border-[#CDD4D0]/60">
+              <span
+                className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-xs font-mono ${
+                  isWifi ? 'bg-[#F27B2A] text-[#000846]' : 'bg-[#4C97FF] text-white'
+                }`}
+              >
+                {isWifi ? 'W' : isEsim ? 'E' : 'S'}
+              </span>
+              <span className="font-mono text-xs font-bold text-[#000846]">
+                {isWifi ? 'Pocket WiFi' : isEsim ? 'Digital eSIM' : 'Travel SIM'}
+              </span>
+            </div>
           </div>
-          <SignalBadge strength={4} label={status} />
+
+          {/* Octilinear Route Schematic */}
+          <div className="py-2 flex items-center justify-between">
+            {/* Origin */}
+            <div className="flex flex-col">
+              <span className="font-mono text-[10px] text-[#6B7570] uppercase">ORIGIN</span>
+              <span className="text-3xl font-extrabold text-[#000846] leading-none tracking-tight font-mono">
+                CGK
+              </span>
+              <span className="text-xs text-[#464650] font-medium">Jakarta (T3)</span>
+            </div>
+
+            {/* Schematic Transit Path */}
+            <div className="flex-1 px-4 flex flex-col items-center justify-center">
+              <div className="w-full flex items-center relative">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#18215A] z-10 shrink-0" />
+                <div className="flex-1 h-1 bg-[#18215A] relative flex items-center justify-center">
+                  <span className="w-2 h-2 rotate-45 border-t-2 border-r-2 border-[#F27B2A] absolute" />
+                </div>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#F27B2A] z-10 shrink-0" />
+              </div>
+              <div className="mt-1 flex items-center gap-1 text-[#000846]">
+                <span className="font-mono text-[10px] text-[#6B7570] font-bold">
+                  GA874 • HND / KIX
+                </span>
+              </div>
+            </div>
+
+            {/* Destination */}
+            <div className="flex flex-col items-end text-right">
+              <span className="font-mono text-[10px] text-[#6B7570] uppercase">DESTINASI</span>
+              <span className="text-3xl font-extrabold text-[#000846] leading-none tracking-tight font-mono truncate max-w-[140px]">
+                {destText}
+              </span>
+              <span className="text-xs text-[#464650] font-medium">Jepang Multi-City</span>
+            </div>
+          </div>
+
+          {/* Passenger & Schedule Grid */}
+          <div className="grid grid-cols-2 gap-3 bg-[#f1f4f2] p-3.5 rounded-xl border border-[#CDD4D0]/50 font-mono text-xs">
+            <div>
+              <span className="text-[10px] text-[#6B7570] uppercase block">PEMEGANG UNIT</span>
+              <span className="font-bold text-[#000846] block truncate">{travelerName}</span>
+              <span className="text-[10px] text-[#6B7570]">4 Wisatawan • 4 Perangkat</span>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] text-[#6B7570] uppercase block">JADWAL AMBIL UNIT</span>
+              <span className="font-bold text-[#000846] block">{startDate}</span>
+              <span className="text-[10px] text-[#6B7570]">s/d {endDate}</span>
+            </div>
+          </div>
         </div>
 
-        {/* Flight-ticket style grids */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4">
-          <div>
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
-              Traveler
-            </span>
-            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate block">
-              {travelerName}
-            </span>
-          </div>
-
-          <div>
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
-              Order No
-            </span>
-            <span className="text-sm font-mono font-semibold text-slate-800 dark:text-slate-200 block">
-              {orderNumber}
-            </span>
-          </div>
-
-          <div>
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
-              Departure
-            </span>
-            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 block">
-              {startDate}
-            </span>
-          </div>
-
-          <div>
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
-              Return
-            </span>
-            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 block">
-              {endDate}
-            </span>
-          </div>
+        {/* Perforated Vertical Divider (Notches) */}
+        <div className="relative hidden md:flex flex-col items-center justify-between w-6 bg-[#f7faf8] border-x border-dashed border-[#CDD4D0]">
+          <div className="w-4 h-4 -mt-2 rounded-full bg-[#f7faf8] border-b border-[#CDD4D0]" />
+          <div className="h-full border-r border-dashed border-[#CDD4D0]" />
+          <div className="w-4 h-4 -mb-2 rounded-full bg-[#f7faf8] border-t border-[#CDD4D0]" />
         </div>
 
-        {/* Footer info & CTA */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
-          <span className="text-xs text-slate-500 font-mono">
-            TAG: #{trackingCode || orderNumber} • #AntiSusahSinyal
+        {/* Right Stub: Barcode & Quick Access */}
+        <div className="w-full md:w-56 bg-[#f1f4f2]/70 p-6 flex flex-col items-center justify-center text-center border-t md:border-t-0 border-[#CDD4D0]">
+          {qrCodeUrl ? (
+            <div className="p-2 bg-white rounded-xl border border-[#CDD4D0] shadow-sm mb-2">
+              <img
+                src={qrCodeUrl}
+                alt="Ticket QR Code"
+                className="w-28 h-28 object-contain"
+              />
+            </div>
+          ) : (
+            <div className="w-28 h-28 rounded-xl border-2 border-dashed border-[#CDD4D0] bg-white flex flex-col items-center justify-center mb-2">
+              <span className="text-2xl">📱</span>
+              <span className="font-mono text-[10px] text-[#6B7570] mt-1">Ready</span>
+            </div>
+          )}
+
+          <span className="font-mono text-xs font-bold text-[#000846] tracking-wider">
+            {orderNumber.slice(-8)}
           </span>
+          <span className="text-[10px] text-[#6B7570] font-mono mt-0.5">
+            Tunjukkan di Booth Bandara
+          </span>
+
           {onActionClick && (
             <button
+              type="button"
               onClick={onActionClick}
-              className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors"
+              className="mt-3 w-full py-2 rounded-lg bg-[#18215a] hover:bg-[#2B3A8C] text-white font-mono text-xs font-bold transition shadow-sm"
             >
               {actionLabel}
             </button>
           )}
         </div>
-      </div>
-
-      {/* Perforated tear line divider with notches */}
-      <div className="relative hidden md:flex flex-col items-center justify-between w-8 bg-slate-50 dark:bg-slate-950/50 border-x border-dashed border-slate-300 dark:border-slate-800">
-        <div className="w-5 h-5 -mt-2.5 rounded-full bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-800" />
-        <div className="h-full border-r border-dashed border-slate-300 dark:border-slate-700" />
-        <div className="w-5 h-5 -mb-2.5 rounded-full bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-800" />
-      </div>
-
-      {/* Right stub / QR code area */}
-      <div className="w-full md:w-48 bg-slate-50 dark:bg-slate-800/40 p-6 flex flex-col items-center justify-center text-center border-t md:border-t-0 border-slate-200 dark:border-slate-800">
-        {qrCodeUrl ? (
-          <img
-            src={qrCodeUrl}
-            alt="Trip QR Code"
-            className="w-24 h-24 rounded-lg border border-slate-200 dark:border-slate-700 p-1 bg-white mb-2"
-          />
-        ) : (
-          <div className="w-24 h-24 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center mb-2 bg-white dark:bg-slate-900">
-            <span className="text-2xl">📱</span>
-            <span className="text-[10px] text-slate-400 mt-1">Ready</span>
-          </div>
-        )}
-        <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 font-semibold">
-          {orderNumber}
-        </span>
-        <span className="text-[10px] text-slate-400">Scan at destination</span>
       </div>
     </div>
   );
