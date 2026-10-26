@@ -118,3 +118,102 @@ export const fxRateSnapshotSchema = z.object({
   provider: z.string(),
 });
 export type FxRateSnapshotDto = z.infer<typeof fxRateSnapshotSchema>;
+
+// ─────────────────────────────────────────────────────────────
+// Gemini 3.8 Flash Extraction Schemas (Structured JSON Outputs)
+// ─────────────────────────────────────────────────────────────
+
+/** Extraction output from Gemini Flash for Halal signals & evidence quotes. */
+export const llmSignalsOutputSchema = z.object({
+  hasCertificate: z.boolean().default(false),
+  certifierName: z.string().nullable().optional(),
+  certNumber: z.string().nullable().optional(),
+  certExpiry: z.string().nullable().optional(),
+  halalClaims: z
+    .array(
+      z.object({
+        quote: z.string(),
+        source: z.string(),
+        claimedBy: z.enum(['OWNER', 'REGISTRY', 'REVIEWER', 'THIRD_PARTY']),
+      })
+    )
+    .default([]),
+  porkFlags: z
+    .array(
+      z.object({
+        quote: z.string(),
+        dishOrIngredient: z.string(),
+      })
+    )
+    .default([]),
+  alcoholFlags: z
+    .array(
+      z.object({
+        quote: z.string(),
+        detail: z.string(),
+      })
+    )
+    .default([]),
+  cookwareNotes: z.string().nullable().optional(),
+  rawQuoteReferences: z.array(z.string()).default([]),
+});
+export type LlmSignalsOutput = z.infer<typeof llmSignalsOutputSchema>;
+
+/** Extraction output from Gemini Flash for menu snapshot items. */
+export const llmMenuItemSchema = z.object({
+  nameOriginal: z.string(),
+  nameEn: z.string(),
+  nameId: z.string(),
+  category: z.string(),
+  description: z.string().nullable().optional(),
+  explainerId: z.string().nullable().optional(),
+  amountMinor: z.number().int().nonnegative(),
+  porkDetected: z.boolean().default(false),
+  alcoholDetected: z.boolean().default(false),
+});
+export type LlmMenuItem = z.infer<typeof llmMenuItemSchema>;
+
+export const llmMenuOutputSchema = z.object({
+  currency: z.string().length(3),
+  items: z.array(llmMenuItemSchema).default([]),
+});
+export type LlmMenuOutput = z.infer<typeof llmMenuOutputSchema>;
+
+/** Final Deterministic 6-Stage Validation Pipeline Result */
+export const validationResultSchema = z.object({
+  isValid: z.boolean(),
+  assignedTier: halalTierSchema,
+  dietaryFlags: z.array(dietaryFlagSchema),
+  certifierName: z.string().optional(),
+  certNumber: z.string().optional(),
+  certExpiresAt: z.string().optional(),
+  quoteVerification: z.object({
+    status: z.enum(['ALL_VERIFIED', 'PARTIAL_VERIFIED', 'FAILED']),
+    verifiedQuotesCount: z.number().int(),
+    unverifiedQuotes: z.array(z.string()),
+  }),
+  lexiconScan: z.object({
+    porkDetected: z.boolean(),
+    alcoholDetected: z.boolean(),
+    detectedTerms: z.array(
+      z.object({
+        term: z.string(),
+        language: z.string(),
+        matchedIn: z.string(),
+      })
+    ),
+  }),
+  priceSanity: z.object({
+    isWithinBands: z.boolean(),
+    currencyMatched: z.boolean(),
+    outlierItems: z.array(z.string()),
+  }),
+  securityTriage: z.object({
+    passed: z.boolean(),
+    requiresManualReview: z.boolean(),
+    injectionFlags: z.array(z.string()),
+    reviewReasons: z.array(z.string()),
+  }),
+});
+export type ValidationResult = z.infer<typeof validationResultSchema>;
+

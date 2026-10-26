@@ -1,7 +1,20 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Query,
+  Body,
+  Headers,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiQuery, ApiResponse, ApiHeader } from '@nestjs/swagger';
 import { DiningService } from './dining.service';
 import { FxService } from './fx.service';
+import { ValidationPipelineService } from './validation/pipeline.service';
+import { GeminiFlashProvider } from './providers/gemini-flash.provider';
+import { DiningOutboxService } from './dining-outbox.service';
 import { DiningFilterMode } from '@javamifi/shared';
 
 @ApiTags('Dining (Compass Rasa)')
@@ -9,7 +22,10 @@ import { DiningFilterMode } from '@javamifi/shared';
 export class DiningController {
   constructor(
     private readonly diningService: DiningService,
-    private readonly fxService: FxService
+    private readonly fxService: FxService,
+    private readonly validationPipeline: ValidationPipelineService,
+    private readonly geminiFlash: GeminiFlashProvider,
+    private readonly diningOutbox: DiningOutboxService
   ) {}
 
   @Get('countries')
@@ -64,5 +80,77 @@ export class DiningController {
   @ApiResponse({ status: 404, description: 'Venue not found' })
   getPlaceDetail(@Param('id') id: string) {
     return this.diningService.getPlaceDetail(id);
+  }
+
+  @Post('callbacks/enrichment')
+  @ApiOperation({ summary: 'HMAC-SHA256 signed callback for background n8n enrichment' })
+  @ApiHeader({ name: 'x-javamifi-signature', required: true })
+  @ApiHeader({ name: 'x-javamifi-timestamp', required: true })
+  handleEnrichmentCallback(
+    @Headers('x-javamifi-signature') signature: string,
+    @Headers('x-javamifi-timestamp') timestamp: string,
+    @Body() body: any
+  ) {
+    const rawPayloadString = JSON.stringify(body);
+    const isValid = this.diningOutbox.verifyIncomingCallback(rawPayloadString, timestamp, signature);
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid HMAC-SHA256 signature on enrichment callback');
+    }
+
+    // Execute 6-stage validation pipeline on model extraction output
+    const validationResult = this.validationPipeline.validateEnrichment({
+      rawEvidenceText: body.rawEvidenceText || '',
+      expectedCurrency: body.expectedCurrency || 'USD',
+      signalsOutputJson: body.signalsOutput,
+      menuOutputJson: body.menuOutput,
+    });
+
+    return {
+      status: 'PROCESSED',
+      runId: body.runId,
+      placeId: body.placeId,
+      validationResult,
+    };
+  }
+
+  @Post('enrich/simulate')
+  @ApiOperation({ summary: 'Simulate end-to-end Gemini extraction & 6-stage validation pipeline' })
+  async simulateEnrichment(
+    @Body()
+    body: {
+      placeName: string;
+      countryCode: string;
+      currency: string;
+      rawEvidence: string;
+      rawMenu?: string;
+    }
+  ) {
+    if (!body.placeName || !body.rawEvidence) {
+      throw new BadRequestException('placeName and rawEvidence are required');
+    }
+
+    // 1. Run Gemini 3.8 Flash High Thinking Extraction
+    const signals = await this.geminiFlash.extractSignals(body.rawEvidence, body.placeName);
+
+    let menuOutput: any = undefined;
+    if (body.rawMenu) {
+      menuOutput = await this.geminiFlash.extractMenu(body.rawMenu, body.currency || 'USD');
+    }
+
+    // 2. Run 6-Stage Deterministic Validation Pipeline
+    const validationResult = this.validationPipeline.validateEnrichment({
+      rawEvidenceText: body.rawEvidence,
+      expectedCurrency: body.currency || 'USD',
+      signalsOutputJson: signals,
+      menuOutputJson: menuOutput,
+    });
+
+    return {
+      success: true,
+      extractedSignals: signals,
+      extractedMenu: menuOutput,
+      validationResult,
+    };
   }
 }
