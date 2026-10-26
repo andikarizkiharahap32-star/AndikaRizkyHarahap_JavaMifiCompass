@@ -1,83 +1,112 @@
 import React from 'react';
+import { TIER_DEFINITIONS, HalalTierType } from '@javamifi/shared';
 
-export type HalalTierType = 'CERTIFIED' | 'CLAIMED' | 'OPTIONS' | 'NOT_HALAL' | 'UNKNOWN';
+export type { HalalTierType };
+export { TIER_DEFINITIONS };
 
 export interface HalalBadgeProps {
   tier: HalalTierType;
-  certifierName?: string;
-  size?: 'sm' | 'md' | 'lg';
+  badges?: string[];
+  validUntil?: string | null;
+  certifier?: string | null;
+  lastVerified?: string | null;
+  showNotice?: boolean;
+  locale?: 'en' | 'id' | string;
   className?: string;
-  showIcon?: boolean;
 }
-
-const TIER_CONFIG: Record<
-  HalalTierType,
-  { label: string; bg: string; text: string; border: string; icon: string }
-> = {
-  CERTIFIED: {
-    label: 'CERTIFIED HALAL',
-    bg: 'bg-[#D1FAE5]',
-    text: 'text-[#047857]',
-    border: 'border-[#10B981]',
-    icon: '✓',
-  },
-  CLAIMED: {
-    label: 'HALAL CLAIMED',
-    bg: 'bg-[#E0F2FE]',
-    text: 'text-[#0284C7]',
-    border: 'border-[#38BDF8]',
-    icon: 'ℹ',
-  },
-  OPTIONS: {
-    label: 'HALAL OPTIONS',
-    bg: 'bg-[#FEF3C7]',
-    text: 'text-[#B45309]',
-    border: 'border-[#F59E0B]',
-    icon: '◈',
-  },
-  NOT_HALAL: {
-    label: 'NON-HALAL',
-    bg: 'bg-[#FEE2E2]',
-    text: 'text-[#B91C1C]',
-    border: 'border-[#EF4444]',
-    icon: '✕',
-  },
-  UNKNOWN: {
-    label: 'UNVERIFIED',
-    bg: 'bg-[#E1E6E3]',
-    text: 'text-[#6B7570]',
-    border: 'border-[#CBD5E1]',
-    icon: '?',
-  },
-};
 
 export const HalalBadge: React.FC<HalalBadgeProps> = ({
   tier,
-  certifierName,
-  size = 'md',
+  badges = [],
+  validUntil,
+  certifier,
+  lastVerified,
+  showNotice = false,
+  locale = 'id',
   className = '',
-  showIcon = true,
 }) => {
-  const config = TIER_CONFIG[tier] || TIER_CONFIG.UNKNOWN;
+  const isId = locale.startsWith('id');
+  const def = TIER_DEFINITIONS[tier] || TIER_DEFINITIONS.UNKNOWN;
+  const label = isId ? def.labelId : def.labelEn;
 
-  const sizeClasses = {
-    sm: 'text-[10px] px-2 py-0.5 tracking-wider gap-1 font-bold',
-    md: 'text-xs px-2.5 py-1 tracking-wider gap-1.5 font-bold',
-    lg: 'text-sm px-3.5 py-1.5 tracking-widest gap-2 font-extrabold',
-  }[size];
+  const alcoholFree = badges.includes('ALCOHOL_FREE');
+  const servesAlcohol = badges.includes('SERVES_ALCOHOL') || badges.includes('ALCOHOL_SERVED');
+  const porkFree = badges.includes('PORK_FREE') || badges.includes('PORK_FREE_COOKWARE');
+  const porkOnMenu = badges.includes('PORK_ON_MENU') || badges.includes('CONTAINS_PORK');
 
   return (
-    <span
-      className={`inline-flex items-center rounded-full border shadow-sm uppercase font-mono ${config.bg} ${config.text} ${config.border} ${sizeClasses} ${className}`}
-      title={certifierName ? `Certified by ${certifierName}` : config.label}
-    >
-      {showIcon && <span className="font-sans font-black">{config.icon}</span>}
-      <span>{config.label}</span>
-      {certifierName && (
-        <span className="opacity-75 font-sans font-medium text-[9px] border-l border-current pl-1 ml-0.5">
-          {certifierName}
+    <div className={`flex flex-col gap-2 ${className}`}>
+      {/* 1. Main Tier Badge (Color-independent via distinct glyph + explicit label) */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span
+          role="status"
+          aria-label={def.ariaLabel}
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-mono font-bold tracking-wider uppercase select-none ${def.bgClass} ${def.textClass} ${def.borderClass}`}
+        >
+          <span className="font-sans font-black text-sm leading-none" aria-hidden="true">
+            {def.icon}
+          </span>
+          <span>{label}</span>
+
+          {/* Certifier name and validity date for CERTIFIED tier */}
+          {tier === 'CERTIFIED' && certifier && (
+            <span className="border-l border-current pl-1.5 ml-0.5 opacity-90 font-medium lowercase first-letter:uppercase text-[11px]">
+              {certifier}
+            </span>
+          )}
+          {tier === 'CERTIFIED' && validUntil && (
+            <span className="opacity-75 text-[10px] font-normal">
+              ({isId ? 's/d' : 'until'} {validUntil})
+            </span>
+          )}
         </span>
+
+        {/* 2. Orthogonal Dietary Chips */}
+        {alcoholFree && (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-low text-primary border border-paper-edge text-[11px] font-mono font-semibold">
+            <span aria-hidden="true">◎</span>
+            <span>{isId ? 'Bebas Alkohol' : 'Alcohol-Free'}</span>
+          </span>
+        )}
+        {servesAlcohol && (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-warning-surface/70 text-warning border border-warning/30 text-[11px] font-mono font-semibold">
+            <span aria-hidden="true">▲</span>
+            <span>{isId ? 'Menyajikan Alkohol' : 'Serves Alcohol'}</span>
+          </span>
+        )}
+
+        {porkFree && (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-low text-primary border border-paper-edge text-[11px] font-mono font-semibold">
+            <span aria-hidden="true">◎</span>
+            <span>{isId ? 'Dapur Bebas Babi' : 'Pork-Free'}</span>
+          </span>
+        )}
+        {porkOnMenu && (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-danger-surface text-danger border border-danger/40 text-[11px] font-mono font-semibold">
+            <span aria-hidden="true">✕</span>
+            <span>{isId ? 'Ada Menu Babi' : 'Pork on Menu'}</span>
+          </span>
+        )}
+
+        {/* Last Verified Timestamp */}
+        {lastVerified && (
+          <span className="text-[10px] font-mono text-outline">
+            {isId ? 'Diverifikasi:' : 'Verified:'} {lastVerified}
+          </span>
+        )}
+      </div>
+
+      {/* 3. Persistent Notice on Restaurant Detail */}
+      {showNotice && (
+        <div className="p-3 rounded bg-sunken border border-paper-edge text-xs font-sans text-secondary leading-relaxed flex items-start gap-2">
+          <span className="text-sm font-bold text-outline shrink-0 mt-0.5">ℹ</span>
+          <p className="m-0">
+            {isId
+              ? 'Harap verifikasi langsung ke pihak restoran. Standar halal berbeda-beda menurut lembaga sertifikasi dan negara tujuan.'
+              : 'Verify with the restaurant. Halal standards differ by certifier and country.'}
+          </p>
+        </div>
       )}
-    </span>
+    </div>
   );
 };

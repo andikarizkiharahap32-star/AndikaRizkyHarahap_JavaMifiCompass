@@ -132,5 +132,52 @@
     "days": "Hari",
     "perDay": "/ hari",
     "unlimited": "Tanpa Batas"
+  },
+  "dining": {
+    "tabTitle": "Kuliner Halal",
+    "topBar": {
+      "filterHalal": "Hanya Halal (Tersertifikasi & Terverifikasi)",
+      "filterAll": "Semua Restoran",
+      "countryLabel": "Negara Tujuan",
+      "radiusLabel": "Radius Pencarian",
+      "includeUnverified": "Sertakan yang belum terverifikasi"
+    },
+    "status": {
+      "checking": "Memeriksa status halal…",
+      "unverified": "Belum terverifikasi (sedang dicek)",
+      "empty": "Tidak ada restoran yang memenuhi kriteria di radius ini.",
+      "rateUnavailable": "Kurs IDR tidak tersedia",
+      "rateTooltip": "Perkiraan indikatif; kurs kartu dan ATM bank mungkin berbeda.",
+      "verifyNotice": "Harap verifikasi langsung ke pihak restoran. Standar halal berbeda menurut certifier dan negara."
+    },
+    "tier": {
+      "certified": "Tersertifikasi Halal Resmi",
+      "claimed": "Klaim Pemilik (Tanpa Sertifikat)",
+      "options": "Tersedia Opsi Menu Halal",
+      "notHalal": "Bukan Halal (Ada Menu Babi/Alkohol)",
+      "unknown": "Status Belum Diketahui"
+    },
+    "badges": {
+      "alcoholFree": "Bebas Alkohol",
+      "servesAlcohol": "Menyajikan Alkohol",
+      "porkFree": "Dapur Bebas Babi",
+      "porkOnMenu": "Ada Menu Babi",
+      "lastVerified": "Terakhir diverifikasi",
+      "certNumber": "No. Sertifikat",
+      "expires": "Berlaku hingga"
+    },
+    "detail": {
+      "menuTitle": "Daftar Menu & Tarif Konversi",
+      "aiExplanation": "Penjelasan AI (Bahan & Alergen)",
+      "evidenceTitle": "Bukti Verifikasi Kepatuhan",
+      "reportBtn": "Laporkan Ketidaksesuaian Data",
+      "reportSubmitted": "Laporan Anda telah dikirim untuk audit tim kepatuhan."
+    }
+  },
+  "dualPrice": {
+    "approx": "≈",
+    "rateUnavailable": "Kurs IDR tidak tersedia",
+    "disclaimer": "Perkiraan indikatif; kurs kartu dan ATM bank mungkin berbeda.",
+    "snapshotDate": "Kurs per tanggal:"
   }
 }

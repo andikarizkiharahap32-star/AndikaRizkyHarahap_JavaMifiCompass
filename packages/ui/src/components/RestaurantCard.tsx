@@ -1,5 +1,6 @@
 import React from 'react';
 import { HalalBadge, HalalTierType } from './HalalBadge';
+import { DualPrice } from './DualPrice';
 
 export interface RestaurantCardProps {
   id: string;
@@ -13,9 +14,14 @@ export interface RestaurantCardProps {
   reviewCount: number;
   tier: HalalTierType;
   certifierName?: string;
+  validUntil?: string | null;
   distanceKm?: number;
-  formattedAvgLocal?: string;
-  formattedAvgIdr?: string;
+  averagePrice?: {
+    amountMinor: number;
+    currency: string;
+    amountIdr?: number | null;
+    rateSnapshotDate?: string;
+  };
   sampleDishes?: string[];
   dietaryFlags?: string[];
   onClick?: () => void;
@@ -24,8 +30,8 @@ export interface RestaurantCardProps {
 
 /**
  * RestaurantCard
- * Tactile Transit Wayfinding place card.
- * Paper surface `#FFFFFF` on architectural ground `#EDF0EE` with emerald accenting.
+ * Tactile Transit Wayfinding paper card.
+ * 1px paper-edge border with 2px lower lip, NO drop shadows.
  */
 export const RestaurantCard: React.FC<RestaurantCardProps> = ({
   name,
@@ -38,9 +44,9 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
   reviewCount,
   tier,
   certifierName,
+  validUntil,
   distanceKm,
-  formattedAvgLocal,
-  formattedAvgIdr,
+  averagePrice,
   sampleDishes = [],
   dietaryFlags = [],
   onClick,
@@ -49,88 +55,88 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`group relative bg-white border border-[#D8DDD9] hover:border-[#059669] rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between ${className}`}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+      className={`group relative bg-paper border border-paper-edge border-b-2 hover:border-primary rounded p-4 transition-colors cursor-pointer flex flex-col justify-between min-h-[160px] ${className}`}
     >
-      <div>
-        {/* Top Wayfinding Header */}
-        <div className="flex items-center justify-between gap-2 mb-2">
+      <div className="flex flex-col gap-2">
+        {/* Top Wayfinding Context Header */}
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 min-w-0">
-            {/* Transit Line Waypoint Bead */}
-            <span className="w-2.5 h-2.5 rounded-full bg-[#059669] flex-shrink-0" />
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-[#18215A] truncate">
+            {/* Transit Waypoint Dot */}
+            <span className="w-2 h-2 rounded-full bg-primary shrink-0" aria-hidden="true" />
+            <span className="text-xs font-mono uppercase tracking-wider font-semibold text-primary truncate">
               {cityName}, {countryName}
             </span>
             {distanceKm !== undefined && (
-              <span className="text-[10px] font-mono text-[#6B7570] bg-[#EDF0EE] px-1.5 py-0.5 rounded">
-                {distanceKm.toFixed(1)} km
+              <span className="text-[11px] font-mono text-outline bg-surface px-1.5 py-0.5 rounded border border-paper-edge">
+                {distanceKm.toFixed(1)}&thinsp;km
               </span>
             )}
           </div>
-          <HalalBadge tier={tier} certifierName={certifierName} size="sm" />
+
+          <HalalBadge
+            tier={tier}
+            certifier={certifierName}
+            validUntil={validUntil}
+            badges={dietaryFlags}
+          />
         </div>
 
-        {/* Restaurant Name */}
-        <h3 className="text-base font-bold text-[#18215A] group-hover:text-[#059669] transition leading-snug">
+        {/* Restaurant Title */}
+        <h3 className="text-base font-bold text-primary leading-snug m-0">
           {name}{' '}
           {nameOriginal && nameOriginal !== name && (
-            <span className="text-xs font-normal text-[#6B7570]">
+            <span className="text-xs font-normal text-outline">
               ({nameOriginal})
             </span>
           )}
         </h3>
 
-        {/* Cuisine & Rating */}
-        <div className="flex items-center gap-2 mt-1 text-xs text-[#475569]">
-          <span className="font-medium text-[#18215A] bg-[#EDF0EE] px-2 py-0.5 rounded">
+        {/* Cuisine & Rating Plate */}
+        <div className="flex items-center gap-2 text-xs text-secondary">
+          <span className="font-semibold text-primary bg-surface px-2 py-0.5 rounded border border-paper-edge">
             {cuisine}
           </span>
-          <div className="flex items-center gap-1">
-            <span className="text-[#F59E0B]">★</span>
-            <span className="font-bold text-[#18215A]">{googleRating.toFixed(1)}</span>
-            <span className="text-[#6B7570]">({reviewCount})</span>
+          <div className="flex items-center gap-1 font-mono">
+            <span className="text-warning">★</span>
+            <span className="font-bold text-primary">{googleRating.toFixed(1)}</span>
+            <span className="text-outline">({reviewCount})</span>
           </div>
         </div>
 
-        {/* Address snippet */}
-        <p className="text-xs text-[#6B7570] mt-2 line-clamp-1">{address}</p>
+        {/* Physical Address */}
+        <p className="text-xs text-secondary line-clamp-1 m-0">{address}</p>
 
-        {/* Dietary badges */}
-        {dietaryFlags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2.5">
-            {dietaryFlags.slice(0, 3).map((flag) => (
-              <span
-                key={flag}
-                className="text-[9px] font-mono uppercase bg-[#F1F5F9] text-[#334155] px-1.5 py-0.5 rounded"
-              >
-                {flag.replace(/_/g, ' ')}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Sample dishes preview */}
-        {sampleDishes.length > 0 && (
-          <div className="mt-3 pt-2.5 border-t border-[#EDF0EE] text-[11px] text-[#475569]">
-            <span className="font-semibold text-[#18215A]">Menu favorit: </span>
-            <span>{sampleDishes.join(' · ')}</span>
+        {/* Dual-Price Indication */}
+        {averagePrice && (
+          <div className="mt-1 pt-2 border-t border-paper-edge flex items-center justify-between">
+            <span className="text-[11px] font-mono text-outline uppercase tracking-wider">
+              Estimasi Rata-rata:
+            </span>
+            <DualPrice
+              local={{
+                amount_minor: averagePrice.amountMinor,
+                currency: averagePrice.currency,
+              }}
+              idr={
+                averagePrice.amountIdr
+                  ? {
+                      amount: averagePrice.amountIdr,
+                      rate_date: averagePrice.rateSnapshotDate || '26 Okt 2026',
+                    }
+                  : null
+              }
+            />
           </div>
         )}
       </div>
-
-      {/* Footer Price Preview */}
-      {(formattedAvgLocal || formattedAvgIdr) && (
-        <div className="mt-3 pt-2.5 border-t border-[#EDF0EE] flex items-center justify-between text-xs">
-          <span className="text-[#6B7570] text-[11px]">Kisaran per orang:</span>
-          <div className="text-right">
-            <span className="font-mono font-bold text-[#18215A]">{formattedAvgLocal}</span>
-            {formattedAvgIdr && (
-              <span className="font-bold text-[#059669] ml-1.5">
-                ≈ {formattedAvgIdr}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

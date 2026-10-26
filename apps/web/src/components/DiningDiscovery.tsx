@@ -1,38 +1,44 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   DiningLogo,
   HalalBadge,
   RestaurantCard,
   MenuTicketChit,
+  DualPrice,
   HalalTierType,
 } from '@javamifi/ui';
 import { apiClient } from '../lib/api';
 import {
   Search,
-  Filter,
   MapPin,
   Clock,
   Phone,
   ShieldCheck,
   AlertCircle,
-  ExternalLink,
   X,
   Compass,
+  CheckCircle2,
 } from 'lucide-react';
 
 export interface DiningDiscoveryProps {
   initialCountry?: string;
   cityName?: string;
   embeddedMode?: boolean;
+  locale?: string;
 }
 
 export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
   initialCountry = 'JP',
   cityName,
   embeddedMode = false,
+  locale = 'id',
 }) => {
+  const t = useTranslations('dining');
+  const tCommon = useTranslations('common');
+
   const [countries, setCountries] = useState<any[]>([]);
   const [selectedCountry, setSelectedCountry] = useState(initialCountry);
   const [filterMode, setFilterMode] = useState<'HALAL' | 'NON_HALAL' | 'ALL'>('HALAL');
@@ -43,6 +49,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
   const [loading, setLoading] = useState(true);
   const [selectedPlace, setSelectedPlace] = useState<any | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   // User dispute report state
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -100,9 +107,10 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
     }
   }, [initialCountry]);
 
-  // Fetch places
+  // Fetch places with fail-closed error handling
   useEffect(() => {
     setLoading(true);
+    setHasError(false);
     apiClient.dining
       .getPlaces({
         country: selectedCountry,
@@ -117,6 +125,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
       })
       .catch((err) => {
         console.error('Failed to fetch dining places', err);
+        setHasError(true);
         setPlaces([]);
       })
       .finally(() => setLoading(false));
@@ -139,78 +148,79 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
   );
 
   return (
-    <div className={`w-full ${embeddedMode ? '' : 'bg-[#EDF0EE] min-h-screen py-8'}`}>
-      <div className={`${embeddedMode ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
+    <div className={`w-full ${embeddedMode ? '' : 'bg-surface min-h-screen py-8 text-primary'}`}>
+      <div className={`${embeddedMode ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6'}`}>
         {/* Top Feature Brand Banner */}
         {!embeddedMode && (
-          <div className="bg-white border border-[#D8DDD9] rounded-2xl p-6 mb-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="bg-paper border border-paper-edge border-b-2 rounded p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <DiningLogo size={56} showWordmark={true} />
               <div>
-                <p className="text-xs text-[#6B7570] font-mono uppercase tracking-wider">
-                  Wayfinding Kuliner & Restoran Halal
+                <p className="text-xs text-outline font-mono uppercase tracking-wider m-0">
+                  {t('tabTitle')} • Wayfinding Kuliner Global
                 </p>
-                <p className="text-sm text-[#18215A] font-medium">
-                  Rekomendasi terverifikasi, menu multibahasa, dan konversi kurs mata uang real-time vs Rupiah.
+                <p className="text-sm text-primary font-medium m-0 mt-0.5">
+                  Rekomendasi bersertifikat, daftar menu dwibahasa, dan konversi kurs mata uang real-time vs Rupiah.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 bg-[#EDF0EE] border border-[#D8DDD9] rounded-xl px-3 py-2 text-xs font-mono text-[#18215A]">
-              <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse" />
-              <span>FAIL-CLOSED: AI EXTRACTS, CODE DECIDES</span>
+            <div className="flex items-center gap-2 bg-surface border border-paper-edge rounded px-3 py-2 text-xs font-mono text-primary">
+              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+              <span>AI EXTRACTS, DETERMINISTIC CODE DECIDES</span>
             </div>
           </div>
         )}
 
-        {/* Top Control Bar (Segmented Control & Filters) */}
-        <div className="bg-white border border-[#D8DDD9] rounded-2xl p-4 sm:p-5 mb-6 shadow-sm">
+        {/* Top Sticky Wayfinding Control Bar (Segmented Control & Strict 52px Touch Targets) */}
+        <div className="sticky top-16 z-30 bg-paper border border-paper-edge border-b-2 rounded p-4 flex flex-col gap-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            {/* Halal / Non-Halal Segmented Control */}
-            <div className="flex items-center bg-[#EDF0EE] p-1 rounded-xl border border-[#D8DDD9] shrink-0">
+            {/* Halal / Non-Halal Segmented Control (52px Touch Height) */}
+            <div className="flex items-center bg-surface p-1 rounded border border-paper-edge shrink-0 h-[52px]">
               <button
                 type="button"
                 onClick={() => setFilterMode('HALAL')}
-                className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider font-extrabold transition ${
+                className={`h-full px-4 rounded text-xs font-mono uppercase tracking-wider font-extrabold transition flex items-center gap-1.5 ${
                   filterMode === 'HALAL'
-                    ? 'bg-[#059669] text-white shadow-sm'
-                    : 'text-[#18215A] hover:bg-white/60'
+                    ? 'bg-primary text-on-primary'
+                    : 'text-primary hover:bg-paper-edge/50'
                 }`}
               >
-                ✓ Hanya Halal
+                <span>✓</span>
+                <span>{t('topBar.filterHalal')}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setFilterMode('ALL')}
-                className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider font-bold transition ${
+                className={`h-full px-4 rounded text-xs font-mono uppercase tracking-wider font-bold transition flex items-center ${
                   filterMode === 'ALL'
-                    ? 'bg-[#18215A] text-white shadow-sm'
-                    : 'text-[#18215A] hover:bg-white/60'
+                    ? 'bg-primary text-on-primary'
+                    : 'text-primary hover:bg-paper-edge/50'
                 }`}
               >
-                Semua Menu
+                {t('topBar.filterAll')}
               </button>
               <button
                 type="button"
                 onClick={() => setFilterMode('NON_HALAL')}
-                className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider font-bold transition ${
+                className={`h-full px-4 rounded text-xs font-mono uppercase tracking-wider font-bold transition flex items-center ${
                   filterMode === 'NON_HALAL'
-                    ? 'bg-[#EF4444] text-white shadow-sm'
-                    : 'text-[#18215A] hover:bg-white/60'
+                    ? 'bg-danger text-on-primary'
+                    : 'text-primary hover:bg-paper-edge/50'
                 }`}
               >
                 Non-Halal
               </button>
             </div>
 
-            {/* Country Selector & Search */}
+            {/* Country Selector, Radius & Search Bar */}
             <div className="flex flex-wrap items-center gap-3 flex-1 lg:justify-end">
-              {/* Destination Dropdown */}
-              <div className="relative min-w-[180px]">
+              {/* Destination Dropdown (52px Target) */}
+              <div className="relative min-w-[200px] h-[52px]">
                 <select
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="w-full appearance-none bg-[#EDF0EE] border border-[#D8DDD9] text-[#18215A] text-xs font-bold rounded-xl px-3.5 py-2.5 pr-8 focus:outline-none focus:border-[#059669] transition font-mono"
+                  className="w-full h-full appearance-none bg-surface border border-outline text-primary text-xs font-bold rounded px-3.5 pr-8 focus:outline-none focus:border-primary transition font-mono"
                 >
                   {countries.map((c) => (
                     <option key={c.code} value={c.code}>
@@ -218,84 +228,93 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                     </option>
                   ))}
                 </select>
-                <div className="absolute right-3 top-3 pointer-events-none text-[#6B7570] text-xs">
+                <div className="absolute right-3 top-4 pointer-events-none text-outline text-xs">
                   ▼
                 </div>
               </div>
 
-              {/* Radius Selector */}
-              <div className="flex items-center gap-1 bg-[#EDF0EE] border border-[#D8DDD9] rounded-xl p-1 text-xs font-mono">
-                <span className="text-[#6B7570] text-[10px] uppercase font-bold px-1.5">Radius:</span>
+              {/* Radius Control (52px Height container) */}
+              <div className="flex items-center gap-1 bg-surface border border-paper-edge rounded px-2 h-[52px] text-xs font-mono">
+                <span className="text-outline text-[11px] uppercase font-bold px-1">{t('topBar.radiusLabel')}:</span>
                 {[1, 2, 5, 10].map((r) => (
                   <button
                     key={r}
+                    type="button"
                     onClick={() => setRadiusKm(r)}
-                    className={`px-2 py-1 rounded text-[11px] font-bold transition ${
+                    className={`h-10 px-3 min-w-[48px] rounded text-xs font-bold transition flex items-center justify-center ${
                       radiusKm === r
-                        ? 'bg-white text-[#059669] shadow-xs'
-                        : 'text-[#6B7570] hover:text-[#18215A]'
+                        ? 'bg-paper text-primary border border-paper-edge'
+                        : 'text-outline hover:text-primary'
                     }`}
                   >
-                    {r}km
+                    {r}&thinsp;km
                   </button>
                 ))}
               </div>
 
-              {/* Search input */}
-              <div className="relative flex-1 min-w-[200px]">
-                <Search className="w-4 h-4 text-[#6B7570] absolute left-3 top-2.5" />
+              {/* Search input (52px Height) */}
+              <div className="relative flex-1 min-w-[220px] h-[52px]">
+                <Search className="w-4 h-4 text-outline absolute left-3 top-4" />
                 <input
                   type="text"
-                  placeholder="Cari restoran, ramen, sushi, tagine..."
+                  placeholder="Cari ramen, sushi, tagine, wagyu..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#EDF0EE] border border-[#D8DDD9] text-[#18215A] placeholder-[#6B7570] text-xs rounded-xl pl-9 pr-3 py-2.5 focus:outline-none focus:border-[#059669] transition"
+                  className="w-full h-full bg-surface border border-outline text-primary placeholder-outline text-xs rounded pl-9 pr-3 focus:outline-none focus:border-primary transition"
                 />
               </div>
             </div>
           </div>
 
           {/* Sub-bar: Status Notice & Fail-Closed Toggle */}
-          <div className="mt-3 pt-3 border-t border-[#EDF0EE] flex flex-wrap items-center justify-between gap-2 text-xs">
-            <div className="flex items-center gap-2 text-[#6B7570] text-[11px] font-mono">
-              <span className="w-2 h-2 rounded-full bg-[#059669]" />
+          <div className="pt-2 border-t border-paper-edge flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2 text-secondary font-mono text-[11px]">
+              <span className="w-2 h-2 rounded-full bg-primary" />
               <span>
                 Menampilkan restoran di{' '}
-                <strong className="text-[#18215A]">
+                <strong className="text-primary font-bold">
                   {selectedCountryObj?.name || selectedCountry}
                 </strong>{' '}
                 (Mata uang: {selectedCountryObj?.currency || 'Lokal'})
               </span>
             </div>
 
-            <label className="flex items-center gap-2 cursor-pointer select-none text-[11px] text-[#6B7570] hover:text-[#18215A]">
+            <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-secondary hover:text-primary">
               <input
                 type="checkbox"
                 checked={includeUnverified}
                 onChange={(e) => setIncludeUnverified(e.target.checked)}
-                className="rounded border-[#D8DDD9] text-[#059669] focus:ring-[#059669]"
+                className="w-4 h-4 rounded border-outline text-primary focus:ring-primary"
               />
-              <span>Sertakan data belum terverifikasi (UNKNOWN)</span>
+              <span>{t('topBar.includeUnverified')}</span>
             </label>
           </div>
         </div>
 
-        {/* Place Grid */}
+        {/* Place Grid & State Views */}
         {loading ? (
-          <div className="bg-white border border-[#D8DDD9] rounded-2xl p-12 text-center">
-            <div className="w-8 h-8 border-3 border-[#059669] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-            <p className="text-xs font-mono text-[#6B7570] uppercase tracking-wider">
-              Memindai radar kuliner di {selectedCountryObj?.name}...
+          <div className="bg-paper border border-paper-edge border-b-2 rounded p-12 text-center">
+            <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <p className="text-xs font-mono text-outline uppercase tracking-wider m-0">
+              {t('status.checking')}
+            </p>
+          </div>
+        ) : hasError ? (
+          <div className="bg-paper border border-danger/40 border-b-2 rounded p-12 text-center">
+            <AlertCircle className="w-10 h-10 text-danger mx-auto mb-3" />
+            <h4 className="text-base font-bold text-danger m-0">Gagal Memuat Data Kuliner</h4>
+            <p className="text-xs text-secondary mt-1 max-w-md mx-auto m-0">
+              Terjadi kendala saat menghubungi server verifikasi. Silakan periksa koneksi atau coba beberapa saat lagi.
             </p>
           </div>
         ) : places.length === 0 ? (
-          <div className="bg-white border border-[#D8DDD9] rounded-2xl p-12 text-center">
-            <AlertCircle className="w-10 h-10 text-[#6B7570] mx-auto mb-3 opacity-60" />
-            <h4 className="text-base font-bold text-[#18215A]">
-              Tidak Ada Restoran Ditemukan
+          <div className="bg-paper border border-paper-edge border-b-2 rounded p-12 text-center">
+            <AlertCircle className="w-10 h-10 text-outline mx-auto mb-3 opacity-60" />
+            <h4 className="text-base font-bold text-primary m-0">
+              {t('status.empty')}
             </h4>
-            <p className="text-xs text-[#6B7570] mt-1 max-w-md mx-auto">
-              Tidak ada restoran yang memenuhi kriteria filter '{filterMode}' di area {selectedCountryObj?.name}. Coba ubah kata kunci atau aktifkan 'Semua Menu'.
+            <p className="text-xs text-secondary mt-1 max-w-md mx-auto m-0">
+              Tidak ada restoran yang memenuhi kriteria filter di area {selectedCountryObj?.name}. Coba perluas radius pencarian atau gunakan filter Semua Menu.
             </p>
           </div>
         ) : (
@@ -314,9 +333,18 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 reviewCount={place.reviewCount}
                 tier={place.tier as HalalTierType}
                 certifierName={place.certifierName}
+                validUntil={place.certExpiresAt}
                 distanceKm={place.distanceKm}
-                formattedAvgLocal={place.averagePrice?.formattedLocal}
-                formattedAvgIdr={place.averagePrice?.formattedIdr}
+                averagePrice={
+                  place.averagePrice
+                    ? {
+                        amountMinor: place.averagePrice.amountMinor,
+                        currency: place.averagePrice.currency,
+                        amountIdr: place.averagePrice.amountIdr,
+                        rateSnapshotDate: place.averagePrice.rateSnapshotDate,
+                      }
+                    : undefined
+                }
                 sampleDishes={place.sampleDishes}
                 dietaryFlags={place.dietaryFlags}
                 onClick={() => handleOpenPlace(place.id)}
@@ -325,30 +353,31 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           </div>
         )}
 
-        {/* Place Detail Modal */}
+        {/* Place Detail Modal (Using Strict Solid Tint Scrim Token, NO Blur) */}
         {selectedPlace && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#000846]/60 backdrop-blur-xs overflow-y-auto">
-            <div className="bg-white border border-[#D8DDD9] rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim overflow-y-auto">
+            <div className="bg-paper border border-paper-edge border-b-2 rounded max-w-3xl w-full max-h-[90vh] overflow-y-auto flex flex-col">
               {/* Modal Wayfinding Header */}
-              <div className="sticky top-0 bg-white border-b border-[#D8DDD9] p-5 flex items-start justify-between gap-4 z-10">
+              <div className="sticky top-0 bg-paper border-b border-paper-edge p-5 flex items-start justify-between gap-4 z-10">
                 <div className="flex items-start gap-3">
                   <DiningLogo size={44} />
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-mono uppercase bg-[#EDF0EE] text-[#18215A] px-2 py-0.5 rounded font-bold">
+                      <span className="text-[11px] font-mono uppercase bg-surface text-primary px-2 py-0.5 rounded border border-paper-edge font-bold">
                         {selectedPlace.cityName}, {selectedPlace.countryName}
                       </span>
                       <HalalBadge
                         tier={selectedPlace.tier as HalalTierType}
-                        certifierName={selectedPlace.certifierName}
-                        size="sm"
+                        certifier={selectedPlace.certifierName}
+                        validUntil={selectedPlace.certExpiresAt}
+                        badges={selectedPlace.dietaryFlags}
                       />
                     </div>
-                    <h2 className="text-xl font-bold text-[#18215A] leading-tight">
+                    <h2 className="text-xl font-bold text-primary leading-tight m-0">
                       {selectedPlace.name}
                     </h2>
                     {selectedPlace.nameOriginal && (
-                      <p className="text-xs text-[#6B7570] mt-0.5">
+                      <p className="text-xs text-outline mt-0.5 m-0 font-mono">
                         {selectedPlace.nameOriginal}
                       </p>
                     )}
@@ -356,61 +385,62 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => setSelectedPlace(null)}
-                  className="w-8 h-8 rounded-full bg-[#EDF0EE] hover:bg-[#D8DDD9] flex items-center justify-center text-[#18215A] transition"
+                  className="w-12 h-12 rounded bg-surface hover:bg-paper-edge flex items-center justify-center text-primary transition border border-paper-edge"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Modal Content Body */}
               <div className="p-6 space-y-6">
                 {/* Basic Meta (Address, Phone, Hours) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#EDF0EE] rounded-2xl p-4 text-xs">
-                  <div className="flex items-start gap-2 text-[#475569]">
-                    <MapPin className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-surface rounded p-4 text-xs border border-paper-edge">
+                  <div className="flex items-start gap-2 text-secondary">
+                    <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                     <span>{selectedPlace.address}</span>
                   </div>
                   {selectedPlace.phone && (
-                    <div className="flex items-center gap-2 text-[#475569]">
-                      <Phone className="w-4 h-4 text-[#059669] shrink-0" />
+                    <div className="flex items-center gap-2 text-secondary">
+                      <Phone className="w-4 h-4 text-primary shrink-0" />
                       <span>{selectedPlace.phone}</span>
                     </div>
                   )}
                   {selectedPlace.openingHours?.length > 0 && (
-                    <div className="flex items-start gap-2 text-[#475569] sm:col-span-2">
-                      <Clock className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-2 text-secondary sm:col-span-2">
+                      <Clock className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                       <span>{selectedPlace.openingHours.join(' · ')}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Evidence Panel: "Why We Think This Is Halal" */}
-                <div className="border border-[#10B981]/40 bg-[#D1FAE5]/30 rounded-2xl p-4">
+                <div className="border border-paper-edge bg-surface rounded p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <ShieldCheck className="w-4 h-4 text-[#047857]" />
-                    <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold text-[#047857]">
-                      Mengapa Kami Menyimpulkan Ini Halal?
+                    <ShieldCheck className="w-4 h-4 text-success" />
+                    <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold text-primary m-0">
+                      {t('detail.evidenceTitle')} {selectedPlace.tier}:
                     </h4>
                   </div>
-                  <p className="text-xs text-[#18215A] leading-relaxed">
+                  <p className="text-xs text-secondary leading-relaxed m-0">
                     {selectedPlace.whyHalalExplanation ||
-                      'Restoran ini memenuhi kriteria verifikasi status Halal sistem JavaMifi Compass.'}
+                      'Restoran ini memenuhi kriteria verifikasi status kepatuhan sistem JavaMifi Compass.'}
                   </p>
 
-                  {/* Verbatim Quotes Evidence */}
+                  {/* Verbatim Quotes Evidence (Rendered as plain text safely) */}
                   {selectedPlace.evidence?.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-[#10B981]/20 space-y-2">
+                    <div className="mt-3 pt-3 border-t border-paper-edge space-y-2">
                       {selectedPlace.evidence.map((ev: any) => (
                         <div
                           key={ev.id}
-                          className="bg-white/80 rounded-lg p-2.5 text-[11px] font-mono border border-[#10B981]/30"
+                          className="bg-paper rounded p-3 text-[11px] font-mono border border-paper-edge"
                         >
-                          <div className="text-[9px] uppercase font-bold text-[#059669] mb-1">
-                            Kutipan Bukti Terverifikasi ({ev.attributionNotice}):
+                          <div className="text-[10px] uppercase font-bold text-outline mb-1">
+                            Kutipan Sumber ({ev.attributionNotice}):
                           </div>
-                          <p className="italic text-[#18215A]">"{ev.quoteText}"</p>
-                          <div className="text-[9px] text-[#6B7570] mt-1">
+                          <p className="italic text-primary m-0">"{ev.quoteText}"</p>
+                          <div className="text-[10px] text-outline mt-1">
                             Diakses: {ev.retrievedAt} · Bahasa: {ev.language}
                           </div>
                         </div>
@@ -422,23 +452,23 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 {/* Full Categorized Menu with Dual Prices */}
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-mono uppercase tracking-wider font-extrabold text-[#18215A]">
-                      Daftar Menu & Tarif Kurs
+                    <h3 className="text-sm font-mono uppercase tracking-wider font-extrabold text-primary m-0">
+                      {t('detail.menuTitle')}
                     </h3>
-                    <span className="text-[10px] font-mono text-[#6B7570]">
-                      Harga dalam mata uang lokal dan perkiraan Rupiah
+                    <span className="text-[10px] font-mono text-outline">
+                      Tarif lokal & perkiraan Rupiah
                     </span>
                   </div>
 
                   {selectedPlace.menuCategories?.length === 0 ? (
-                    <p className="text-xs text-[#6B7570] italic">
+                    <p className="text-xs text-outline italic m-0">
                       Daftar menu sedang diperbarui oleh sistem verifikasi.
                     </p>
                   ) : (
                     <div className="space-y-4">
                       {selectedPlace.menuCategories.map((cat: any) => (
                         <div key={cat.category} className="space-y-2">
-                          <h4 className="text-xs font-bold text-[#059669] uppercase tracking-wide">
+                          <h4 className="text-xs font-bold text-primary uppercase tracking-wide border-b border-paper-edge pb-1 m-0">
                             {cat.category}
                           </h4>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -452,11 +482,13 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                                 category={item.category}
                                 sourceDescription={item.sourceDescription}
                                 explainerId={item.explainerId}
-                                formattedLocal={item.price.formattedLocal}
-                                formattedIdr={item.price.formattedIdr}
+                                amountMinor={item.price.amountMinor}
+                                currency={item.price.currency}
+                                amountIdr={item.price.amountIdr}
                                 rateDate={item.price.rateSnapshotDate}
                                 isHalal={item.isHalal}
                                 flags={item.flags}
+                                locale={locale}
                               />
                             ))}
                           </div>
@@ -467,17 +499,17 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 </div>
 
                 {/* Persistent Notice & Report Button */}
-                <div className="pt-4 border-t border-[#D8DDD9] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#6B7570]">
-                  <p className="text-[11px] max-w-lg">
-                    ⚠️ <strong>Pemberitahuan:</strong> Tarif konversi bersifat indikatif. Selalu konfirmasi kembali kepada pihak restoran saat memesan, karena standar dan sertifikasi halal dapat berbeda antar lembaga.
+                <div className="pt-4 border-t border-paper-edge flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-secondary">
+                  <p className="text-[11px] max-w-lg leading-relaxed m-0">
+                    {t('status.verifyNotice')}
                   </p>
                   <button
                     type="button"
                     onClick={() => setIsReportOpen(true)}
-                    className="shrink-0 px-3 py-1.5 rounded-lg border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-800 font-mono text-[11px] font-bold transition flex items-center gap-1.5"
+                    className="shrink-0 h-12 px-4 rounded border border-danger/40 bg-danger-surface hover:bg-danger-surface/80 text-danger font-mono text-xs font-bold transition flex items-center gap-1.5"
                   >
-                    <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
-                    Laporkan Data Salah
+                    <AlertCircle className="w-4 h-4 text-danger" />
+                    <span>{t('detail.reportBtn')}</span>
                   </button>
                 </div>
               </div>
@@ -485,134 +517,106 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           </div>
         )}
 
-        {/* User Dispute / Correction Dialog Modal (Transit Wayfinding Design) */}
+        {/* User Dispute / Correction Dialog Modal */}
         {isReportOpen && selectedPlace && (
-          <div className="fixed inset-0 z-50 bg-[#000846]/60 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white border-2 border-[#18215A] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
+          <div className="fixed inset-0 z-50 bg-scrim flex items-center justify-center p-4">
+            <div className="bg-paper border border-paper-edge border-b-2 rounded max-w-lg w-full p-6 relative">
               <button
                 type="button"
                 onClick={() => {
                   setIsReportOpen(false);
                   setReportSuccessReceipt(null);
                 }}
-                className="absolute top-4 right-4 p-1 rounded-full text-[#6B7570] hover:text-[#18215A] hover:bg-[#EDF0EE]"
+                className="absolute top-3 right-3 w-12 h-12 rounded text-outline hover:text-primary hover:bg-surface flex items-center justify-center"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="flex items-center gap-2 mb-3">
-                <span className="w-2 h-2 rounded-full bg-rose-500" />
-                <span className="text-[10px] font-mono uppercase tracking-widest text-rose-600 font-extrabold">
-                  Dispute & Review Ticket
-                </span>
+                <AlertCircle className="w-5 h-5 text-danger" />
+                <h3 className="text-base font-bold text-primary font-mono uppercase tracking-wide m-0">
+                  {t('detail.reportBtn')}
+                </h3>
               </div>
 
-              <h3 className="text-lg font-bold text-[#18215A]">
-                Laporkan Koreksi Data Restoran
-              </h3>
-              <p className="text-xs text-[#6B7570] mb-4">
-                {selectedPlace.name} ({selectedPlace.cityName}, {selectedPlace.countryName})
-              </p>
-
               {reportSuccessReceipt ? (
-                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2">
-                  <ShieldCheck className="w-8 h-8 text-emerald-600 mx-auto" />
-                  <p className="text-sm font-bold text-emerald-900">
-                    Laporan Berhasil Diterima!
-                  </p>
-                  <p className="text-xs text-emerald-700 font-mono">
-                    Nomor Tiket Antrean CMS: <strong>{reportSuccessReceipt}</strong>
-                  </p>
-                  <p className="text-[11px] text-[#6B7570]">
-                    Tim kurasi & verifikator JavaMifi akan meninjau data ini. Terima kasih telah membantu sesama traveler.
+                <div className="py-6 text-center space-y-2">
+                  <CheckCircle2 className="w-12 h-12 text-success mx-auto" />
+                  <h4 className="text-base font-bold text-primary m-0">
+                    {t('detail.reportSubmitted')}
+                  </h4>
+                  <p className="text-xs font-mono text-outline m-0">
+                    Ticket ID: {reportSuccessReceipt}
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmitReport} className="space-y-4">
+                  <p className="text-xs text-secondary leading-relaxed m-0">
+                    Bantu kami menjaga akurasi sertifikasi kuliner untuk wisatawan muslim dunia. Masukan Anda akan langsung masuk ke antrean audit verifikasi manusia.
+                  </p>
+
                   <div>
-                    <label className="block text-xs font-mono font-bold text-[#18215A] uppercase mb-1">
-                      Alasan Masalah
+                    <label className="block text-xs font-bold uppercase font-mono text-primary mb-1">
+                      Alasan Pelaporan:
                     </label>
                     <select
                       value={reportReason}
                       onChange={(e) => setReportReason(e.target.value)}
-                      className="w-full text-xs font-medium bg-[#EDF0EE] border border-[#D8DDD9] rounded-xl px-3 py-2 text-[#18215A] focus:outline-none focus:border-[#059669]"
+                      className="w-full h-12 px-3 bg-surface border border-outline rounded text-xs text-primary font-semibold"
                     >
-                      <option value="PORK_DETECTED">Menu Mengandung Babi / Olahan Babi (Pork Detected)</option>
-                      <option value="ALCOHOL_SERVED">Menyajikan Minuman Beralkohol / Arak Masak</option>
-                      <option value="CERTIFICATE_EXPIRED">Sertifikat Halal Kedaluwarsa / Palsu</option>
-                      <option value="PRICING_INCORRECT">Harga atau Konversi Kurs Mata Uang Tidak Akurat</option>
-                      <option value="OTHER">Lainnya / Perubahan Status Restoran</option>
+                      <option value="PORK_DETECTED">Terdeteksi Mengandung Daging/Minyak Babi (Pork)</option>
+                      <option value="ALCOHOL_SERVED">Menyajikan Minuman Keras / Alkohol</option>
+                      <option value="EXPIRED_CERT">Sertifikat Halal Sudah Kedaluwarsa</option>
+                      <option value="WRONG_PRICE">Harga Menu atau Kurs Sangat Berbeda</option>
+                      <option value="CLOSED_DOWN">Restoran Sudah Tutup Permanen</option>
+                      <option value="OTHER">Lainnya</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono font-bold text-[#18215A] uppercase mb-1">
-                      Usulan Status Halal Baru
+                    <label className="block text-xs font-bold uppercase font-mono text-primary mb-1">
+                      Rekomendasi Status yang Tepat:
                     </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {[
-                        { id: 'NOT_HALAL', label: 'TIDAK HALAL' },
-                        { id: 'OPTIONS', label: 'OPTIONS (Dapur Campur)' },
-                        { id: 'UNKNOWN', label: 'BELUM TERVERIFIKASI' },
-                      ].map((t) => (
-                        <button
-                          key={t.id}
-                          type="button"
-                          onClick={() => setSuggestedTier(t.id)}
-                          className={`px-2 py-1.5 rounded-lg text-[10px] font-mono font-bold border transition ${
-                            suggestedTier === t.id
-                              ? 'bg-[#18215A] text-white border-[#18215A]'
-                              : 'bg-white text-[#18215A] border-[#D8DDD9] hover:bg-[#EDF0EE]'
-                          }`}
-                        >
-                          {t.label}
-                        </button>
-                      ))}
-                    </div>
+                    <select
+                      value={suggestedTier}
+                      onChange={(e) => setSuggestedTier(e.target.value)}
+                      className="w-full h-12 px-3 bg-surface border border-outline rounded text-xs text-primary font-semibold"
+                    >
+                      <option value="NOT_HALAL">Ubah Menjadi NOT_HALAL (Non-Halal)</option>
+                      <option value="OPTIONS">Ubah Menjadi OPTIONS (Menu Pilihan Saja)</option>
+                      <option value="CLAIMED">Ubah Menjadi CLAIMED (Klaim Pemilik)</option>
+                      <option value="UNKNOWN">Tandai UNKNOWN (Audit Ulang)</option>
+                    </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono font-bold text-[#18215A] uppercase mb-1">
-                      Rincian Temuan / Bukti Lapangan <span className="text-rose-500">*</span>
+                    <label className="block text-xs font-bold uppercase font-mono text-primary mb-1">
+                      Detail Temuan / Catatan Tambahan:
                     </label>
                     <textarea
                       required
                       rows={3}
+                      placeholder="Sebutkan menu yang terindikasi non-halal atau informasi tambahan..."
                       value={reportComment}
                       onChange={(e) => setReportComment(e.target.value)}
-                      placeholder="Contoh: Menu ramen seasonal menggunakan kaldu babi, atau pelayan mengonfirmasi tidak ada sertifikat halal resmi..."
-                      className="w-full text-xs bg-white border border-[#D8DDD9] rounded-xl p-2.5 text-[#18215A] focus:outline-none focus:border-[#059669]"
+                      className="w-full p-2.5 bg-surface border border-outline rounded text-xs text-primary placeholder-outline"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-mono font-bold text-[#18215A] uppercase mb-1">
-                      Email Anda (Opsional, untuk notifikasi status)
-                    </label>
-                    <input
-                      type="email"
-                      value={reportEmail}
-                      onChange={(e) => setReportEmail(e.target.value)}
-                      placeholder="traveler@example.com"
-                      className="w-full text-xs bg-white border border-[#D8DDD9] rounded-xl px-3 py-2 text-[#18215A] focus:outline-none focus:border-[#059669]"
-                    />
-                  </div>
-
-                  <div className="pt-2 flex items-center justify-end gap-2">
+                  <div className="pt-2 flex justify-end gap-3">
                     <button
                       type="button"
                       onClick={() => setIsReportOpen(false)}
-                      className="px-4 py-2 rounded-xl text-xs font-bold text-[#6B7570] hover:bg-[#EDF0EE] transition"
+                      className="h-12 px-4 rounded text-xs font-bold text-outline hover:text-primary min-w-[48px]"
                     >
-                      Batal
+                      {tCommon('close')}
                     </button>
                     <button
                       type="submit"
-                      disabled={isSubmittingReport || !reportComment.trim()}
-                      className="px-5 py-2 rounded-xl text-xs font-bold bg-[#059669] hover:bg-[#047857] text-white transition disabled:opacity-50"
+                      disabled={isSubmittingReport}
+                      className="h-12 px-5 rounded bg-primary hover:bg-primary-hover text-on-primary text-xs font-mono font-bold tracking-wider uppercase transition disabled:opacity-50 min-w-[48px]"
                     >
-                      {isSubmittingReport ? 'Mengirim...' : 'Kirim Laporan Koreksi'}
+                      {isSubmittingReport ? 'Mengirim...' : 'Kirim Laporan Audit'}
                     </button>
                   </div>
                 </form>

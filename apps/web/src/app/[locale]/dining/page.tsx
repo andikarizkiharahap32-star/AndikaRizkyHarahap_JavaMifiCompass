@@ -9,15 +9,17 @@ export const metadata: Metadata = {
 };
 
 export default function DiningPage({
+  params: { locale },
   searchParams,
 }: {
+  params: { locale: string };
   searchParams?: { country?: string; city?: string };
 }) {
   const initialCountry = (searchParams?.country || 'JP').toUpperCase();
 
   return (
-    <main className="w-full bg-[#EDF0EE] min-h-screen">
-      <DiningDiscovery initialCountry={initialCountry} />
+    <main className="w-full bg-surface min-h-screen">
+      <DiningDiscovery initialCountry={initialCountry} locale={locale} />
     </main>
   );
 }

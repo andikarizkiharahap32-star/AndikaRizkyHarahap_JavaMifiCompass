@@ -1,4 +1,5 @@
 import React from 'react';
+import { DualPrice } from './DualPrice';
 
 export interface MenuTicketChitProps {
   id: string;
@@ -8,19 +9,21 @@ export interface MenuTicketChitProps {
   category: string;
   sourceDescription?: string;
   explainerId?: string;
-  formattedLocal: string;
-  formattedIdr: string;
+  amountMinor: number;
+  currency: string;
+  amountIdr?: number | null;
   rateDate?: string;
   isHalal?: boolean;
   flags?: string[];
+  locale?: string;
   className?: string;
 }
 
 /**
  * MenuTicketChit
- * Rendered in the Google Stitch tactile paper ticket format:
- * Crisp white card, subtle perforation line, dual-currency pricing (Local + IDR),
- * and transparent dietary indicators.
+ * Formatted strictly as a Transit Wayfinding paper menu ticket:
+ * 1px paper-edge outline with 2px lower lip, dual-currency pricing with thin space,
+ * and distinct label for venue description vs AI explanation.
  */
 export const MenuTicketChit: React.FC<MenuTicketChitProps> = ({
   nameOriginal,
@@ -29,83 +32,91 @@ export const MenuTicketChit: React.FC<MenuTicketChitProps> = ({
   category,
   sourceDescription,
   explainerId,
-  formattedLocal,
-  formattedIdr,
-  rateDate,
+  amountMinor,
+  currency,
+  amountIdr,
+  rateDate = '26 Okt 2026',
   isHalal = true,
   flags = [],
+  locale = 'id',
   className = '',
 }) => {
+  const isId = locale.startsWith('id');
+  const title = isId ? (nameId || nameEn) : (nameEn || nameId);
+
   return (
     <div
-      className={`relative bg-white border border-[#D8DDD9] rounded-lg p-3.5 shadow-sm transition hover:shadow-md ${className}`}
+      className={`relative bg-paper border border-paper-edge border-b-2 rounded p-4 flex flex-col justify-between gap-3 ${className}`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-[#6B7570] bg-[#EDF0EE] px-1.5 py-0.5 rounded">
-              {category}
+      <div className="flex flex-col gap-2">
+        {/* Top Category Badge & Dietary Indicator */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-[11px] uppercase font-mono tracking-wider font-semibold text-outline bg-surface px-2 py-0.5 rounded border border-paper-edge">
+            {category}
+          </span>
+          {isHalal ? (
+            <span className="text-[11px] font-mono font-bold text-success bg-success-surface px-2 py-0.5 rounded-full border border-success/30">
+              HALAL
             </span>
-            {isHalal ? (
-              <span className="text-[10px] font-bold text-[#047857] bg-[#D1FAE5] px-1.5 py-0.5 rounded-full">
-                HALAL
-              </span>
-            ) : (
-              <span className="text-[10px] font-bold text-[#B91C1C] bg-[#FEE2E2] px-1.5 py-0.5 rounded-full">
-                NON-HALAL
-              </span>
-            )}
-          </div>
-
-          <h4 className="text-sm font-bold text-[#18215A] leading-tight">
-            {nameId || nameEn}{' '}
-            {nameOriginal && nameOriginal !== (nameId || nameEn) && (
-              <span className="text-xs font-normal text-[#6B7570] ml-1">
-                ({nameOriginal})
-              </span>
-            )}
-          </h4>
-
-          {explainerId && (
-            <p className="text-xs text-[#475569] mt-1 leading-relaxed">
-              {explainerId}
-            </p>
-          )}
-
-          {sourceDescription && !explainerId && (
-            <p className="text-xs text-[#64748B] mt-1 italic">
-              {sourceDescription}
-            </p>
-          )}
-
-          {flags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2">
-              {flags.map((flag) => (
-                <span
-                  key={flag}
-                  className="text-[9px] font-mono uppercase bg-[#F1F5F9] text-[#475569] px-1.5 py-0.2 rounded"
-                >
-                  {flag.replace(/_/g, ' ')}
-                </span>
-              ))}
-            </div>
+          ) : (
+            <span className="text-[11px] font-mono font-bold text-danger bg-danger-surface px-2 py-0.5 rounded-full border border-danger/40">
+              NON-HALAL
+            </span>
           )}
         </div>
 
-        {/* Dual Currency Price Chit */}
-        <div className="text-right flex-shrink-0 bg-[#EDF0EE] border border-[#D8DDD9] rounded-md px-2.5 py-1.5">
-          <div className="text-sm font-extrabold font-mono text-[#18215A]">
-            {formattedLocal}
-          </div>
-          <div className="text-[11px] font-bold text-[#059669]">
-            ≈ {formattedIdr}
-          </div>
-          {rateDate && (
-            <div className="text-[8px] font-mono text-[#6B7570] mt-0.5">
-              Kurs {rateDate}
-            </div>
+        {/* Menu Item Name */}
+        <h4 className="text-sm font-bold text-primary leading-tight m-0">
+          {title}{' '}
+          {nameOriginal && nameOriginal !== title && (
+            <span className="text-xs font-normal text-outline ml-1">
+              ({nameOriginal})
+            </span>
           )}
-        </div>
+        </h4>
+
+        {/* Venue's Own Description (Unmodified) */}
+        {sourceDescription && (
+          <p className="text-xs text-secondary leading-relaxed m-0">
+            {sourceDescription}
+          </p>
+        )}
+
+        {/* Separately Labeled AI Explanation */}
+        {explainerId && (
+          <div className="p-2.5 bg-surface rounded border border-paper-edge text-xs leading-relaxed">
+            <span className="font-mono text-[10px] uppercase font-bold text-primary block mb-0.5 tracking-wider">
+              {isId ? 'Penjelasan AI (Bahan & Alergen):' : 'AI Explanation:'}
+            </span>
+            <p className="text-secondary m-0">{explainerId}</p>
+          </div>
+        )}
+
+        {/* Dietary / Allergen Flags */}
+        {flags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1">
+            {flags.map((flag) => (
+              <span
+                key={flag}
+                className="text-[10px] font-mono uppercase bg-sunken text-primary px-1.5 py-0.5 rounded"
+              >
+                {flag.replace(/_/g, ' ')}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Dual Price Chit Footnote */}
+      <div className="pt-2.5 border-t border-paper-edge flex items-center justify-between">
+        <span className="text-[11px] font-mono text-outline uppercase tracking-wider">
+          {isId ? 'Tarif Menu:' : 'Price:'}
+        </span>
+        <DualPrice
+          local={{ amount_minor: amountMinor, currency }}
+          idr={amountIdr ? { amount: amountIdr, rate_date: rateDate } : null}
+          locale={locale}
+        />
       </div>
     </div>
   );

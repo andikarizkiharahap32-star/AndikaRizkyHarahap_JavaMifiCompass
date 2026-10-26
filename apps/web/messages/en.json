@@ -132,5 +132,52 @@
     "days": "Days",
     "perDay": "/ day",
     "unlimited": "Unlimited"
+  },
+  "dining": {
+    "tabTitle": "Eat & Dining",
+    "topBar": {
+      "filterHalal": "Halal Only (Certified & Claimed)",
+      "filterAll": "All Restaurants",
+      "countryLabel": "Destination Country",
+      "radiusLabel": "Search Radius",
+      "includeUnverified": "Include unverified"
+    },
+    "status": {
+      "checking": "Checking halal status…",
+      "unverified": "Unverified (checking)",
+      "empty": "No certified or claimed restaurants found in this radius.",
+      "rateUnavailable": "IDR rate unavailable",
+      "rateTooltip": "Indicative; card and ATM rates differ.",
+      "verifyNotice": "Verify with the restaurant. Halal standards differ by certifier and country."
+    },
+    "tier": {
+      "certified": "Officially Halal Certified",
+      "claimed": "Declared, not certified",
+      "options": "Halal Options Available",
+      "notHalal": "Not Halal (Pork/Alcohol on Menu)",
+      "unknown": "Unknown (Fails Closed)"
+    },
+    "badges": {
+      "alcoholFree": "Alcohol-Free",
+      "servesAlcohol": "Serves Alcohol",
+      "porkFree": "Pork-Free Kitchen",
+      "porkOnMenu": "Pork on Menu",
+      "lastVerified": "Last verified",
+      "certNumber": "Certificate No.",
+      "expires": "Valid until"
+    },
+    "detail": {
+      "menuTitle": "Menu & Converted Prices",
+      "aiExplanation": "AI Explanation (Ingredients & Allergens)",
+      "evidenceTitle": "Compliance Verification Evidence",
+      "reportBtn": "Report incorrect info",
+      "reportSubmitted": "Report submitted for compliance audit."
+    }
+  },
+  "dualPrice": {
+    "approx": "≈",
+    "rateUnavailable": "IDR rate unavailable",
+    "disclaimer": "Indicative; card and ATM rates differ.",
+    "snapshotDate": "Snapshot rate date:"
   }
 }

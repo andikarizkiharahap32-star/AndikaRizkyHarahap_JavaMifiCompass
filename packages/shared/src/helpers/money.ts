@@ -82,3 +82,45 @@ export function applyFixedDiscount(amount: number, fixedDiscountIdr: number): nu
   if (fixedDiscountIdr <= 0) return amount;
   return Math.max(0, amount - fixedDiscountIdr);
 }
+
+/**
+ * Returns the minor unit decimal places for ISO currencies per PRD & DESIGN.md
+ */
+export function getCurrencyDecimals(currency: string): number {
+  const zeroDecimal = ['JPY', 'KRW', 'VND', 'UGX', 'CLP', 'PYG', 'RWF'];
+  const threeDecimal = ['KWD', 'BHD', 'JOD', 'OMR', 'TND', 'LYD'];
+  const upper = (currency || '').toUpperCase();
+
+  if (zeroDecimal.includes(upper)) return 0;
+  if (threeDecimal.includes(upper)) return 3;
+  return 2;
+}
+
+/**
+ * Formats a minor amount into a major currency representation
+ */
+export function formatLocalAmount(amountMinor: number, currency: string, locale: string = 'en-US'): string {
+  const decimals = getCurrencyDecimals(currency);
+  const factor = Math.pow(10, decimals);
+  const majorValue = amountMinor / factor;
+
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(majorValue);
+  } catch {
+    return `${currency.toUpperCase()} ${majorValue.toFixed(decimals)}`;
+  }
+}
+
+/**
+ * Formats IDR integer value with dot thousand separators
+ */
+export function formatIdrInteger(amount: number): string {
+  return new Intl.NumberFormat('id-ID', {
+    maximumFractionDigits: 0,
+  }).format(Math.round(amount));
+}

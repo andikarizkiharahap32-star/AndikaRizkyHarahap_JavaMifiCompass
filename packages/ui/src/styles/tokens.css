@@ -1,0 +1,146 @@
+/* ==========================================================================
+   JAVAMIFI COMPASS: TRANSIT WAYFINDING TOKENS
+   Generated strictly from docs/DESIGN.md
+   ========================================================================== */
+
+:root {
+  /* Base Palette */
+  --color-surface: #f7faf8;
+  --color-surface-dim: #d7dbd9;
+  --color-surface-bright: #f7faf8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f1f4f2;
+  --color-surface-container: #ebefed;
+  --color-surface-container-high: #e6e9e7;
+  --color-surface-container-highest: #e0e3e1;
+  --color-on-surface: #181c1b;
+  --color-on-surface-variant: #464650;
+  --color-inverse-surface: #2d3130;
+  --color-inverse-on-surface: #eef1ef;
+  --color-outline: #6B7570;
+  --color-outline-variant: #c6c5d1;
+  --color-surface-tint: #515a95;
+
+  /* Primary Structural Ink */
+  --color-primary: #000846;
+  --color-on-primary: #EDF0EE;
+  --color-primary-container: #18215a;
+  --color-on-primary-container: #818ac9;
+  --color-inverse-primary: #bbc3ff;
+  --color-primary-hover: #2B3A8C;
+  --color-primary-pressed: #0E1440;
+
+  /* Secondary & Tertiary */
+  --color-secondary: #535c89;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #c1c9fd;
+  --color-on-secondary-container: #4b5480;
+  --color-tertiary: #0b1411;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #202925;
+  --color-on-tertiary-container: #86908b;
+
+  /* Status */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-success: #176B40;
+  --color-success-surface: #D7EBDF;
+  --color-warning: #7A4F00;
+  --color-warning-surface: #F7E8C2;
+  --color-danger: #A8231B;
+  --color-danger-surface: #F6D9D6;
+
+  /* Fixed & Semantic */
+  --color-primary-fixed: #dfe0ff;
+  --color-primary-fixed-dim: #bbc3ff;
+  --color-on-primary-fixed: #0a144e;
+  --color-on-primary-fixed-variant: #39427c;
+  --color-secondary-fixed: #dde1ff;
+  --color-secondary-fixed-dim: #bbc4f7;
+  --color-on-secondary-fixed: #0e1841;
+  --color-on-secondary-fixed-variant: #3b446f;
+  --color-tertiary-fixed: #dbe5df;
+  --color-tertiary-fixed-dim: #bfc9c3;
+  --color-on-tertiary-fixed: #141d1a;
+  --color-on-tertiary-fixed-variant: #3f4944;
+  --color-background: #EDF0EE;
+  --color-on-background: #181c1b;
+  --color-surface-variant: #e0e3e1;
+
+  /* Tactile Paper Materials */
+  --color-paper: #FFFFFF;
+  --color-paper-edge: #CDD4D0;
+  --color-sunken: #E1E6E3;
+  --color-selection: #D3D9F0;
+  --color-scrim: rgba(24, 33, 90, 0.48);
+
+  /* Product Lines (Strictly Connectivity Only) */
+  --color-line-wifi: #F27B2A;
+  --color-line-wifi-stroke: #C95A0A;
+  --color-line-esim: #4C97FF;
+  --color-line-esim-stroke: #2468E0;
+  --color-line-sim: #E96BB0;
+  --color-line-sim-stroke: #C23A86;
+  --color-line-pro: #18215A;
+
+  /* Night Mode Token Primitives */
+  --color-night-ground: #0E1438;
+  --color-night-raised: #171F54;
+  --color-night-edge: #2B357A;
+  --color-night-ink: #E9ECF8;
+  --color-night-ink-soft: #A7AFD6;
+
+  /* Spacing */
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-mobile: 1rem;
+  --spacing-margin: 1.5rem;
+  --spacing-margin-mobile: 1rem;
+}
+
+/* Night Theme Activation */
+.dark,
+[data-theme="night"] {
+  --color-background: var(--color-night-ground);
+  --color-surface: var(--color-night-ground);
+  --color-surface-container-low: #101740;
+  --color-surface-container: #171F54;
+  --color-surface-container-high: #1E286B;
+  --color-surface-container-highest: #263384;
+  --color-on-surface: var(--color-night-ink);
+  --color-on-surface-variant: var(--color-night-ink-soft);
+  --color-paper: var(--color-night-raised);
+  --color-paper-edge: var(--color-night-edge);
+  --color-sunken: #101740;
+  --color-primary: var(--color-night-ink);
+  --color-primary-container: var(--color-night-raised);
+  --color-secondary: var(--color-night-ink-soft);
+  --color-outline: var(--color-night-edge);
+  --color-selection: var(--color-night-raised);
+  --color-scrim: rgba(14, 20, 56, 0.72);
+  --color-success-surface: rgba(23, 107, 64, 0.25);
+  --color-warning-surface: rgba(122, 79, 0, 0.25);
+  --color-danger-surface: rgba(168, 35, 27, 0.25);
+}
+
+/* Tabular Numerics Utility */
+.tnum,
+.font-tnum {
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Wayfinding Paper Card with Tactile 2px Lower Lip */
+.wayfinding-card {
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-paper-edge);
+  border-bottom: 2px solid var(--color-paper-edge);
+  border-radius: 4px;
+}
+
+/* Interactive Touch Targets */
+.touch-target-48 {
+  min-height: 48px;
+  min-width: 48px;
+}
