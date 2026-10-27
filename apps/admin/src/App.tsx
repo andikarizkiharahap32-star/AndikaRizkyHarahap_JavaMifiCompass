@@ -13,6 +13,9 @@ import {
   User,
   UtensilsCrossed,
   Loader2,
+  Image,
+  Tag,
+  Users,
 } from 'lucide-react';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { OrdersScreen } from './screens/OrdersScreen';
@@ -24,6 +27,9 @@ import { IntegrationsHealthScreen } from './screens/IntegrationsHealthScreen';
 import { SupportTicketsScreen } from './screens/SupportTicketsScreen';
 import { LoginScreen } from './screens/LoginScreen';
 import { DiningReviewQueueScreen } from './screens/DiningReviewQueueScreen';
+import { MediaLibraryScreen } from './screens/MediaLibraryScreen';
+import { CatalogScreen } from './screens/CatalogScreen';
+import { CustomersScreen } from './screens/CustomersScreen';
 import { apiClient } from './lib/api';
 
 export const App = () => {
@@ -31,7 +37,18 @@ export const App = () => {
   const [loading, setLoading] = useState(true);
 
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'dining' | 'orders' | 'devices' | 'content' | 'automation' | 'audit' | 'integrations' | 'support'
+    | 'dashboard'
+    | 'dining'
+    | 'orders'
+    | 'catalog'
+    | 'devices'
+    | 'customers'
+    | 'content'
+    | 'media'
+    | 'automation'
+    | 'audit'
+    | 'integrations'
+    | 'support'
   >('dashboard');
 
   useEffect(() => {
@@ -85,17 +102,25 @@ export const App = () => {
     );
   }
 
-  const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
-    { id: 'dining', label: 'Audit Halal & AI Discovery', icon: <UtensilsCrossed className="w-4 h-4 text-emerald-400" /> },
-    { id: 'orders', label: 'Pesanan & Ledger', icon: <Package className="w-4 h-4" /> },
-    { id: 'devices', label: 'Armada Modem WiFi', icon: <Wifi className="w-4 h-4" /> },
-    { id: 'content', label: 'Editor Konten CMS', icon: <FileText className="w-4 h-4" /> },
-    { id: 'automation', label: 'Konsol Otomasi n8n', icon: <Activity className="w-4 h-4" /> },
-    { id: 'support', label: 'Tiket Dukungan', icon: <Headphones className="w-4 h-4" /> },
-    { id: 'integrations', label: 'Kesehatan & Adapter', icon: <Sliders className="w-4 h-4" /> },
-    { id: 'audit', label: 'Audit Log', icon: <ShieldCheck className="w-4 h-4" /> },
+  const allNavItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE', 'EDITOR', 'SUPPORT'] },
+    { id: 'dining', label: 'Audit Halal & AI Discovery', icon: <UtensilsCrossed className="w-4 h-4 text-emerald-400" />, roles: ['SUPER_ADMIN', 'ADMIN'] },
+    { id: 'orders', label: 'Pesanan & Ledger', icon: <Package className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE'] },
+    { id: 'catalog', label: 'Katalog & Paket Kuota', icon: <Tag className="w-4 h-4 text-amber-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
+    { id: 'devices', label: 'Armada Modem WiFi', icon: <Wifi className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
+    { id: 'customers', label: 'Pelanggan & Traveler', icon: <Users className="w-4 h-4 text-sky-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT', 'FINANCE'] },
+    { id: 'content', label: 'Editor Konten CMS', icon: <FileText className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
+    { id: 'media', label: 'Pustaka Media & Aset', icon: <Image className="w-4 h-4 text-indigo-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
+    { id: 'automation', label: 'Konsol Otomasi n8n', icon: <Activity className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
+    { id: 'support', label: 'Tiket Dukungan', icon: <Headphones className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT'] },
+    { id: 'integrations', label: 'Kesehatan & Adapter', icon: <Sliders className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
+    { id: 'audit', label: 'Audit Log', icon: <ShieldCheck className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'FINANCE'] },
   ];
+
+  const currentRole = user?.role || 'SUPER_ADMIN';
+  const navItems = allNavItems.filter((item) =>
+    currentRole === 'SUPER_ADMIN' || item.roles.includes(currentRole),
+  );
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
@@ -104,12 +129,12 @@ export const App = () => {
         <div className="space-y-6">
           {/* Brand header */}
           <div className="flex items-center gap-3 px-2 py-3">
-            <div className="w-9 h-9 rounded-xl bg-sky-600 flex items-center justify-center text-white shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-sky-600 flex items-center justify-center text-white">
               <Compass className="w-5 h-5 animate-spin-slow" />
             </div>
             <div>
               <span className="font-bold text-sm text-white block">JavaMifi CMS</span>
-              <span className="text-[10px] text-slate-400 font-mono">v0.1.0 Monorepo</span>
+              <span className="text-xs text-slate-400 font-mono">v0.1.0 RBAC Active</span>
             </div>
           </div>
 
@@ -121,7 +146,7 @@ export const App = () => {
                 onClick={() => setActiveTab(item.id as any)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors text-left ${
                   activeTab === item.id
-                    ? 'bg-sky-600 text-white shadow-sm'
+                    ? 'bg-sky-600 text-white'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800'
                 }`}
               >
@@ -140,7 +165,7 @@ export const App = () => {
             </div>
             <div className="overflow-hidden">
               <span className="text-xs font-bold text-white truncate block">{user.fullName || user.email}</span>
-              <span className="text-[10px] text-sky-400 font-mono block">{user.role}</span>
+              <span className="text-xs text-sky-400 font-mono block">{user.role}</span>
             </div>
           </div>
 
@@ -159,8 +184,11 @@ export const App = () => {
         {activeTab === 'dashboard' && <DashboardScreen />}
         {activeTab === 'dining' && <DiningReviewQueueScreen />}
         {activeTab === 'orders' && <OrdersScreen />}
+        {activeTab === 'catalog' && <CatalogScreen />}
         {activeTab === 'devices' && <DevicesScreen />}
+        {activeTab === 'customers' && <CustomersScreen />}
         {activeTab === 'content' && <ContentEditorScreen />}
+        {activeTab === 'media' && <MediaLibraryScreen />}
         {activeTab === 'automation' && <AutomationConsoleScreen />}
         {activeTab === 'support' && <SupportTicketsScreen />}
         {activeTab === 'integrations' && <IntegrationsHealthScreen />}

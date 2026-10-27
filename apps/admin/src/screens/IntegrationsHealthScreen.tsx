@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Activity, Server, Database, Radio, Globe, Shield, ToggleLeft, ToggleRight, RefreshCw } from 'lucide-react';
+import { apiClient } from '../lib/api';
 
 export const IntegrationsHealthScreen = () => {
   const [paymentMode, setPaymentMode] = useState<'mock' | 'midtrans_sandbox'>('mock');
@@ -31,6 +32,28 @@ export const IntegrationsHealthScreen = () => {
   useEffect(() => {
     fetchHealth();
   }, []);
+
+  const handleSwitchPayment = async () => {
+    const next = paymentMode === 'mock' ? 'midtrans_sandbox' : 'mock';
+    try {
+      await apiClient.admin.switchAdapter('paymentGateway', next);
+      setPaymentMode(next);
+      fetchHealth();
+    } catch {
+      setPaymentMode(next);
+    }
+  };
+
+  const handleSwitchEsim = async () => {
+    const next = esimMode === 'mock' ? 'airalo_sandbox' : 'mock';
+    try {
+      await apiClient.admin.switchAdapter('esimProvider', next);
+      setEsimMode(next);
+      fetchHealth();
+    } catch {
+      setEsimMode(next);
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -112,7 +135,7 @@ export const IntegrationsHealthScreen = () => {
               </p>
             </div>
             <button
-              onClick={() => setPaymentMode(paymentMode === 'mock' ? 'midtrans_sandbox' : 'mock')}
+              onClick={handleSwitchPayment}
               className="text-sky-600 hover:text-sky-700 transition-colors p-2"
             >
               {paymentMode === 'mock' ? (
@@ -134,7 +157,7 @@ export const IntegrationsHealthScreen = () => {
               </p>
             </div>
             <button
-              onClick={() => setEsimMode(esimMode === 'mock' ? 'airalo_sandbox' : 'mock')}
+              onClick={handleSwitchEsim}
               className="text-sky-600 hover:text-sky-700 transition-colors p-2"
             >
               {esimMode === 'mock' ? (

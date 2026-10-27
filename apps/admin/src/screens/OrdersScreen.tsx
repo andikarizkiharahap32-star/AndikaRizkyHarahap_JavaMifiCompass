@@ -84,6 +84,19 @@ export const OrdersScreen = () => {
     fetchOrders();
   }, [filter]);
 
+  const handleRefund = async (orderNumber: string) => {
+    if (!confirm(`Konfirmasi proses refund untuk pesanan ${orderNumber}? Dana akan dicatat pada ledger.`)) {
+      return;
+    }
+    try {
+      await apiClient.orders.refundOrder(orderNumber, 'Admin initiated refund from CMS');
+      alert(`[Berhasil] Pesanan ${orderNumber} telah di-refund dan dicatat pada ledger keuangan.`);
+      fetchOrders();
+    } catch (err: any) {
+      alert(`Gagal memproses refund: ${err.message}`);
+    }
+  };
+
   const displayedOrders = orders.filter((o) => {
     if (!searchTerm) return true;
     const term = searchTerm.toLowerCase();
@@ -188,14 +201,24 @@ export const OrdersScreen = () => {
                     Rp {o.amountIdr.toLocaleString('id-ID')}
                   </td>
                   <td className="px-5 py-3 text-center">
-                    <a
-                      href={`http://localhost:3000/id/trip-hub/${o.orderNumber}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] inline-flex items-center gap-1"
-                    >
-                      <Eye className="w-3 h-3" /> Trip Hub
-                    </a>
+                    <div className="flex items-center justify-center gap-1.5">
+                      <a
+                        href={`http://localhost:3000/id/trip-hub/${o.orderNumber}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center gap-1"
+                      >
+                        <Eye className="w-3 h-3" /> Trip Hub
+                      </a>
+                      {o.status === 'PAID' && (
+                        <button
+                          onClick={() => handleRefund(o.orderNumber)}
+                          className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs inline-flex items-center gap-1"
+                        >
+                          Refund
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
