@@ -163,7 +163,9 @@ Configure the platform in `.env`:
 
 ---
 
-## Testing
+## Testing & Verification
+
+For a complete runnable checklist, refer to the **[Verification & Reproducibility Playbook](docs/VERIFICATION.md)**.
 
 Run unit, integration, and state machine tests:
 ```bash
