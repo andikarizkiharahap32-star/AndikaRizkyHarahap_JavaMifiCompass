@@ -141,38 +141,48 @@ ${endDelimiter}
   private mockExtractSignals(text: string): LlmSignalsOutput {
     const rawLower = text.toLowerCase();
 
+    // Explicit negative statements or warning checks against certification
+    const hasNegativeCertStatement =
+      /\b(?:not\s+certified|never\s+certified|unaccredited|fake\s+certificate|fake\s+halal|fraud|warning|not\s+halal|non-halal|tidak\s+bersertifikat|bukan\s+halal|tanpa\s+sertifikat|tidak\s+memiliki\s+sertifikat)\b/i.test(text);
+
+    // Explicit certificate claim indicator
+    const hasCertificateClaim =
+      /\b(?:certified|certificate|sertifikat|sijil|清真认证|sfda|masjid\s*al\s*haram|haram\s*zone|official\s+registry)\b/i.test(text);
+
     // 1. Identify accredited certifier present in text
     let detectedCertifier: string | null = null;
     let hasCert = false;
 
     const certifierMap: [RegExp, string][] = [
       [/sfda|saudi\s*food\s*and\s*drug|saudi\s*commercial\s*laws?|masjid\s*al\s*haram|haram\s*zone/i, 'Saudi Food and Drug Authority (SFDA)'],
-      [/muis/i, 'Majlis Ugama Islam Singapura (MUIS)'],
-      [/jakim/i, 'JAKIM Malaysia'],
-      [/hmc/i, 'Halal Monitoring Committee (HMC)'],
-      [/hfa/i, 'Halal Food Authority (HFA)'],
+      [/\bmuis\b|majlis\s*ugama\s*islam\s*singapura/i, 'Majlis Ugama Islam Singapura (MUIS)'],
+      [/\bjakim\b/i, 'JAKIM Malaysia'],
+      [/\bhmc\b|halal\s*monitoring\s*committee/i, 'Halal Monitoring Committee (HMC)'],
+      [/\bhfa\b|halal\s*food\s*authority/i, 'Halal Food Authority (HFA)'],
       [/uk\s*muslim\s*authorities/i, 'UK Muslim Authorities'],
       [/certified\s*qingzhen|清真认证/i, 'China Islamic Association (Qingzhen)'],
-      [/niujie/i, 'Niujie Islamic Committee'],
-      [/japan\s*halal\s*foundation|jhf/i, 'Japan Halal Foundation (JHF)'],
-      [/nippon\s*asia\s*halal|naha/i, 'Nippon Asia Halal Association (NAHA)'],
-      [/japan\s*halal\s*association|jha/i, 'Japan Halal Association (JHA)'],
-      [/korea\s*muslim\s*federation|kmf/i, 'Korea Muslim Federation (KMF)'],
-      [/cicot/i, 'CICOT Thailand'],
-      [/gimdes/i, 'GIMDES Turkey'],
+      [/niujie\s*islamic\s*committee|\bniujie\b/i, 'Niujie Islamic Committee'],
+      [/japan\s*halal\s*foundation|\bjhf\b/i, 'Japan Halal Foundation (JHF)'],
+      [/nippon\s*asia\s*halal|\bNAHA\b/, 'Nippon Asia Halal Association (NAHA)'],
+      [/japan\s*halal\s*association|\bjha\b/i, 'Japan Halal Association (JHA)'],
+      [/korea\s*muslim\s*federation|\bkmf\b/i, 'Korea Muslim Federation (KMF)'],
+      [/\bcicot\b/i, 'CICOT Thailand'],
+      [/\bgimdes\b/i, 'GIMDES Turkey'],
       [/shaanxi\s*islamic\s*association/i, 'Shaanxi Islamic Association'],
       [/shenzhen\s*islamic\s*association/i, 'Shenzhen Islamic Association'],
       [/beijing\s*islamic\s*association/i, 'Beijing Islamic Association'],
-      [/china\s*islamic\s*association|islamic\s*association|muslim\s*association/i, 'China Islamic Association'],
+      [/china\s*islamic\s*association/i, 'China Islamic Association'],
       [/huaisheng\s*mosque/i, 'Huaisheng Mosque Committee'],
       [/halal\s*green\s*certificate/i, 'Halal Green Certificate'],
     ];
 
-    for (const [regex, name] of certifierMap) {
-      if (regex.test(text)) {
-        detectedCertifier = name;
-        hasCert = true;
-        break;
+    if (!hasNegativeCertStatement && hasCertificateClaim) {
+      for (const [regex, name] of certifierMap) {
+        if (regex.test(text)) {
+          detectedCertifier = name;
+          hasCert = true;
+          break;
+        }
       }
     }
 

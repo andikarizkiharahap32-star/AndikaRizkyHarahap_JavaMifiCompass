@@ -180,6 +180,9 @@ export class ValidationPipelineService {
     if (injectionFlags.length > 0) {
       finalTier = lexiconResult.porkDetected ? HalalTier.NOT_HALAL : HalalTier.UNKNOWN;
       reviewReasons.push('SECURITY ALERT: Adversarial prompt injection detected. Tier forced to fail-closed.');
+    } else if (!quoteCheck.allQuotesVerified && (finalTier === HalalTier.CERTIFIED || finalTier === HalalTier.CLAIMED)) {
+      finalTier = HalalTier.UNKNOWN;
+      reviewReasons.push('SECURITY ALERT: Quote verification failed for claimed certification. Tier fail-closed to UNKNOWN.');
     }
 
     return {

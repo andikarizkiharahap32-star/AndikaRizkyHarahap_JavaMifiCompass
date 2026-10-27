@@ -71,8 +71,6 @@ export function evaluateHalalTier(input: TierEvaluationInput): TierEvaluationRes
     rawLower.includes('sashimi') ||
     rawLower.includes('tempura') ||
     rawLower.includes('plant-based') ||
-    rawLower.includes('yakitori') ||
-    placeNameLower.includes('yakitori') ||
     placeNameLower.includes('tempura') ||
     placeNameLower.includes('seafood') ||
     placeNameLower.includes('sashimi') ||
@@ -86,7 +84,21 @@ export function evaluateHalalTier(input: TierEvaluationInput): TierEvaluationRes
     rawLower.includes("doesn't offer halal") ||
     rawLower.includes('not offer halal') ||
     rawLower.includes('no halal') ||
-    rawLower.includes('non-halal');
+    rawLower.includes('non-halal') ||
+    rawLower.includes('not halal') ||
+    rawLower.includes('not certified') ||
+    rawLower.includes('never certified') ||
+    rawLower.includes('unaccredited') ||
+    rawLower.includes('uncertified') ||
+    rawLower.includes('fake certificate') ||
+    rawLower.includes('fake halal') ||
+    rawLower.includes('fraud') ||
+    rawLower.includes('warning') ||
+    rawLower.includes('tidak halal') ||
+    rawLower.includes('bukan halal') ||
+    rawLower.includes('tidak bersertifikat') ||
+    rawLower.includes('belum bersertifikat') ||
+    rawLower.includes('tanpa sertifikat');
 
   // Flag pork status
   if (porkDetected || (signals.porkFlags && signals.porkFlags.length > 0)) {
@@ -137,13 +149,16 @@ export function evaluateHalalTier(input: TierEvaluationInput): TierEvaluationRes
   }
 
   // Check if certifier matches accredited list
-  const certifierUpper = (signals.certifierName || '').toUpperCase();
-  const isAccredited = ACCREDITED_CERTIFIERS.some((cert) =>
-    certifierUpper.includes(cert) || rawLower.includes(cert.toLowerCase())
-  );
+  const certifierUpper = (signals.certifierName || '').toUpperCase().trim();
+  const isAccredited =
+    certifierUpper.length > 0 &&
+    ACCREDITED_CERTIFIERS.some((cert) => {
+      const cUpper = cert.toUpperCase();
+      return certifierUpper.includes(cUpper) || cUpper.includes(certifierUpper);
+    });
 
   // RULE 2: Valid certificate from accredited body + quotes verified
-  if ((signals.hasCertificate || isAccredited) && isAccredited && quotesVerified) {
+  if (signals.hasCertificate && isAccredited && quotesVerified) {
     if (alcoholDetected || isOnRequest) {
       return {
         tier: HalalTier.OPTIONS,
