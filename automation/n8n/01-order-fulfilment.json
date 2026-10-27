@@ -15,6 +15,16 @@
     },
     {
       "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst secret = process.env.WEBHOOK_SECRET || 'javamifi-n8n-hmac-secret-key-32chars';\nconst headers = $json.headers || {};\nconst timestamp = headers['x-javamifi-timestamp'] || '';\nconst signature = headers['x-javamifi-signature'] || '';\nconst rawBody = JSON.stringify($json.body);\n\nconst computed = crypto.createHmac('sha256', secret).update(timestamp + '.' + rawBody).digest('hex');\nif (signature && computed !== signature) {\n  throw new Error('Invalid inbound HMAC signature on order.paid webhook');\n}\n\nreturn { json: { ...$json.body, body: $json.body, isHmacValid: true } };"
+      },
+      "id": "node-verify-hmac-fulfillment",
+      "name": "Code: Verify Webhook HMAC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [210, 300]
+    },
+    {
+      "parameters": {
         "conditions": {
           "string": [
             {
@@ -77,6 +87,17 @@
   ],
   "connections": {
     "Webhook: order.paid": {
+      "main": [
+        [
+          {
+            "node": "Code: Verify Webhook HMAC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Verify Webhook HMAC": {
       "main": [
         [
           {
