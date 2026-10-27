@@ -81,23 +81,23 @@ export default async function HomePage({
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-12 sm:pt-20 pb-16 bg-surface border-b border-paper-edge">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 text-xs font-bold border border-sky-200 dark:border-sky-800 animate-fade-in">
-            <Compass className="w-4 h-4 text-sky-600 animate-spin-slow" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-sunken text-primary border border-paper-edge text-xs font-mono font-bold uppercase tracking-wider">
+            <Compass className="w-4 h-4 text-primary" />
             <span>{t('badge')}</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white tracking-tight max-w-4xl mx-auto leading-[1.15]">
+          <h1 className="text-3xl sm:text-5xl font-black text-primary tracking-tight max-w-4xl mx-auto leading-tight">
             {t('title')}
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-secondary max-w-2xl mx-auto leading-relaxed">
             {t('subtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
               href={`/${locale}/planner`}
-              className="w-full sm:w-auto px-8 min-h-[48px] rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-sm transition-all flex items-center justify-center gap-2 active:scale-95"
+              className="w-full sm:w-auto px-6 min-h-12 rounded bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary font-bold text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
             >
               <Compass className="w-4 h-4" />
               <span>{t('ctaPlanner')}</span>
@@ -106,25 +106,25 @@ export default async function HomePage({
 
             <Link
               href={`/${locale}/destinations`}
-              className="w-full sm:w-auto px-8 min-h-[48px] rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 min-h-12 rounded bg-surface hover:bg-paper text-primary font-bold text-xs uppercase tracking-wider border border-paper-edge transition-colors flex items-center justify-center gap-2"
             >
-              <Globe2 className="w-4 h-4 text-slate-500" />
+              <Globe2 className="w-4 h-4 text-secondary" />
               <span>{t('ctaDestinations')}</span>
             </Link>
           </div>
 
           {/* Quick Signal Feature Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-8 text-xs font-semibold text-slate-500">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-8 text-xs font-semibold text-secondary">
             <span className="flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-amber-500" />
+              <Zap className="w-4 h-4 text-warning" />
               Rekomendasi Berbasis Aturan Transparan
             </span>
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+              <ShieldCheck className="w-4 h-4 text-success" />
               eSIM Digital & Modem Fisik 1 Lini Masa
             </span>
             <span className="flex items-center gap-1.5">
-              <Wifi className="w-4 h-4 text-sky-500" />
+              <Wifi className="w-4 h-4 text-line-wifi" />
               {t('tag')}
             </span>
           </div>
@@ -133,20 +133,21 @@ export default async function HomePage({
 
       {/* Journey Presets Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-paper-edge pb-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-sky-600">
+            <span className="text-xs font-bold uppercase tracking-wider text-secondary">
               Inspirasi Perjalanan Siap Pakai
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
+            <h2 className="text-2xl sm:text-3xl font-black text-primary mt-1">
               Journey Presets Pilihan
             </h2>
           </div>
           <Link
             href={`/${locale}/destinations`}
-            className="text-xs font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1"
+            className="min-h-12 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-secondary hover:text-primary transition-colors"
           >
-            Lihat Semua 160+ Destinasi <ArrowRight className="w-3.5 h-3.5" />
+            <span>Lihat Semua 160+ Destinasi</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
@@ -155,23 +156,25 @@ export default async function HomePage({
             <Link
               key={idx}
               href={preset.href}
-              className="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-sky-300 dark:hover:border-sky-700 transition-all flex flex-col justify-between"
+              className="group p-6 rounded bg-paper border border-paper-edge border-b-2 hover:border-primary transition-colors flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-900">
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-sunken text-primary border border-paper-edge">
                     {preset.tag}
                   </span>
-                  <span className="text-xs text-slate-400 font-medium">{preset.days}</span>
+                  <span className="text-xs text-outline font-mono font-medium tnum">{preset.days}</span>
                 </div>
-                <span className="text-sm font-bold text-slate-500 block mb-1">{preset.dest}</span>
-                <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors">
+                <span className="text-xs font-bold text-secondary uppercase tracking-wider block mb-1">
+                  {preset.dest}
+                </span>
+                <h3 className="font-bold text-base text-primary group-hover:text-primary-hover transition-colors">
                   {preset.title}
                 </h3>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">{preset.desc}</p>
+                <p className="text-xs text-outline mt-2 leading-relaxed font-normal">{preset.desc}</p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-sky-600">
+              <div className="mt-6 pt-4 border-t border-paper-edge flex items-center justify-between text-xs font-bold uppercase tracking-wider text-secondary group-hover:text-primary transition-colors">
                 <span>Rencanakan Sekarang</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -182,34 +185,34 @@ export default async function HomePage({
 
       {/* Trust & Differentiation Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white relative overflow-hidden">
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-            <div className="space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-400 mb-4 mx-auto md:mx-0">
-                <Compass className="w-6 h-6" />
+        <div className="p-6 sm:p-10 rounded border border-paper-edge bg-surface">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-5 rounded border border-paper-edge bg-paper space-y-2">
+              <div className="w-10 h-10 rounded bg-primary-container text-on-primary flex items-center justify-center mb-3">
+                <Compass className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-bold">Plan First, Shop Second</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <h3 className="text-base font-bold text-primary">Plan First, Shop Second</h3>
+              <p className="text-xs text-outline leading-relaxed font-normal">
                 Wizard menganalisis jumlah orang, hari, gadget, dan kebutuhan khusus untuk merekomendasikan opsi paling hemat secara matematis.
               </p>
             </div>
 
-            <div className="space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 mb-4 mx-auto md:mx-0">
-                <ShieldCheck className="w-6 h-6" />
+            <div className="p-5 rounded border border-paper-edge bg-paper space-y-2">
+              <div className="w-10 h-10 rounded bg-primary-container text-on-primary flex items-center justify-center mb-3">
+                <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-bold">Destination Readiness Card</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <h3 className="text-base font-bold text-primary">Destination Readiness Card</h3>
+              <p className="text-xs text-outline leading-relaxed font-normal">
                 Informasi langsung kondisi cuaca real-time (Open-Meteo), kurs mata uang ECB vs Rupiah, dan info colokan sebelum berangkat.
               </p>
             </div>
 
-            <div className="space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400 mb-4 mx-auto md:mx-0">
-                <HeartHandshake className="w-6 h-6" />
+            <div className="p-5 rounded border border-paper-edge bg-paper space-y-2">
+              <div className="w-10 h-10 rounded bg-primary-container text-on-primary flex items-center justify-center mb-3">
+                <HeartHandshake className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-bold">Post-Purchase Trip Hub</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <h3 className="text-base font-bold text-primary">Post-Purchase Trip Hub</h3>
+              <p className="text-xs text-outline leading-relaxed font-normal">
                 Satu halaman terpadu: panduan aktivasi QR, meter penggunaan kuota 80%, lini masa pengiriman, hingga pengembalian deposit.
               </p>
             </div>

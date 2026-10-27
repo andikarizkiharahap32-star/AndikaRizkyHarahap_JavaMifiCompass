@@ -3,7 +3,11 @@
 > **LOGIC:** When building or modifying a specific page, first check `design-system/pages/[page-name].md`. If that file exists, its rules override this Master file. If not, strictly follow the rules below.
 
 - **Project:** JavaMifi Compass
-- **Category:** Global Connectivity & Travel Wayfinding
+- **Core Archetype:** Public Transit Guide (Product 155, UI-UX Pro Max) & Swiss Modernism 2.0 (Style 50)
+- **Selected Design System:** Transit Wayfinding / Tactile Wayfinding Minimalism
+- **Rejected Alternatives:**
+  - *Road Trip Planner / Aurora UI (Product 156):* Rejected due to flowing gradients, non-semantic sunset orange, and low outdoor contrast violating GEMINI.md.
+  - *Glassmorphism / Neumorphism:* Rejected due to forbidden backdrop-blur, soft drop shadows, and poor readability under bright sunlight.
 - **Design Dials:** Variance 3/10 (Centered / Minimal) | Motion 3/10 (Subtle) | Density 7/10 (Standard)
 - **Governing Standard:** `docs/DESIGN.md` and `GEMINI.md`
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Wifi, QrCode, Smartphone, Zap, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Wifi, QrCode, Smartphone, Zap, ArrowRight, ShieldCheck, Check } from 'lucide-react';
 import { EsimCompatibilityChecker } from '../../../components/EsimCompatibilityChecker';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
@@ -27,10 +27,12 @@ export default function ProductsPage({
   params: { locale: string };
 }) {
   unstable_setRequestLocale(locale);
+  const isId = locale === 'id';
+
   const products = [
     {
       type: 'WIFI_RENTAL',
-      icon: <Wifi className="w-8 h-8 text-sky-500" />,
+      icon: <Wifi className="w-8 h-8 text-line-wifi" />,
       title: 'Pocket WiFi Rental',
       tagline: 'Solusi Terbaik untuk Liburan Keluarga & Rombongan',
       desc: '1 modem saku praktis menghubungkan hingga 5 perangkat sekaligus. Kuota 4G Unlimited tanpa takut kuota habis di tengah perjalanan.',
@@ -46,7 +48,7 @@ export default function ProductsPage({
     },
     {
       type: 'ESIM',
-      icon: <QrCode className="w-8 h-8 text-emerald-500" />,
+      icon: <QrCode className="w-8 h-8 text-line-esim" />,
       title: 'Digital Travel eSIM',
       tagline: '100% Digital via QR Code, Langsung Aktif',
       desc: 'Tanpa kartu fisik, tanpa perlu ganti SIM card. Scan kode QR langsung dari email dan nikmati koneksi Tier-1 saat mendarat.',
@@ -62,10 +64,10 @@ export default function ProductsPage({
     },
     {
       type: 'SIM_CARD',
-      icon: <Smartphone className="w-8 h-8 text-amber-500" />,
+      icon: <Smartphone className="w-8 h-8 text-line-sim" />,
       title: 'Physical Travel SIM Card',
       tagline: 'Kompatibel dengan Semua Jenis Smartphone Unlocked',
-      desc: 'Kartu SIM prabayar praktis bagi pengguna ponsel yang belum mendukung eSIM. Dilengkapi jarum ejector SIM tray.',
+      desc: 'Kartu SIM fisik prabayar tinggal pasang. Sangat cocok untuk ponsel yang belum mendukung teknologi eSIM digital.',
       points: [
         'Tinggal colok langsung internetan (Plug and play)',
         'Kompatibel dengan semua smartphone 4G/LTE',
@@ -77,7 +79,7 @@ export default function ProductsPage({
     },
     {
       type: 'PRO_SUBSCRIPTION',
-      icon: <Zap className="w-8 h-8 text-purple-500" />,
+      icon: <Zap className="w-8 h-8 text-line-pro" />,
       title: 'JavaMifi PRO Subscription',
       tagline: 'Langganan Bulanan Fleksibel untuk Frequent Flyer',
       desc: 'Didesain untuk pebisnis, digital nomad, dan kru maskapai yang sering bepergian lintas negara setiap bulan.',
@@ -94,14 +96,14 @@ export default function ProductsPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-16">
-      <div className="max-w-3xl space-y-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-sky-600">
+      <div className="max-w-3xl space-y-2 border-b border-paper-edge pb-4">
+        <span className="text-xs font-bold uppercase tracking-wider text-secondary">
           Katalog Produk Konektivitas
         </span>
-        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
+        <h1 className="text-3xl sm:text-4xl font-black text-primary">
           Pilih Format Koneksi Sesuai Kebutuhan Anda
         </h1>
-        <p className="text-sm text-slate-500">
+        <p className="text-xs text-outline font-medium leading-relaxed">
           Bandingkan keunggulan antara modem Pocket WiFi bersama, eSIM digital instan, kartu SIM fisik, atau langganan bulanan PRO.
         </p>
       </div>
@@ -111,34 +113,34 @@ export default function ProductsPage({
         {products.map((p) => (
           <div
             key={p.type}
-            className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between"
+            className="p-6 sm:p-8 rounded bg-paper border border-paper-edge border-b-2 flex flex-col justify-between"
           >
             <div>
               <div className="mb-4">{p.icon}</div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{p.title}</h3>
-              <p className="text-xs font-semibold text-sky-600 mt-1">{p.tagline}</p>
-              <p className="text-xs text-slate-500 mt-3 leading-relaxed">{p.desc}</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-primary">{p.title}</h3>
+              <p className="text-xs font-bold text-secondary uppercase tracking-wider mt-1">{p.tagline}</p>
+              <p className="text-xs text-outline mt-3 leading-relaxed font-normal">{p.desc}</p>
 
               <ul className="mt-6 space-y-2.5">
                 {p.points.map((point, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-                    <span className="text-emerald-500 font-bold">✓</span>
+                  <li key={idx} className="flex items-start gap-2 text-xs text-secondary font-medium">
+                    <Check className="w-3.5 h-3.5 text-success shrink-0 mt-0.5" />
                     <span>{point}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div className="mt-8 pt-6 border-t border-paper-edge flex items-center justify-between">
               <div>
-                <span className="text-xs text-slate-400 block uppercase font-medium">Tarif Mulai</span>
-                <span className="text-base font-extrabold text-slate-900 dark:text-white">
+                <span className="text-xs text-outline block uppercase font-mono">Tarif Mulai</span>
+                <span className="text-base font-black text-primary font-mono tnum">
                   {p.priceStarts}
                 </span>
               </div>
               <Link
                 href={p.href}
-                className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 font-bold text-xs transition-colors flex items-center gap-1.5"
+                className="min-h-12 px-6 rounded bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary font-bold text-xs uppercase tracking-wider transition-colors inline-flex items-center gap-2"
               >
                 <span>{p.ctaLabel}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
