@@ -20,6 +20,10 @@ import {
   X,
   Compass,
   CheckCircle2,
+  UtensilsCrossed,
+  Coins,
+  ShieldCheck,
+  AlertTriangle,
 } from 'lucide-react';
 
 export interface DiningDiscoveryProps {
@@ -213,21 +217,21 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             <button
               type="button"
               onClick={() => setIsPhraseCardOpen(true)}
-              className="h-10 px-3.5 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-primary font-sans font-bold flex items-center gap-1.5 transition"
+              className="min-h-[48px] px-3.5 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-primary font-sans font-bold flex items-center gap-1.5 transition"
             >
-              <span aria-hidden="true">🍶</span>
+              <UtensilsCrossed className="w-4 h-4 text-primary shrink-0" />
               <span>Kartu Tanya Mirin & Babi</span>
             </button>
             <button
               type="button"
               onClick={() => setIsBudgetCardOpen((prev) => !prev)}
-              className={`h-10 px-3.5 rounded border border-paper-edge font-sans font-bold flex items-center gap-1.5 transition ${
+              className={`min-h-[48px] px-3.5 rounded border border-paper-edge font-sans font-bold flex items-center gap-1.5 transition ${
                 isBudgetCardOpen
                   ? 'bg-primary text-on-primary'
                   : 'bg-surface hover:bg-paper-edge text-primary'
               }`}
             >
-              <span aria-hidden="true">💰</span>
+              <Coins className="w-4 h-4 text-primary shrink-0" />
               <span>Estimasi Kas Makan Trip</span>
             </button>
           </div>
@@ -573,7 +577,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           </div>
 
           <div className="p-3 rounded bg-sunken border border-paper-edge text-xs text-secondary leading-relaxed flex items-start gap-2">
-            <span className="text-sm font-bold text-outline shrink-0 mt-0.5">🛡️</span>
+            <ShieldCheck className="w-4 h-4 text-outline shrink-0 mt-0.5" />
             <p className="m-0">
               <strong>Model Keamanan Chatbot:</strong> Input pencarian pengguna hanya dikonversi oleh model bahasa menjadi parameter pencarian terstruktur (negara, kota, jenis kuliner, batas anggaran, radius). Sistem backend deterministik yang mengeksekusi pencarian fail-closed. AI tidak pernah menghasilkan klaim status halal dalam bentuk teks bebas.
             </p>
@@ -606,7 +610,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             >
               <div className="flex items-center justify-between border-b border-paper-edge pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-danger font-bold text-lg" aria-hidden="true">⚠️</span>
+                  <AlertTriangle className="w-5 h-5 text-danger shrink-0" />
                   <h3 className="text-base font-bold text-primary m-0">
                     Laporkan Perbedaan Status Restoran
                   </h3>

@@ -39,12 +39,12 @@ function CheckoutContent({ locale }: { locale: string }) {
     if (promoCodeInput.toUpperCase() === 'ANTISUSAHSINYAL') {
       const disc = Math.round((calculatedSubtotal * 15) / 100);
       setDiscountIdr(Math.min(50_000, disc));
-      setPromoMessage('✓ Kode ANTISUSAHSINYAL aktif! Hemat 15%');
+      setPromoMessage('Kode ANTISUSAHSINYAL aktif! Hemat 15%');
     } else if (promoCodeInput.toUpperCase() === 'HEMAT50K') {
       setDiscountIdr(50_000);
-      setPromoMessage('✓ Kode HEMAT50K aktif! Potongan Rp 50.000');
+      setPromoMessage('Kode HEMAT50K aktif! Potongan Rp 50.000');
     } else {
-      setPromoMessage('❌ Kode promo tidak valid atau telah kedaluwarsa');
+      setPromoMessage('Kode promo tidak valid atau telah kedaluwarsa');
     }
   };
 

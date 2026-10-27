@@ -35,15 +35,15 @@ export const MockPaymentSimulator = ({
       } as any);
 
       if (status === 'SUCCESS') {
-        setStatusMessage('✅ Pembayaran Berhasil! Mengalihkan ke Trip Hub Boarding Pass...');
+        setStatusMessage('Pembayaran Berhasil! Mengalihkan ke Trip Hub Boarding Pass...');
         setTimeout(() => {
           router.push(`/${locale}/trip-hub/${orderNumber}`);
         }, 1200);
       } else if (status === 'EXPIRED') {
-        setStatusMessage('⏱️ Status pesanan kedaluwarsa (expired webhook settlement).');
+        setStatusMessage('Status pesanan kedaluwarsa (expired webhook settlement).');
         setLoading(false);
       } else {
-        setStatusMessage('❌ Transaksi ditolak atau dibatalkan (deny webhook settlement).');
+        setStatusMessage('Transaksi ditolak atau dibatalkan (deny webhook settlement).');
         setLoading(false);
       }
     } catch (err: any) {

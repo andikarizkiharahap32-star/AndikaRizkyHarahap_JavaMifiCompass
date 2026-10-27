@@ -94,7 +94,7 @@ export default function ProductsPage({
         {products.map((p) => (
           <div
             key={p.type}
-            className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between"
+            className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between"
           >
             <div>
               <div className="mb-4">{p.icon}</div>

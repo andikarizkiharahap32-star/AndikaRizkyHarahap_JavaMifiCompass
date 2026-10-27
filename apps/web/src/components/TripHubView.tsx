@@ -75,7 +75,7 @@ export const TripHubView = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left: Digital eSIM QR or Physical Device Tracker */}
         {fulfillmentType === 'DIGITAL' && esim ? (
-          <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm space-y-4">
+          <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <QrCode className="w-5 h-5 text-sky-600" />
@@ -85,7 +85,7 @@ export const TripHubView = ({
             </div>
 
             <div className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
-              <div className="w-48 h-48 bg-white p-3 rounded-2xl border shadow-sm flex items-center justify-center">
+              <div className="w-48 h-48 bg-white p-3 rounded-2xl border border-slate-200 flex items-center justify-center">
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(esim.activationCode || 'LPA:1$smdp.io$SAMPLE')}`}
                   alt="eSIM QR Code"
@@ -103,7 +103,7 @@ export const TripHubView = ({
                 <button
                   onClick={() => setActivePlatformTab('ios')}
                   className={`flex-1 py-1.5 rounded-lg transition-colors ${
-                    activePlatformTab === 'ios' ? 'bg-white dark:bg-slate-700 text-sky-600 shadow-xs' : 'text-slate-500'
+                    activePlatformTab === 'ios' ? 'bg-white dark:bg-slate-700 text-sky-600' : 'text-slate-500'
                   }`}
                 >
                   Panduan iOS (iPhone)
@@ -111,7 +111,7 @@ export const TripHubView = ({
                 <button
                   onClick={() => setActivePlatformTab('android')}
                   className={`flex-1 py-1.5 rounded-lg transition-colors ${
-                    activePlatformTab === 'android' ? 'bg-white dark:bg-slate-700 text-sky-600 shadow-xs' : 'text-slate-500'
+                    activePlatformTab === 'android' ? 'bg-white dark:bg-slate-700 text-sky-600' : 'text-slate-500'
                   }`}
                 >
                   Panduan Android
@@ -138,7 +138,7 @@ export const TripHubView = ({
             </div>
           </div>
         ) : (
-          <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm space-y-4">
+          <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Wifi className="w-5 h-5 text-indigo-600" />
@@ -181,7 +181,7 @@ export const TripHubView = ({
           />
 
           {/* Quick Actions Card */}
-          <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm space-y-4">
+          <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-4">
             <h4 className="font-bold text-slate-900 dark:text-white text-sm">
               Layanan Tambahan & Bantuan
             </h4>
@@ -223,7 +223,7 @@ export const TripHubView = ({
       </div>
 
       {/* Logistics & Order State Timeline */}
-      <div className="p-6 sm:p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm space-y-6">
+      <div className="p-6 sm:p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-6">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white">
           Lini Masa Perjalanan & Logistik
         </h3>

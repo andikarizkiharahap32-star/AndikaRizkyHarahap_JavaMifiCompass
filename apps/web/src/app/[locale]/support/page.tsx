@@ -51,7 +51,7 @@ export default function SupportPage({
         <p className="text-sm text-slate-500">{t('subtitle')}</p>
       </div>
 
-      <div className="p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm">
+      <div className="p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl">
         {submitted ? (
           <div className="p-8 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
@@ -136,7 +136,7 @@ export default function SupportPage({
             <button
               type="submit"
               disabled={loading}
-              className="w-full sm:w-auto px-8 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 min-h-[48px] rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm transition-all flex items-center justify-center gap-2"
             >
               <Send className="w-4 h-4" />
               <span>{loading ? 'Mengirim...' : t('submit')}</span>
