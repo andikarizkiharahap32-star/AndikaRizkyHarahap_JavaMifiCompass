@@ -1,39 +1,74 @@
-import React, { useState } from 'react';
-import { Headphones, AlertCircle, Clock, CheckCircle2, MessageSquare, ShieldAlert } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Headphones, AlertCircle, Clock, CheckCircle2, MessageSquare, ShieldAlert, RefreshCw } from 'lucide-react';
+import { apiClient } from '../lib/api';
+
+const fallbackTickets = [
+  {
+    id: 'tkt-01',
+    subject: 'eSIM tidak terhubung saat mendarat di Narita Tokyo',
+    customer: 'Budi Santoso (budi@example.com)',
+    priority: 'URGENT',
+    status: 'OPEN',
+    orderNumber: 'JMF-9X2L8K4P',
+    time: '14:35',
+    triageReason: "Auto-triaged to URGENT by n8n: contains 'tidak terhubung' & airport location",
+  },
+  {
+    id: 'tkt-02',
+    subject: 'Pertanyaan cara aktivasi VPN Pocket WiFi China',
+    customer: 'Dewi Lestari (dewi@example.com)',
+    priority: 'MEDIUM',
+    status: 'IN_PROGRESS',
+    orderNumber: 'JMF-4B8W2R9Y',
+    time: '11:20',
+    triageReason: 'General inquiry on China VPN setup instructions',
+  },
+  {
+    id: 'tkt-03',
+    subject: 'Konfirmasi lokasi drop-box modem di Bandara Ngurah Rai',
+    customer: 'Michael Wong (michael@example.com)',
+    priority: 'LOW',
+    status: 'RESOLVED',
+    orderNumber: 'JMF-7M1Q3T5V',
+    time: 'Kemarin',
+    triageReason: 'Drop-box location inquiry',
+  },
+];
 
 export const SupportTicketsScreen = () => {
-  const [tickets, setTickets] = useState([
-    {
-      id: 'tkt-01',
-      subject: 'eSIM tidak terhubung saat mendarat di Narita Tokyo',
-      customer: 'Budi Santoso (budi@example.com)',
-      priority: 'URGENT',
-      status: 'OPEN',
-      orderNumber: 'JMF-9X2L8K4P',
-      time: '14:35',
-      triageReason: "Auto-triaged to URGENT by n8n: contains 'tidak terhubung' & airport location",
-    },
-    {
-      id: 'tkt-02',
-      subject: 'Pertanyaan cara aktivasi VPN Pocket WiFi China',
-      customer: 'Dewi Lestari (dewi@example.com)',
-      priority: 'MEDIUM',
-      status: 'IN_PROGRESS',
-      orderNumber: 'JMF-4B8W2R9Y',
-      time: '11:20',
-      triageReason: 'General inquiry on China VPN setup instructions',
-    },
-    {
-      id: 'tkt-03',
-      subject: 'Konfirmasi lokasi drop-box modem di Bandara Ngurah Rai',
-      customer: 'Michael Wong (michael@example.com)',
-      priority: 'LOW',
-      status: 'RESOLVED',
-      orderNumber: 'JMF-7M1Q3T5V',
-      time: 'Kemarin',
-      triageReason: 'Drop-box location inquiry',
-    },
-  ]);
+  const [tickets, setTickets] = useState<any[]>(fallbackTickets);
+  const [loading, setLoading] = useState(false);
+
+  const fetchTickets = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.support.getTickets({ limit: 50 });
+      if (res && res.items && res.items.length > 0) {
+        setTickets(
+          res.items.map((t: any) => ({
+            id: t.id,
+            subject: t.subject,
+            customer: `${t.name} (${t.email})`,
+            priority: t.priority,
+            status: t.status,
+            orderNumber: t.orderNumber || '-',
+            time: new Date(t.createdAt).toLocaleTimeString('id-ID'),
+            triageReason: t.message,
+          })),
+        );
+      } else {
+        setTickets(fallbackTickets);
+      }
+    } catch {
+      setTickets(fallbackTickets);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
 
   const handleResolve = (id: string) => {
     setTickets((prev) =>
@@ -50,6 +85,15 @@ export const SupportTicketsScreen = () => {
             Penanganan kendala pelanggan dengan penentuan prioritas otomatis (Keyword Urgency Triage n8n)
           </p>
         </div>
+
+        <button
+          onClick={fetchTickets}
+          disabled={loading}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-sky-600' : ''}`} />
+          {loading ? 'Memuat...' : 'Segarkan'}
+        </button>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">

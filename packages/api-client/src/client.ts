@@ -206,6 +206,10 @@ export class JavaMifiApiClient {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
+    getTickets: (params?: { page?: number; limit?: number; status?: string }) => {
+      const query = new URLSearchParams(params as Record<string, string>).toString();
+      return this.request<any>(`/support/tickets?${query}`);
+    },
   };
 
   // ── Admin Endpoints ─────────────────────────────────────────

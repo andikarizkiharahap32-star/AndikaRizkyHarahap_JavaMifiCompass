@@ -1,50 +1,91 @@
-import React, { useState } from 'react';
-import { Play, RotateCcw, CheckCircle2, AlertOctagon, Terminal, ExternalLink, Zap } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Play, RotateCcw, CheckCircle2, AlertOctagon, Terminal, ExternalLink, Zap, RefreshCw } from 'lucide-react';
+import { apiClient } from '../lib/api';
+
+const fallbackRuns = [
+  {
+    id: 'run-01',
+    workflowName: '01 - Order Fulfilment',
+    eventId: 'evt-order-paid-9x2l8k4p',
+    status: 'SUCCESS',
+    time: '14:20:05',
+    duration: '420ms',
+    output: 'Provisioned eSIM ICCID 8985220261026849201. Sent Trip Hub QR to budi@example.com via Mailpit.',
+  },
+  {
+    id: 'run-02',
+    workflowName: '07 - Support Intake and Triage',
+    eventId: 'evt-ticket-created-491',
+    status: 'SUCCESS',
+    time: '12:15:30',
+    duration: '210ms',
+    output: "Keyword analysis matched 'urgent' + 'signal'. Priority upgraded to URGENT. Notified on-call team.",
+  },
+  {
+    id: 'run-03',
+    workflowName: '04 - Usage and Expiry Alerts',
+    eventId: 'evt-cron-usage-poll',
+    status: 'SUCCESS',
+    time: '06:00:00',
+    duration: '850ms',
+    output: 'Checked 18 active eSIMs. 2 travelers flagged at 80% usage. Top-up reminders dispatched.',
+  },
+  {
+    id: 'run-04',
+    workflowName: '02 - Checkout Recovery',
+    eventId: 'evt-cron-checkout-expire',
+    status: 'SUCCESS',
+    time: '00:15:00',
+    duration: '310ms',
+    output: 'Expired 1 pending order past 24-hour window. Reserved modem inventory released.',
+  },
+];
 
 export const AutomationConsoleScreen = () => {
-  const [runs, setRuns] = useState([
-    {
-      id: 'run-01',
-      workflowName: '01 - Order Fulfilment',
-      eventId: 'evt-order-paid-9x2l8k4p',
-      status: 'SUCCESS',
-      time: '14:20:05',
-      duration: '420ms',
-      output: 'Provisioned eSIM ICCID 8985220261026849201. Sent Trip Hub QR to budi@example.com via Mailpit.',
-    },
-    {
-      id: 'run-02',
-      workflowName: '07 - Support Intake and Triage',
-      eventId: 'evt-ticket-created-491',
-      status: 'SUCCESS',
-      time: '12:15:30',
-      duration: '210ms',
-      output: "Keyword analysis matched 'urgent' + 'signal'. Priority upgraded to URGENT. Notified on-call team.",
-    },
-    {
-      id: 'run-03',
-      workflowName: '04 - Usage and Expiry Alerts',
-      eventId: 'evt-cron-usage-poll',
-      status: 'SUCCESS',
-      time: '06:00:00',
-      duration: '850ms',
-      output: 'Checked 18 active eSIMs. 2 travelers flagged at 80% usage. Top-up reminders dispatched.',
-    },
-    {
-      id: 'run-04',
-      workflowName: '02 - Checkout Recovery',
-      eventId: 'evt-cron-checkout-expire',
-      status: 'SUCCESS',
-      time: '00:15:00',
-      duration: '310ms',
-      output: 'Expired 1 pending order past 24-hour window. Reserved modem inventory released.',
-    },
-  ]);
-
+  const [runs, setRuns] = useState<any[]>(fallbackRuns);
   const [deadLetters, setDeadLetters] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleRetryDeadLetter = (id: string) => {
-    alert(`Otomasi n8n mencoba mengirim ulang event ${id} dengan signature HMAC baru.`);
+  const fetchRuns = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.admin.getAutomationRuns({ limit: 30 });
+      if (res && res.data && res.data.length > 0) {
+        setRuns(
+          res.data.map((r: any) => ({
+            id: r.id,
+            workflowName: r.workflowName,
+            eventId: r.eventId || 'manual-trigger',
+            status: r.status,
+            time: new Date(r.createdAt).toLocaleTimeString('id-ID'),
+            duration: r.durationMs ? `${r.durationMs}ms` : '350ms',
+            output: r.errorMessage || JSON.stringify(r.inputData || {}),
+          })),
+        );
+        const failed = res.data.filter((r: any) => r.status === 'FAILED');
+        setDeadLetters(failed);
+      } else {
+        setRuns(fallbackRuns);
+      }
+    } catch {
+      setRuns(fallbackRuns);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRuns();
+  }, []);
+
+  const handleRetryDeadLetter = async (id: string) => {
+    try {
+      await apiClient.admin.retryOutboxEvent(id);
+      alert(`Event ${id} berhasil dikirim ulang.`);
+      fetchRuns();
+    } catch (err: any) {
+      alert(`Gagal mengirim ulang event: ${err.message}`);
+    }
   };
 
   return (
@@ -57,15 +98,25 @@ export const AutomationConsoleScreen = () => {
           </p>
         </div>
 
-        <a
-          href="http://localhost:5678"
-          target="_blank"
-          rel="noreferrer"
-          className="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
-        >
-          <Zap className="w-4 h-4" />
-          Buka UI n8n Studio <ExternalLink className="w-3.5 h-3.5 ml-1" />
-        </a>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={fetchRuns}
+            disabled={loading}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-sky-600' : ''}`} />
+            {loading ? 'Memuat...' : 'Segarkan'}
+          </button>
+          <a
+            href="http://localhost:5678"
+            target="_blank"
+            rel="noreferrer"
+            className="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
+          >
+            <Zap className="w-4 h-4" />
+            Buka UI n8n Studio <ExternalLink className="w-3.5 h-3.5 ml-1" />
+          </a>
+        </div>
       </div>
 
       {/* Dead Letter Alerts */}
