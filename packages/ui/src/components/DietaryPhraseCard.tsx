@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Languages } from 'lucide-react';
 
 export interface DietaryPhraseCardProps {
   countryCode?: string;
@@ -99,7 +100,7 @@ export const DietaryPhraseCard: React.FC<DietaryPhraseCardProps> = ({
       <div className="flex items-center justify-between border-b border-paper-edge pb-3">
         <div className="flex items-center gap-2">
           <span className="w-6 h-6 rounded bg-primary text-on-primary font-mono font-bold text-xs flex items-center justify-center">
-            🍶
+            <Languages className="w-3.5 h-3.5" />
           </span>
           <div>
             <h4 className="text-xs uppercase font-bold tracking-wider text-secondary m-0">

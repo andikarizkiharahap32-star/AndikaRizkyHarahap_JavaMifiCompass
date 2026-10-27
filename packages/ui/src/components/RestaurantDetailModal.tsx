@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Building2, Utensils, Award, Wifi, Car, Languages, MapPin, Phone, Clock, ShieldCheck } from 'lucide-react';
 import { HalalBadge, HalalTierType } from './HalalBadge';
 import { MenuTicketChit } from './MenuTicketChit';
 import { HalalCustomsStamp } from './HalalCustomsStamp';
@@ -140,12 +141,14 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
                           : 'bg-surface text-secondary hover:bg-paper-edge border-paper-edge'
                       }`}
                     >
-                      <span aria-hidden="true">
-                        {img.type === 'STOREFRONT'
-                          ? '🏛️'
-                          : img.type === 'DISH'
-                          ? '🍜'
-                          : '📜'}
+                      <span aria-hidden="true" className="flex items-center justify-center">
+                        {img.type === 'STOREFRONT' ? (
+                          <Building2 className="w-3.5 h-3.5" />
+                        ) : img.type === 'DISH' ? (
+                          <Utensils className="w-3.5 h-3.5" />
+                        ) : (
+                          <Award className="w-3.5 h-3.5" />
+                        )}
                       </span>
                       <span>
                         {img.type === 'STOREFRONT'
@@ -183,9 +186,9 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
           {place.wifiPickupBooth && (
             <div className="bg-paper border border-paper-edge border-b-2 rounded p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-start gap-3">
-                <span className="text-2xl mt-0.5" aria-hidden="true">
-                  📶
-                </span>
+                <div className="w-10 h-10 rounded bg-surface border border-paper-edge flex items-center justify-center shrink-0 mt-0.5">
+                  <Wifi className="w-5 h-5 text-secondary" />
+                </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-mono font-bold uppercase bg-primary text-on-primary px-2 py-0.5 rounded">
@@ -218,7 +221,7 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
                 onClick={onShowTaxiCard}
                 className="h-12 px-4 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-bold text-primary flex items-center gap-2 transition"
               >
-                <span aria-hidden="true">🚕</span>
+                <Car className="w-4 h-4 text-secondary" />
                 <span>{isId ? 'Tampilkan Kartu Supir Taksi' : 'Taxi Driver Address Card'}</span>
               </button>
             )}
@@ -228,7 +231,7 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
                 onClick={onShowPhraseCard}
                 className="h-12 px-4 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-bold text-primary flex items-center gap-2 transition"
               >
-                <span aria-hidden="true">🍶</span>
+                <Languages className="w-4 h-4 text-secondary" />
                 <span>{isId ? 'Cek Frasa Mirin & Babi' : 'Mirin & Pork Phrase Card'}</span>
               </button>
             )}
@@ -237,24 +240,18 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
           {/* 5. Basic Physical Meta Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-surface rounded p-4 text-xs border border-paper-edge">
             <div className="flex items-start gap-2 text-secondary">
-              <span className="font-bold text-primary shrink-0" aria-hidden="true">
-                📍
-              </span>
+              <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
               <span>{place.address}</span>
             </div>
             {place.phone && (
               <div className="flex items-center gap-2 text-secondary">
-                <span className="font-bold text-primary shrink-0" aria-hidden="true">
-                  📞
-                </span>
+                <Phone className="w-4 h-4 text-primary shrink-0" />
                 <span className="font-mono tnum">{place.phone}</span>
               </div>
             )}
             {place.openingHours?.length > 0 && (
               <div className="flex items-start gap-2 text-secondary sm:col-span-2">
-                <span className="font-bold text-primary shrink-0" aria-hidden="true">
-                  ⏰
-                </span>
+                <Clock className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span className="tnum">{place.openingHours.join(' · ')}</span>
               </div>
             )}
@@ -275,9 +272,7 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
 
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-base text-success" aria-hidden="true">
-                  🛡️
-                </span>
+                <ShieldCheck className="w-4 h-4 text-success shrink-0" />
                 <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold text-primary m-0">
                   {isId ? 'Landasan Bukti Status Halal' : 'Halal Evidence Verification'}{' '}
                   [{place.tier}]:

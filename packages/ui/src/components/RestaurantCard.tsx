@@ -1,4 +1,5 @@
 import React from 'react';
+import { Car, Languages, Info } from 'lucide-react';
 import { HalalBadge, HalalTierType } from './HalalBadge';
 import { DualPrice } from './DualPrice';
 
@@ -210,7 +211,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
               onClick={onShowTaxiCard}
               className="h-12 px-3 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-semibold text-primary flex items-center gap-1.5 transition"
             >
-              <span aria-hidden="true">🚕</span>
+              <Car className="w-3.5 h-3.5 text-secondary" />
               <span>Kartu Taksi</span>
             </button>
           )}
@@ -220,7 +221,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
               onClick={onShowPhraseCard}
               className="h-12 px-3 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-semibold text-primary flex items-center gap-1.5 transition"
             >
-              <span aria-hidden="true">🍶</span>
+              <Languages className="w-3.5 h-3.5 text-secondary" />
               <span>Cek Mirin/Sake</span>
             </button>
           )}
@@ -228,7 +229,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
 
         {/* Row 9: Persistent "Verify with Restaurant" Notice */}
         <div className="p-2.5 rounded bg-sunken border border-paper-edge text-xs font-sans text-secondary leading-snug flex items-start gap-1.5">
-          <span className="text-outline font-bold" aria-hidden="true">ℹ</span>
+          <Info className="w-4 h-4 text-outline shrink-0 mt-0.5" />
           <p className="m-0">
             Harap selalu konfirmasi status kehalalan bahan dan alat masak langsung ke staf restoran sebelum memesan.
           </p>

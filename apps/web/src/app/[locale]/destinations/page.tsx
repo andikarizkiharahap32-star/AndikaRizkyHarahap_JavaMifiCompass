@@ -75,37 +75,37 @@ export default function DestinationsPage({
           <Link
             key={dest.countryCode}
             href={`/${locale}/destinations/${dest.slug}`}
-            className="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-md hover:border-sky-400 dark:hover:border-sky-600 transition-all flex flex-col justify-between"
+            className="group p-6 rounded bg-paper border border-paper-edge border-b-2 hover:border-primary transition-colors flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-4xl">{dest.flag}</span>
                 {dest.needsVpn ? (
-                  <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 flex items-center gap-1">
+                  <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-warning-surface text-warning border border-warning/30 flex items-center gap-1">
                     <ShieldAlert className="w-3.5 h-3.5" />
                     VPN Termasuk
                   </span>
                 ) : (
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-surface text-secondary font-mono border border-paper-edge">
                     {dest.countryCode}
                   </span>
                 )}
               </div>
 
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors">
+              <h3 className="text-xl font-bold text-primary group-hover:text-primary-hover transition-colors">
                 {dest.name}
               </h3>
-              <p className="text-xs text-slate-500 mt-2 leading-relaxed">{dest.desc}</p>
+              <p className="text-xs text-secondary mt-2 leading-relaxed">{dest.desc}</p>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div className="mt-6 pt-4 border-t border-paper-edge flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-slate-400 block uppercase font-medium">Mulai dari</span>
-                <span className="text-sm font-extrabold text-sky-600">
+                <span className="text-xs text-outline block uppercase font-mono">Mulai dari</span>
+                <span className="text-sm font-bold text-primary font-mono tnum">
                   Rp {dest.priceStartsIdr.toLocaleString('id-ID')} / hari
                 </span>
               </div>
-              <span className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-sky-600 group-hover:text-white transition-all">
+              <span className="w-12 h-12 rounded bg-surface border border-paper-edge flex items-center justify-center text-secondary group-hover:bg-primary group-hover:text-on-primary transition-colors">
                 <ArrowRight className="w-4 h-4" />
               </span>
             </div>

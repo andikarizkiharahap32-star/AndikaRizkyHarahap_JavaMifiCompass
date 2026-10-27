@@ -1,17 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Compass, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Compass, CheckCircle2, ShieldCheck, UtensilsCrossed, ArrowRight } from 'lucide-react';
 import { DestinationReadinessCard } from '../../../../components/DestinationReadinessCard';
 import { apiClient } from '../../../../lib/api';
+import { SLUG_TO_COUNTRY } from '../../../../lib/destinations';
 import { unstable_setRequestLocale } from 'next-intl/server';
-
-const SLUG_TO_COUNTRY: Record<string, string> = {
-  jepang: 'JP',
-  china: 'CN',
-  'arab-saudi-umrah': 'SA',
-  singapura: 'SG',
-};
 
 async function getReadinessData(countryCode: string) {
   try {
@@ -93,69 +87,101 @@ export default async function DestinationDetailPage({
       {/* Destination Readiness Card */}
       <DestinationReadinessCard data={readinessData} locale={locale} />
 
+      {/* Compass Rasa Halal Dining Explorer Card */}
+      <div className="p-6 rounded bg-paper border border-paper-edge border-b-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded bg-success-surface text-success border border-success/30 flex items-center justify-center shrink-0 mt-0.5">
+            <UtensilsCrossed className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-bold uppercase bg-success text-on-primary px-2 py-0.5 rounded">
+                Compass Rasa
+              </span>
+              <span className="text-xs text-outline font-sans">
+                Direktori Kuliner Halal
+              </span>
+            </div>
+            <h3 className="text-base font-bold text-primary mt-1">
+              Restoran Halal Terverifikasi di {readinessData.countryInfo.name}
+            </h3>
+            <p className="text-xs text-secondary mt-0.5">
+              Cek sertifikasi resmi, kutipan bukti kurator, menu dwibahasa, dan estimasi kurs Rupiah sebelum tiba di lokasi.
+            </p>
+          </div>
+        </div>
+        <Link
+          href={`/${locale}/destinations/${slug}/eat`}
+          className="inline-flex items-center justify-center gap-1.5 px-5 h-12 rounded bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary text-xs font-bold uppercase tracking-wider shrink-0 transition"
+        >
+          <span>Buka Direktori Kuliner</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+
       {/* Available Plans for this Destination */}
       <div className="space-y-6">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-sky-600">
+          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
             Pilihan Paket Koneksi
           </span>
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white mt-1">
+          <h2 className="text-2xl font-bold text-primary mt-1">
             Paket Internet untuk {readinessData.countryInfo.name}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* WiFi Card */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div className="p-6 rounded bg-paper border border-paper-edge border-b-2 flex flex-col justify-between">
             <div>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200">
+              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-surface text-secondary border border-paper-edge">
                 Pocket WiFi Rental
               </span>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-3">
+              <h3 className="text-xl font-bold text-primary mt-3">
                 JavaMifi Pocket WiFi {readinessData.countryInfo.name} Unlimited
               </h3>
-              <p className="text-xs text-slate-500 mt-2">
+              <p className="text-xs text-secondary mt-2 leading-relaxed">
                 1 perangkat router portable untuk 5 smartphone/gadget. Kuota tanpa batas, gratis antar jemput bandara.
               </p>
               <div className="my-4">
-                <span className="text-2xl font-black text-slate-900 dark:text-white">
+                <span className="text-2xl font-black text-primary font-mono tnum">
                   Rp 70.000
                 </span>
-                <span className="text-xs text-slate-400"> / hari</span>
+                <span className="text-xs text-outline"> / hari</span>
               </div>
             </div>
 
             <Link
               href={`/${locale}/checkout?type=WIFI_RENTAL&dest=${countryCode}&days=7`}
-              className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs text-center shadow-sm transition-colors"
+              className="w-full h-12 rounded bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary font-bold text-xs uppercase tracking-wider flex items-center justify-center transition"
             >
               Pesan Pocket WiFi
             </Link>
           </div>
 
           {/* eSIM Card */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div className="p-6 rounded bg-paper border border-paper-edge border-b-2 flex flex-col justify-between">
             <div>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200">
+              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-surface text-secondary border border-paper-edge">
                 Digital eSIM
               </span>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-3">
+              <h3 className="text-xl font-bold text-primary mt-3">
                 JavaMifi Digital Travel eSIM {readinessData.countryInfo.name} (5GB / 15 Hari)
               </h3>
-              <p className="text-xs text-slate-500 mt-2">
+              <p className="text-xs text-secondary mt-2 leading-relaxed">
                 Aktif instan dalam 5 menit melalui kode QR. Tanpa kartu fisik, tanpa antrean bandara.
               </p>
               <div className="my-4">
-                <span className="text-2xl font-black text-slate-900 dark:text-white">
+                <span className="text-2xl font-black text-primary font-mono tnum">
                   Rp 185.000
                 </span>
-                <span className="text-xs text-slate-400"> / paket (15 hari)</span>
+                <span className="text-xs text-outline"> / paket (15 hari)</span>
               </div>
             </div>
 
             <Link
               href={`/${locale}/checkout?type=ESIM&dest=${countryCode}&days=15`}
-              className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center shadow-sm transition-colors"
+              className="w-full h-12 rounded bg-secondary hover:bg-primary active:bg-primary-pressed text-on-primary font-bold text-xs uppercase tracking-wider flex items-center justify-center transition"
             >
               Pesan Digital eSIM
             </Link>
