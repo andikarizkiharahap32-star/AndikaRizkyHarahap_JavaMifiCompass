@@ -1,6 +1,8 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { ContentService } from './content.service';
+import { Roles, RolesGuard } from '../auth/auth.module';
 
 @ApiTags('content')
 @Controller('content')
@@ -26,6 +28,9 @@ export class ContentController {
   }
 
   @Post('pages/:id/publish')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN', 'EDITOR')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Publish page and trigger n8n distribution workflow' })
   publishPage(@Param('id') id: string) {
     return this.contentService.publishPage(id);

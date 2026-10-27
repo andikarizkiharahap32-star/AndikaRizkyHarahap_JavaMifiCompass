@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -210,13 +211,53 @@ export class OrdersService {
     };
   }
 
+  async listOrders(page = 1, limit = 20, status?: string) {
+    const skip = (page - 1) * limit;
+    const where = status && status !== 'ALL' ? { status } : {};
+
+    const [items, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          items: { include: { product: true, plan: true } },
+          statusHistory: { take: 1, orderBy: { createdAt: 'desc' } },
+        },
+      }),
+      this.prisma.order.count({ where }),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
   async transitionStatus(
     orderId: string,
     targetStatus: OrderStatus,
     reason?: string,
     actorId?: string,
     actorType: 'USER' | 'SYSTEM' | 'AUTOMATION' = 'SYSTEM',
+    userRoles?: string[],
   ) {
+    // Security check: Unauthenticated or regular user cannot mark orders as PAID manually
+    if (targetStatus === 'PAID' && actorType !== 'SYSTEM') {
+      const hasAdminPrivileges = userRoles?.some(
+        (r) => r === 'SUPER_ADMIN' || r === 'ADMIN' || r === 'OPS',
+      );
+      if (!hasAdminPrivileges) {
+        throw new ForbiddenException(
+          'Unauthorized status transition: Orders can only be marked as PAID through verified payment gateways or by authorized administrators.',
+        );
+      }
+    }
+
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
     });

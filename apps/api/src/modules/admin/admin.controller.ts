@@ -1,9 +1,14 @@
 import { Body, Controller, Get, Param, Patch, Query, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { AdminService } from './admin.service';
 import { AuditService } from '../audit/audit.service';
+import { Roles, RolesGuard } from '../auth/auth.module';
 
 @ApiTags('admin')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'), RolesGuard)
+@Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
 @Controller('admin')
 export class AdminController {
   constructor(

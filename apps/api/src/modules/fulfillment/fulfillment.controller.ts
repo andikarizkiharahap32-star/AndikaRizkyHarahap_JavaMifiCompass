@@ -1,8 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { FulfillmentService } from './fulfillment.service';
+import { Roles, RolesGuard } from '../auth/auth.module';
 
 @ApiTags('fulfillment')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'), RolesGuard)
+@Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
 @Controller('fulfillment')
 export class FulfillmentController {
   constructor(private readonly fulfillmentService: FulfillmentService) {}
