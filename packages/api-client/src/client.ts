@@ -159,6 +159,11 @@ export class JavaMifiApiClient {
       const query = new URLSearchParams(params as Record<string, string>).toString();
       return this.request<any>(`/orders?${query}`);
     },
+    refundOrder: (orderNumber: string, reason?: string) =>
+      this.request<any>(`/orders/${orderNumber}/refund`, {
+        method: 'POST',
+        body: JSON.stringify({ reason: reason || 'Customer requested refund' }),
+      }),
   };
 
   // ── Payments Endpoints ──────────────────────────────────────
@@ -233,6 +238,24 @@ export class JavaMifiApiClient {
     retryOutboxEvent: (eventId: string) =>
       this.request<any>(`/admin/automation/events/${eventId}/retry`, {
         method: 'POST',
+      }),
+    getCustomers: () => this.request<any[]>('/admin/customers'),
+    getCatalog: () => this.request<any[]>('/admin/catalog/products'),
+    updateCatalogProduct: (id: string, body: any) =>
+      this.request<any>(`/admin/catalog/products/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      }),
+    getMediaList: () => this.request<any[]>('/admin/media'),
+    uploadMedia: (body: any) =>
+      this.request<any>('/admin/media/upload', {
+        method: 'POST',
+        body: typeof body === 'string' ? body : JSON.stringify(body),
+      }),
+    switchAdapter: (adapterType: 'paymentGateway' | 'esimProvider', mode: string) =>
+      this.request<any>('/admin/integrations/switch', {
+        method: 'POST',
+        body: JSON.stringify({ adapterType, mode }),
       }),
   };
 
