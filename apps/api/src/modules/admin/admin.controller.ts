@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminService } from './admin.service';
@@ -6,9 +6,6 @@ import { AuditService } from '../audit/audit.service';
 import { Roles, RolesGuard } from '../auth/auth.module';
 
 @ApiTags('admin')
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
 @Controller('admin')
 export class AdminController {
   constructor(
@@ -17,6 +14,9 @@ export class AdminController {
   ) {}
 
   @Get('dashboard')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
   @ApiOperation({ summary: 'Admin Dashboard metrics (sales, devices out, overdue, failed payments)' })
   getDashboardMetrics() {
     return this.adminService.getDashboardMetrics();
@@ -28,13 +28,33 @@ export class AdminController {
     return this.adminService.getOpsDigestMetrics();
   }
 
+  @Post('automation/runs/record-error')
+  @ApiOperation({ summary: 'Record n8n global workflow execution failure in dead-letter log' })
+  recordAutomationError(
+    @Body()
+    body: {
+      workflowName: string;
+      status: string;
+      errorMessage: string;
+      inputData?: any;
+    },
+  ) {
+    return this.adminService.recordAutomationError(body);
+  }
+
   @Get('devices')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
   @ApiOperation({ summary: 'List physical Pocket WiFi inventory and statuses' })
   getDevices(@Query('status') status?: string) {
     return this.adminService.getDevices(status);
   }
 
   @Patch('devices/:id/status')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
   @ApiOperation({ summary: 'Update device inventory status' })
   updateDeviceStatus(
     @Param('id') id: string,
@@ -44,6 +64,9 @@ export class AdminController {
   }
 
   @Get('audit-logs')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
   @ApiOperation({ summary: 'Get append-only audit trail' })
   getAuditLogs(
     @Query('page') page?: number,

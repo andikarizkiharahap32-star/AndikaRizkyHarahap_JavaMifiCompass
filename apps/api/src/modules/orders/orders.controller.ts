@@ -39,6 +39,12 @@ export class OrdersController {
     return this.ordersService.listOrders(Number(page) || 1, Number(limit) || 20, status);
   }
 
+  @Get('pending-recovery-candidates')
+  @ApiOperation({ summary: 'Get unpaid orders pending recovery or expiration for n8n cron' })
+  getPendingRecoveryCandidates() {
+    return this.ordersService.getPendingRecoveryCandidates();
+  }
+
   @Get(':orderNumber')
   @ApiOperation({ summary: 'Get order details by order number' })
   getOrder(@Param('orderNumber') orderNumber: string) {

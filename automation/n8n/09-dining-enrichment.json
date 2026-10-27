@@ -43,7 +43,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=http://api:3001/dining/places/{{ $('node-verify-hmac').item.json.placeId }}/enrichment-callback",
+        "url": "http://api:3001/v1/dining/callbacks/enrichment",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [

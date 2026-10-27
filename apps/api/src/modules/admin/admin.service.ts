@@ -95,4 +95,21 @@ export class AdminService {
       },
     });
   }
+
+  async recordAutomationError(data: {
+    workflowName: string;
+    status?: string;
+    errorMessage?: string;
+    inputData?: any;
+  }) {
+    return this.prisma.automationRun.create({
+      data: {
+        workflowName: data.workflowName || 'n8n.workflow.error',
+        status: 'FAILED',
+        errorMessage: data.errorMessage || 'Unknown n8n execution failure',
+        inputData: data.inputData || {},
+        completedAt: new Date(),
+      },
+    });
+  }
 }

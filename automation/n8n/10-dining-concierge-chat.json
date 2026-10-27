@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "GET",
-        "url": "=http://api:3001/dining/places?country={{ $json.country }}&filter={{ $json.filter }}&search={{ $json.cuisine }}",
+        "url": "=http://api:3001/v1/dining/places?country={{ $json.country }}&filter={{ $json.filter }}&search={{ $json.cuisine }}",
         "options": {}
       },
       "id": "node-api-search",

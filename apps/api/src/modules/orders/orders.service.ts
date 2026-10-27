@@ -238,6 +238,28 @@ export class OrdersService {
     };
   }
 
+  async getPendingRecoveryCandidates() {
+    const orders = await this.prisma.order.findMany({
+      where: { status: 'PENDING_PAYMENT' },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    const now = Date.now();
+    return orders.map((o) => {
+      const ageHours = (now - new Date(o.createdAt).getTime()) / (1000 * 60 * 60);
+      return {
+        id: o.id,
+        orderNumber: o.orderNumber,
+        contactName: o.contactName,
+        contactEmail: o.contactEmail,
+        contactPhone: o.contactPhone,
+        totalIdr: o.totalIdr,
+        createdAt: o.createdAt,
+        ageHours: Math.round(ageHours * 10) / 10,
+      };
+    });
+  }
+
   async transitionStatus(
     orderId: string,
     targetStatus: OrderStatus,
