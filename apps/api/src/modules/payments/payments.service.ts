@@ -108,7 +108,9 @@ export class PaymentsService {
     }
 
     // 3. Prevent duplicate webhook processing (Idempotency)
-    const eventId = notification.transactionId || `${notification.orderNumber}-${notification.statusCode}-${Date.now()}`;
+    const eventId =
+      notification.transactionId ||
+      `${notification.orderNumber}-${notification.statusCode}-${notification.transactionStatus}`;
     const existingEvent = await this.prisma.webhookEvent.findUnique({
       where: { eventId },
     });
