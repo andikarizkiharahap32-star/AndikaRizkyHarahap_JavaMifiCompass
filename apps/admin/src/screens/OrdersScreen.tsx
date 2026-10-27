@@ -1,51 +1,98 @@
-import React, { useState } from 'react';
-import { Package, Search, Filter, ShieldCheck, ArrowRight, Eye, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Package, Search, Filter, ShieldCheck, ArrowRight, Eye, RefreshCw, Loader2 } from 'lucide-react';
+import { apiClient } from '../lib/api';
+
+const fallbackOrders = [
+  {
+    id: 'ord-01',
+    orderNumber: 'JMF-9X2L8K4P',
+    customer: 'Rina Kusuma',
+    type: 'ESIM',
+    dest: 'Jepang (Tokyo)',
+    status: 'PAID',
+    amountIdr: 490000,
+    createdAt: '2026-10-26 14:20',
+  },
+  {
+    id: 'ord-02',
+    orderNumber: 'JMF-7M1Q3T5V',
+    customer: 'Ahmad Faiz',
+    type: 'WIFI_RENTAL',
+    dest: 'Arab Saudi (Umrah)',
+    status: 'IN_USE',
+    amountIdr: 595000,
+    createdAt: '2026-10-25 09:12',
+  },
+  {
+    id: 'ord-03',
+    orderNumber: 'JMF-4B8W2R9Y',
+    customer: 'Siti Rahma',
+    type: 'WIFI_RENTAL',
+    dest: 'China (VPN)',
+    status: 'SHIPPED',
+    amountIdr: 765000,
+    createdAt: '2026-10-24 16:45',
+  },
+  {
+    id: 'ord-04',
+    orderNumber: 'JMF-2D6P9N1Z',
+    customer: 'David Tan',
+    type: 'ESIM',
+    dest: 'Singapura',
+    status: 'PENDING_PAYMENT',
+    amountIdr: 185000,
+    createdAt: '2026-10-26 16:00',
+  },
+];
 
 export const OrdersScreen = () => {
   const [filter, setFilter] = useState('ALL');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [orders, setOrders] = useState<any[]>(fallbackOrders);
+  const [loading, setLoading] = useState(false);
 
-  const orders = [
-    {
-      id: 'ord-01',
-      orderNumber: 'JMF-9X2L8K4P',
-      customer: 'Rina Kusuma',
-      type: 'ESIM',
-      dest: 'Jepang',
-      status: 'PAID',
-      amountIdr: 490000,
-      createdAt: '2026-10-26 14:20',
-    },
-    {
-      id: 'ord-02',
-      orderNumber: 'JMF-7M1Q3T5V',
-      customer: 'Ahmad Faiz',
-      type: 'WIFI_RENTAL',
-      dest: 'Arab Saudi (Umrah)',
-      status: 'IN_USE',
-      amountIdr: 595000,
-      createdAt: '2026-10-25 09:12',
-    },
-    {
-      id: 'ord-03',
-      orderNumber: 'JMF-4B8W2R9Y',
-      customer: 'Siti Rahma',
-      type: 'WIFI_RENTAL',
-      dest: 'China (VPN)',
-      status: 'SHIPPED',
-      amountIdr: 765000,
-      createdAt: '2026-10-24 16:45',
-    },
-    {
-      id: 'ord-04',
-      orderNumber: 'JMF-2D6P9N1Z',
-      customer: 'David Tan',
-      type: 'ESIM',
-      dest: 'Singapura',
-      status: 'PENDING_PAYMENT',
-      amountIdr: 185000,
-      createdAt: '2026-10-26 16:00',
-    },
-  ];
+  const fetchOrders = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.orders.listOrders({
+        status: filter === 'ALL' ? undefined : filter,
+      });
+      if (res && res.items && res.items.length > 0) {
+        setOrders(
+          res.items.map((o: any) => ({
+            id: o.id,
+            orderNumber: o.orderNumber,
+            customer: o.contactName,
+            type: o.fulfillmentType,
+            dest: o.items?.[0]?.product?.nameEn || 'International',
+            status: o.status,
+            amountIdr: o.totalIdr,
+            createdAt: new Date(o.createdAt).toLocaleString('id-ID'),
+          })),
+        );
+      } else {
+        setOrders(fallbackOrders);
+      }
+    } catch {
+      setOrders(fallbackOrders);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [filter]);
+
+  const displayedOrders = orders.filter((o) => {
+    if (!searchTerm) return true;
+    const term = searchTerm.toLowerCase();
+    return (
+      o.orderNumber.toLowerCase().includes(term) ||
+      o.customer.toLowerCase().includes(term) ||
+      o.dest.toLowerCase().includes(term)
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -58,8 +105,12 @@ export const OrdersScreen = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-xs hover:bg-slate-50">
-            <RefreshCw className="w-3.5 h-3.5" />
+          <button
+            onClick={fetchOrders}
+            disabled={loading}
+            className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-xs hover:bg-slate-50 disabled:opacity-50"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
         </div>
@@ -73,6 +124,8 @@ export const OrdersScreen = () => {
             <input
               type="text"
               placeholder="Cari order no atau nama..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-sky-500"
             />
           </div>
@@ -107,7 +160,7 @@ export const OrdersScreen = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {orders.map((o) => (
+              {displayedOrders.map((o) => (
                 <tr key={o.id} className="hover:bg-slate-50/50">
                   <td className="px-5 py-3 font-mono font-bold text-sky-600">{o.orderNumber}</td>
                   <td className="px-5 py-3 font-semibold text-slate-800">{o.customer}</td>

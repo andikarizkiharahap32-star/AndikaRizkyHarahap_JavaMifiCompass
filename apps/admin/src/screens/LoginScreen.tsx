@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Compass, Lock, Mail, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Compass, Lock, Mail, ShieldCheck, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { apiClient } from '../lib/api';
 
 export const LoginScreen = ({ onLoginSuccess }: { onLoginSuccess: (user: any) => void }) => {
   const [email, setEmail] = useState('admin@javamifi.com');
   const [password, setPassword] = useState('Admin12345!');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const presets = [
     { role: 'SUPER_ADMIN', email: 'admin@javamifi.com', label: 'Super Admin' },
@@ -13,13 +16,24 @@ export const LoginScreen = ({ onLoginSuccess }: { onLoginSuccess: (user: any) =>
     { role: 'SUPPORT', email: 'support@javamifi.com', label: 'Customer Support' },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onLoginSuccess({
-      email,
-      fullName: email.split('@')[0].toUpperCase(),
-      role: presets.find((p) => p.email === email)?.role || 'SUPER_ADMIN',
-    });
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await apiClient.auth.login({ email, password });
+      if (res && res.token) {
+        localStorage.setItem('javamifi_admin_token', res.token);
+        onLoginSuccess(res.user);
+      } else {
+        throw new Error('Autentikasi gagal: Token tidak diterima');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Email atau kata sandi tidak valid. Periksa kembali kredensial Anda.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,35 +51,58 @@ export const LoginScreen = ({ onLoginSuccess }: { onLoginSuccess: (user: any) =>
           </p>
         </div>
 
+        {error && (
+          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5">
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+            <span>{error}</span>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-slate-600 mb-1">Email Staf</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm"
-            />
+            <div className="relative">
+              <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-sky-500"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-xs font-bold text-slate-600 mb-1">Kata Sandi</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm"
-            />
+            <div className="relative">
+              <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-sky-500"
+              />
+            </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-98"
+            disabled={loading}
+            className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-98"
           >
-            <span>Masuk ke Konsol Staf</span>
-            <ArrowRight className="w-4 h-4" />
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Memverifikasi Argon2id...</span>
+              </>
+            ) : (
+              <>
+                <span>Masuk ke Konsol Staf</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
           </button>
         </form>
 
@@ -79,7 +116,11 @@ export const LoginScreen = ({ onLoginSuccess }: { onLoginSuccess: (user: any) =>
               <button
                 key={p.role}
                 type="button"
-                onClick={() => setEmail(p.email)}
+                onClick={() => {
+                  setEmail(p.email);
+                  setPassword('Admin12345!');
+                  setError(null);
+                }}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-colors ${
                   email === p.email
                     ? 'bg-sky-600 text-white border-sky-600'

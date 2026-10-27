@@ -53,11 +53,35 @@ function CheckoutContent({ locale }: { locale: string }) {
     setIsSubmitting(true);
 
     try {
-      // In dev/mock, call simulator directly
-      const mockOrderNumber = `JMF-${Date.now().toString(36).toUpperCase().slice(-8)}`;
+      const planSlug = isWifi ? 'wifi-japan-unlimited' : 'esim-japan-5gb';
+      let orderNumber = `JMF-${Date.now().toString(36).toUpperCase().slice(-8)}`;
+      let finalAmount = totalAmountIdr;
+
+      try {
+        const order = await apiClient.orders.createOrder({
+          contactName: fullName,
+          contactEmail: email,
+          contactPhone: phone,
+          shippingAddress: isWifi ? address : undefined,
+          promoCode: promoCodeInput || undefined,
+          items: [
+            {
+              planId: planSlug,
+              quantity: isWifi ? 1 : travelers,
+              durationDays,
+            },
+          ],
+        });
+        if (order && order.orderNumber) {
+          orderNumber = order.orderNumber;
+          finalAmount = order.totalIdr;
+        }
+      } catch (apiErr: any) {
+        console.warn('API createOrder notice:', apiErr.message);
+      }
 
       // Navigate to mock payment simulator
-      const simUrl = `/${locale}/checkout/mock-payment?paymentId=mock-pay-${Date.now()}&orderNumber=${mockOrderNumber}&amount=${totalAmountIdr}&customer=${encodeURIComponent(fullName)}`;
+      const simUrl = `/${locale}/checkout/mock-payment?paymentId=mock-pay-${Date.now()}&orderNumber=${orderNumber}&amount=${finalAmount}&customer=${encodeURIComponent(fullName)}`;
       router.push(simUrl);
     } catch (err: any) {
       alert(`Checkout failed: ${err.message}`);

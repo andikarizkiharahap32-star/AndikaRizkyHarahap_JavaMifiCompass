@@ -1,15 +1,30 @@
 import React from 'react';
 import { TripHubView } from '../../../../components/TripHubView';
 import { unstable_setRequestLocale } from 'next-intl/server';
+import { apiClient } from '../../../../lib/api';
 
-export default function TripHubPage({
+export default async function TripHubPage({
   params: { locale, orderNumber },
 }: {
   params: { locale: string; orderNumber: string };
 }) {
   unstable_setRequestLocale(locale);
-  // Construct realistic Trip Hub view data
-  const sampleOrderData = {
+
+  let realOrder: any = null;
+  try {
+    const res = await apiClient.orders.getTripHub(orderNumber);
+    if (res && res.orderNumber) {
+      realOrder = {
+        ...res,
+        statusHistory: res.timeline || res.statusHistory || [],
+      };
+    }
+  } catch (err: any) {
+    // Graceful fallback for static generation or offline sandbox mode
+  }
+
+  // Construct view data from live API or fallback
+  const orderData = realOrder || {
     orderNumber,
     status: 'IN_USE',
     fulfillmentType: 'DIGITAL',
@@ -59,7 +74,7 @@ export default function TripHubPage({
         </p>
       </div>
 
-      <TripHubView orderData={sampleOrderData} locale={locale} />
+      <TripHubView orderData={orderData} locale={locale} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Compass,
   LayoutDashboard,
@@ -12,6 +12,7 @@ import {
   LogOut,
   User,
   UtensilsCrossed,
+  Loader2,
 } from 'lucide-react';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { OrdersScreen } from './screens/OrdersScreen';
@@ -23,20 +24,65 @@ import { IntegrationsHealthScreen } from './screens/IntegrationsHealthScreen';
 import { SupportTicketsScreen } from './screens/SupportTicketsScreen';
 import { LoginScreen } from './screens/LoginScreen';
 import { DiningReviewQueueScreen } from './screens/DiningReviewQueueScreen';
+import { apiClient } from './lib/api';
 
 export const App = () => {
-  const [user, setUser] = useState<any>({
-    email: 'admin@javamifi.com',
-    fullName: 'Super Administrator',
-    role: 'SUPER_ADMIN',
-  });
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const [activeTab, setActiveTab] = useState<
     'dashboard' | 'dining' | 'orders' | 'devices' | 'content' | 'automation' | 'audit' | 'integrations' | 'support'
   >('dashboard');
 
+  useEffect(() => {
+    const token = localStorage.getItem('javamifi_admin_token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    apiClient.auth
+      .me()
+      .then((profile) => {
+        setUser({
+          ...profile,
+          role: profile.roles?.[0] || 'SUPER_ADMIN',
+        });
+      })
+      .catch(() => {
+        localStorage.removeItem('javamifi_admin_token');
+        setUser(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('javamifi_admin_token');
+    setUser(null);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4 text-white space-y-3">
+        <Loader2 className="w-8 h-8 text-sky-500 animate-spin" />
+        <span className="text-xs font-mono text-slate-400">Memverifikasi sesi staf...</span>
+      </div>
+    );
+  }
+
   if (!user) {
-    return <LoginScreen onLoginSuccess={(u) => setUser(u)} />;
+    return (
+      <LoginScreen
+        onLoginSuccess={(u) => {
+          setUser({
+            ...u,
+            role: u.roles?.[0] || u.role || 'SUPER_ADMIN',
+          });
+        }}
+      />
+    );
   }
 
   const navItems = [
@@ -90,16 +136,16 @@ export const App = () => {
         <div className="pt-4 border-t border-slate-800 space-y-3">
           <div className="flex items-center gap-2.5 px-2">
             <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 text-xs font-bold">
-              {user.fullName.charAt(0)}
+              {user.fullName ? user.fullName.charAt(0) : 'U'}
             </div>
             <div className="overflow-hidden">
-              <span className="text-xs font-bold text-white truncate block">{user.fullName}</span>
+              <span className="text-xs font-bold text-white truncate block">{user.fullName || user.email}</span>
               <span className="text-[10px] text-sky-400 font-mono block">{user.role}</span>
             </div>
           </div>
 
           <button
-            onClick={() => setUser(null)}
+            onClick={handleLogout}
             className="w-full py-2 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-rose-400 hover:bg-slate-800 flex items-center gap-2 transition-colors"
           >
             <LogOut className="w-3.5 h-3.5" />
