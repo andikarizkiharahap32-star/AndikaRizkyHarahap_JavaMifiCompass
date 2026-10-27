@@ -1,4 +1,5 @@
 import React from 'react';
+import { QrCode } from 'lucide-react';
 
 export interface TripBoardingPassProps {
   orderNumber: string;
@@ -165,7 +166,7 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
             </div>
           ) : (
             <div className="w-28 h-28 rounded-xl border-2 border-dashed border-paper-edge bg-paper flex flex-col items-center justify-center mb-2">
-              <span className="text-2xl">📱</span>
+              <QrCode className="w-8 h-8 text-secondary" />
               <span className="font-mono text-xs text-outline mt-1">Ready</span>
             </div>
           )}

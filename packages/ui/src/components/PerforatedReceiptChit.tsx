@@ -1,4 +1,5 @@
 import React from 'react';
+import { ShieldCheck } from 'lucide-react';
 
 export interface PerforatedReceiptChitProps {
   orderNumber: string;
@@ -137,7 +138,7 @@ export const PerforatedReceiptChit: React.FC<PerforatedReceiptChitProps> = ({
         {/* Deposit Guarantee Callout */}
         {depositIdr > 0 && isDepositRefundable && (
           <div className="bg-success-surface border border-success/30 text-success rounded-xl p-3 flex items-start gap-2.5 text-xs">
-            <span className="font-bold text-sm leading-none mt-0.5">🛡️</span>
+            <ShieldCheck className="w-4 h-4 text-success shrink-0 mt-0.5" />
             <p className="text-xs leading-relaxed">
               <strong>Jaminan Pengembalian Dana:</strong> Deposit Rp {depositIdr.toLocaleString('id-ID')} akan otomatis ditransfer kembali ke rekening/e-wallet Anda maksimal 1×24 jam setelah modem tiba dan lolos inspeksi fisik.
             </p>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Languages } from 'lucide-react';
+import { Languages, X } from 'lucide-react';
 
 export interface DietaryPhraseCardProps {
   countryCode?: string;
@@ -119,7 +119,7 @@ export const DietaryPhraseCard: React.FC<DietaryPhraseCardProps> = ({
             className="w-12 h-12 rounded bg-surface hover:bg-paper-edge flex items-center justify-center text-primary text-sm font-bold border border-paper-edge"
             aria-label="Tutup"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -133,7 +133,7 @@ export const DietaryPhraseCard: React.FC<DietaryPhraseCardProps> = ({
               key={code}
               type="button"
               onClick={() => setSelectedLang(code)}
-              className={`h-9 px-3 rounded text-xs font-sans font-bold transition flex items-center gap-1 ${
+              className={`min-h-[48px] px-3.5 rounded text-xs font-sans font-bold transition flex items-center gap-1 ${
                 selectedLang === code
                   ? 'bg-primary text-on-primary'
                   : 'bg-surface text-outline hover:text-primary border border-paper-edge'

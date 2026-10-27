@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Utensils, Award, Wifi, Car, Languages, MapPin, Phone, Clock, ShieldCheck } from 'lucide-react';
+import { Building2, Utensils, Award, Wifi, Car, Languages, MapPin, Phone, Clock, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { HalalBadge, HalalTierType } from './HalalBadge';
 import { MenuTicketChit } from './MenuTicketChit';
 import { HalalCustomsStamp } from './HalalCustomsStamp';
@@ -369,7 +369,7 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
                 onClick={onOpenReport}
                 className="shrink-0 h-12 px-4 rounded border border-danger bg-danger-surface hover:bg-danger-surface/80 text-danger font-mono text-xs font-bold transition flex items-center gap-1.5"
               >
-                <span aria-hidden="true">⚠️</span>
+                <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
                 <span>{isId ? 'Laporkan Data / Dispute' : 'Report Issue / Dispute'}</span>
               </button>
             )}

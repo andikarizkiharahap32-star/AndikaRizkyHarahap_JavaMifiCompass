@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Zap } from 'lucide-react';
 
 export interface SandboxGatewayProps {
   orderNumber: string;
@@ -45,7 +46,7 @@ export const SandboxGatewaySimulator: React.FC<SandboxGatewayProps> = ({
       {/* Persistent Non-Dismissible Test-Mode Indicator Plate */}
       <div className="w-full bg-warning-surface text-warning px-4 py-3 rounded-xl flex items-center justify-between gap-3 border border-warning/30">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="font-mono font-bold text-sm shrink-0">⚡</span>
+          <Zap className="w-4 h-4 text-warning shrink-0" />
           <p className="font-mono text-xs font-bold tracking-wide uppercase truncate">
             MODE SIMULASI PEMBAYARAN • SANDBOX GATEWAY (Bukan Transaksi Nyata)
           </p>
