@@ -1,7 +1,7 @@
 # ═══════════════════════════════════════════════════════════════
-# JavaMifi Compass — Admin (Vite React) Dockerfile
+# JavaMifi Compass — Admin (React Vite) Dockerfile
 # ═══════════════════════════════════════════════════════════════
-# Multi-stage build: Vite build → nginx static serve
+# Multi-stage monorepo build with static Nginx runner
 
 # ── Stage 1: Install dependencies ─────────────────────────────
 FROM node:20-alpine AS deps
@@ -9,7 +9,12 @@ FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml* ./
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/config/package.json ./packages/config/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/api-client/package.json ./packages/api-client/
+COPY apps/admin/package.json ./apps/admin/
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 RUN pnpm install --frozen-lockfile
@@ -20,63 +25,19 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/packages ./packages
+COPY --from=deps /app/apps/admin/node_modules ./apps/admin/node_modules
 COPY . .
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN pnpm run build
+RUN pnpm --filter @javamifi/shared build
+RUN pnpm --filter @javamifi/api-client build
+RUN pnpm --filter @javamifi/admin build
 
-# ── Stage 3: Serve with nginx ────────────────────────────────
-FROM nginx:1.25-alpine AS runner
+# ── Stage 3: Nginx static host ────────────────────────────────
+FROM nginx:alpine AS runner
 
-# Remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Custom nginx config for SPA routing
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Inline nginx config for the admin SPA
-RUN cat > /etc/nginx/conf.d/default.conf <<'EOF'
-server {
-    listen       3002;
-    server_name  _;
-
-    root   /usr/share/nginx/html;
-    index  index.html;
-
-    # gzip compression
-    gzip on;
-    gzip_vary on;
-    gzip_proxied any;
-    gzip_comp_level 6;
-    gzip_min_length 256;
-    gzip_types
-        text/plain
-        text/css
-        text/javascript
-        application/javascript
-        application/json
-        application/xml
-        image/svg+xml;
-
-    # Cache static assets aggressively
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-        try_files $uri =404;
-    }
-
-    # SPA fallback: all routes serve index.html
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-}
-EOF
+COPY --from=build /app/apps/admin/dist /usr/share/nginx/html
 
 EXPOSE 3002
 

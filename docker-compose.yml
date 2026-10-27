@@ -100,8 +100,8 @@ services:
   # ── API (NestJS) ───────────────────────────────────────────
   api:
     build:
-      context: ./apps/api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/api/Dockerfile
     container_name: javamifi-api
     restart: unless-stopped
     ports:
@@ -128,8 +128,8 @@ services:
   # ── Web (Next.js) ──────────────────────────────────────────
   web:
     build:
-      context: ./apps/web
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/web/Dockerfile
     container_name: javamifi-web
     restart: unless-stopped
     ports:
@@ -146,8 +146,8 @@ services:
   # ── Admin (Vite React) ─────────────────────────────────────
   admin:
     build:
-      context: ./apps/admin
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/admin/Dockerfile
     container_name: javamifi-admin
     restart: unless-stopped
     ports:
