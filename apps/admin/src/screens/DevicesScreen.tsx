@@ -90,12 +90,12 @@ export const DevicesScreen = () => {
       setDevices((prev) =>
         prev.map((d) => (d.id === id ? { ...d, status: 'AVAILABLE', currentHolder: 'Gudang Utama CGK' } : d)),
       );
-      alert('✓ Unit telah diinspeksi. Status modem diperbarui ke AVAILABLE.');
+      alert('[Berhasil] Unit telah diinspeksi. Status modem diperbarui ke AVAILABLE.');
     } catch {
       setDevices((prev) =>
         prev.map((d) => (d.id === id ? { ...d, status: 'AVAILABLE', currentHolder: 'Gudang Utama CGK' } : d)),
       );
-      alert('✓ Unit telah diinspeksi secara lokal.');
+      alert('[Berhasil] Unit telah diinspeksi secara lokal.');
     }
   };
 

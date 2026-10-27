@@ -20,7 +20,7 @@ export const ContentEditorScreen = () => {
 
   const handlePublish = () => {
     setStatus('PUBLISHED');
-    alert('✓ Halaman dipublikasikan! Event article.published dikirim ke n8n untuk draf newsletter.');
+    alert('[Berhasil] Halaman dipublikasikan! Event article.published dikirim ke n8n untuk draf newsletter.');
   };
 
   return (
@@ -47,7 +47,7 @@ export const ContentEditorScreen = () => {
           </span>
           <button
             onClick={handlePublish}
-            className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-sm transition-colors"
+            className="px-4 min-h-[48px] rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs transition-colors"
           >
             Publikasikan Konten
           </button>
@@ -56,25 +56,25 @@ export const ContentEditorScreen = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Main Bilingual Block Editor */}
-        <div className="lg:col-span-2 p-6 bg-white border border-slate-200 rounded-2xl shadow-xs space-y-4">
+        <div className="lg:col-span-2 p-6 bg-white border border-slate-200 rounded-2xl space-y-4">
           {/* Language Tabs */}
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex rounded-lg bg-slate-100 p-1 text-xs font-bold">
               <button
                 onClick={() => setSelectedLang('id')}
                 className={`px-3 py-1.5 rounded-md transition-colors ${
-                  selectedLang === 'id' ? 'bg-white text-sky-600 shadow-xs' : 'text-slate-500'
+                  selectedLang === 'id' ? 'bg-white text-sky-600' : 'text-slate-500'
                 }`}
               >
-                🇮🇩 Bahasa Indonesia
+                ID • Bahasa Indonesia
               </button>
               <button
                 onClick={() => setSelectedLang('en')}
                 className={`px-3 py-1.5 rounded-md transition-colors ${
-                  selectedLang === 'en' ? 'bg-white text-sky-600 shadow-xs' : 'text-slate-500'
+                  selectedLang === 'en' ? 'bg-white text-sky-600' : 'text-slate-500'
                 }`}
               >
-                🇬🇧 English
+                EN • English
               </button>
             </div>
             <span className="text-xs text-slate-400">Slug: /destinations/jepang</span>

@@ -224,7 +224,7 @@ export const DiningReviewQueueScreen: React.FC = () => {
 
           <div className="bg-slate-900 text-white p-3 rounded-xl text-xs font-mono flex items-center justify-between">
             <span>Quality Gate Status:</span>
-            <span className="font-bold text-emerald-400">✅ PASSED ALL 4 CRITICAL GATES</span>
+            <span className="font-bold text-emerald-400">[PASSED] ALL 4 CRITICAL GATES</span>
           </div>
         </div>
       )}
