@@ -176,8 +176,14 @@ pnpm --filter @javamifi/api test:unit -- src/modules/planner/planner.engine.spec
 # Run hybrid order state machine tests
 pnpm --filter @javamifi/api test:unit -- src/modules/orders/order.state-machine.spec.ts
 
-# Run payment signature verification tests
-pnpm --filter @javamifi/api test:unit -- src/modules/payments/payments.spec.ts
+# Run payment signature verification and route guard tests
+pnpm --filter @javamifi/api test:unit -- src/modules/payments/payments.spec.ts src/modules/payments/payments-guard.spec.ts
+
+# Run adversarial probes for Halal validation (word boundaries, negative claims, fail-closed)
+pnpm --filter @javamifi/api test:unit -- src/modules/dining/adversarial-probes.spec.ts
+
+# Run retention cleanup and transactional outbox daemon tests
+pnpm --filter @javamifi/api test:unit -- src/modules/admin/retention.service.spec.ts src/modules/automation/outbox.service.spec.ts
 
 # Run dining pipeline & deterministic tier engine tests
 pnpm --filter @javamifi/api test:unit -- src/modules/dining/dining-pipeline.spec.ts
@@ -206,7 +212,7 @@ javamifi-compass/
 │   ├── api-client/              # Typed API client wrapper
 │   └── config/                  # Shared ESLint, i18n rules, and TypeScript configs
 ├── automation/
-│   └── n8n/                     # 8 production-grade n8n workflow JSON exports
+│   └── n8n/                     # 10 production-grade n8n workflow JSON exports
 ├── infra/
 │   └── nginx/                   # Reverse proxy configuration
 ├── docs/                        # Architecture, PRD, Security, Automation & ADRs
