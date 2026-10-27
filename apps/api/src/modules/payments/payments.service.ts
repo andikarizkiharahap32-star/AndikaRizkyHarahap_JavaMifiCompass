@@ -24,6 +24,12 @@ export class PaymentsService {
     private readonly auditService: AuditService,
   ) {}
 
+  async findOrderByNumber(orderNumber: string) {
+    return this.prisma.order.findUnique({
+      where: { orderNumber },
+    });
+  }
+
   async initiatePayment(orderId: string, requestedMode?: 'mock' | 'midtrans_sandbox') {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },

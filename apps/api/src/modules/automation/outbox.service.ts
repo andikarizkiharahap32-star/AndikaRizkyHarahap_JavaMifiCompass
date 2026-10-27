@@ -1,14 +1,45 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { generateHmacSha256 } from '@javamifi/shared';
 
 @Injectable()
-export class OutboxService {
+export class OutboxService implements OnApplicationBootstrap, OnApplicationShutdown {
   private readonly logger = new Logger(OutboxService.name);
   private readonly n8nWebhookBaseUrl = process.env.N8N_WEBHOOK_URL || 'http://localhost:5678';
   private readonly webhookSecret = process.env.WEBHOOK_SECRET || 'javamifi-n8n-hmac-secret-key-32chars';
+  private pollerTimer?: NodeJS.Timeout;
 
   constructor(private readonly prisma: PrismaService) {}
+
+  onApplicationBootstrap() {
+    if (process.env.NODE_ENV !== 'test') {
+      this.startPoller();
+    }
+  }
+
+  startPoller(intervalMs = 10000) {
+    if (this.pollerTimer) return;
+    this.logger.log(`Starting Outbox retry poller daemon (interval: ${intervalMs}ms)`);
+    this.pollerTimer = setInterval(async () => {
+      try {
+        await this.processPendingEvents();
+      } catch (err: any) {
+        this.logger.error(`Error during outbox event processing: ${err.message}`);
+      }
+    }, intervalMs);
+    this.pollerTimer.unref();
+  }
+
+  stopPoller() {
+    if (this.pollerTimer) {
+      clearInterval(this.pollerTimer);
+      this.pollerTimer = undefined;
+    }
+  }
+
+  onApplicationShutdown() {
+    this.stopPoller();
+  }
 
   /**
    * Save domain event inside a Prisma transaction (or standalone)
