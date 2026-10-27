@@ -1,8 +1,25 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Wifi, QrCode, Smartphone, Zap, ArrowRight, ShieldCheck } from 'lucide-react';
 import { EsimCompatibilityChecker } from '../../../components/EsimCompatibilityChecker';
 import { unstable_setRequestLocale } from 'next-intl/server';
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const isId = locale === 'id';
+  return {
+    title: isId
+      ? 'Katalog Produk & Cek Kompatibilitas eSIM — JavaMifi Compass'
+      : 'Product Catalog & eSIM Compatibility Checker — JavaMifi Compass',
+    description: isId
+      ? 'Pilihan sewa Pocket WiFi unlimited, eSIM digital instan, dan SIM card fisik untuk perjalanan internasional. Cek kecocokan HP Anda.'
+      : 'Explore Pocket WiFi rental, instant digital eSIM, and prepaid SIM cards for international journeys. Check phone eSIM compatibility.',
+  };
+}
 
 export default function ProductsPage({
   params: { locale },

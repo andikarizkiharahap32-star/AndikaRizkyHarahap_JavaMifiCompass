@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Compass, CheckCircle2, ShieldCheck, UtensilsCrossed, ArrowRight } from 'lucide-react';
@@ -6,6 +7,31 @@ import { DestinationReadinessCard } from '../../../../components/DestinationRead
 import { apiClient } from '../../../../lib/api';
 import { SLUG_TO_COUNTRY } from '../../../../lib/destinations';
 import { unstable_setRequestLocale } from 'next-intl/server';
+
+export async function generateMetadata({
+  params: { locale, slug },
+}: {
+  params: { locale: string; slug: string };
+}): Promise<Metadata> {
+  const isId = locale === 'id';
+  const countryCode = SLUG_TO_COUNTRY[slug] || 'GLOBAL';
+  const countryNames: Record<string, string> = {
+    jepang: isId ? 'Jepang' : 'Japan',
+    china: isId ? 'China' : 'China',
+    'arab-saudi-umrah': isId ? 'Arab Saudi (Umrah)' : 'Saudi Arabia (Umrah)',
+    singapura: isId ? 'Singapura' : 'Singapore',
+  };
+  const name = countryNames[slug] || slug.toUpperCase();
+
+  return {
+    title: isId
+      ? `Panduan Konektivitas & Kesiapan ${name} — JavaMifi Compass`
+      : `${name} Travel Connectivity & Readiness Guide — JavaMifi Compass`,
+    description: isId
+      ? `Kartu kesiapan destinasi ${name} (${countryCode}): cuaca live, kurs harian IDR, tips bypass VPN, rekomendasi Pocket WiFi dan eSIM.`
+      : `Destination readiness card for ${name} (${countryCode}): live weather, daily exchange rates, network tips, Pocket WiFi and eSIM packages.`,
+  };
+}
 
 async function getReadinessData(countryCode: string) {
   try {

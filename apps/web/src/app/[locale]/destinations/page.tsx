@@ -1,7 +1,24 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Globe2, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
 import { unstable_setRequestLocale } from 'next-intl/server';
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const isId = locale === 'id';
+  return {
+    title: isId
+      ? 'Destinasi Populer & Kartu Kesiapan — JavaMifi Compass'
+      : 'Popular Destinations & Readiness Cards — JavaMifi Compass',
+    description: isId
+      ? 'Informasi jaringan, kurs harian, cuaca langsung, dan opsi koneksi Pocket WiFi serta eSIM di Jepang, China, Arab Saudi, Singapura, dan 160+ negara.'
+      : 'Network coverage, live exchange rates, weather, and Pocket WiFi & eSIM solutions for Japan, China, Saudi Arabia, Singapore, and 160+ destinations.',
+  };
+}
 
 const DESTINATIONS = [
   {

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import {
@@ -14,6 +15,22 @@ import {
   HeartHandshake,
 } from 'lucide-react';
 import { SignalBadge } from '@javamifi/ui';
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const isId = locale === 'id';
+  return {
+    title: isId
+      ? 'JavaMifi Compass — Rencanakan Koneksi Sebelum Berangkat #AntiSusahSinyal'
+      : 'JavaMifi Compass — Plan Your Connection Before You Pack #AntiSusahSinyal',
+    description: isId
+      ? 'Sewa Pocket WiFi 4G unlimited dan eSIM wisata internasional di 160+ negara. Bandingkan biaya transparan dan rekomendasi objektif.'
+      : 'Rent unlimited 4G Pocket WiFi and international travel eSIM in 160+ countries. Transparent cost comparisons and explainable recommendations.',
+  };
+}
 
 export default async function HomePage({
   params: { locale },
