@@ -15,7 +15,7 @@ pnpm typecheck
 # 2. Monorepo ESLint Verification (8 packages in scope, 0 errors expected)
 pnpm lint
 
-# 3. Next.js App Router Production Build (23/23 static pages prerendered)
+# 3. Next.js App Router Production Build (31/31 static pages prerendered)
 pnpm --filter @javamifi/web build
 
 # 4. Full Automated Test Suite (153 tests across shared and API modules)
