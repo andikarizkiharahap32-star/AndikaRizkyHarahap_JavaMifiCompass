@@ -28,7 +28,8 @@ export const Footer = ({ currentLocale }: { currentLocale: string }) => {
               <li><Link href={`/${currentLocale}/planner`} className="hover:text-white transition-colors">Trip Planner Wizard</Link></li>
               <li><Link href={`/${currentLocale}/products`} className="hover:text-white transition-colors">Pocket WiFi Unlimited</Link></li>
               <li><Link href={`/${currentLocale}/products`} className="hover:text-white transition-colors">Digital Travel eSIM</Link></li>
-              <li><Link href={`/${currentLocale}/products`} className="hover:text-white transition-colors">Physical SIM Card</Link></li>
+              <li><Link href={`/${currentLocale}/trip-hub`} className="hover:text-white transition-colors">Trip Hub Traveler</Link></li>
+              <li><Link href={`/${currentLocale}/faq`} className="hover:text-white transition-colors">Pusat Bantuan & FAQ</Link></li>
             </ul>
           </div>
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Wifi, Compass, Sun, Moon } from 'lucide-react';
+import { Wifi, Compass, Sun, Moon, ShoppingCart, User, HelpCircle } from 'lucide-react';
 
 export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
   const t = useTranslations('nav');
@@ -105,10 +105,36 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
           >
             <span className="inline-block leading-none">{t('support')}</span>
           </Link>
+          <Link
+            href={`/${currentLocale}/faq`}
+            className="hover:text-primary transition-colors inline-flex items-center justify-center h-full leading-none"
+          >
+            <span className="inline-block leading-none">FAQ</span>
+          </Link>
         </nav>
 
-        {/* Actions: Theme Switcher, Locale Switcher, CTA (Indigo #18215A Primary tokens) */}
+        {/* Actions: Theme Switcher, Locale Switcher, Cart, Account, CTA (Indigo #18215A Primary tokens) */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Cart Icon Link */}
+          <Link
+            href={`/${currentLocale}/cart`}
+            className="w-10 h-10 rounded border border-paper-edge bg-surface hover:bg-paper text-primary flex items-center justify-center transition-colors"
+            aria-label="Keranjang Belanja"
+            title="Keranjang Belanja"
+          >
+            <ShoppingCart className="w-4 h-4 text-secondary" />
+          </Link>
+
+          {/* Account Icon Link */}
+          <Link
+            href={`/${currentLocale}/account`}
+            className="w-10 h-10 rounded border border-paper-edge bg-surface hover:bg-paper text-primary flex items-center justify-center transition-colors"
+            aria-label="Akun Traveler"
+            title="Akun Traveler"
+          >
+            <User className="w-4 h-4 text-secondary" />
+          </Link>
+
           {/* Real-time Theme Switcher */}
           <button
             type="button"
