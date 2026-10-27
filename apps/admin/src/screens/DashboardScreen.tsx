@@ -11,32 +11,72 @@ import {
   CheckCheck,
   FileCheck,
   ArrowUpRight,
+  RefreshCw,
 } from 'lucide-react';
 import { apiClient } from '../lib/api';
 
+const fallbackMetrics = {
+  totalOrders: 142,
+  paidOrders: 118,
+  totalRevenueIdr: 28_450_000,
+  devicesOut: 24,
+  totalDevices: 50,
+  deadLetters: 0,
+  recentOrders: [
+    { orderNumber: 'JMF-9X2L8K4P', contactName: 'Rina Kusuma', status: 'PAID', totalIdr: 490000 },
+    { orderNumber: 'JMF-7M1Q3T5V', contactName: 'Ahmad Faiz', status: 'IN_USE', totalIdr: 595000 },
+    { orderNumber: 'JMF-4B8W2R9Y', contactName: 'Siti Rahma', status: 'SHIPPED', totalIdr: 765000 },
+    { orderNumber: 'JMF-2D6P9N1Z', contactName: 'David Tan', status: 'PENDING_PAYMENT', totalIdr: 185000 },
+  ],
+};
+
 export const DashboardScreen = () => {
-  const [metrics, setMetrics] = useState<any>({
-    totalOrders: 142,
-    paidOrders: 118,
-    totalRevenueIdr: 28_450_000,
-    devicesOut: 24,
-    totalDevices: 50,
-    deadLetters: 0,
-    recentOrders: [
-      { orderNumber: 'JMF-9X2L8K4P', contactName: 'Rina Kusuma', status: 'PAID', totalIdr: 490000 },
-      { orderNumber: 'JMF-7M1Q3T5V', contactName: 'Ahmad Faiz', status: 'IN_USE', totalIdr: 595000 },
-      { orderNumber: 'JMF-4B8W2R9Y', contactName: 'Siti Rahma', status: 'SHIPPED', totalIdr: 765000 },
-      { orderNumber: 'JMF-2D6P9N1Z', contactName: 'David Tan', status: 'PENDING_PAYMENT', totalIdr: 185000 },
-    ],
-  });
+  const [metrics, setMetrics] = useState<any>(fallbackMetrics);
+  const [loading, setLoading] = useState(false);
+
+  const fetchMetrics = async () => {
+    setLoading(true);
+    try {
+      const data = await apiClient.admin.getDashboardMetrics();
+      if (data) {
+        setMetrics({
+          totalOrders: data.totalOrders ?? fallbackMetrics.totalOrders,
+          paidOrders: data.paidOrders ?? fallbackMetrics.paidOrders,
+          totalRevenueIdr: data.totalRevenueIdr ?? fallbackMetrics.totalRevenueIdr,
+          devicesOut: data.devicesOut ?? fallbackMetrics.devicesOut,
+          totalDevices: data.totalDevices ?? fallbackMetrics.totalDevices,
+          deadLetters: data.deadLetters ?? fallbackMetrics.deadLetters,
+          recentOrders: data.recentOrders?.length ? data.recentOrders : fallbackMetrics.recentOrders,
+        });
+      }
+    } catch {
+      // Retain fallback metrics
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMetrics();
+  }, []);
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Operations Dashboard</h1>
-        <p className="text-xs text-slate-500 mt-1">
-          Ringkasan penjualan real-time, sirkulasi modem WiFi, keterlambatan pengembalian, dan status otomasi
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Operations Dashboard</h1>
+          <p className="text-xs text-slate-500 mt-1">
+            Ringkasan penjualan real-time, sirkulasi modem WiFi, keterlambatan pengembalian, dan status otomasi
+          </p>
+        </div>
+        <button
+          onClick={fetchMetrics}
+          disabled={loading}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-sky-600' : ''}`} />
+          {loading ? 'Memuat...' : 'Segarkan'}
+        </button>
       </div>
 
       {/* Top 4 KPI Metric Cards */}

@@ -8,8 +8,10 @@ import { GeminiFlashProvider } from './providers/gemini-flash.provider';
 import { DiningOutboxService } from './dining-outbox.service';
 import { GoldenSetRunnerService } from './evaluation/golden-set-runner';
 import { DiningReviewService } from './dining-review.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [DiningController],
   providers: [
     DiningService,

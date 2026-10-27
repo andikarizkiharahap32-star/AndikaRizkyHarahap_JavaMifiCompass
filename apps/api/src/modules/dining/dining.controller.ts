@@ -8,8 +8,10 @@ import {
   Headers,
   UnauthorizedException,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery, ApiResponse, ApiHeader } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery, ApiResponse, ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { DiningService } from './dining.service';
 import { FxService } from './fx.service';
 import { ValidationPipelineService } from './validation/pipeline.service';
@@ -18,6 +20,7 @@ import { DiningOutboxService } from './dining-outbox.service';
 import { GoldenSetRunnerService } from './evaluation/golden-set-runner';
 import { DiningReviewService } from './dining-review.service';
 import { DiningFilterMode, DiningReportCreateDto, HalalTier } from '@javamifi/shared';
+import { Roles, RolesGuard } from '../auth/auth.module';
 
 @ApiTags('Dining (Compass Rasa)')
 @Controller('v1/dining')
@@ -187,6 +190,9 @@ export class DiningController {
   }
 
   @Get('admin/review-queue')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN')
   @ApiOperation({ summary: 'Get flagged enrichment jobs and user dispute tickets' })
   @ApiResponse({ status: 200, description: 'List of review items' })
   getReviewQueue() {
@@ -194,6 +200,9 @@ export class DiningController {
   }
 
   @Post('admin/review-queue/:id/resolve')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN')
   @ApiOperation({ summary: 'Resolve or dismiss a review item' })
   resolveReviewItem(
     @Param('id') id: string,
@@ -212,12 +221,18 @@ export class DiningController {
   }
 
   @Get('admin/safety-status')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN')
   @ApiOperation({ summary: 'Get AI discovery token budget and kill-switch status' })
   getSafetyStatus() {
     return this.diningReview.getSafetyStatus();
   }
 
   @Post('admin/safety-toggle')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN')
   @ApiOperation({ summary: 'Toggle kill-switch for AI discovery enrichment' })
   toggleKillSwitch(@Body() body: { active: boolean }) {
     if (typeof body.active !== 'boolean') {
