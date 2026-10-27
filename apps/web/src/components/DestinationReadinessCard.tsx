@@ -13,11 +13,13 @@ export const DestinationReadinessCard = ({
   const { countryInfo, weather, exchangeRate, tips } = data;
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+    <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div className="flex items-center gap-3">
-          <span className="text-4xl">{countryInfo.flagEmoji}</span>
+          <div className="w-12 h-12 rounded-2xl bg-sunken border border-paper-edge flex items-center justify-center font-mono font-bold text-sm text-primary tracking-wider">
+            {countryInfo.countryCode}
+          </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
               {countryInfo.name}
@@ -40,7 +42,9 @@ export const DestinationReadinessCard = ({
         {/* 1. Live Weather (Open-Meteo) */}
         {weather && (
           <div className="p-4 rounded-2xl bg-sky-50/70 dark:bg-slate-800/60 border border-sky-100 dark:border-slate-700 flex items-center gap-4">
-            <span className="text-3xl">{weather.conditionIcon}</span>
+            <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900 flex items-center justify-center text-sky-700 dark:text-sky-300 shrink-0">
+              <CloudSun className="w-5 h-5" />
+            </div>
             <div>
               <span className="text-xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider block">
                 Cuaca Saat Ini

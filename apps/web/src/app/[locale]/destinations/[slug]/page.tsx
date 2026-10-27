@@ -24,7 +24,7 @@ async function getReadinessData(countryCode: string) {
         countryCode,
         temperatureC: 18,
         condition: 'Cerah Berawan',
-        conditionIcon: '⛅',
+        conditionIcon: 'SUNNY_CLOUDY',
         isCached: true,
       },
       exchangeRate: {
@@ -39,7 +39,7 @@ async function getReadinessData(countryCode: string) {
         name: isChina ? 'Tiongkok / China' : isSaudi ? 'Arab Saudi' : countryCode === 'JP' ? 'Jepang' : 'Singapura',
         officialName: countryCode,
         countryCode,
-        flagEmoji: isChina ? '🇨🇳' : isSaudi ? '🇸🇦' : countryCode === 'JP' ? '🇯🇵' : '🇸🇬',
+        flagEmoji: countryCode,
         capital: isChina ? 'Beijing' : isSaudi ? 'Riyadh' : countryCode === 'JP' ? 'Tokyo' : 'Singapore',
         callingCode: isChina ? '+86' : isSaudi ? '+966' : countryCode === 'JP' ? '+81' : '+65',
         timezones: ['UTC+8'],

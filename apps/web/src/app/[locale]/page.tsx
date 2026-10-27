@@ -27,7 +27,7 @@ export default async function HomePage({
   const presets = [
     {
       title: locale === 'id' ? 'Paket Umrah Barokah' : 'Umrah Pilgrimage Package',
-      dest: '🇸🇦 Arab Saudi',
+      dest: 'SA • Arab Saudi',
       days: '9 - 12 Hari',
       desc: locale === 'id' ? '1 modem Pocket WiFi menghubungkan keluarga jamaah selama di Makkah & Madinah.' : 'Share 1 WiFi router across pilgrim family members in Mecca & Medina.',
       tag: 'Keluarga & Rombongan',
@@ -35,7 +35,7 @@ export default async function HomePage({
     },
     {
       title: locale === 'id' ? 'Jepang Autumn & Shinkansen' : 'Japan Bullet Train Explorer',
-      dest: '🇯🇵 Jepang',
+      dest: 'JP • Jepang',
       days: '7 Hari',
       desc: locale === 'id' ? 'Koneksi ultra-cepat 4G/5G di Tokyo, Kyoto, Osaka & kereta Shinkansen.' : 'Ultra-fast 4G/5G connection across Tokyo, Kyoto & bullet trains.',
       tag: 'Populer',
@@ -43,7 +43,7 @@ export default async function HomePage({
     },
     {
       title: locale === 'id' ? 'China VPN-Ready Explorer' : 'China VPN-Ready Explorer',
-      dest: '🇨🇳 China',
+      dest: 'CN • China',
       days: '8 Hari',
       desc: locale === 'id' ? 'Bypass firewall otomatis. Tetap lancar buka WhatsApp, Google & Instagram.' : 'Automated built-in VPN bypass. Keep using WhatsApp, Google & IG smoothly.',
       tag: 'Termasuk VPN',
@@ -51,7 +51,7 @@ export default async function HomePage({
     },
     {
       title: locale === 'id' ? 'EuroTrip Multi-Negara' : 'EuroTrip Multi-Country',
-      dest: '🇪🇺 Prancis, Jerman, Italia',
+      dest: 'EU • Prancis, Jerman, Italia',
       days: '14 Hari',
       desc: locale === 'id' ? '1 eSIM atau Pocket WiFi aktif di 33 negara Eropa tanpa gonta-ganti kartu.' : '1 eSIM or Pocket WiFi active across 33 European countries without swapping SIMs.',
       tag: 'Multi-Country',
@@ -62,7 +62,7 @@ export default async function HomePage({
   return (
     <div className="space-y-16 pb-20">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-12 sm:pt-20 pb-16 bg-gradient-to-b from-sky-50/60 via-white to-slate-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200 dark:border-slate-800">
+      <section className="relative overflow-hidden pt-12 sm:pt-20 pb-16 bg-surface border-b border-paper-edge">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 text-xs font-bold border border-sky-200 dark:border-sky-800 animate-fade-in">
             <Compass className="w-4 h-4 text-sky-600 animate-spin-slow" />
@@ -80,7 +80,7 @@ export default async function HomePage({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
               href={`/${locale}/planner`}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-95"
+              className="w-full sm:w-auto px-8 min-h-[48px] rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-sm transition-all flex items-center justify-center gap-2 active:scale-95"
             >
               <Compass className="w-4 h-4" />
               <span>{t('ctaPlanner')}</span>
@@ -89,7 +89,7 @@ export default async function HomePage({
 
             <Link
               href={`/${locale}/destinations`}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-2 shadow-xs"
+              className="w-full sm:w-auto px-8 min-h-[48px] rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-2"
             >
               <Globe2 className="w-4 h-4 text-slate-500" />
               <span>{t('ctaDestinations')}</span>
@@ -138,7 +138,7 @@ export default async function HomePage({
             <Link
               key={idx}
               href={preset.href}
-              className="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-md hover:border-sky-300 dark:hover:border-sky-700 transition-all flex flex-col justify-between"
+              className="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-sky-300 dark:hover:border-sky-700 transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">

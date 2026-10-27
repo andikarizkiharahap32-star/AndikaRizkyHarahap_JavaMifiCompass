@@ -46,14 +46,14 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
   const [splitCount, setSplitCount] = useState(4);
 
   const destinationOptions = [
-    { code: 'JP', label: '🇯🇵 Japan (Tokyo & Osaka • 2 Kota)' },
-    { code: 'CN', label: '🇨🇳 China (Shanghai & Beijing • Bypass VPN)' },
-    { code: 'SA', label: '🇸🇦 Saudi Arabia (Makkah & Madinah • Umrah / Haji)' },
-    { code: 'SG', label: '🇸🇬 Singapore (Changi Hub)' },
-    { code: 'MY', label: '🇲🇾 Malaysia (Kuala Lumpur & Penang)' },
-    { code: 'TH', label: '🇹🇭 Thailand (Bangkok & Phuket)' },
-    { code: 'KR', label: '🇰🇷 South Korea (Seoul & Busan)' },
-    { code: 'FR', label: '🇫🇷 Europe Multi-Country (Schengen Area)' },
+    { code: 'JP', label: 'JP • Japan (Tokyo & Osaka • 2 Kota)' },
+    { code: 'CN', label: 'CN • China (Shanghai & Beijing • Bypass VPN)' },
+    { code: 'SA', label: 'SA • Saudi Arabia (Makkah & Madinah • Umrah / Haji)' },
+    { code: 'SG', label: 'SG • Singapore (Changi Hub)' },
+    { code: 'MY', label: 'MY • Malaysia (Kuala Lumpur & Penang)' },
+    { code: 'TH', label: 'TH • Thailand (Bangkok & Phuket)' },
+    { code: 'KR', label: 'KR • South Korea (Seoul & Busan)' },
+    { code: 'FR', label: 'FR • Europe Multi-Country (Schengen Area)' },
   ];
 
   // Dynamic real-time calculation teaser

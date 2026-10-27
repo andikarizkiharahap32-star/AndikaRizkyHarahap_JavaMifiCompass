@@ -8,7 +8,6 @@ const DESTINATIONS = [
     countryCode: 'JP',
     name: 'Jepang (Japan)',
     slug: 'jepang',
-    flag: '🇯🇵',
     callingCode: '+81',
     currency: 'JPY',
     needsVpn: false,
@@ -19,7 +18,6 @@ const DESTINATIONS = [
     countryCode: 'CN',
     name: 'China',
     slug: 'china',
-    flag: '🇨🇳',
     callingCode: '+86',
     currency: 'CNY',
     needsVpn: true,
@@ -30,7 +28,6 @@ const DESTINATIONS = [
     countryCode: 'SA',
     name: 'Arab Saudi (Umrah & Haji)',
     slug: 'arab-saudi-umrah',
-    flag: '🇸🇦',
     callingCode: '+966',
     currency: 'SAR',
     needsVpn: false,
@@ -41,7 +38,6 @@ const DESTINATIONS = [
     countryCode: 'SG',
     name: 'Singapura',
     slug: 'singapura',
-    flag: '🇸🇬',
     callingCode: '+65',
     currency: 'SGD',
     needsVpn: false,
@@ -79,7 +75,9 @@ export default function DestinationsPage({
           >
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-4xl">{dest.flag}</span>
+                <span className="font-mono text-sm font-bold px-2.5 py-1 rounded bg-sunken text-primary border border-paper-edge tracking-wider">
+                  {dest.countryCode}
+                </span>
                 {dest.needsVpn ? (
                   <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-warning-surface text-warning border border-warning/30 flex items-center gap-1">
                     <ShieldAlert className="w-3.5 h-3.5" />
