@@ -51,7 +51,7 @@ export const DestinationReadinessCard = ({
                 </span>
                 <span className="text-xs text-slate-500 font-medium">({weather.condition})</span>
               </div>
-              <span className="text-[10px] text-slate-400 mt-1 block">Sumber: Open-Meteo CC BY 4.0</span>
+              <span className="text-xs text-slate-400 mt-1 block">Sumber: Open-Meteo CC BY 4.0</span>
             </div>
           </div>
         )}
@@ -69,7 +69,7 @@ export const DestinationReadinessCard = ({
               <span className="text-sm font-extrabold text-slate-900 dark:text-white block mt-0.5">
                 {exchangeRate.formatted}
               </span>
-              <span className="text-[10px] text-slate-400 mt-1 block">
+              <span className="text-xs text-slate-400 mt-1 block">
                 ECB Ref: {exchangeRate.date}
               </span>
             </div>
@@ -88,7 +88,7 @@ export const DestinationReadinessCard = ({
             <span className="font-bold text-slate-800 dark:text-slate-200 block mt-0.5">
               {tips.plugType || 'Type C / G'}
             </span>
-            <span className="text-[11px] text-slate-500">Kode Telp: {countryInfo.callingCode}</span>
+            <span className="text-xs text-slate-500">Kode Telp: {countryInfo.callingCode}</span>
           </div>
         </div>
       </div>

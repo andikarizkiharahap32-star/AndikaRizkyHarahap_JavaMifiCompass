@@ -114,7 +114,7 @@ export default function ProductsPage({
 
             <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-slate-400 block uppercase font-medium">Tarif Mulai</span>
+                <span className="text-xs text-slate-400 block uppercase font-medium">Tarif Mulai</span>
                 <span className="text-base font-extrabold text-slate-900 dark:text-white">
                   {p.priceStarts}
                 </span>

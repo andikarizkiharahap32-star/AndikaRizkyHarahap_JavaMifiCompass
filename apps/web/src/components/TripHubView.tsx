@@ -198,7 +198,7 @@ export const TripHubView = ({
               >
                 <Sparkles className="w-5 h-5 mb-1.5" />
                 <span className="font-bold text-xs block">Top-Up Kuota</span>
-                <span className="text-[10px] text-slate-500">Tambah 1GB / 5GB</span>
+                <span className="text-xs text-slate-500">Tambah 1GB / 5GB</span>
               </button>
 
               <a
@@ -209,7 +209,7 @@ export const TripHubView = ({
               >
                 <PhoneCall className="w-5 h-5 mb-1.5" />
                 <span className="font-bold text-xs block">WhatsApp 24/7</span>
-                <span className="text-[10px] text-slate-500">Bantuan cepat teknis</span>
+                <span className="text-xs text-slate-500">Bantuan cepat teknis</span>
               </a>
             </div>
 
@@ -245,7 +245,7 @@ export const TripHubView = ({
                   {step.title}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500">{step.desc}</p>
+              <p className="text-xs text-slate-500">{step.desc}</p>
             </div>
           ))}
         </div>
@@ -306,7 +306,7 @@ export const TripHubView = ({
                   <MapPin className="w-4 h-4 text-emerald-600" />
                   Dekat Titik Drop-Off Router
                 </span>
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold tnum">
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold tnum">
                   400m (5 mnt jalan kaki)
                 </span>
               </div>
@@ -324,7 +324,7 @@ export const TripHubView = ({
               </span>
               <Link
                 href={`/${locale}/dining`}
-                className="inline-flex items-center justify-center gap-2 px-4 h-10 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono font-bold tracking-wider uppercase transition shrink-0"
+                className="inline-flex items-center justify-center gap-2 px-4 min-h-[48px] rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono font-bold tracking-wider uppercase transition shrink-0"
               >
                 <span>Buka Radar Lengkap</span>
                 <span>→</span>

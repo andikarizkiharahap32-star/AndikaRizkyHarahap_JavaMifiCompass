@@ -62,7 +62,7 @@ export default function DesignSystemShowcasePage({
               <button
                 type="button"
                 onClick={() => setActiveTheme('light')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition min-h-[44px] ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition min-h-[48px] ${
                   activeTheme === 'light'
                     ? 'bg-background text-primary font-bold border border-paper-edge'
                     : 'text-night-ink-soft hover:text-white'
@@ -75,7 +75,7 @@ export default function DesignSystemShowcasePage({
               <button
                 type="button"
                 onClick={() => setActiveTheme('night')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition min-h-[44px] ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition min-h-[48px] ${
                   activeTheme === 'night'
                     ? 'bg-night-raised text-white font-bold border border-night-edge'
                     : 'text-night-ink-soft hover:text-white'
@@ -88,7 +88,7 @@ export default function DesignSystemShowcasePage({
               <button
                 type="button"
                 onClick={() => setActiveTheme('side-by-side')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition min-h-[44px] ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition min-h-[48px] ${
                   activeTheme === 'side-by-side'
                     ? 'bg-line-wifi text-primary font-bold'
                     : 'text-night-ink-soft hover:text-white'
