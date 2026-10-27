@@ -340,4 +340,81 @@ export class OrdersService {
 
     return updated;
   }
+
+  async refundOrder(orderNumber: string, reason: string, actorId?: string, actorRoles?: string[]) {
+    const hasAdminPrivileges = actorRoles?.some(
+      (r) => r === 'SUPER_ADMIN' || r === 'ADMIN' || r === 'FINANCE',
+    );
+    if (!hasAdminPrivileges) {
+      throw new ForbiddenException('Refunds can only be processed by authorized Finance or Admin staff.');
+    }
+
+    const order = await this.prisma.order.findUnique({
+      where: { orderNumber },
+      include: { payments: true },
+    });
+
+    if (!order) throw new NotFoundException(`Order ${orderNumber} not found`);
+
+    if (order.status !== 'PAID' && order.status !== 'CANCELLED') {
+      throw new BadRequestException(`Order ${orderNumber} in status ${order.status} is not eligible for refund`);
+    }
+
+    // 1. Create immutable refund ledger entry if payment exists
+    if (order.payments && order.payments[0]) {
+      await this.prisma.ledgerEntry.create({
+        data: {
+          paymentId: order.payments[0].id,
+          type: 'REFUND',
+          amountIdr: -order.totalIdr,
+          balanceIdr: 0,
+          description: `Order ${orderNumber} refunded: ${reason}`,
+        },
+      });
+    }
+
+    // 2. Transition status or cancel
+    const updated = await this.prisma.order.update({
+      where: { id: order.id },
+      data: {
+        status: 'CANCELLED',
+        cancelledAt: new Date(),
+        statusHistory: {
+          create: {
+            fromStatus: order.status,
+            toStatus: 'CANCELLED',
+            reason: `Refunded: ${reason}`,
+            actorId,
+            actorType: 'USER',
+          },
+        },
+      },
+    });
+
+    // 3. Dual-write outbox event for n8n notification
+    await this.outboxService.recordEvent('order.refunded', order.id, {
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+      contactEmail: order.contactEmail,
+      contactName: order.contactName,
+      refundAmountIdr: order.totalIdr,
+      reason,
+    });
+
+    // 4. Immutable audit record
+    await this.auditService.record({
+      actorId,
+      actorType: 'USER',
+      action: 'ORDER_REFUNDED',
+      resource: 'orders',
+      resourceId: order.id,
+      newValue: { refundAmountIdr: order.totalIdr, reason },
+    });
+
+    return {
+      success: true,
+      message: `Order ${orderNumber} refunded successfully`,
+      order: updated,
+    };
+  }
 }

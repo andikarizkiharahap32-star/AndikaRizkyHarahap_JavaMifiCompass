@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DiningController } from './dining.controller';
+import { DiningAdminController } from './dining-admin.controller';
+import { DiningAutomationController } from './dining-automation.controller';
 import { DiningService } from './dining.service';
 import { FxService } from './fx.service';
 import { PlacesProviderService } from './places-provider.service';
@@ -12,7 +14,7 @@ import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [AuthModule],
-  controllers: [DiningController],
+  controllers: [DiningController, DiningAdminController, DiningAutomationController],
   providers: [
     DiningService,
     FxService,

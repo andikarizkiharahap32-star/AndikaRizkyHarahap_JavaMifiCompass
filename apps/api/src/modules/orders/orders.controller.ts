@@ -51,6 +51,24 @@ export class OrdersController {
     return this.ordersService.getOrderByNumber(orderNumber);
   }
 
+  @Post(':orderNumber/refund')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN', 'FINANCE')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Process refund for order and write to financial ledger (Finance/Admin only)' })
+  refundOrder(
+    @Param('orderNumber') orderNumber: string,
+    @Body() body: { reason: string },
+    @Request() req: any,
+  ) {
+    return this.ordersService.refundOrder(
+      orderNumber,
+      body?.reason || 'Customer requested refund',
+      req.user?.id,
+      req.user?.roles,
+    );
+  }
+
   @Get(':orderNumber/trip-hub')
   @ApiOperation({ summary: 'Get Trip Hub dashboard data for active/completed order' })
   getTripHub(@Param('orderNumber') orderNumber: string) {
