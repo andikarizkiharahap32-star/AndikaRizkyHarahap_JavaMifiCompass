@@ -42,3 +42,21 @@ JavaMifi Compass is architected to comply with Indonesia's *Undang-Undang Pelind
    Verified using `constantTimeCompare` against timing attacks.
 3. **Double-Spend & Duplicate Rejection:** The `WebhookEvent` table enforces a `@unique` index on `eventId`. Duplicate notifications trigger a fast 200 OK without double-crediting the ledger.
 4. **Append-Only Financial Ledger:** Every monetary movement (charges, refunds, deposit holds, deposit releases) is recorded as an immutable row in `ledger_entries`. Balances are strictly derived.
+
+---
+
+## 4. Route-Level Authentication & Authorization Enforcement Matrix
+
+Every mutating or operational route is strictly gated by NestJS guards (`AuthGuard('jwt')`, `RolesGuard`) with fail-closed default posture:
+
+| Route Path | HTTP Method | Guard / Auth Mechanism | Allowed Roles / Callers | Security Purpose |
+|---|---|---|---|---|
+| `/admin/*` | ALL | `JwtAuthGuard`, `RolesGuard` | `SUPER_ADMIN`, `ADMIN`, `OPS` | Protects operations dashboard, device inventory mutations, audit log views |
+| `/orders` | GET | `JwtAuthGuard`, `RolesGuard` | `SUPER_ADMIN`, `ADMIN`, `OPS` | Prevents unauthorized listing of customer orders |
+| `/orders/:id/status` | PATCH | `JwtAuthGuard`, `RolesGuard` | `SUPER_ADMIN`, `ADMIN`, `OPS` | Enforces state machine; strictly prevents callers from manually forging `PAID` transitions |
+| `/fulfillment/*` | ALL | `JwtAuthGuard`, `RolesGuard` | `SUPER_ADMIN`, `ADMIN`, `OPS` | Protects digital eSIM provisioning, modem logistics queues, and deposit release |
+| `/content/pages/:id/publish` | POST | `JwtAuthGuard`, `RolesGuard` | `SUPER_ADMIN`, `ADMIN`, `EDITOR` | Protects CMS block publishing and n8n broadcast distribution triggers |
+| `/support/tickets` | GET, PATCH | `JwtAuthGuard`, `RolesGuard` | `SUPER_ADMIN`, `ADMIN`, `SUPPORT` | Protects traveler support inquiries and priority triage updates |
+| `/v1/dining/admin/*` | ALL | `JwtAuthGuard`, `RolesGuard` | `SUPER_ADMIN`, `ADMIN` | Protects Halal review queue overrides, kill-switches, and golden-set runs |
+| `/payments/webhook/*` | POST | Cryptographic Gateway Signature | Payment Gateway Webhook | Validated using constant-time comparison; idempotent deduplication on `eventId` |
+| `/automation/callback/*` | POST | Webhook Secret HMAC-SHA256 | n8n Orchestrator | Validates timestamp (≤ 5-minute replay window) and HMAC signature |

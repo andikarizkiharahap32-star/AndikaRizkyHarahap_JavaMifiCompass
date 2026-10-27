@@ -182,7 +182,10 @@ pnpm --filter @javamifi/api test:unit -- src/modules/payments/payments.spec.ts
 # Run dining pipeline & deterministic tier engine tests
 pnpm --filter @javamifi/api test:unit -- src/modules/dining/dining-pipeline.spec.ts
 
-# Run golden set evaluation & 0.00% false-halal quality gate
+# Run 100-venue validator benchmark (deterministic extraction fixtures & 0.00% false-halal gates)
+# Note: In CI/offline environments without GEMINI_API_KEY, the test harness evaluates the deterministic
+# 6-stage validation pipeline and quote verifier against 100 labeled fixtures (including prompt injection tests).
+# Live LLM inference against Google Gemini Flash requires setting GEMINI_API_KEY in .env.
 pnpm --filter @javamifi/api test:unit -- src/modules/dining/evaluation/golden-set.spec.ts
 ```
 
