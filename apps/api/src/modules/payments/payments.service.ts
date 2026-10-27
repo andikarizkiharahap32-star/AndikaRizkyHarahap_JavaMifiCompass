@@ -44,7 +44,12 @@ export class PaymentsService {
       throw new BadRequestException(`Order status is ${order.status}, not eligible for payment initiation`);
     }
 
-    const mode = requestedMode || (process.env.PAYMENT_GATEWAY_MODE as any) || 'mock';
+    // S2 Protection: In production, payment gateway mode is strictly governed by server env; client override is rejected
+    const isProd = process.env.NODE_ENV === 'production';
+    if (isProd && requestedMode && requestedMode !== process.env.PAYMENT_GATEWAY_MODE) {
+      this.logger.warn(`Rejected client attempt to override gatewayMode in production: requested=${requestedMode}`);
+    }
+    const mode = (isProd ? process.env.PAYMENT_GATEWAY_MODE : (requestedMode || process.env.PAYMENT_GATEWAY_MODE)) || 'mock';
     const adapter = mode === 'midtrans_sandbox' ? this.midtransAdapter : this.mockAdapter;
 
     const result = await adapter.createPayment({
