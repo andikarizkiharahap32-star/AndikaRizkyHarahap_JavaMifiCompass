@@ -8,7 +8,20 @@ export class AutomationService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  verifyCallbackSignature(timestamp: string, signature: string, payload: any): boolean {
+  verifyCallbackSignature(timestamp: string, signature: string, payload: any, maxAgeMs = 300_000): boolean {
+    if (!timestamp || !signature) return false;
+
+    // Replay attack prevention: verify timestamp is within allowed window
+    const tsNumber = Number(timestamp);
+    if (isNaN(tsNumber)) return false;
+
+    const now = Date.now();
+    const age = now - tsNumber;
+    // Reject timestamps older than maxAgeMs (5 minutes) or future by more than 60s
+    if (age > maxAgeMs || age < -60_000) {
+      return false;
+    }
+
     const raw = `${timestamp}.${JSON.stringify(payload)}`;
     const expected = generateHmacSha256(raw, this.webhookSecret);
     return constantTimeCompare(expected, signature);

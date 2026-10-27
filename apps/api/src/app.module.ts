@@ -13,7 +13,7 @@ import { ContentModule } from './modules/content/content.module';
 import { SupportModule } from './modules/support/support.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { AuditModule } from './modules/audit/audit.module';
-import { HealthModule } from './modules/health/health.module';
+import { HealthController } from './modules/health/health.controller';
 import { DiningModule } from './modules/dining/dining.module';
 
 @Module({
@@ -32,8 +32,8 @@ import { DiningModule } from './modules/dining/dining.module';
     ContentModule,
     SupportModule,
     AdminModule,
-    HealthModule,
     DiningModule,
   ],
+  controllers: [HealthController],
 })
 export class AppModule {}
