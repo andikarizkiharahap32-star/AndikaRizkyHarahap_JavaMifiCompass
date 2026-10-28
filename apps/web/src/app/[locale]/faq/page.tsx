@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { HelpCircle, MessageSquare } from 'lucide-react';
 import { apiClient } from '../../../lib/api';
-import { FaqInteractiveAccordion } from '../../../components/FaqInteractiveAccordion';
-import { FALLBACK_FAQS, type FaqItem } from '../../../lib/faq-data';
+import {
+  FaqInteractiveAccordion,
+  type FaqItem,
+} from '../../../components/FaqInteractiveAccordion';
 
 export async function generateMetadata({
   params: { locale },
@@ -50,12 +52,7 @@ export default async function FaqPage({
           question: f.question || '',
           answer: f.answer || '',
         }))
-      : FALLBACK_FAQS.map((f) => ({
-          id: f.id,
-          category: f.category,
-          question: isId ? f.questionId : f.questionEn,
-          answer: isId ? f.answerId : f.answerEn,
-        }));
+      : [];
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
