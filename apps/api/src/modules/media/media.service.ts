@@ -60,7 +60,12 @@ export function sniffMimeType(buffer: Buffer): SupportedMimeType | null {
   }
 
   // GIF: GIF87a or GIF89a (47 49 46 38)
-  if (buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x38) {
+  if (
+    buffer[0] === 0x47 &&
+    buffer[1] === 0x49 &&
+    buffer[2] === 0x46 &&
+    buffer[3] === 0x38
+  ) {
     return 'image/gif';
   }
 
@@ -143,12 +148,12 @@ export class MediaService {
     userId: string,
     filename: string,
     declaredMimeType: string,
-    fileSizeBytes: number,
+    fileSizeBytes: number
   ): PresignedUploadDetails {
     if (fileSizeBytes > MAX_UPLOAD_SIZE_BYTES) {
       throw new ValidationError(
         `File size exceeds maximum allowable limit of ${MAX_UPLOAD_SIZE_BYTES / (1024 * 1024)} MB`,
-        [{ name: 'fileSize', reason: 'Must be <= 8388608 bytes' }],
+        [{ name: 'fileSize', reason: 'Must be <= 8388608 bytes' }]
       );
     }
 
@@ -177,7 +182,7 @@ export class MediaService {
    */
   processAndSanitizeUpload(
     buffer: Buffer,
-    declaredMimeType: string,
+    declaredMimeType: string
   ): { sanitizedBuffer: Buffer; actualMimeType: SupportedMimeType } {
     if (buffer.length > MAX_UPLOAD_SIZE_BYTES) {
       throw new ValidationError('File size exceeds 8 MB ceiling', [
@@ -189,7 +194,7 @@ export class MediaService {
     if (!actualMime || actualMime !== declaredMimeType) {
       throw new ValidationError(
         `Content sniff failed: Declared type '${declaredMimeType}' does not match binary magic bytes '${actualMime || 'unknown'}'`,
-        [{ name: 'mimeType', reason: 'MIME type mismatch with binary header' }],
+        [{ name: 'mimeType', reason: 'MIME type mismatch with binary header' }]
       );
     }
 

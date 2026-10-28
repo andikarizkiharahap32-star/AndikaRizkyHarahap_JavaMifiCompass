@@ -34,9 +34,7 @@ describe('Backend and Workflows - P01: Configuration and Environment Management'
       NODE_ENV: 'production',
       JWT_SECRET: 'development-jwt-secret-not-for-production',
     };
-    expect(() => parseEnv(prodWithDevSecret)).toThrow(
-      /JWT_SECRET cannot use development fallback in production/,
-    );
+    expect(() => parseEnv(prodWithDevSecret)).toThrow(/JWT_SECRET cannot use development fallback in production/);
   });
 
   it('verifies apps/api/.env.example covers every schema key in env.ts', () => {

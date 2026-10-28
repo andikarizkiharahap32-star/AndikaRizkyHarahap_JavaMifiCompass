@@ -144,10 +144,7 @@ export function validateCookieSecurity(
   return {
     valid: violations.length === 0,
     violations,
-    prefixCompliance:
-      inferredPrefix !== 'NONE'
-        ? violations.filter((v) => v.includes('PREFIX')).length === 0
-        : true,
+    prefixCompliance: inferredPrefix !== 'NONE' ? violations.filter(v => v.includes('PREFIX')).length === 0 : true,
     invariantsSatisfied: invariants,
   };
 }
@@ -354,9 +351,7 @@ export function verifyCsrfRequest(
     try {
       const refererMatch = input.referer.match(/^(https?:\/\/[^/]+)/i);
       const refererOrigin = refererMatch && refererMatch[1] ? refererMatch[1] : '';
-      const isRefererAllowed = refererOrigin
-        ? policy.allowedOrigins.includes(refererOrigin)
-        : false;
+      const isRefererAllowed = refererOrigin ? policy.allowedOrigins.includes(refererOrigin) : false;
       if (!isRefererAllowed) {
         return {
           valid: false,
@@ -426,8 +421,7 @@ export const SecurityHeadersPolicySchema = z.object({
 export type SecurityHeadersPolicy = z.infer<typeof SecurityHeadersPolicySchema>;
 
 export const DEFAULT_SECURITY_HEADERS: SecurityHeadersPolicy = {
-  contentSecurityPolicy:
-    "default-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self';",
+  contentSecurityPolicy: "default-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self';",
   xFrameOptions: 'DENY',
   xContentTypeOptions: 'nosniff',
   strictTransportSecurity: 'max-age=63072000; includeSubDomains; preload',
@@ -464,8 +458,7 @@ export function evaluateSecurityHeaders(
   // Clickjacking defense: frame-ancestors in CSP or X-Frame-Options
   const csp = normalized['content-security-policy'] || '';
   const xfo = normalized['x-frame-options'] || '';
-  const hasFrameAncestorsNone =
-    csp.includes("frame-ancestors 'none'") || csp.includes("frame-ancestors 'self'");
+  const hasFrameAncestorsNone = csp.includes("frame-ancestors 'none'") || csp.includes("frame-ancestors 'self'");
   const hasXfoDenyOrSame = xfo.toUpperCase() === 'DENY' || xfo.toUpperCase() === 'SAMEORIGIN';
 
   const framingProtected = hasFrameAncestorsNone || hasXfoDenyOrSame;
@@ -488,11 +481,9 @@ export function evaluateSecurityHeaders(
 
   // Referrer Policy defense
   const refPolicy = normalized['referrer-policy'] || '';
-  const referrerProtected = [
-    'strict-origin-when-cross-origin',
-    'no-referrer',
-    'same-origin',
-  ].includes(refPolicy.toLowerCase());
+  const referrerProtected = ['strict-origin-when-cross-origin', 'no-referrer', 'same-origin'].includes(
+    refPolicy.toLowerCase(),
+  );
   if (!referrerProtected) {
     violations.push('REFERRER_POLICY_WEAK_OR_MISSING');
   }
@@ -559,8 +550,7 @@ export function evaluateBrowserBoundariesCompliance(params?: {
   const checks: BrowserBoundaryCheck[] = [];
 
   // Check 1: CORS Wildcard with credentials check (SEC-P06-CTRL-0013, INV-04)
-  const hasWildcardWithCreds =
-    corsPolicy.allowedOrigins.includes('*') && corsPolicy.allowCredentials;
+  const hasWildcardWithCreds = corsPolicy.allowedOrigins.includes('*') && corsPolicy.allowCredentials;
   checks.push({
     id: 'SEC-P06-CHK-01',
     name: 'CORS Wildcard with Credentials Prevention',
@@ -572,9 +562,7 @@ export function evaluateBrowserBoundariesCompliance(params?: {
   });
 
   // Check 2: Explicit allowed CORS origins (SEC-P06-CTRL-0013, INV-01)
-  const allOriginsExplicit = corsPolicy.allowedOrigins.every(
-    (o) => o.startsWith('https://') || o.startsWith('http://localhost'),
-  );
+  const allOriginsExplicit = corsPolicy.allowedOrigins.every(o => o.startsWith('https://') || o.startsWith('http://localhost'));
   checks.push({
     id: 'SEC-P06-CHK-02',
     name: 'CORS Origin Strict Allowlist',
@@ -609,10 +597,9 @@ export function evaluateBrowserBoundariesCompliance(params?: {
     name: 'Admin Cookie Strict SameSite Isolation',
     invariant: 'INV-02',
     status: adminVal.valid && adminIsStrict ? 'PASS' : 'FAIL',
-    details:
-      adminVal.valid && adminIsStrict
-        ? `Admin cookie '${adminCookie.name}' enforces SameSite=Strict and __Host- prefix`
-        : 'Admin session cookie does not enforce SameSite=Strict or has security violations',
+    details: adminVal.valid && adminIsStrict
+      ? `Admin cookie '${adminCookie.name}' enforces SameSite=Strict and __Host- prefix`
+      : 'Admin session cookie does not enforce SameSite=Strict or has security violations',
   });
 
   // Check 5: CSRF Token & Origin Verification (SEC-P06-CTRL-0014, INV-01)
@@ -669,7 +656,7 @@ export function evaluateBrowserBoundariesCompliance(params?: {
   });
 
   const totalChecks = checks.length;
-  const passedChecks = checks.filter((c) => c.status === 'PASS').length;
+  const passedChecks = checks.filter(c => c.status === 'PASS').length;
   const failedChecks = totalChecks - passedChecks;
   const complianceRate = totalChecks > 0 ? (passedChecks / totalChecks) * 100 : 0;
   const status = failedChecks === 0 ? 'PASS' : 'FAIL';

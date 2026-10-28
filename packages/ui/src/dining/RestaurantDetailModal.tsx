@@ -60,7 +60,7 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
     place.latitude !== undefined && place.longitude !== undefined
       ? `https://www.google.com/maps/search/?api=1&query=${place.latitude},${place.longitude}`
       : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-          `${place.name} ${place.address}`,
+          `${place.name} ${place.address}`
         )}`;
 
   // 1. Scroll Lock: prevent background body scroll while modal is active
@@ -87,7 +87,7 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
   const handleTabTrap = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Tab' || !modalRef.current) return;
     const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
     );
     if (focusableElements.length === 0) return;
 
@@ -203,15 +203,8 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
             <div className="space-y-2">
               <div className="relative rounded overflow-hidden border border-paper-edge bg-sunken aspect-video flex items-center justify-center">
                 {/* Base placeholder in solid container if image is loading or fails */}
-                <div
-                  className="text-outline text-xs font-sans text-center px-4 select-none pointer-events-none"
-                  aria-hidden="true"
-                >
-                  <span>
-                    {isId
-                      ? 'Dokumentasi Visual Tersedia di Lokasi'
-                      : 'Visual Documentation Available on Location'}
-                  </span>
+                <div className="text-outline text-xs font-sans text-center px-4 select-none pointer-events-none" aria-hidden="true">
+                  <span>{isId ? 'Dokumentasi Visual Tersedia di Lokasi' : 'Visual Documentation Available on Location'}</span>
                 </div>
                 <img
                   src={currentImage.url}
@@ -230,12 +223,12 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
                       ? 'Fasad Depan'
                       : 'Storefront'
                     : currentImage.type === 'DISH'
-                      ? isId
-                        ? 'Menu Andalan'
-                        : 'Signature Dish'
-                      : isId
-                        ? 'Sertifikat Resmi'
-                        : 'Certificate'}
+                    ? isId
+                      ? 'Menu Andalan'
+                      : 'Signature Dish'
+                    : isId
+                    ? 'Sertifikat Resmi'
+                    : 'Certificate'}
                 </div>
                 {currentImage.caption && (
                   <div className="absolute bottom-0 inset-x-0 bg-primary/90 text-on-primary p-2 text-xs font-sans">
@@ -273,12 +266,12 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
                             ? 'Fasad'
                             : 'Front'
                           : img.type === 'DISH'
-                            ? isId
-                              ? 'Menu'
-                              : 'Dish'
-                            : isId
-                              ? 'Sertifikat'
-                              : 'Cert'}
+                          ? isId
+                            ? 'Menu'
+                            : 'Dish'
+                          : isId
+                          ? 'Sertifikat'
+                          : 'Cert'}
                       </span>
                     </button>
                   ))}
@@ -287,11 +280,7 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
             </div>
           ) : (
             <div className="w-full h-28 rounded border border-paper-edge bg-sunken flex items-center justify-center text-outline text-xs">
-              <span>
-                {isId
-                  ? 'Foto & Dokumentasi Fasad Tersedia di Lokasi'
-                  : 'Storefront Photos Available on Location'}
-              </span>
+              <span>{isId ? 'Foto & Dokumentasi Fasad Tersedia di Lokasi' : 'Storefront Photos Available on Location'}</span>
             </div>
           )}
 
@@ -394,8 +383,8 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
                     ? 'Data Berhasil Disalin!'
                     : 'Details Copied!'
                   : isId
-                    ? 'Bagikan / Salin Data'
-                    : 'Share / Copy Info'}
+                  ? 'Bagikan / Salin Data'
+                  : 'Share / Copy Info'}
               </span>
             </button>
 
@@ -465,9 +454,7 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
                       Google Places API &bull; {isId ? 'Terverifikasi' : 'Verified'}
                     </span>
                   </div>
-                  <span className="tnum block leading-relaxed">
-                    {place.openingHours.join(' · ')}
-                  </span>
+                  <span className="tnum block leading-relaxed">{place.openingHours.join(' · ')}</span>
                 </div>
               </div>
             )}
@@ -490,8 +477,8 @@ export const RestaurantDetailModal: React.FC<RestaurantDetailModalProps> = ({
               <div className="flex items-center gap-2 mb-2">
                 <ShieldCheck className="w-4 h-4 text-success shrink-0" />
                 <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold text-primary m-0">
-                  {isId ? 'Landasan Bukti Status Halal' : 'Halal Evidence Verification'} [
-                  {place.tier}]:
+                  {isId ? 'Landasan Bukti Status Halal' : 'Halal Evidence Verification'}{' '}
+                  [{place.tier}]:
                 </h4>
               </div>
               <p className="text-xs text-secondary leading-relaxed m-0">

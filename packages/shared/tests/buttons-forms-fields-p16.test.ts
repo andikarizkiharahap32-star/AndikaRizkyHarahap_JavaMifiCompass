@@ -19,25 +19,15 @@ describe('P16 — Buttons, Forms, Fields, and Touch Targets', () => {
   describe('WS01 to WS05: Button Primitives and Variants', () => {
     it('implements primary, secondary, outline, ghost, and danger variants using design tokens', () => {
       // Primary variant
-      expect(buttonSource).toContain(
-        'bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary border border-primary',
-      );
+      expect(buttonSource).toContain("bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary border border-primary");
       // Secondary variant
-      expect(buttonSource).toContain(
-        'bg-surface hover:bg-paper active:bg-surface text-primary border border-paper-edge',
-      );
+      expect(buttonSource).toContain("bg-surface hover:bg-paper active:bg-surface text-primary border border-paper-edge");
       // Outline variant
-      expect(buttonSource).toContain(
-        'bg-transparent hover:bg-paper active:bg-surface text-primary border border-paper-edge',
-      );
+      expect(buttonSource).toContain("bg-transparent hover:bg-paper active:bg-surface text-primary border border-paper-edge");
       // Ghost variant
-      expect(buttonSource).toContain(
-        'bg-transparent hover:bg-paper active:bg-surface text-secondary hover:text-primary border border-transparent',
-      );
+      expect(buttonSource).toContain("bg-transparent hover:bg-paper active:bg-surface text-secondary hover:text-primary border border-transparent");
       // Danger variant
-      expect(buttonSource).toContain(
-        'bg-danger hover:bg-danger text-on-error active:bg-danger border border-danger',
-      );
+      expect(buttonSource).toContain("bg-danger hover:bg-danger text-on-error active:bg-danger border border-danger");
     });
 
     it('WS12 & GEMINI.md: Enforces 48px minimum touch target across all button sizes', () => {

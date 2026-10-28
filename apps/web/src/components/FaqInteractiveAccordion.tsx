@@ -32,8 +32,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-shipping-airport',
     category: 'shipping',
-    questionId: 'Bagaimana cara mengambil dan mengembalikan modem Pocket WiFi di bandara?',
-    questionEn: 'How do I pick up and return the Pocket WiFi router at the airport?',
+    questionId:
+      'Bagaimana cara mengambil dan mengembalikan modem Pocket WiFi di bandara?',
+    questionEn:
+      'How do I pick up and return the Pocket WiFi router at the airport?',
     answerId:
       'Modem dapat diambil di booth JavaMifi Bandara Soekarno-Hatta (Terminal 3 Internasional), Bandara Ngurah Rai Bali (DPS), atau Bandara Juanda Surabaya (SUB) 2 jam sebelum jadwal terbang. Untuk pengembalian, Anda cukup memasukkan unit ke Dropbox 24 jam kami di bandara kedatangan tanpa antre.',
     answerEn:
@@ -42,8 +44,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-shipping-courier',
     category: 'shipping',
-    questionId: 'Apakah modem Pocket WiFi dapat dikirimkan ke alamat rumah atau hotel?',
-    questionEn: 'Can the Pocket WiFi router be delivered to my home or hotel address?',
+    questionId:
+      'Apakah modem Pocket WiFi dapat dikirimkan ke alamat rumah atau hotel?',
+    questionEn:
+      'Can the Pocket WiFi router be delivered to my home or hotel address?',
     answerId:
       'Ya. Kami melayani pengiriman kurir reguler maupun instan (JNE, SiCepat, Gosend) ke seluruh Indonesia. Perangkat dikirim 2 hari sebelum tanggal keberangkatan Anda sehingga tiba tepat waktu sebelum Anda menuju bandara.',
     answerEn:
@@ -52,7 +56,8 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-shipping-china-vpn',
     category: 'shipping',
-    questionId: 'Apakah modem Pocket WiFi JavaMifi dapat membuka WhatsApp dan Google di China?',
+    questionId:
+      'Apakah modem Pocket WiFi JavaMifi dapat membuka WhatsApp dan Google di China?',
     questionEn:
       'Can JavaMifi Pocket WiFi access Google, WhatsApp, and Instagram in mainland China?',
     answerId:
@@ -77,8 +82,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-esim-timing',
     category: 'esim',
-    questionId: 'Kapan waktu terbaik untuk memindai (scan) kode QR eSIM JavaMifi?',
-    questionEn: 'When is the best time to scan and install the JavaMifi eSIM QR code?',
+    questionId:
+      'Kapan waktu terbaik untuk memindai (scan) kode QR eSIM JavaMifi?',
+    questionEn:
+      'When is the best time to scan and install the JavaMifi eSIM QR code?',
     answerId:
       'Kami menyarankan Anda memindai kode QR 1 hari sebelum terbang atau saat menunggu di ruang tunggu bandara dengan koneksi WiFi yang stabil. Setibanya di bandara negara tujuan, cukup aktifkan opsi Data Roaming pada profil eSIM tersebut.',
     answerEn:
@@ -87,8 +94,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-esim-compatibility',
     category: 'esim',
-    questionId: 'Perangkat smartphone apa saja yang kompatibel dengan eSIM JavaMifi?',
-    questionEn: 'Which smartphone models are compatible with JavaMifi eSIM?',
+    questionId:
+      'Perangkat smartphone apa saja yang kompatibel dengan eSIM JavaMifi?',
+    questionEn:
+      'Which smartphone models are compatible with JavaMifi eSIM?',
     answerId:
       'eSIM didukung oleh iPhone XS, XR, seri 11 hingga 16, Samsung Galaxy S20 ke atas, Z Flip/Fold, serta Google Pixel 3 ke atas. Pastikan smartphone Anda dalam kondisi carrier-unlocked (tidak terkunci operator tertentu). Anda dapat memeriksa kompatibilitas langsung di fitur eSIM Checker kami.',
     answerEn:
@@ -97,8 +106,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-esim-reinstall',
     category: 'esim',
-    questionId: 'Bisakah kode QR eSIM dipindai ulang jika saya berganti smartphone atau terhapus?',
-    questionEn: 'Can an eSIM QR code be scanned multiple times or transferred to another device?',
+    questionId:
+      'Bisakah kode QR eSIM dipindai ulang jika saya berganti smartphone atau terhapus?',
+    questionEn:
+      'Can an eSIM QR code be scanned multiple times or transferred to another device?',
     answerId:
       'Sesuai standar keamanan GSMA, satu kode QR eSIM bersifat sekali pakai (single-use) dan hanya dapat terpasang pada satu perangkat aktif. Jika profil terhapus secara tidak sengaja sebelum keberangkatan, segera hubungi Helpdesk 24/7 kami untuk verifikasi dan penerbitan ulang.',
     answerEn:
@@ -121,8 +132,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-refund-sla',
     category: 'refund',
-    questionId: 'Berapa lama proses pengembalian deposit jaminan modem Pocket WiFi (Rp 500.000)?',
-    questionEn: 'How long does the Pocket WiFi security deposit refund (Rp 500,000) take?',
+    questionId:
+      'Berapa lama proses pengembalian deposit jaminan modem Pocket WiFi (Rp 500.000)?',
+    questionEn:
+      'How long does the Pocket WiFi security deposit refund (Rp 500,000) take?',
     answerId:
       'Deposit jaminan sebesar Rp 500.000 akan otomatis dikembalikan ke rekening bank atau limit kartu kredit Anda dalam 1-3 hari kerja setelah perangkat kami terima dan lolos inspeksi fisik kelengkapan.',
     answerEn:
@@ -133,7 +146,8 @@ export const FALLBACK_FAQS = [
     category: 'refund',
     questionId:
       'Bagaimana kebijakan pembatalan sewa jika rencana perjalanan saya berubah atau dibatalkan?',
-    questionEn: 'What is the cancellation policy if my travel plans are delayed or cancelled?',
+    questionEn:
+      'What is the cancellation policy if my travel plans are delayed or cancelled?',
     answerId:
       'Pembatalan yang diajukan minimal 24 jam sebelum tanggal aktivasi atau jadwal pengiriman berhak mendapatkan pengembalian dana 100% penuh tanpa potongan penalti, baik melalui metode pembayaran asal maupun voucher kredit perjalanan.',
     answerEn:
@@ -144,7 +158,8 @@ export const FALLBACK_FAQS = [
     category: 'refund',
     questionId:
       'Apa yang terjadi jika perangkat modem mengalami kerusakan fisik atau hilang selama perjalanan?',
-    questionEn: 'What happens if a rental router is damaged or lost during my trip?',
+    questionEn:
+      'What happens if a rental router is damaged or lost during my trip?',
     answerId:
       'Jika Anda memilih opsi Garansi Perlindungan Perangkat saat checkout, Anda sepenuhnya dibebaskan dari biaya penggantian unit. Tanpa garansi, biaya penggantian akan diperhitungkan secara transparan dari deposit escrow tanpa denda tersembunyi.',
     answerEn:
@@ -155,8 +170,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-dining-verification',
     category: 'dining',
-    questionId: 'Bagaimana Compass menentukan sertifikasi halal tempat makan di luar negeri?',
-    questionEn: 'How does Compass verify halal certification for overseas restaurants?',
+    questionId:
+      'Bagaimana Compass menentukan sertifikasi halal tempat makan di luar negeri?',
+    questionEn:
+      'How does Compass verify halal certification for overseas restaurants?',
     answerId:
       'Sistem Compass menggunakan mesin evaluasi bukti 5-tier fail-closed: sertifikat resmi terdaftar (JAKIM, MUIS, JHA), klaim tertulis pemilik, atau opsi halal. Jika bukti tidak cukup kuat, sistem secara aman menandainya sebagai Unverified.',
     answerEn:
@@ -165,8 +182,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-dining-tiers',
     category: 'dining',
-    questionId: 'Apa arti 5 tier klasifikasi status halal pada Compass Rasa?',
-    questionEn: 'What do the 5 halal classification tiers mean in Compass Rasa?',
+    questionId:
+      'Apa arti 5 tier klasifikasi status halal pada Compass Rasa?',
+    questionEn:
+      'What do the 5 halal classification tiers mean in Compass Rasa?',
     answerId:
       'Tier 1: Tersertifikasi Halal Resmi oleh badan akreditasi; Tier 2: Dimiliki Muslim (Muslim-Owned); Tier 3: Menyajikan daging halal dan bebas alkohol; Tier 4: Menu bebas babi (Pork-Free / Omission); Tier 5: Belum terverifikasi (Unverified / Fail-Closed).',
     answerEn:
@@ -177,7 +196,8 @@ export const FALLBACK_FAQS = [
     category: 'dining',
     questionId:
       'Apakah sistem Compass menggunakan prediksi AI atau halusinasi untuk menentukan status halal?',
-    questionEn: 'Does Compass use synthetic AI predictions or unverified data for halal status?',
+    questionEn:
+      'Does Compass use synthetic AI predictions or unverified data for halal status?',
     answerId:
       'Sama sekali tidak. Prinsip AI Safety kami melarang keras klaim sintetis tanpa audit. Seluruh informasi kuliner wajib memiliki rujukan sertifikat nyata, nomor registrasi, atau laporan inspeksi fisik yang dapat ditinjau langsung di Evidence Drawer.',
     answerEn:
@@ -188,8 +208,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-currency-conversion',
     category: 'currency',
-    questionId: 'Bagaimana kurs mata uang dan perkiraan harga kuliner luar negeri dihitung?',
-    questionEn: 'How are currency conversions and foreign dining price estimates calculated?',
+    questionId:
+      'Bagaimana kurs mata uang dan perkiraan harga kuliner luar negeri dihitung?',
+    questionEn:
+      'How are currency conversions and foreign dining price estimates calculated?',
     answerId:
       'Sistem menyajikan harga ganda (Dual-Price Display) yang mengonversi mata uang lokal ke Rupiah (IDR) berdasarkan kurs referensi harian European Central Bank (ECB) ditambah estimasi spread kartu bank yang transparan.',
     answerEn:
@@ -198,8 +220,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-currency-idr-zero-decimal',
     category: 'currency',
-    questionId: 'Mengapa nominal Rupiah (IDR) ditampilkan tanpa nilai desimal (koma)?',
-    questionEn: 'Why are Indonesian Rupiah (IDR) figures displayed without decimal places?',
+    questionId:
+      'Mengapa nominal Rupiah (IDR) ditampilkan tanpa nilai desimal (koma)?',
+    questionEn:
+      'Why are Indonesian Rupiah (IDR) figures displayed without decimal places?',
     answerId:
       'Sesuai standar moneter Bank Indonesia dan ISO 4217, Rupiah adalah mata uang tanpa satuan minor desimal (0-decimal currency). Semua nilai IDR dibulatkan secara deterministik demi kemudahan membaca.',
     answerEn:
@@ -210,7 +234,8 @@ export const FALLBACK_FAQS = [
     category: 'currency',
     questionId:
       'Bagaimana Compass menangani mata uang 3 desimal seperti Dinar Kuwait atau Rial Oman?',
-    questionEn: 'How does Compass handle 3-decimal currencies such as Kuwaiti Dinar or Omani Rial?',
+    questionEn:
+      'How does Compass handle 3-decimal currencies such as Kuwaiti Dinar or Omani Rial?',
     answerId:
       'Mata uang Timur Tengah (KWD, BHD, OMR, JOD) memiliki 3 angka desimal (1.000 fils). Sistem menampilkannya dengan presisi 3 desimal penuh menggunakan angka tabular (tnum) agar perhitungannya tepat.',
     answerEn:
@@ -221,8 +246,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-payment-mock-sandbox',
     category: 'payment',
-    questionId: 'Apa itu Mock Payment Gateway dan apakah kartu kredit saya akan terdebit?',
-    questionEn: 'What is the Mock Payment Gateway and will my real card be charged?',
+    questionId:
+      'Apa itu Mock Payment Gateway dan apakah kartu kredit saya akan terdebit?',
+    questionEn:
+      'What is the Mock Payment Gateway and will my real card be charged?',
     answerId:
       'Mock Payment Gateway adalah lingkungan simulasi sandbox untuk menguji alur pemesanan secara aman. Tidak ada tagihan uang nyata yang dilakukan ke kartu kredit atau rekening bank Anda selama mode sandbox.',
     answerEn:
@@ -231,8 +258,10 @@ export const FALLBACK_FAQS = [
   {
     id: 'faq-payment-chit-verification',
     category: 'payment',
-    questionId: 'Bagaimana cara memverifikasi bahwa pembayaran simulasi saya berhasil?',
-    questionEn: 'How can I verify that my simulated transaction was completed successfully?',
+    questionId:
+      'Bagaimana cara memverifikasi bahwa pembayaran simulasi saya berhasil?',
+    questionEn:
+      'How can I verify that my simulated transaction was completed successfully?',
     answerId:
       'Setelah simulasi selesai, sistem menerbitkan Audit Chit digital di halaman Trip Hub lengkap dengan Nomor Pesanan unik, rincian biaya deterministik, dan kode QR aktivasi siap pakai.',
     answerEn:
@@ -245,7 +274,10 @@ interface FaqInteractiveAccordionProps {
   locale: string;
 }
 
-export function FaqInteractiveAccordion({ initialItems, locale }: FaqInteractiveAccordionProps) {
+export function FaqInteractiveAccordion({
+  initialItems,
+  locale,
+}: FaqInteractiveAccordionProps) {
   const t = useTranslations('faqPage');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -262,7 +294,7 @@ export function FaqInteractiveAccordion({ initialItems, locale }: FaqInteractive
       { id: 'currency', label: t('categoryCurrency'), icon: Coins },
       { id: 'payment', label: t('categoryPayment'), icon: CreditCard },
     ],
-    [t],
+    [t]
   );
 
   // Deep linking: Inspect hash on mount to expand and scroll target item
@@ -299,7 +331,11 @@ export function FaqInteractiveAccordion({ initialItems, locale }: FaqInteractive
       const questionText = item.question.toLowerCase();
       const answerText = item.answer.toLowerCase();
       const categoryText = item.category.toLowerCase();
-      return questionText.includes(q) || answerText.includes(q) || categoryText.includes(q);
+      return (
+        questionText.includes(q) ||
+        answerText.includes(q) ||
+        categoryText.includes(q)
+      );
     });
   }, [initialItems, selectedCategory, searchQuery]);
 
@@ -333,15 +369,18 @@ export function FaqInteractiveAccordion({ initialItems, locale }: FaqInteractive
     setExpandedIds(new Set());
   }, []);
 
-  const handleCopyLink = useCallback((id: string) => {
-    if (typeof window === 'undefined') return;
-    const url = `${window.location.origin}${window.location.pathname}#${id}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopiedId(id);
-      window.history.replaceState(null, '', `#${id}`);
-      setTimeout(() => setCopiedId(null), 2500);
-    });
-  }, []);
+  const handleCopyLink = useCallback(
+    (id: string) => {
+      if (typeof window === 'undefined') return;
+      const url = `${window.location.origin}${window.location.pathname}#${id}`;
+      navigator.clipboard.writeText(url).then(() => {
+        setCopiedId(id);
+        window.history.replaceState(null, '', `#${id}`);
+        setTimeout(() => setCopiedId(null), 2500);
+      });
+    },
+    []
+  );
 
   const handleResetFilters = useCallback(() => {
     setSearchQuery('');
@@ -349,7 +388,8 @@ export function FaqInteractiveAccordion({ initialItems, locale }: FaqInteractive
   }, []);
 
   const allExpanded =
-    filteredItems.length > 0 && filteredItems.every((item) => expandedIds.has(item.id));
+    filteredItems.length > 0 &&
+    filteredItems.every((item) => expandedIds.has(item.id));
 
   return (
     <div className="space-y-8">
@@ -388,7 +428,11 @@ export function FaqInteractiveAccordion({ initialItems, locale }: FaqInteractive
         <span className="text-xs font-bold uppercase tracking-wider text-secondary block">
           {t('categoriesLabel')}
         </span>
-        <div role="tablist" aria-label={t('categoriesLabel')} className="flex flex-wrap gap-2">
+        <div
+          role="tablist"
+          aria-label={t('categoriesLabel')}
+          className="flex flex-wrap gap-2"
+        >
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isSelected = selectedCategory === cat.id;
@@ -411,7 +455,9 @@ export function FaqInteractiveAccordion({ initialItems, locale }: FaqInteractive
                 <span>{cat.label}</span>
                 <span
                   className={`tnum px-1.5 py-0.5 rounded text-xs font-mono font-bold ${
-                    isSelected ? 'bg-primary-container text-on-primary' : 'bg-paper text-secondary'
+                    isSelected
+                      ? 'bg-primary-container text-on-primary'
+                      : 'bg-paper text-secondary'
                   }`}
                 >
                   {count}

@@ -96,7 +96,7 @@ describe('PAY-P04 — Mock Payment Intent Creation Audit Suite', () => {
       process.env.ALLOW_MOCK_PAYMENT = 'false';
 
       expect(() => guard.assertMockAllowed()).toThrow(
-        /Mock payment simulation is strictly disabled in production environments/,
+        /Mock payment simulation is strictly disabled in production environments/
       );
     });
 
@@ -107,7 +107,7 @@ describe('PAY-P04 — Mock Payment Intent Creation Audit Suite', () => {
       expect(() =>
         guard.assertMockAllowed({
           queryParams: { mock: 'true' },
-        }),
+        })
       ).toThrow(/Activating mock payment via client query parameters is strictly prohibited/);
     });
 
@@ -198,7 +198,7 @@ describe('PAY-P04 — Mock Payment Intent Creation Audit Suite', () => {
         guard.validateMockPaymentIntentRequest({
           orderNumber: 'JM-ORD-2026-0001',
           cardNumber: '4111222233334444',
-        }),
+        })
       ).toThrow();
     });
   });
@@ -211,7 +211,7 @@ describe('PAY-P04 — Mock Payment Intent Creation Audit Suite', () => {
       expect(missingOrder.success).toBe(false);
       if (!missingOrder.success) {
         expect(missingOrder.error.issues[0]?.message).toContain(
-          'Either orderId or orderNumber must be provided',
+          'Either orderId or orderNumber must be provided'
         );
       }
 
@@ -283,9 +283,7 @@ describe('PAY-P04 — Mock Payment Intent Creation Audit Suite', () => {
 
       const result = validateIntentIdempotencyMatch(existingPayment, tamperedAmountRequest);
       expect(result.match).toBe(false);
-      expect(result.reason).toContain(
-        'Idempotency key parameter mismatch: original amount 500000 IDR differs from requested amount 300000 IDR',
-      );
+      expect(result.reason).toContain('Idempotency key parameter mismatch: original amount 500000 IDR differs from requested amount 300000 IDR');
     });
 
     it('rejects cross-order parameter mismatch when idempotency key is reused for a different order', () => {
@@ -296,9 +294,7 @@ describe('PAY-P04 — Mock Payment Intent Creation Audit Suite', () => {
 
       const result = validateIntentIdempotencyMatch(existingPayment, crossOrderRequest);
       expect(result.match).toBe(false);
-      expect(result.reason).toContain(
-        'Idempotency key parameter mismatch: key was originally bound to order order_123',
-      );
+      expect(result.reason).toContain('Idempotency key parameter mismatch: key was originally bound to order order_123');
     });
   });
 
@@ -345,9 +341,7 @@ describe('PAY-P04 — Mock Payment Intent Creation Audit Suite', () => {
     it('asserts trust boundaries distinguish server, client, and mock provider', () => {
       expect(PAYMENT_TRUST_BOUNDARIES.CLIENT_BROWSER).toBe('UNTRUSTED');
       expect(PAYMENT_TRUST_BOUNDARIES.SERVER_DATABASE).toBe('AUTHORITATIVE_SOURCE_OF_TRUTH');
-      expect(PAYMENT_TRUST_BOUNDARIES.EXTERNAL_WEBHOOK).toBe(
-        'SEMI_TRUSTED_NEEDS_CRYPTO_VERIFICATION',
-      );
+      expect(PAYMENT_TRUST_BOUNDARIES.EXTERNAL_WEBHOOK).toBe('SEMI_TRUSTED_NEEDS_CRYPTO_VERIFICATION');
     });
   });
 });

@@ -13,11 +13,11 @@ import { z } from 'zod';
  * Aligned with SEC-P10-CTRL-0012, SEC-P10-CTRL-0041, SEC-P10-CTRL-0070.
  */
 export const ApiAbuseRateLimitTierEnum = z.enum([
-  'ANONYMOUS', // Public endpoints (e.g. Catalog browsing, Health check) - 60 req/min
-  'AUTHENTICATED', // Standard logged-in user requests - 300 req/min
-  'AUTH_MUTATION', // Sensitive auth endpoints (login, forgot password, MFA verify) - 5 attempts per 15m
+  'ANONYMOUS',            // Public endpoints (e.g. Catalog browsing, Health check) - 60 req/min
+  'AUTHENTICATED',        // Standard logged-in user requests - 300 req/min
+  'AUTH_MUTATION',        // Sensitive auth endpoints (login, forgot password, MFA verify) - 5 attempts per 15m
   'TRANSACTION_MUTATION', // Financial & order mutations (checkout, payment capture) - 10 req/min per tenant/IP
-  'ADMIN', // Administrative operations - 120 req/min
+  'ADMIN',                // Administrative operations - 120 req/min
 ]);
 export type ApiAbuseRateLimitTier = z.infer<typeof ApiAbuseRateLimitTierEnum>;
 
@@ -36,10 +36,7 @@ export type ApiAbuseRateLimitTierConfig = z.infer<typeof ApiAbuseRateLimitTierCo
 /**
  * Standard baseline rate limiting configurations per tier.
  */
-export const DEFAULT_API_ABUSE_RATE_LIMIT_TIERS: Record<
-  ApiAbuseRateLimitTier,
-  ApiAbuseRateLimitTierConfig
-> = {
+export const DEFAULT_API_ABUSE_RATE_LIMIT_TIERS: Record<ApiAbuseRateLimitTier, ApiAbuseRateLimitTierConfig> = {
   ANONYMOUS: {
     tier: 'ANONYMOUS',
     windowSeconds: 60,
@@ -140,12 +137,12 @@ export function consumeRateLimitToken(
  * Aligned with SEC-P10-CTRL-0011, SEC-P10-CTRL-0040, SEC-P10-CTRL-0069 and INV-01.
  */
 export const RESOURCE_LIMITS = {
-  MAX_JSON_BODY_BYTES: 65536, // 64 KB
+  MAX_JSON_BODY_BYTES: 65536,         // 64 KB
   MAX_MULTIPART_UPLOAD_BYTES: 10485760, // 10 MB
-  MAX_STRING_PARAM_LENGTH: 16384, // 16 KB (16,384 characters)
-  MAX_ARRAY_LENGTH: 100, // Max 100 items per array
-  MAX_OBJECT_DEPTH: 8, // Max 8 levels of nesting
-  MAX_DECOMPRESSION_RATIO: 10, // Max 10:1 uncompressed-to-compressed ratio
+  MAX_STRING_PARAM_LENGTH: 16384,      // 16 KB (16,384 characters)
+  MAX_ARRAY_LENGTH: 100,               // Max 100 items per array
+  MAX_OBJECT_DEPTH: 8,                 // Max 8 levels of nesting
+  MAX_DECOMPRESSION_RATIO: 10,         // Max 10:1 uncompressed-to-compressed ratio
 } as const;
 
 export interface ResourceBoundMetrics {
@@ -227,14 +224,8 @@ export function validatePayloadResourceBounds(
       maxDepthObserved = depth;
     }
     if (depth > limits.MAX_OBJECT_DEPTH) {
-      if (
-        !violations.includes(
-          `Object nesting depth exceeds maximum allowed (${limits.MAX_OBJECT_DEPTH})`,
-        )
-      ) {
-        violations.push(
-          `Object nesting depth exceeds maximum allowed (${limits.MAX_OBJECT_DEPTH})`,
-        );
+      if (!violations.includes(`Object nesting depth exceeds maximum allowed (${limits.MAX_OBJECT_DEPTH})`)) {
+        violations.push(`Object nesting depth exceeds maximum allowed (${limits.MAX_OBJECT_DEPTH})`);
       }
       return;
     }
@@ -301,11 +292,7 @@ export function validateDecompressionRatio(
   maxRatio: number = RESOURCE_LIMITS.MAX_DECOMPRESSION_RATIO,
 ): { isSafe: boolean; ratio: number; violation?: string } {
   if (compressedBytes <= 0) {
-    return {
-      isSafe: false,
-      ratio: Infinity,
-      violation: 'Compressed byte size must be greater than zero',
-    };
+    return { isSafe: false, ratio: Infinity, violation: 'Compressed byte size must be greater than zero' };
   }
   const ratio = uncompressedBytes / compressedBytes;
   if (ratio > maxRatio) {
@@ -420,7 +407,11 @@ export function verifyAntiEnumerationMessage(
  * Concurrency & Idempotency Key Lock status.
  * Aligned with SEC-P10-CTRL-0026, SEC-P10-CTRL-0055, SEC-P10-CTRL-0083.
  */
-export const IdempotencyStatusEnum = z.enum(['IN_PROGRESS', 'COMPLETED', 'FAILED']);
+export const IdempotencyStatusEnum = z.enum([
+  'IN_PROGRESS',
+  'COMPLETED',
+  'FAILED',
+]);
 export type IdempotencyStatus = z.infer<typeof IdempotencyStatusEnum>;
 
 export interface IdempotencyLockRecord {
@@ -455,8 +446,7 @@ export function evaluateOptimisticConcurrency(
 export interface ApiAbuseCheckRecord {
   id: string;
   controlId: string;
-  category:
-    'RATE_LIMITING' | 'PAYLOAD_BOUNDS' | 'QUERY_PROTECTION' | 'ANTI_ENUMERATION' | 'CONCURRENCY';
+  category: 'RATE_LIMITING' | 'PAYLOAD_BOUNDS' | 'QUERY_PROTECTION' | 'ANTI_ENUMERATION' | 'CONCURRENCY';
   description: string;
   invariantId: 'INV-01' | 'INV-02' | 'INV-03' | 'INV-04';
   status: 'COMPLIANT' | 'NON_COMPLIANT';
@@ -512,8 +502,7 @@ export function evaluateApiAbuseDefensesCompliance(
       id: 'SEC-P10-CHK-02',
       controlId: 'SEC-P10-CTRL-0041',
       category: 'RATE_LIMITING',
-      description:
-        'Authentication endpoints capped at 5 attempts per 15 minutes to defeat credential stuffing',
+      description: 'Authentication endpoints capped at 5 attempts per 15 minutes to defeat credential stuffing',
       invariantId: 'INV-01',
       status: rateLimitingEnabled ? 'COMPLIANT' : 'NON_COMPLIANT',
       evidence: rateLimitingEnabled
@@ -546,8 +535,7 @@ export function evaluateApiAbuseDefensesCompliance(
       id: 'SEC-P10-CHK-05',
       controlId: 'SEC-P10-CTRL-0040',
       category: 'PAYLOAD_BOUNDS',
-      description:
-        'Object nesting depth (<= 8) and array length (<= 100) constrained to prevent parser starvation',
+      description: 'Object nesting depth (<= 8) and array length (<= 100) constrained to prevent parser starvation',
       invariantId: 'INV-01',
       status: payloadBoundsEnforced ? 'COMPLIANT' : 'NON_COMPLIANT',
       evidence: payloadBoundsEnforced
@@ -558,8 +546,7 @@ export function evaluateApiAbuseDefensesCompliance(
       id: 'SEC-P10-CHK-06',
       controlId: 'SEC-P10-CTRL-0007',
       category: 'QUERY_PROTECTION',
-      description:
-        'Database query pagination strictly bounded (default 20, max 100) and unbounded take rejected',
+      description: 'Database query pagination strictly bounded (default 20, max 100) and unbounded take rejected',
       invariantId: 'INV-01',
       status: queryPaginationBounded ? 'COMPLIANT' : 'NON_COMPLIANT',
       evidence: queryPaginationBounded
@@ -570,8 +557,7 @@ export function evaluateApiAbuseDefensesCompliance(
       id: 'SEC-P10-CHK-07',
       controlId: 'SEC-P10-CTRL-0027',
       category: 'ANTI_ENUMERATION',
-      description:
-        'External error semantics identical between valid and non-existent accounts (zero oracle)',
+      description: 'External error semantics identical between valid and non-existent accounts (zero oracle)',
       invariantId: 'INV-03',
       status: antiEnumerationPreserved ? 'COMPLIANT' : 'NON_COMPLIANT',
       evidence: antiEnumerationPreserved
@@ -582,8 +568,7 @@ export function evaluateApiAbuseDefensesCompliance(
       id: 'SEC-P10-CHK-08',
       controlId: 'SEC-P10-CTRL-0026',
       category: 'CONCURRENCY',
-      description:
-        'Mutations use atomic locks and idempotency checks to prevent race condition bypass',
+      description: 'Mutations use atomic locks and idempotency checks to prevent race condition bypass',
       invariantId: 'INV-02',
       status: concurrencyLocksActive ? 'COMPLIANT' : 'NON_COMPLIANT',
       evidence: concurrencyLocksActive
@@ -601,9 +586,7 @@ export function evaluateApiAbuseDefensesCompliance(
       passedCount++;
     } else {
       failedCount++;
-      releaseBlockers.push(
-        `Release blocker (${chk.invariantId}): ${chk.id} [${chk.controlId}] - ${chk.description}`,
-      );
+      releaseBlockers.push(`Release blocker (${chk.invariantId}): ${chk.id} [${chk.controlId}] - ${chk.description}`);
     }
   }
 

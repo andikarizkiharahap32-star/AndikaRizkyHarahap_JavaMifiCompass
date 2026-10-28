@@ -3,20 +3,38 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Design System Lab & Isolated Showcase Governance', () => {
-  const homePagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
+  const homePagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
   const labPagePath = path.resolve(
     __dirname,
-    '../../../apps/web/src/app/[locale]/design-system/lab/page.tsx',
+    '../../../apps/web/src/app/[locale]/design-system/lab/page.tsx'
   );
   const tunnelComponentPath = path.resolve(
     __dirname,
-    '../../../apps/web/src/components/OctilinearTicketTunnel.tsx',
+    '../../../apps/web/src/components/OctilinearTicketTunnel.tsx'
   );
-  const webPackageJsonPath = path.resolve(__dirname, '../../../apps/web/package.json');
-  const uiPackageJsonPath = path.resolve(__dirname, '../../../packages/ui/package.json');
-  const sharedPackageJsonPath = path.resolve(__dirname, '../../../packages/shared/package.json');
-  const enMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/en.json');
-  const idMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/id.json');
+  const webPackageJsonPath = path.resolve(
+    __dirname,
+    '../../../apps/web/package.json'
+  );
+  const uiPackageJsonPath = path.resolve(
+    __dirname,
+    '../../../packages/ui/package.json'
+  );
+  const sharedPackageJsonPath = path.resolve(
+    __dirname,
+    '../../../packages/shared/package.json'
+  );
+  const enMessagesPath = path.resolve(
+    __dirname,
+    '../../../apps/web/messages/en.json'
+  );
+  const idMessagesPath = path.resolve(
+    __dirname,
+    '../../../apps/web/messages/id.json'
+  );
 
   it('confirms OctilinearTicketTunnel is isolated to /design-system/lab and strictly absent from Home', () => {
     const homeCode = fs.readFileSync(homePagePath, 'utf8');
@@ -37,7 +55,10 @@ describe('Design System Lab & Isolated Showcase Governance', () => {
 
     // Installed in apps/web
     expect(
-      Boolean(webPkg.dependencies?.['framer-motion'] || webPkg.devDependencies?.['framer-motion']),
+      Boolean(
+        webPkg.dependencies?.['framer-motion'] ||
+          webPkg.devDependencies?.['framer-motion']
+      )
     ).toBe(true);
 
     // Completely absent from packages/ui and packages/shared

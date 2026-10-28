@@ -1,7 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
-import { diningQuerySchema, diningSortBySchema, DiningFilterMode, HalalTier } from '../src';
+import {
+  diningQuerySchema,
+  diningSortBySchema,
+  DiningFilterMode,
+  HalalTier,
+} from '../src';
 import { DiningService } from '../../../apps/api/src/modules/dining/dining.service';
 import { FxService } from '../../../apps/api/src/modules/dining/fx.service';
 
@@ -27,7 +32,9 @@ describe('P11 — Search, Filters, Sorting, and Query State', () => {
       const validQuery = diningQuerySchema.parse({ search: 'a'.repeat(100) });
       expect(validQuery.search).toHaveLength(100);
 
-      expect(() => diningQuerySchema.parse({ search: 'a'.repeat(101) })).toThrow();
+      expect(() =>
+        diningQuerySchema.parse({ search: 'a'.repeat(101) })
+      ).toThrow();
     });
 
     it('enforces radiusKm maximum 50 km and positive number (P11-WS03)', () => {
@@ -56,7 +63,7 @@ describe('P11 — Search, Filters, Sorting, and Query State', () => {
       expect(result.items.length).toBeGreaterThan(1);
       for (let i = 0; i < result.items.length - 1; i++) {
         expect(result.items[i].googleRating).toBeGreaterThanOrEqual(
-          result.items[i + 1].googleRating,
+          result.items[i + 1].googleRating
         );
       }
     });
@@ -100,7 +107,7 @@ describe('P11 — Search, Filters, Sorting, and Query State', () => {
   describe('P11-WS01, WS10, WS11, WS12: UI Component Contracts in DiningDiscovery.tsx', () => {
     const componentPath = path.resolve(
       __dirname,
-      '../../../apps/web/src/components/DiningDiscovery.tsx',
+      '../../../apps/web/src/components/DiningDiscovery.tsx'
     );
     const content = fs.readFileSync(componentPath, 'utf8');
 

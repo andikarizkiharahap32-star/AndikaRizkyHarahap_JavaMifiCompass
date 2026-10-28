@@ -80,7 +80,7 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
           statusCode: '200',
           grossAmount: '350000',
           signatureKey: 'forged_fake_signature_hex_value_1234567890abcdef',
-        }),
+        })
       ).toBe(false);
 
       // 2. Tampered amount with original signature
@@ -90,7 +90,7 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
           statusCode: '200',
           grossAmount: '1000', // tampered
           signatureKey: validSignature,
-        }),
+        })
       ).toBe(false);
 
       // 3. Tampered statusCode with original signature
@@ -100,7 +100,7 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
           statusCode: '400', // tampered
           grossAmount: '350000',
           signatureKey: validSignature,
-        }),
+        })
       ).toBe(false);
 
       // 4. Missing or null signature
@@ -110,7 +110,7 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
           statusCode: '200',
           grossAmount: '350000',
           signatureKey: undefined,
-        }),
+        })
       ).toBe(false);
     });
 
@@ -187,13 +187,13 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
       const liveSecret = 'live_production_secret_key_super_secret_999';
 
       // Rejects collision
-      expect(() => guard.assertMockSigningKeyIsolation(liveSecret, liveSecret)).toThrow(
-        /Mock payment signing key cannot be identical to production credentials/,
-      );
+      expect(() =>
+        guard.assertMockSigningKeyIsolation(liveSecret, liveSecret)
+      ).toThrow(/Mock payment signing key cannot be identical to production credentials/);
 
       // Permits isolated secrets
       expect(() =>
-        guard.assertMockSigningKeyIsolation(MOCK_DEFAULT_SIGNING_SECRET, liveSecret),
+        guard.assertMockSigningKeyIsolation(MOCK_DEFAULT_SIGNING_SECRET, liveSecret)
       ).not.toThrow();
     });
   });
@@ -203,11 +203,7 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
       const now = Date.now();
       const freshTimestamp = now - 30 * 1000; // 30 seconds ago
 
-      const result = validateWebhookTimestampFreshness(
-        freshTimestamp,
-        MAX_WEBHOOK_TIMESTAMP_DRIFT_SEC,
-        now,
-      );
+      const result = validateWebhookTimestampFreshness(freshTimestamp, MAX_WEBHOOK_TIMESTAMP_DRIFT_SEC, now);
       expect(result.valid).toBe(true);
     });
 
@@ -215,11 +211,7 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
       const now = Date.now();
       const staleTimestamp = now - 350 * 1000; // 350 seconds ago
 
-      const result = validateWebhookTimestampFreshness(
-        staleTimestamp,
-        MAX_WEBHOOK_TIMESTAMP_DRIFT_SEC,
-        now,
-      );
+      const result = validateWebhookTimestampFreshness(staleTimestamp, MAX_WEBHOOK_TIMESTAMP_DRIFT_SEC, now);
       expect(result.valid).toBe(false);
       expect(result.reason).toContain('Timestamp is stale');
     });
@@ -228,11 +220,7 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
       const now = Date.now();
       const futureTimestamp = now + 120 * 1000; // 2 minutes in future
 
-      const result = validateWebhookTimestampFreshness(
-        futureTimestamp,
-        MAX_WEBHOOK_TIMESTAMP_DRIFT_SEC,
-        now,
-      );
+      const result = validateWebhookTimestampFreshness(futureTimestamp, MAX_WEBHOOK_TIMESTAMP_DRIFT_SEC, now);
       expect(result.valid).toBe(false);
       expect(result.reason).toContain('Timestamp is in the future');
     });
@@ -243,8 +231,8 @@ describe('PAY-P06 — Signed Simulated Webhook Events Audit Suite', () => {
       expect(() =>
         guard.recordInvalidSignatureSecurityEvent(
           'JM-ORD-2026-SAFE',
-          'd4c4f9b801a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8',
-        ),
+          'd4c4f9b801a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8'
+        )
       ).not.toThrow();
     });
   });

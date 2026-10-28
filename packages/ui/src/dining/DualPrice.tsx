@@ -56,7 +56,9 @@ export const DualPrice: React.FC<DualPriceProps> = ({
   // If range prop is provided, render range with per-person estimate
   if (range) {
     const hasValidIdrRange =
-      range.minIdr !== null && range.minIdr !== undefined && Boolean(range.formattedIdrRange);
+      range.minIdr !== null &&
+      range.minIdr !== undefined &&
+      Boolean(range.formattedIdrRange);
 
     return (
       <div
@@ -93,7 +95,10 @@ export const DualPrice: React.FC<DualPriceProps> = ({
               </span>
             </span>
           ) : (
-            <span className="text-xs font-sans text-outline italic" title={unavailableText}>
+            <span
+              className="text-xs font-sans text-outline italic"
+              title={unavailableText}
+            >
               ({unavailableText})
             </span>
           )}
@@ -107,13 +112,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
             </span>
           )}
           {showInlineRateDate && (
-            <span
-              className={
-                hasValidIdrRange && range.formattedPerPersonIdr
-                  ? 'border-l border-paper-edge pl-2'
-                  : ''
-              }
-            >
+            <span className={hasValidIdrRange && range.formattedPerPersonIdr ? 'border-l border-paper-edge pl-2' : ''}>
               ({snapshotDateLabel} {range.rateSnapshotDate})
             </span>
           )}
@@ -122,16 +121,9 @@ export const DualPrice: React.FC<DualPriceProps> = ({
               role="status"
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-warning-surface text-primary border border-warning text-xs font-mono font-bold uppercase tracking-wider"
               title={range.staleNotice}
-              aria-label={
-                range.staleNotice ||
-                (isIdLocale
-                  ? 'Peringatan: Kurs berumur lebih dari 3 hari'
-                  : 'Warning: Rate older than 3 days')
-              }
+              aria-label={range.staleNotice || (isIdLocale ? 'Peringatan: Kurs berumur lebih dari 3 hari' : 'Warning: Rate older than 3 days')}
             >
-              <span aria-hidden="true" className="text-warning">
-                ▲
-              </span>
+              <span aria-hidden="true" className="text-warning">▲</span>
               <span>{isIdLocale ? 'Kurs >3 hari' : 'Stale rate (>3d)'}</span>
             </span>
           )}
@@ -140,7 +132,9 @@ export const DualPrice: React.FC<DualPriceProps> = ({
     );
   }
 
-  const formattedLocal = local ? formatLocalAmount(local.amount_minor, local.currency, locale) : '';
+  const formattedLocal = local
+    ? formatLocalAmount(local.amount_minor, local.currency, locale)
+    : '';
 
   return (
     <div
@@ -184,16 +178,9 @@ export const DualPrice: React.FC<DualPriceProps> = ({
               role="status"
               className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-warning-surface text-primary border border-warning text-xs font-mono font-bold uppercase tracking-wider ml-1"
               title={idr.staleNotice}
-              aria-label={
-                idr.staleNotice ||
-                (isIdLocale
-                  ? 'Peringatan: Kurs berumur lebih dari 3 hari'
-                  : 'Warning: Rate older than 3 days')
-              }
+              aria-label={idr.staleNotice || (isIdLocale ? 'Peringatan: Kurs berumur lebih dari 3 hari' : 'Warning: Rate older than 3 days')}
             >
-              <span aria-hidden="true" className="text-warning">
-                ▲
-              </span>
+              <span aria-hidden="true" className="text-warning">▲</span>
               <span>{isIdLocale ? 'Kurs >3 hari' : 'Stale rate (>3d)'}</span>
             </span>
           )}

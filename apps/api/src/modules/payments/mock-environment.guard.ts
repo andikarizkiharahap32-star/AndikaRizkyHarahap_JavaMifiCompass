@@ -1,4 +1,9 @@
-import { BadRequestException, ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import {
   ALLOWLISTED_MOCK_TOKENS,
   containsRealPaymentCredentials,
@@ -64,21 +69,17 @@ export class MockEnvironmentGuard {
    * Asserts that mock payment mode is permitted in the current environment.
    * Fails closed in production unless explicitly enabled via server configuration.
    */
-  assertMockAllowed(
-    context: {
-      queryParams?: Record<string, any>;
-      headers?: Record<string, any>;
-    } = {},
-  ): void {
+  assertMockAllowed(context: {
+    queryParams?: Record<string, any>;
+    headers?: Record<string, any>;
+  } = {}): void {
     const isProd = process.env.NODE_ENV === 'production';
 
     // 1. In production, mock payment is disabled unless explicit server-side flag is set
     if (isProd && process.env.ALLOW_MOCK_PAYMENT !== 'true') {
-      this.logger.warn(
-        'Mock payment access attempted in production without ALLOW_MOCK_PAYMENT=true',
-      );
+      this.logger.warn('Mock payment access attempted in production without ALLOW_MOCK_PAYMENT=true');
       throw new ForbiddenException(
-        'Mock payment simulation is strictly disabled in production environments',
+        'Mock payment simulation is strictly disabled in production environments'
       );
     }
 
@@ -87,7 +88,7 @@ export class MockEnvironmentGuard {
       const q = context.queryParams;
       if (q['mock'] !== undefined || q['isMock'] !== undefined || q['mode'] === 'mock') {
         throw new BadRequestException(
-          'Activating mock payment via client query parameters is strictly prohibited',
+          'Activating mock payment via client query parameters is strictly prohibited'
         );
       }
     }
@@ -97,7 +98,7 @@ export class MockEnvironmentGuard {
       const h = context.headers;
       if (h['x-mock-mode'] || h['x-payment-mode'] === 'mock') {
         throw new BadRequestException(
-          'Activating mock payment via client request headers is strictly prohibited',
+          'Activating mock payment via client request headers is strictly prohibited'
         );
       }
     }
@@ -108,24 +109,17 @@ export class MockEnvironmentGuard {
    */
   validateSyntheticCredentials(payload: unknown): void {
     if (containsRealPaymentCredentials(payload)) {
-      this.logger.warn(
-        'Real payment credentials detected in mock payment payload. Rejecting immediately.',
-      );
+      this.logger.warn('Real payment credentials detected in mock payment payload. Rejecting immediately.');
       throw new BadRequestException(
-        'Real payment credentials (PAN/CVV) are strictly prohibited in the mock payment gateway. Use documented synthetic test tokens.',
+        'Real payment credentials (PAN/CVV) are strictly prohibited in the mock payment gateway. Use documented synthetic test tokens.'
       );
     }
 
     if (payload && typeof payload === 'object') {
       const token = (payload as any).syntheticToken || (payload as any).token;
-      if (
-        token &&
-        typeof token === 'string' &&
-        !token.startsWith('tok_mock_') &&
-        !token.startsWith('mock-token-')
-      ) {
+      if (token && typeof token === 'string' && !token.startsWith('tok_mock_') && !token.startsWith('mock-token-')) {
         throw new BadRequestException(
-          `Invalid synthetic token "${token}". Synthetic tokens must start with "tok_mock_".`,
+          `Invalid synthetic token "${token}". Synthetic tokens must start with "tok_mock_".`
         );
       }
     }
@@ -137,15 +131,13 @@ export class MockEnvironmentGuard {
   assertAllowlistedToken(token: string): void {
     if (!token.startsWith('tok_mock_') && !token.startsWith('mock-token-')) {
       throw new BadRequestException(
-        `Invalid synthetic token "${token}". Synthetic tokens must start with "tok_mock_".`,
+        `Invalid synthetic token "${token}". Synthetic tokens must start with "tok_mock_".`
       );
     }
-    const isAllowlisted =
-      (ALLOWLISTED_MOCK_TOKENS as readonly string[]).includes(token) ||
-      token.startsWith('mock-token-');
+    const isAllowlisted = (ALLOWLISTED_MOCK_TOKENS as readonly string[]).includes(token) || token.startsWith('mock-token-');
     if (!isAllowlisted) {
       throw new BadRequestException(
-        `Synthetic token "${token}" is not in the documented allowlist. Supported tokens: ${ALLOWLISTED_MOCK_TOKENS.join(', ')}`,
+        `Synthetic token "${token}" is not in the documented allowlist. Supported tokens: ${ALLOWLISTED_MOCK_TOKENS.join(', ')}`
       );
     }
   }
@@ -164,10 +156,10 @@ export class MockEnvironmentGuard {
   assertAuthoritativeAmount(orderTotalIdr: number, clientSuppliedAmount?: number): number {
     if (clientSuppliedAmount !== undefined && clientSuppliedAmount !== orderTotalIdr) {
       this.logger.warn(
-        `Price tampering detected: client provided ${clientSuppliedAmount}, authoritative order total is ${orderTotalIdr}`,
+        `Price tampering detected: client provided ${clientSuppliedAmount}, authoritative order total is ${orderTotalIdr}`
       );
       throw new BadRequestException(
-        `Payment amount ${clientSuppliedAmount} does not match authoritative order total ${orderTotalIdr}`,
+        `Payment amount ${clientSuppliedAmount} does not match authoritative order total ${orderTotalIdr}`
       );
     }
     return orderTotalIdr;
@@ -181,10 +173,10 @@ export class MockEnvironmentGuard {
     const result = validateAuthoritativeAmountMatch(orderTotalIdr, rawGrossAmount);
     if (!result.valid) {
       this.logger.warn(
-        `Authoritative amount mismatch: orderTotalIdr=${orderTotalIdr}, received=${rawGrossAmount}`,
+        `Authoritative amount mismatch: orderTotalIdr=${orderTotalIdr}, received=${rawGrossAmount}`
       );
       throw new BadRequestException(
-        `Authoritative amount mismatch: expected ${orderTotalIdr}, received ${rawGrossAmount}`,
+        `Authoritative amount mismatch: expected ${orderTotalIdr}, received ${rawGrossAmount}`
       );
     }
   }
@@ -192,11 +184,7 @@ export class MockEnvironmentGuard {
   /**
    * Enforces legal state machine transitions and quarantines impossible status sequences (INV-03 / PAY-P01-CTRL-0013 / PAY-P03-CTRL-0041).
    */
-  assertLegalTransition(
-    fromStatus: string,
-    toStatus: string,
-    entityType: 'order' | 'payment',
-  ): void {
+  assertLegalTransition(fromStatus: string, toStatus: string, entityType: 'order' | 'payment'): void {
     const result =
       entityType === 'order'
         ? validateOrderTransition(fromStatus, toStatus)
@@ -204,11 +192,10 @@ export class MockEnvironmentGuard {
 
     if (!result.valid) {
       this.logger.warn(
-        `Illegal state transition attempted for ${entityType}: ${fromStatus} -> ${toStatus}. Reason: ${result.reason}`,
+        `Illegal state transition attempted for ${entityType}: ${fromStatus} -> ${toStatus}. Reason: ${result.reason}`
       );
       throw new BadRequestException(
-        result.reason ||
-          `Illegal ${entityType} state transition: cannot transition from ${fromStatus} to ${toStatus}`,
+        result.reason || `Illegal ${entityType} state transition: cannot transition from ${fromStatus} to ${toStatus}`
       );
     }
   }
@@ -246,7 +233,7 @@ export class MockEnvironmentGuard {
     if (isTerminal) {
       this.logger.warn(`Mutation attempted on terminal ${entityType} in status '${currentStatus}'`);
       throw new BadRequestException(
-        `${entityType === 'order' ? 'Order' : 'Payment'} is already in terminal state '${currentStatus}'; further transitions are prohibited`,
+        `${entityType === 'order' ? 'Order' : 'Payment'} is already in terminal state '${currentStatus}'; further transitions are prohibited`
       );
     }
   }
@@ -273,7 +260,7 @@ export class MockEnvironmentGuard {
    */
   assertIntentIdempotencyMatch(
     existingPayment: { orderId: string; amountIdr: number; snapToken?: string | null },
-    newRequest: { orderId: string; amountIdr: number },
+    newRequest: { orderId: string; amountIdr: number }
   ): void {
     const result = validateIntentIdempotencyMatch(existingPayment, newRequest);
     if (!result.match) {
@@ -295,9 +282,7 @@ export class MockEnvironmentGuard {
       paymentId: intent.paymentId,
       orderNumber: intent.orderNumber,
       amountIdr: intent.amountIdr,
-      syntheticToken: intent.syntheticToken
-        ? `${intent.syntheticToken.slice(0, 12)}...`
-        : undefined,
+      syntheticToken: intent.syntheticToken ? `${intent.syntheticToken.slice(0, 12)}...` : undefined,
     };
   }
 
@@ -308,7 +293,7 @@ export class MockEnvironmentGuard {
   assertConcurrencyLimit(activePendingCount: number): void {
     if (activePendingCount >= PAYMENT_CONCURRENCY_POLICY.MAX_ACTIVE_PENDING_INTENTS_PER_ORDER) {
       this.logger.warn(
-        `Concurrency limit reached: ${activePendingCount} active pending payment intents exist (max allowed: ${PAYMENT_CONCURRENCY_POLICY.MAX_ACTIVE_PENDING_INTENTS_PER_ORDER})`,
+        `Concurrency limit reached: ${activePendingCount} active pending payment intents exist (max allowed: ${PAYMENT_CONCURRENCY_POLICY.MAX_ACTIVE_PENDING_INTENTS_PER_ORDER})`
       );
     }
   }
@@ -325,12 +310,8 @@ export class MockEnvironmentGuard {
    */
   assertMockSigningKeyIsolation(mockSecret: string, productionSecret?: string): void {
     if (productionSecret && mockSecret && mockSecret === productionSecret) {
-      this.logger.error(
-        'CRITICAL: Mock payment signing key matches production secret! Failing closed.',
-      );
-      throw new ForbiddenException(
-        'Mock payment signing key cannot be identical to production credentials',
-      );
+      this.logger.error('CRITICAL: Mock payment signing key matches production secret! Failing closed.');
+      throw new ForbiddenException('Mock payment signing key cannot be identical to production credentials');
     }
   }
 
@@ -338,12 +319,8 @@ export class MockEnvironmentGuard {
    * P6: Records a sanitized security alert on forged or invalid webhook signatures (PAY-P06-CTRL-0011).
    */
   recordInvalidSignatureSecurityEvent(orderNumber: string, signatureKey?: string): void {
-    const maskedSig = signatureKey
-      ? `${signatureKey.slice(0, 8)}...${signatureKey.slice(-4)}`
-      : 'missing';
-    this.logger.warn(
-      `[SECURITY ALERT] Invalid/forged webhook signature for order ${orderNumber}: sig=${maskedSig}`,
-    );
+    const maskedSig = signatureKey ? `${signatureKey.slice(0, 8)}...${signatureKey.slice(-4)}` : 'missing';
+    this.logger.warn(`[SECURITY ALERT] Invalid/forged webhook signature for order ${orderNumber}: sig=${maskedSig}`);
   }
 
   /**
@@ -351,7 +328,7 @@ export class MockEnvironmentGuard {
    */
   validateOperatorOverrideRequest(
     body: unknown,
-    currentStatus: { orderStatus: string; paymentStatus: string },
+    currentStatus: { orderStatus: string; paymentStatus: string }
   ): OperatorOverrideInput {
     const parseResult = operatorOverrideSchema.safeParse(body);
     if (!parseResult.success) {
@@ -392,7 +369,7 @@ export class MockEnvironmentGuard {
       oldValue?: any;
       newValue?: any;
       metadata?: any;
-    },
+    }
   ): Promise<any> {
     const sanitized = {
       ...params,
@@ -406,7 +383,7 @@ export class MockEnvironmentGuard {
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       this.logger.error(
-        `[CRITICAL AUDIT FAILURE] Failed to record audit log for action=${params.action} resource=${params.resource}/${params.resourceId}: ${errorMsg}`,
+        `[CRITICAL AUDIT FAILURE] Failed to record audit log for action=${params.action} resource=${params.resource}/${params.resourceId}: ${errorMsg}`
       );
       // Critical event alerting per PAY-P07-CTRL-0019
       throw new Error(`CRITICAL_AUDIT_FAILURE: ${errorMsg}`);
@@ -420,7 +397,7 @@ export class MockEnvironmentGuard {
     this.assertMockAllowed();
     if (!PAYMENT_SCENARIO_IDS.includes(scenarioId as PaymentScenarioId)) {
       throw new BadRequestException(
-        `Unknown payment scenario '${scenarioId}'. Available scenarios: ${PAYMENT_SCENARIO_IDS.join(', ')}`,
+        `Unknown payment scenario '${scenarioId}'. Available scenarios: ${PAYMENT_SCENARIO_IDS.join(', ')}`
       );
     }
     return scenarioId as PaymentScenarioId;
@@ -445,13 +422,11 @@ export class MockEnvironmentGuard {
    */
   assertPayloadBounds(
     payload: unknown,
-    maxBytes: number = PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES,
+    maxBytes: number = PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES
   ): void {
     const result = validatePayloadBounds(payload, maxBytes);
     if (!result.valid) {
-      this.logger.warn(
-        `Abuse guard: oversized payload rejected (${result.sizeBytes} bytes > ${maxBytes} bytes)`,
-      );
+      this.logger.warn(`Abuse guard: oversized payload rejected (${result.sizeBytes} bytes > ${maxBytes} bytes)`);
       throw new BadRequestException(result.reason || 'Payload size limit exceeded');
     }
   }
@@ -463,10 +438,10 @@ export class MockEnvironmentGuard {
     const scan = detectInjectionPattern(payload);
     if (scan.detected) {
       this.logger.warn(
-        `[SECURITY ALERT] Malicious injection detected [${scan.vector}] in field '${scan.field}': pattern '${scan.matchedPattern}'`,
+        `[SECURITY ALERT] Malicious injection detected [${scan.vector}] in field '${scan.field}': pattern '${scan.matchedPattern}'`
       );
       throw new BadRequestException(
-        `Security policy violation: suspicious input detected (${scan.vector})`,
+        `Security policy violation: suspicious input detected (${scan.vector})`
       );
     }
   }
@@ -493,7 +468,7 @@ export class MockEnvironmentGuard {
   assertRateLimit(
     key: string,
     maxRequests: number = PAYMENT_ABUSE_LIMITS.MAX_INTENT_RATE_LIMIT_PER_WINDOW,
-    windowMs: number = PAYMENT_ABUSE_LIMITS.RATE_LIMIT_WINDOW_MS,
+    windowMs: number = PAYMENT_ABUSE_LIMITS.RATE_LIMIT_WINDOW_MS
   ): void {
     const now = Date.now();
     const bucket = this.rateLimitBuckets.get(key);
@@ -504,11 +479,9 @@ export class MockEnvironmentGuard {
     }
 
     if (bucket.count >= maxRequests) {
-      this.logger.warn(
-        `Rate limit bucket exceeded for key '${key}' (${bucket.count}/${maxRequests})`,
-      );
+      this.logger.warn(`Rate limit bucket exceeded for key '${key}' (${bucket.count}/${maxRequests})`);
       throw new BadRequestException(
-        `Rate limit exceeded: maximum ${maxRequests} requests per ${Math.round(windowMs / 1000)}s`,
+        `Rate limit exceeded: maximum ${maxRequests} requests per ${Math.round(windowMs / 1000)}s`
       );
     }
 
@@ -526,7 +499,7 @@ export class MockEnvironmentGuard {
       headers?: Record<string, any>;
       maxBytes?: number;
       rateLimitKey?: string;
-    } = {},
+    } = {}
   ): void {
     // 1. Environment isolation guard
     this.assertMockAllowed({
@@ -579,14 +552,14 @@ export class MockEnvironmentGuard {
       allowMockEnv?: boolean;
       mockSigningKeyMatchesProd?: boolean;
       unresolvedMockIntents?: number;
-    } = {},
+    } = {}
   ): ReleaseSignoffReport {
     const report = this.getReleaseSignoff(options);
     if (report.overallStatus !== 'APPROVED') {
       const failed = report.gates.filter((g) => g.status === 'FAILED').map((g) => g.gateId);
       this.logger.warn(`Release gates failed: ${failed.join(', ')}`);
       throw new ForbiddenException(
-        `Mock payment release gates failed: ${failed.join(', ')}. Release status: ${report.overallStatus}`,
+        `Mock payment release gates failed: ${failed.join(', ')}. Release status: ${report.overallStatus}`
       );
     }
     return report;
@@ -601,10 +574,10 @@ export class MockEnvironmentGuard {
       allowMockEnv?: boolean;
       mockSigningKeyMatchesProd?: boolean;
       unresolvedMockIntents?: number;
-    } = {},
+    } = {}
   ): ReleaseSignoffReport {
-    const isProd = options.isProduction ?? process.env.NODE_ENV === 'production';
-    const allowMock = options.allowMockEnv ?? process.env.ALLOW_MOCK_PAYMENT === 'true';
+    const isProd = options.isProduction ?? (process.env.NODE_ENV === 'production');
+    const allowMock = options.allowMockEnv ?? (process.env.ALLOW_MOCK_PAYMENT === 'true');
     return evaluateReleaseSignoff({
       isProduction: isProd,
       allowMockEnv: allowMock,
@@ -626,3 +599,4 @@ export class MockEnvironmentGuard {
 }
 
 export const mockEnvironmentGuard = new MockEnvironmentGuard();
+

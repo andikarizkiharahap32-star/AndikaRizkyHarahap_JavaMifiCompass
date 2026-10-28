@@ -16,15 +16,15 @@ import {
   AbuseVectorCodeEnum,
   AbuseVectorCode,
 } from './security-audit.schema';
-import { DataClassificationEnum, DataClassification } from './asset-inventory.schema';
+import {
+  DataClassificationEnum,
+  DataClassification,
+} from './asset-inventory.schema';
 import { constantTimeCompare } from '../helpers/crypto';
 
 // declare WHATWG URL interface for isomorphic/DOM-less tsconfig
 declare const URL: {
-  new (
-    url: string | any,
-    base?: string | any,
-  ): {
+  new (url: string | any, base?: string | any): {
     protocol: string;
     hostname: string;
     port: string;
@@ -36,13 +36,13 @@ declare const URL: {
  * 7 Major Attack Surface Categories (SEC-P02 Taxonomy)
  */
 export const AttackSurfaceCategoryEnum = z.enum([
-  'PUBLIC_ROUTE', // Unauthenticated routes reachable from the internet
-  'AUTHENTICATED_ROUTE', // Customer/traveler routes requiring valid Bearer JWT
-  'ADMIN_FUNCTION', // Back-office endpoints requiring administrative RBAC
-  'WEBHOOK_INGEST', // External inbound event callbacks (Midtrans, n8n)
-  'WORKER_INPUT', // Background jobs, queues, outbox event consumers
-  'FILE_UPLOAD', // Ingest boundaries receiving binary multipart files
-  'INTEGRATION_BOUNDARY', // Outbound external API integrations (SSRF vectors)
+  'PUBLIC_ROUTE',            // Unauthenticated routes reachable from the internet
+  'AUTHENTICATED_ROUTE',     // Customer/traveler routes requiring valid Bearer JWT
+  'ADMIN_FUNCTION',          // Back-office endpoints requiring administrative RBAC
+  'WEBHOOK_INGEST',          // External inbound event callbacks (Midtrans, n8n)
+  'WORKER_INPUT',            // Background jobs, queues, outbox event consumers
+  'FILE_UPLOAD',             // Ingest boundaries receiving binary multipart files
+  'INTEGRATION_BOUNDARY',    // Outbound external API integrations (SSRF vectors)
 ]);
 export type AttackSurfaceCategory = z.infer<typeof AttackSurfaceCategoryEnum>;
 
@@ -62,18 +62,26 @@ export type RouteAuthRequirement = z.infer<typeof RouteAuthRequirementEnum>;
  * Rate Limiting Tiers
  */
 export const RateLimitTierEnum = z.enum([
-  'PUBLIC_STRICT', // 5 req/min (brute-force sensitive: login, register, pwd reset)
-  'PUBLIC_STANDARD', // 120 req/min (browsing catalog, content, dining)
-  'AUTHENTICATED', // 300 req/min (orders, payments, profile)
-  'ADMIN', // 600 req/min (internal console operations)
-  'UNMETERED_INTERNAL', // Async worker jobs, retention scripts
+  'PUBLIC_STRICT',           // 5 req/min (brute-force sensitive: login, register, pwd reset)
+  'PUBLIC_STANDARD',         // 120 req/min (browsing catalog, content, dining)
+  'AUTHENTICATED',           // 300 req/min (orders, payments, profile)
+  'ADMIN',                   // 600 req/min (internal console operations)
+  'UNMETERED_INTERNAL',      // Async worker jobs, retention scripts
 ]);
 export type RateLimitTier = z.infer<typeof RateLimitTierEnum>;
 
 /**
  * HTTP Methods
  */
-export const HttpMethodEnum = z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'ALL', 'JOB']);
+export const HttpMethodEnum = z.enum([
+  'GET',
+  'POST',
+  'PUT',
+  'PATCH',
+  'DELETE',
+  'ALL',
+  'JOB',
+]);
 export type HttpMethod = z.infer<typeof HttpMethodEnum>;
 
 /**
@@ -119,20 +127,8 @@ export const DEFAULT_FILE_UPLOAD_POLICY: FileUploadBoundaryPolicy = {
   maxSizeBytes: 10 * 1024 * 1024, // 10 MB maximum
   allowedExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.svg'],
   forbiddenExtensions: [
-    '.exe',
-    '.sh',
-    '.bat',
-    '.cmd',
-    '.php',
-    '.phtml',
-    '.js',
-    '.ts',
-    '.html',
-    '.htm',
-    '.jar',
-    '.vbs',
-    '.ps1',
-    '.py',
+    '.exe', '.sh', '.bat', '.cmd', '.php', '.phtml', '.js',
+    '.ts', '.html', '.htm', '.jar', '.vbs', '.ps1', '.py',
   ],
   allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'],
   magicBytesRequired: true,
@@ -228,7 +224,10 @@ export const JAVAMIFI_ATTACK_SURFACES: AttackSurfaceEntry[] = [
     inputValidationSchema: 'RegisterRequestSchema',
     trustBoundary: 'TB_01_INTERNET_TO_EDGE',
     dataClassification: 'RESTRICTED',
-    associatedAbuseVectors: ['FAIL_012_RATE_LIMIT_EVASION', 'FAIL_027_ERROR_ORACLE_ENUMERATION'],
+    associatedAbuseVectors: [
+      'FAIL_012_RATE_LIMIT_EVASION',
+      'FAIL_027_ERROR_ORACLE_ENUMERATION',
+    ],
     owningModule: 'auth',
     hasDeterministicVerification: true,
   },
@@ -397,7 +396,10 @@ export const JAVAMIFI_ATTACK_SURFACES: AttackSurfaceEntry[] = [
     inputValidationSchema: 'CreatePaymentIntentDtoSchema',
     trustBoundary: 'TB_02_EDGE_TO_API',
     dataClassification: 'CONFIDENTIAL',
-    associatedAbuseVectors: ['FAIL_003_CROSS_ACCOUNT_IDOR', 'FAIL_026_CONCURRENCY_RACE_CONDITION'],
+    associatedAbuseVectors: [
+      'FAIL_003_CROSS_ACCOUNT_IDOR',
+      'FAIL_026_CONCURRENCY_RACE_CONDITION',
+    ],
     owningModule: 'payments',
     hasDeterministicVerification: true,
   },
@@ -499,7 +501,10 @@ export const JAVAMIFI_ATTACK_SURFACES: AttackSurfaceEntry[] = [
     inputValidationSchema: 'UpdateDeviceStatusSchema',
     trustBoundary: 'TB_02_EDGE_TO_API',
     dataClassification: 'CONFIDENTIAL',
-    associatedAbuseVectors: ['FAIL_002_LOW_PRIVILEGE_ESCALATION', 'FAIL_007_SQL_ORM_INJECTION'],
+    associatedAbuseVectors: [
+      'FAIL_002_LOW_PRIVILEGE_ESCALATION',
+      'FAIL_007_SQL_ORM_INJECTION',
+    ],
     owningModule: 'admin',
     hasDeterministicVerification: true,
   },
@@ -534,7 +539,10 @@ export const JAVAMIFI_ATTACK_SURFACES: AttackSurfaceEntry[] = [
     inputValidationSchema: 'CustomerQuerySchema',
     trustBoundary: 'TB_02_EDGE_TO_API',
     dataClassification: 'RESTRICTED',
-    associatedAbuseVectors: ['FAIL_002_LOW_PRIVILEGE_ESCALATION', 'FAIL_024_UNBOUNDED_DATA_EXPORT'],
+    associatedAbuseVectors: [
+      'FAIL_002_LOW_PRIVILEGE_ESCALATION',
+      'FAIL_024_UNBOUNDED_DATA_EXPORT',
+    ],
     owningModule: 'admin',
     hasDeterministicVerification: true,
   },
@@ -805,7 +813,10 @@ export const JAVAMIFI_ATTACK_SURFACES: AttackSurfaceEntry[] = [
     inputValidationSchema: 'GeocodeQuerySchema',
     trustBoundary: 'TB_04_API_TO_PROVIDERS',
     dataClassification: 'PUBLIC',
-    associatedAbuseVectors: ['FAIL_010_SSRF_INTERNAL_METADATA', 'FAIL_012_RATE_LIMIT_EVASION'],
+    associatedAbuseVectors: [
+      'FAIL_010_SSRF_INTERNAL_METADATA',
+      'FAIL_012_RATE_LIMIT_EVASION',
+    ],
     owningModule: 'geo',
     hasDeterministicVerification: true,
   },
@@ -881,13 +892,23 @@ export function validateFileUploadSecurity(
     }
     // PNG: 89 50 4E 47
     else if (file.mimetype === 'image/png') {
-      if (bytes[0] !== 0x89 || bytes[1] !== 0x50 || bytes[2] !== 0x4e || bytes[3] !== 0x47) {
+      if (
+        bytes[0] !== 0x89 ||
+        bytes[1] !== 0x50 ||
+        bytes[2] !== 0x4e ||
+        bytes[3] !== 0x47
+      ) {
         return { safe: false, reason: 'Magic byte signature mismatch for image/png' };
       }
     }
     // WEBP: 'RIFF' (52 49 46 46)
     else if (file.mimetype === 'image/webp') {
-      if (bytes[0] !== 0x52 || bytes[1] !== 0x49 || bytes[2] !== 0x46 || bytes[3] !== 0x46) {
+      if (
+        bytes[0] !== 0x52 ||
+        bytes[1] !== 0x49 ||
+        bytes[2] !== 0x46 ||
+        bytes[3] !== 0x46
+      ) {
         return { safe: false, reason: 'Magic byte signature mismatch for image/webp' };
       }
     }
@@ -938,7 +959,10 @@ export function validateSsrfTargetDestination(
 
     // 3. Reject RFC1918 private IPv4 ranges
     const ipv4Parts = host.split('.').map((s) => Number(s));
-    if (ipv4Parts.length === 4 && ipv4Parts.every((p: number) => !isNaN(p) && p >= 0 && p <= 255)) {
+    if (
+      ipv4Parts.length === 4 &&
+      ipv4Parts.every((p: number) => !isNaN(p) && p >= 0 && p <= 255)
+    ) {
       const b0 = ipv4Parts[0] ?? 0;
       const b1 = ipv4Parts[1] ?? 0;
       if (
@@ -1008,7 +1032,9 @@ export const AttackSurfaceEvaluationReportSchema = z.object({
     }),
   ),
 });
-export type AttackSurfaceEvaluationReport = z.infer<typeof AttackSurfaceEvaluationReportSchema>;
+export type AttackSurfaceEvaluationReport = z.infer<
+  typeof AttackSurfaceEvaluationReportSchema
+>;
 
 /**
  * Runtime Evaluator for SEC-P02 Attack Surface Compliance
@@ -1098,9 +1124,7 @@ export function evaluateAttackSurfaceCompliance(
       if (
         surface.authRequirement === 'ADMIN_RBAC' &&
         surface.allowedRoles.length > 0 &&
-        surface.allowedRoles.every((r) =>
-          ['SUPER_ADMIN', 'ADMIN', 'OPS', 'EDITOR', 'SUPPORT'].includes(r),
-        )
+        surface.allowedRoles.every((r) => ['SUPER_ADMIN', 'ADMIN', 'OPS', 'EDITOR', 'SUPPORT'].includes(r))
       ) {
         adminRbacCount++;
       } else {
@@ -1186,7 +1210,9 @@ export function evaluateAttackSurfaceCompliance(
   const inv04CriticalFindingsBlockRelease = criticalReleaseBlockers === 0;
 
   const status =
-    criticalReleaseBlockers === 0 && inv01InputValidated && inv02AuthRecheckedAtMutation
+    criticalReleaseBlockers === 0 &&
+    inv01InputValidated &&
+    inv02AuthRecheckedAtMutation
       ? 'COMPLIANT'
       : 'NON_COMPLIANT';
 

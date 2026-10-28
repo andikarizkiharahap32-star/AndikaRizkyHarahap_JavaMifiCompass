@@ -19,7 +19,7 @@ export class DiningService {
   getCountries() {
     return COUNTRIES_CATALOG.map((country) => {
       const placesInCountry = SEEDED_PLACES.filter(
-        (p) => p.countryIso2.toUpperCase() === country.code.toUpperCase(),
+        (p) => p.countryIso2.toUpperCase() === country.code.toUpperCase()
       );
       return {
         ...country,
@@ -41,12 +41,16 @@ export class DiningService {
 
     // 1. Country filter
     if (query.country) {
-      places = places.filter((p) => p.countryIso2.toUpperCase() === query.country!.toUpperCase());
+      places = places.filter(
+        (p) => p.countryIso2.toUpperCase() === query.country!.toUpperCase()
+      );
     }
 
     // 2. City filter
     if (query.city) {
-      places = places.filter((p) => p.cityName.toLowerCase() === query.city!.toLowerCase());
+      places = places.filter(
+        (p) => p.cityName.toLowerCase() === query.city!.toLowerCase()
+      );
     }
 
     // 3. Search query
@@ -57,7 +61,7 @@ export class DiningService {
           p.name.toLowerCase().includes(q) ||
           (p.nameOriginal && p.nameOriginal.toLowerCase().includes(q)) ||
           p.cuisine.toLowerCase().includes(q) ||
-          p.cityName.toLowerCase().includes(q),
+          p.cityName.toLowerCase().includes(q)
       );
     }
 
@@ -69,7 +73,7 @@ export class DiningService {
       } else {
         // Fail closed: Only CERTIFIED and CLAIMED are included by default
         places = places.filter(
-          (p) => p.tier === HalalTier.CERTIFIED || p.tier === HalalTier.CLAIMED,
+          (p) => p.tier === HalalTier.CERTIFIED || p.tier === HalalTier.CLAIMED
         );
       }
     } else if (filter === DiningFilterMode.NON_HALAL) {
@@ -208,9 +212,7 @@ export class DiningService {
 
     if (searchResult.items.length === 0) {
       lines.push('Maaf, tidak ditemukan restoran yang memenuhi kriteria halal terverifikasi.');
-      lines.push(
-        '💡 Tip: Gunakan opsi filter "Semua Menu" untuk melihat opsi ramah muslim lainnya.',
-      );
+      lines.push('💡 Tip: Gunakan opsi filter "Semua Menu" untuk melihat opsi ramah muslim lainnya.');
     } else {
       searchResult.items.forEach((p, idx) => {
         lines.push(`${idx + 1}. *${p.name}*`);
@@ -218,20 +220,14 @@ export class DiningService {
         lines.push(`   🍜 Jenis: ${p.cuisine} | ⭐ Rating: ${p.googleRating.toFixed(1)}`);
         lines.push(`   📍 Alamat: ${p.address}`);
         if (p.priceRange) {
-          lines.push(
-            `   💰 Estimasi: ${p.priceRange.formattedLocalRange} (${p.priceRange.formattedIdrRange})`,
-          );
+          lines.push(`   💰 Estimasi: ${p.priceRange.formattedLocalRange} (${p.priceRange.formattedIdrRange})`);
         }
         if (p.wifiPickupBooth) {
-          lines.push(
-            `   📶 Booth WiFi Terdekat: ${p.wifiPickupBooth.airportName} (${p.wifiPickupBooth.counterLocation})`,
-          );
+          lines.push(`   📶 Booth WiFi Terdekat: ${p.wifiPickupBooth.airportName} (${p.wifiPickupBooth.counterLocation})`);
         }
         lines.push('');
       });
-      lines.push(
-        'ℹ️ _Status halal didasarkan pada kutipan bukti resmi yang diverifikasi deterministik._',
-      );
+      lines.push('ℹ️ _Status halal didasarkan pada kutipan bukti resmi yang diverifikasi deterministik._');
     }
 
     return {
@@ -268,7 +264,7 @@ export class DiningService {
         certNumber: p.certNumber,
         certExpiresAt: p.certExpiresAt,
         daysUntilExpiry: Math.round(
-          (new Date(p.certExpiresAt!).getTime() - now.getTime()) / (24 * 60 * 60 * 1000),
+          (new Date(p.certExpiresAt!).getTime() - now.getTime()) / (24 * 60 * 60 * 1000)
         ),
         lastVerifiedDate: p.lastVerifiedDate,
       })),
@@ -288,11 +284,18 @@ export class DiningService {
   }
 
   private mapToSummary(p: RawPlace): DiningPlaceSummary {
-    const avgPrice = this.fxService.convertMinorPrice(p.averagePriceMinor, p.currency);
+    const avgPrice = this.fxService.convertMinorPrice(
+      p.averagePriceMinor,
+      p.currency
+    );
 
     const minPrice = p.minPriceMinor || Math.round(p.averagePriceMinor * 0.75);
     const maxPrice = p.maxPriceMinor || Math.round(p.averagePriceMinor * 1.5);
-    const priceRange = this.fxService.convertMinorPriceRange(minPrice, maxPrice, p.currency);
+    const priceRange = this.fxService.convertMinorPriceRange(
+      minPrice,
+      maxPrice,
+      p.currency
+    );
 
     // Mock prayer context based on standard itinerary
     const prayerContext = {
@@ -328,8 +331,7 @@ export class DiningService {
       lastVerifiedDate: p.lastVerifiedDate || '26 Okt 2026',
       dietaryFlags: p.dietaryFlags,
       alcoholStatus: p.alcoholStatus,
-      distanceKm:
-        (p as any).distanceKm ?? Number((0.5 + ((p.name.length * 7) % 45) / 10).toFixed(1)),
+      distanceKm: (p as any).distanceKm ?? Number((0.5 + ((p.name.length * 7) % 45) / 10).toFixed(1)),
       averagePrice: avgPrice,
       priceRange: priceRange,
       prayerContext: prayerContext,
@@ -348,7 +350,10 @@ export class DiningService {
     // Group menu items by category
     const categoriesMap = new Map<string, any[]>();
     for (const item of p.menuItems) {
-      const convertedPrice = this.fxService.convertMinorPrice(item.amountMinor, item.currency);
+      const convertedPrice = this.fxService.convertMinorPrice(
+        item.amountMinor,
+        item.currency
+      );
 
       const mappedItem = {
         id: item.id,
@@ -370,10 +375,12 @@ export class DiningService {
       categoriesMap.get(item.category)!.push(mappedItem);
     }
 
-    const menuCategories = Array.from(categoriesMap.entries()).map(([category, items]) => ({
-      category,
-      items,
-    }));
+    const menuCategories = Array.from(categoriesMap.entries()).map(
+      ([category, items]) => ({
+        category,
+        items,
+      })
+    );
 
     return {
       ...summary,

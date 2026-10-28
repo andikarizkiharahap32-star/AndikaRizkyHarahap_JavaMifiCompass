@@ -3,12 +3,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Security Audit & Quality Remediation Governance', () => {
-  const navbarPath = path.resolve(__dirname, '../../../apps/web/src/components/Navbar.tsx');
+  const navbarPath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/components/Navbar.tsx'
+  );
   const mockAdapterPath = path.resolve(
     __dirname,
-    '../../../apps/api/src/modules/payments/adapters/mock-gateway.adapter.ts',
+    '../../../apps/api/src/modules/payments/adapters/mock-gateway.adapter.ts'
   );
-  const automationDocPath = path.resolve(__dirname, '../../../docs/AUTOMATION.md');
+  const automationDocPath = path.resolve(
+    __dirname,
+    '../../../docs/AUTOMATION.md'
+  );
   const readmePath = path.resolve(__dirname, '../../../README.md');
   const n8nDir = path.resolve(__dirname, '../../../automation/n8n');
 
@@ -41,7 +47,9 @@ describe('Security Audit & Quality Remediation Governance', () => {
   });
 
   it('reconciles n8n workflow exports inventory with documentation (12 workflows)', () => {
-    const workflowFiles = fs.readdirSync(n8nDir).filter((file) => file.endsWith('.json'));
+    const workflowFiles = fs
+      .readdirSync(n8nDir)
+      .filter((file) => file.endsWith('.json'));
 
     expect(workflowFiles.length).toBe(12);
 

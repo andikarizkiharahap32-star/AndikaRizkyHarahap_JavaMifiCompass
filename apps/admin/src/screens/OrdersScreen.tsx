@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Package,
-  Search,
-  Filter,
-  ShieldCheck,
-  ArrowRight,
-  Eye,
-  RefreshCw,
-  Loader2,
-} from 'lucide-react';
+import { Package, Search, Filter, ShieldCheck, ArrowRight, Eye, RefreshCw, Loader2 } from 'lucide-react';
 import { apiClient } from '../lib/api';
 
 const fallbackOrders = [
@@ -94,11 +85,7 @@ export const OrdersScreen = () => {
   }, [filter]);
 
   const handleRefund = async (orderNumber: string) => {
-    if (
-      !confirm(
-        `Konfirmasi proses refund untuk pesanan ${orderNumber}? Dana akan dicatat pada ledger.`,
-      )
-    ) {
+    if (!confirm(`Konfirmasi proses refund untuk pesanan ${orderNumber}? Dana akan dicatat pada ledger.`)) {
       return;
     }
     try {
@@ -189,15 +176,10 @@ export const OrdersScreen = () => {
               {displayedOrders.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-5 py-8 text-center text-slate-500">
-                    <p className="font-semibold text-xs">
-                      Tidak ada pesanan yang sesuai dengan filter.
-                    </p>
+                    <p className="font-semibold text-xs">Tidak ada pesanan yang sesuai dengan filter.</p>
                     <button
                       type="button"
-                      onClick={() => {
-                        setFilter('ALL');
-                        setSearchTerm('');
-                      }}
+                      onClick={() => { setFilter('ALL'); setSearchTerm(''); }}
                       className="mt-2 min-h-12 px-4 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
                     >
                       Reset Filter
@@ -206,58 +188,55 @@ export const OrdersScreen = () => {
                 </tr>
               ) : (
                 displayedOrders.map((o) => (
-                  <tr key={o.id} className="hover:bg-slate-50/50">
-                    <td className="px-5 py-3 font-mono font-bold text-sky-600 tnum">
-                      {o.orderNumber}
-                    </td>
-                    <td className="px-5 py-3 font-semibold text-slate-800">{o.customer}</td>
-                    <td className="px-5 py-3">
-                      <span className="font-medium text-slate-700">{o.dest}</span>
-                      <span className="text-xs text-slate-400 block">{o.type}</span>
-                    </td>
-                    <td className="px-5 py-3 text-slate-500 font-mono tnum">{o.createdAt}</td>
-                    <td className="px-5 py-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-full font-bold text-xs ${
-                          o.status === 'PAID'
-                            ? 'bg-emerald-50 text-emerald-700'
-                            : o.status === 'IN_USE'
-                              ? 'bg-sky-50 text-sky-700'
-                              : o.status === 'SHIPPED'
-                                ? 'bg-indigo-50 text-indigo-700'
-                                : 'bg-amber-50 text-amber-700'
-                        }`}
+                <tr key={o.id} className="hover:bg-slate-50/50">
+                  <td className="px-5 py-3 font-mono font-bold text-sky-600 tnum">{o.orderNumber}</td>
+                  <td className="px-5 py-3 font-semibold text-slate-800">{o.customer}</td>
+                  <td className="px-5 py-3">
+                    <span className="font-medium text-slate-700">{o.dest}</span>
+                    <span className="text-xs text-slate-400 block">{o.type}</span>
+                  </td>
+                  <td className="px-5 py-3 text-slate-500 font-mono tnum">{o.createdAt}</td>
+                  <td className="px-5 py-3">
+                    <span
+                      className={`px-2 py-0.5 rounded-full font-bold text-xs ${
+                        o.status === 'PAID'
+                          ? 'bg-emerald-50 text-emerald-700'
+                          : o.status === 'IN_USE'
+                          ? 'bg-sky-50 text-sky-700'
+                          : o.status === 'SHIPPED'
+                          ? 'bg-indigo-50 text-indigo-700'
+                          : 'bg-amber-50 text-amber-700'
+                      }`}
+                    >
+                      {o.status}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3 text-right font-extrabold text-slate-900 font-mono tnum">
+                    Rp {o.amountIdr.toLocaleString('id-ID')}
+                  </td>
+                  <td className="px-5 py-3 text-center">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <a
+                        href={`http://localhost:3000/id/trip-hub/${o.orderNumber}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="min-h-12 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center justify-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
                       >
-                        {o.status}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-right font-extrabold text-slate-900 font-mono tnum">
-                      Rp {o.amountIdr.toLocaleString('id-ID')}
-                    </td>
-                    <td className="px-5 py-3 text-center">
-                      <div className="flex items-center justify-center gap-1.5">
-                        <a
-                          href={`http://localhost:3000/id/trip-hub/${o.orderNumber}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="min-h-12 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center justify-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+                        <Eye className="w-3.5 h-3.5" /> <span>Trip Hub</span>
+                      </a>
+                      {o.status === 'PAID' && (
+                        <button
+                          type="button"
+                          onClick={() => handleRefund(o.orderNumber)}
+                          className="min-h-12 px-3 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs inline-flex items-center justify-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
                         >
-                          <Eye className="w-3.5 h-3.5" /> <span>Trip Hub</span>
-                        </a>
-                        {o.status === 'PAID' && (
-                          <button
-                            type="button"
-                            onClick={() => handleRefund(o.orderNumber)}
-                            className="min-h-12 px-3 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs inline-flex items-center justify-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
-                          >
-                            <span>Refund</span>
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
+                          <span>Refund</span>
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              )))}
             </tbody>
           </table>
         </div>

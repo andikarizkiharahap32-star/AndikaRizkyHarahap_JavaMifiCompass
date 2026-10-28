@@ -68,7 +68,7 @@ describe('Navbar, Mobile Navigation, and Wayfinding (P04)', () => {
     expect(content).not.toContain('backdrop-blur');
 
     // Mobile drawer navigation items
-    expect(content).toContain('onClick={() => setMobileMenuOpen(false)}');
+    expect(content).toContain("onClick={() => setMobileMenuOpen(false)}");
   });
 
   it('enforces 48px touch targets and sticky header tokens with zero drop shadows', () => {

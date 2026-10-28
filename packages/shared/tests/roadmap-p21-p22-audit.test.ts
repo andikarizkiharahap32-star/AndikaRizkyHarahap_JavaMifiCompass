@@ -18,10 +18,7 @@ describe('Roadmap P21–P22 Diagnostic & Verification Audit', () => {
   const checkoutPath = path.join(rootDir, 'apps/web/src/app/[locale]/checkout/page.tsx');
   const loginPath = path.join(rootDir, 'apps/web/src/app/[locale]/login/page.tsx');
   const adminAppPath = path.join(rootDir, 'apps/admin/src/App.tsx');
-  const integrationsPath = path.join(
-    rootDir,
-    'apps/admin/src/screens/IntegrationsHealthScreen.tsx',
-  );
+  const integrationsPath = path.join(rootDir, 'apps/admin/src/screens/IntegrationsHealthScreen.tsx');
   const dashboardPath = path.join(rootDir, 'apps/admin/src/screens/DashboardScreen.tsx');
 
   describe('P21: Responsive Behavior, Breakpoints, and Localization Resilience', () => {
@@ -130,10 +127,7 @@ describe('Roadmap P21–P22 Diagnostic & Verification Audit', () => {
     it('verifies double-submit prevention and loading indicators on async triggers', () => {
       const checkoutCode = fs.readFileSync(checkoutPath, 'utf8');
       const loginCode = fs.readFileSync(loginPath, 'utf8');
-      const buttonCode = fs.readFileSync(
-        path.join(rootDir, 'packages/ui/src/primitives/Button.tsx'),
-        'utf8',
-      );
+      const buttonCode = fs.readFileSync(path.join(rootDir, 'packages/ui/src/primitives/Button.tsx'), 'utf8');
 
       // Checkout submit button double-submit prevention
       expect(checkoutCode).toContain('isLoading={isSubmitting}');
@@ -163,9 +157,7 @@ describe('Roadmap P21–P22 Diagnostic & Verification Audit', () => {
     it('verifies role-aware navigation links (RBAC) in admin shell', () => {
       const adminCode = fs.readFileSync(adminAppPath, 'utf8');
 
-      expect(adminCode).toContain(
-        "currentRole === 'SUPER_ADMIN' || item.roles.includes(currentRole)",
-      );
+      expect(adminCode).toContain('currentRole === \'SUPER_ADMIN\' || item.roles.includes(currentRole)');
       expect(adminCode).toContain("'SUPER_ADMIN'");
       expect(adminCode).toContain("'OPS'");
       expect(adminCode).toContain("'FINANCE'");

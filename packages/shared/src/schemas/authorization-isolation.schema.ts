@@ -114,7 +114,12 @@ export const ROLE_PERMISSIONS_MAP: Record<AuthZRole, readonly PermissionKey[]> =
     'admin:devices_manage',
     'dining:read_public',
   ],
-  FINANCE: ['orders:read_all', 'orders:refund', 'admin:dashboard', 'security:audit_read'],
+  FINANCE: [
+    'orders:read_all',
+    'orders:refund',
+    'admin:dashboard',
+    'security:audit_read',
+  ],
   SUPPORT: [
     'orders:read_all',
     'orders:read_tenant',
@@ -122,10 +127,26 @@ export const ROLE_PERMISSIONS_MAP: Record<AuthZRole, readonly PermissionKey[]> =
     'admin:dashboard',
     'dining:read_public',
   ],
-  EDITOR: ['dining:read_public', 'dining:reviews_moderate', 'content:manage'],
-  CUSTOMER: ['orders:read_own', 'orders:create', 'dining:read_public', 'dining:reviews_create'],
-  USER: ['orders:read_own', 'orders:create', 'dining:read_public', 'dining:reviews_create'],
-  GUEST: ['dining:read_public'],
+  EDITOR: [
+    'dining:read_public',
+    'dining:reviews_moderate',
+    'content:manage',
+  ],
+  CUSTOMER: [
+    'orders:read_own',
+    'orders:create',
+    'dining:read_public',
+    'dining:reviews_create',
+  ],
+  USER: [
+    'orders:read_own',
+    'orders:create',
+    'dining:read_public',
+    'dining:reviews_create',
+  ],
+  GUEST: [
+    'dining:read_public',
+  ],
 };
 
 /**
@@ -261,10 +282,7 @@ export function hasRolePermission(role: AuthZRole, permission: PermissionKey): b
 /**
  * Checks whether an actor (holding one or more roles) has the requested permission.
  */
-export function actorHasPermission(
-  actorRoles: readonly AuthZRole[],
-  permission: PermissionKey,
-): boolean {
+export function actorHasPermission(actorRoles: readonly AuthZRole[], permission: PermissionKey): boolean {
   return actorRoles.some((role) => hasRolePermission(role, permission));
 }
 
@@ -319,12 +337,8 @@ export function evaluateObjectAccess(
         decisionCode: 'DENY_TENANT_ISOLATION_BREACH',
         auditEventType: 'AUTHZ_TENANT_BREACH_ATTEMPT',
         reason: `Cross-tenant access violation: actor tenant '${actor.tenantId}' requested resource in tenant '${resource.tenantId}'`,
-        externalStatusCode: denialPolicy.preventErrorOracles
-          ? denialPolicy.sanitizedDenyStatusCode
-          : 403,
-        externalMessage: denialPolicy.preventErrorOracles
-          ? denialPolicy.sanitizedDenyMessage
-          : 'Cross-tenant access denied',
+        externalStatusCode: denialPolicy.preventErrorOracles ? denialPolicy.sanitizedDenyStatusCode : 403,
+        externalMessage: denialPolicy.preventErrorOracles ? denialPolicy.sanitizedDenyMessage : 'Cross-tenant access denied',
       };
     }
   }
@@ -345,12 +359,8 @@ export function evaluateObjectAccess(
         decisionCode: 'DENY_IDOR_OWNERSHIP_MISMATCH',
         auditEventType: 'AUTHZ_IDOR_PROBE_DETECTED',
         reason: `IDOR attempt: actor '${actor.userId}' attempted access to resource owned by '${resource.ownerId}'`,
-        externalStatusCode: denialPolicy.preventErrorOracles
-          ? denialPolicy.sanitizedDenyStatusCode
-          : 404,
-        externalMessage: denialPolicy.preventErrorOracles
-          ? denialPolicy.sanitizedDenyMessage
-          : 'Resource not found',
+        externalStatusCode: denialPolicy.preventErrorOracles ? denialPolicy.sanitizedDenyStatusCode : 404,
+        externalMessage: denialPolicy.preventErrorOracles ? denialPolicy.sanitizedDenyMessage : 'Resource not found',
       };
     }
   }
@@ -433,54 +443,38 @@ export function evaluateAuthorizationIsolationCompliance(
   const totalChecks = 7;
 
   // Check 1: Default Deny / Fail Closed
-  if (
-    config.denialPolicy.failClosed === true &&
-    config.denialPolicy.denyAnonymousProtected === true
-  ) {
+  if (config.denialPolicy.failClosed === true && config.denialPolicy.denyAnonymousProtected === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Default denial / fail-closed posture is disabled or permissive.',
-    );
+    blockers.push('RELEASE BLOCKER: Default denial / fail-closed posture is disabled or permissive.');
   }
 
   // Check 2: Tenant Isolation Mode
-  if (
-    config.tenantPolicy.isolationMode === 'STRICT_ROW_LEVEL' &&
-    config.tenantPolicy.allowCrossTenantAccess === false
-  ) {
+  if (config.tenantPolicy.isolationMode === 'STRICT_ROW_LEVEL' && config.tenantPolicy.allowCrossTenantAccess === false) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Tenant isolation mode must be STRICT_ROW_LEVEL without cross-tenant sharing.',
-    );
+    blockers.push('RELEASE BLOCKER: Tenant isolation mode must be STRICT_ROW_LEVEL without cross-tenant sharing.');
   }
 
   // Check 3: Tenant Leak Prevention & Error Oracle Sanitization
   if (config.tenantPolicy.leakPrevention === true && config.blockErrorOracles === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Error oracle sanitization must be active to prevent IDOR and tenant probing.',
-    );
+    blockers.push('RELEASE BLOCKER: Error oracle sanitization must be active to prevent IDOR and tenant probing.');
   }
 
   // Check 4: Server-Side Role Derivation (Zero Client-Forged Roles)
   if (config.enforceServerSideRoleDerivation === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Server-side role derivation must be strictly enforced (client claims rejected).',
-    );
+    blockers.push('RELEASE BLOCKER: Server-side role derivation must be strictly enforced (client claims rejected).');
   }
 
   // Check 5: Mutation Boundary Recheck (INV-02)
   if (config.enforceMutationBoundaryRecheck === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Authorization must be explicitly rechecked at the mutation boundary (INV-02).',
-    );
+    blockers.push('RELEASE BLOCKER: Authorization must be explicitly rechecked at the mutation boundary (INV-02).');
   }
 
   // Check 6: Role Permission Least Privilege Bounds
@@ -491,18 +485,14 @@ export function evaluateAuthorizationIsolationCompliance(
   if (!hasLeakedAdminPerms) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: CUSTOMER role granted unauthorized administrative permissions.',
-    );
+    blockers.push('RELEASE BLOCKER: CUSTOMER role granted unauthorized administrative permissions.');
   }
 
   // Check 7: Step-Up Reauth Protection on High-Risk Actions
   if (HIGH_RISK_AUTHZ_ACTIONS.length >= 4) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: High-risk mutation operations missing mandatory step-up reauthentication gates.',
-    );
+    blockers.push('RELEASE BLOCKER: High-risk mutation operations missing mandatory step-up reauthentication gates.');
   }
 
   const score = Math.round((passedChecks / totalChecks) * 100);

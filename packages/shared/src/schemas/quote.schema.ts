@@ -18,18 +18,8 @@ export const quoteRequestSchema = z
     dest: z.string().min(2, 'Destination code required').max(10).default('JP'),
     days: z.coerce.number().int().min(1, 'Minimum 1 day').max(90, 'Maximum 90 days').default(7),
     pax: quotePaxTierSchema.default('solo'),
-    travelers: z.coerce
-      .number()
-      .int()
-      .min(1, 'Minimum 1 traveler')
-      .max(50, 'Maximum 50 travelers')
-      .default(1),
-    devices: z.coerce
-      .number()
-      .int()
-      .min(1, 'Minimum 1 device')
-      .max(20, 'Maximum 20 devices')
-      .default(1),
+    travelers: z.coerce.number().int().min(1, 'Minimum 1 traveler').max(50, 'Maximum 50 travelers').default(1),
+    devices: z.coerce.number().int().min(1, 'Minimum 1 device').max(20, 'Maximum 20 devices').default(1),
     startDate: z.string().optional(),
     endDate: z.string().optional(),
     promoCode: z.string().max(20).optional(),
@@ -44,7 +34,7 @@ export const quoteRequestSchema = z
     {
       message: 'Tanggal pulang harus setelah atau sama dengan tanggal berangkat',
       path: ['endDate'],
-    },
+    }
   );
 
 export type QuoteRequest = z.infer<typeof quoteRequestSchema>;

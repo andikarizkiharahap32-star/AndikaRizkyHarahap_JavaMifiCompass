@@ -55,7 +55,7 @@ describe('Mock Payment Gateway - P0: Mock-only Scope and Environment Isolation',
       guard.validateSyntheticCredentials({
         pan: '4532015012345678',
         cvv: '999',
-      }),
+      })
     ).toThrow(/Real payment credentials .* are strictly prohibited in the mock payment gateway/);
   });
 
@@ -70,21 +70,21 @@ describe('Mock Payment Gateway - P0: Mock-only Scope and Environment Isolation',
         'tok_mock_qris_expired',
         'tok_mock_gateway_timeout',
         'tok_mock_insufficient_funds',
-      ]),
+      ])
     );
 
     // Documented token passes validation
     expect(() =>
       guard.validateSyntheticCredentials({
         syntheticToken: 'tok_mock_visa_success',
-      }),
+      })
     ).not.toThrow();
 
     // Undocumented token throws validation error
     expect(() =>
       guard.validateSyntheticCredentials({
         syntheticToken: 'invalid_unrecognized_token',
-      }),
+      })
     ).toThrow(/Invalid synthetic token.*must start with "tok_mock_"/);
   });
 
@@ -94,7 +94,7 @@ describe('Mock Payment Gateway - P0: Mock-only Scope and Environment Isolation',
 
     // In production without ALLOW_MOCK_PAYMENT, mock mode is forbidden
     expect(() => guard.assertMockAllowed()).toThrow(
-      /Mock payment simulation is strictly disabled in production environments/,
+      /Mock payment simulation is strictly disabled in production environments/
     );
 
     // When explicitly enabled on server, mock mode is permitted
@@ -110,13 +110,13 @@ describe('Mock Payment Gateway - P0: Mock-only Scope and Environment Isolation',
     expect(() =>
       guard.assertMockAllowed({
         queryParams: { mock: 'true' },
-      }),
+      })
     ).toThrow(/Activating mock payment via client query parameters is strictly prohibited/);
 
     expect(() =>
       guard.assertMockAllowed({
         queryParams: { mode: 'mock' },
-      }),
+      })
     ).toThrow(/Activating mock payment via client query parameters is strictly prohibited/);
   });
 
@@ -128,13 +128,13 @@ describe('Mock Payment Gateway - P0: Mock-only Scope and Environment Isolation',
     expect(() =>
       guard.assertMockAllowed({
         headers: { 'x-mock-mode': 'enabled' },
-      }),
+      })
     ).toThrow(/Activating mock payment via client request headers is strictly prohibited/);
 
     expect(() =>
       guard.assertMockAllowed({
         headers: { 'x-payment-mode': 'mock' },
-      }),
+      })
     ).toThrow(/Activating mock payment via client request headers is strictly prohibited/);
   });
 
@@ -146,9 +146,9 @@ describe('Mock Payment Gateway - P0: Mock-only Scope and Environment Isolation',
     expect(guard.assertAuthoritativeAmount(authoritativeOrderTotal, undefined)).toBe(350000);
 
     // Tampered client amount throws error
-    expect(() => guard.assertAuthoritativeAmount(authoritativeOrderTotal, 1000)).toThrow(
-      /Payment amount 1000 does not match authoritative order total 350000/,
-    );
+    expect(() =>
+      guard.assertAuthoritativeAmount(authoritativeOrderTotal, 1000)
+    ).toThrow(/Payment amount 1000 does not match authoritative order total 350000/);
   });
 
   it('P0-8: Zod mockPaymentIntentSchema rejects requests containing real card fields', () => {

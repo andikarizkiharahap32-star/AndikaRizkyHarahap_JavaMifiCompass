@@ -45,7 +45,7 @@ describe('Backend and Workflows - P18: User Preferences and Favorites', () => {
     await expect(
       prefService.updatePreferences('usr_001', {
         dietaryStrictness: 'invalid_tier' as any,
-      }),
+      })
     ).rejects.toThrow(/Invalid dietaryStrictness/);
   });
 
@@ -54,7 +54,9 @@ describe('Backend and Workflows - P18: User Preferences and Favorites', () => {
     expect(() => assertNoInferredAttributes(safeData)).not.toThrow();
 
     const unsafeData = { religion: 'inferred_sunni', displayCurrency: 'IDR' };
-    expect(() => assertNoInferredAttributes(unsafeData)).toThrow(/Privacy Violation \(P18\)/);
+    expect(() => assertNoInferredAttributes(unsafeData)).toThrow(
+      /Privacy Violation \(P18\)/
+    );
   });
 
   it('P18-3: Enforces favorites composite key (user_id, place_id) and soft cap of 500', async () => {
@@ -69,7 +71,7 @@ describe('Backend and Workflows - P18: User Preferences and Favorites', () => {
 
     // 501st favorite exceeds soft cap -> rejected
     await expect(favService.addFavorite(userId, 'plc_venue_501')).rejects.toThrow(
-      /Favorites soft cap of 500 places reached/,
+      /Favorites soft cap of 500 places reached/
     );
   });
 
@@ -96,15 +98,7 @@ describe('Backend and Workflows - P18: User Preferences and Favorites', () => {
     // 1. Export covers all user data
     const exportData = await prefService.exportUserData(userId, {
       favorites: [{ placeId: 'plc_kyoto_01', addedAt: new Date().toISOString() }],
-      reviews: [
-        {
-          id: 'rev_1',
-          placeId: 'plc_kyoto_01',
-          rating: 5,
-          body: 'Superb dining',
-          createdAt: new Date().toISOString(),
-        },
-      ],
+      reviews: [{ id: 'rev_1', placeId: 'plc_kyoto_01', rating: 5, body: 'Superb dining', createdAt: new Date().toISOString() }],
       sessionsCount: 2,
     });
 
@@ -120,12 +114,8 @@ describe('Backend and Workflows - P18: User Preferences and Favorites', () => {
 
     const deleteResult = await prefService.deleteUserData(userId, {
       deleteFavorites: (uid) => favService.deleteAllForUser(uid),
-      anonymizeReviews: () => {
-        reviewsAnonymized = true;
-      },
-      deleteSessions: () => {
-        sessionsDeleted = true;
-      },
+      anonymizeReviews: () => { reviewsAnonymized = true; },
+      deleteSessions: () => { sessionsDeleted = true; },
     });
 
     expect(deleteResult.deleted).toBe(true);
@@ -153,7 +143,7 @@ describe('Backend and Workflows - P19: Media and Uploads', () => {
       'usr_001',
       'halal_ramen.jpg',
       'image/jpeg',
-      5 * 1024 * 1024,
+      5 * 1024 * 1024
     );
 
     expect(details.uploadUrl).toContain('s3.ap-southeast-1.amazonaws.com');
@@ -169,31 +159,27 @@ describe('Backend and Workflows - P19: Media and Uploads', () => {
         'usr_001',
         'huge_photo.jpg',
         'image/jpeg',
-        9 * 1024 * 1024, // 9 MB
-      ),
+        9 * 1024 * 1024 // 9 MB
+      )
     ).toThrow(/File size exceeds maximum allowable limit of 8 MB/);
   });
 
   it('P19-2: Magic byte content sniffing rejects mismatched or spoofed MIME types', () => {
     // 1. Valid JPEG buffer (SOI header FF D8 FF)
-    const validJpeg = Buffer.from([
-      0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01,
-    ]);
+    const validJpeg = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01]);
     expect(sniffMimeType(validJpeg)).toBe('image/jpeg');
 
     // 2. Valid PNG buffer (89 50 4E 47 ...)
-    const validPng = Buffer.from([
-      0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d,
-    ]);
+    const validPng = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d]);
     expect(sniffMimeType(validPng)).toBe('image/png');
 
     // 3. Spoofed file: Client declares image/jpeg but payload is HTML script
     const fakeJpeg = Buffer.from('<script>alert("malicious payload")</script>');
     expect(sniffMimeType(fakeJpeg)).toBeNull();
 
-    expect(() => mediaService.processAndSanitizeUpload(fakeJpeg, 'image/jpeg')).toThrow(
-      /Content sniff failed/,
-    );
+    expect(() =>
+      mediaService.processAndSanitizeUpload(fakeJpeg, 'image/jpeg')
+    ).toThrow(/Content sniff failed/);
   });
 
   it('P19-3: Strips APP1 EXIF & GPS metadata from JPEG buffers', () => {

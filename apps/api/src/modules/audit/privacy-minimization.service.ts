@@ -69,7 +69,9 @@ export class PrivacyMinimizationService {
    * Processes a Data Subject Export request under UU PDP Art. 35 / GDPR Art. 15 (INV-02, SEC-P08-CTRL-0024).
    * Strips password hashes, MFA credentials, and token secrets.
    */
-  async exportSubjectData(input: UserDataSubjectInput): Promise<DataSubjectExportResult> {
+  async exportSubjectData(
+    input: UserDataSubjectInput,
+  ): Promise<DataSubjectExportResult> {
     this.logger.log(`Processing Data Subject Export for userId: ${input.userId}`);
 
     const result = buildDataSubjectExport(input);
@@ -94,7 +96,9 @@ export class PrivacyMinimizationService {
    * Processes a Data Subject Erasure / Anonymization request under UU PDP Art. 39 / GDPR Art. 17 (INV-02).
    * Anonymizes direct identifiers and shipping address while preserving statutory financial ledger records.
    */
-  async anonymizeSubjectData(input: UserDataSubjectInput): Promise<AnonymizedUserDataResult> {
+  async anonymizeSubjectData(
+    input: UserDataSubjectInput,
+  ): Promise<AnonymizedUserDataResult> {
     this.logger.warn(`Executing Data Subject Anonymization for userId: ${input.userId}`);
 
     const result = anonymizeUserData(input);

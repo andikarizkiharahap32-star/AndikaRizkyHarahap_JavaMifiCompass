@@ -3,10 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 function lum(hex: string): number {
-  const rgb = hex
-    .replace('#', '')
-    .match(/.{2}/g)!
-    .map((x) => parseInt(x, 16) / 255);
+  const rgb = hex.replace('#', '').match(/.{2}/g)!.map((x) => parseInt(x, 16) / 255);
   const a = rgb.map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
   return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
 }
@@ -21,10 +18,7 @@ describe('Home Page Fixes: i18n, WCAG AA Button Contrast & Metadata', () => {
   const enPath = path.resolve(__dirname, '../../../apps/web/messages/en.json');
   const idPath = path.resolve(__dirname, '../../../apps/web/messages/id.json');
   const pagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
-  const heroPath = path.resolve(
-    __dirname,
-    '../../../apps/web/src/components/DepartureBoardHero.tsx',
-  );
+  const heroPath = path.resolve(__dirname, '../../../apps/web/src/components/DepartureBoardHero.tsx');
   const tokensPath = path.resolve(__dirname, '../../../packages/ui/src/tokens/index.ts');
 
   it('eliminates hard-coded Indonesian in English presets & trust cards', () => {

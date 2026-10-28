@@ -48,11 +48,7 @@ export const RUNBOOK_REGISTRY: Record<RunbookSlug, RunbookDefinition> = {
       'Execute RDS promote replica CLI or switch Route53 private DNS record',
       'Verify application connection pool re-establishment with zero stale locks',
     ],
-    verificationCriteria: [
-      'pg_up returns 1',
-      'Write latency p95 < 20ms',
-      'Zero 500 DB connection errors',
-    ],
+    verificationCriteria: ['pg_up returns 1', 'Write latency p95 < 20ms', 'Zero 500 DB connection errors'],
   },
   'queue-backlog': {
     slug: 'queue-backlog',
@@ -76,10 +72,7 @@ export const RUNBOOK_REGISTRY: Record<RunbookSlug, RunbookDefinition> = {
       'Compare Bank of Japan vs European Central Bank daily fixing rates',
       'Pin manual override rate via Redis admin if divergence is an upstream provider bug',
     ],
-    verificationCriteria: [
-      'Divergence ratio <= 0.005',
-      'Zero arbitrary unverified currency guesses in UI',
-    ],
+    verificationCriteria: ['Divergence ratio <= 0.005', 'Zero arbitrary unverified currency guesses in UI'],
   },
   'provider-outage': {
     slug: 'provider-outage',
@@ -91,10 +84,7 @@ export const RUNBOOK_REGISTRY: Record<RunbookSlug, RunbookDefinition> = {
       'Fall back to stale-while-revalidate cached place records',
       'Pause upstream provider ingestion queue to prevent rate limit burns',
     ],
-    verificationCriteria: [
-      'Search endpoint success rate >= 99.5%',
-      'Zero raw upstream error leaks to API clients',
-    ],
+    verificationCriteria: ['Search endpoint success rate >= 99.5%', 'Zero raw upstream error leaks to API clients'],
   },
   'secret-rotation': {
     slug: 'secret-rotation',
@@ -107,12 +97,9 @@ export const RUNBOOK_REGISTRY: Record<RunbookSlug, RunbookDefinition> = {
       'Verify outbound webhooks sign with new secret while verifying inbound with either secret',
       'Deprecate old secret after 48-hour drain window',
     ],
-    verificationCriteria: [
-      'Secret age reset to 0 days',
-      'Zero webhook signature rejection spikes during rotation',
-    ],
+    verificationCriteria: ['Secret age reset to 0 days', 'Zero webhook signature rejection spikes during rotation'],
   },
-  rollback: {
+  'rollback': {
     slug: 'rollback',
     title: 'Emergency Deployment Rollback Procedure',
     category: 'deployment',
@@ -161,7 +148,9 @@ export class IncidentManagementService {
   private postmortems = new Map<string, PostmortemRecord>();
   private gameDays: GameDayRecord[] = [];
 
-  createPostmortem(params: Omit<PostmortemRecord, 'isClosed' | 'closedAt'>): PostmortemRecord {
+  createPostmortem(
+    params: Omit<PostmortemRecord, 'isClosed' | 'closedAt'>
+  ): PostmortemRecord {
     const postmortem: PostmortemRecord = {
       ...params,
       isClosed: false,
@@ -180,20 +169,18 @@ export class IncidentManagementService {
     }
 
     if (pm.actionItems.length === 0) {
-      throw new Error(
-        'Postmortem closure failure: At least one preventative action item is required.',
-      );
+      throw new Error('Postmortem closure failure: At least one preventative action item is required.');
     }
 
     for (const item of pm.actionItems) {
       if (!item.owner || item.owner.trim() === '') {
         throw new Error(
-          `Postmortem closure failure: Action item "${item.description}" has no assigned owner. Owners are mandatory.`,
+          `Postmortem closure failure: Action item "${item.description}" has no assigned owner. Owners are mandatory.`
         );
       }
       if (!item.dueDate || isNaN(item.dueDate.getTime())) {
         throw new Error(
-          `Postmortem closure failure: Action item "${item.description}" has no valid due date. Due dates are mandatory.`,
+          `Postmortem closure failure: Action item "${item.description}" has no valid due date. Due dates are mandatory.`
         );
       }
     }
@@ -225,7 +212,7 @@ export class IncidentManagementService {
 
     if (ageInDays >= 90) {
       throw new Error(
-        `Game Day Audit Failure: Last game day is ${ageInDays.toFixed(1)} days old (maximum allowed: < 90 days).`,
+        `Game Day Audit Failure: Last game day is ${ageInDays.toFixed(1)} days old (maximum allowed: < 90 days).`
       );
     }
   }

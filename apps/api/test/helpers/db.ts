@@ -23,7 +23,7 @@ export interface TransactionContext {
  * Guarantees zero shared mutable fixture pollution across tests.
  */
 export async function withIsolatedTransaction<T>(
-  callback: (tx: TransactionContext) => Promise<T>,
+  callback: (tx: TransactionContext) => Promise<T>
 ): Promise<T> {
   const txId = `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const executed: string[] = [];
@@ -65,7 +65,7 @@ export async function waitUntil(
     timeoutMs?: number;
     intervalMs?: number;
     description?: string;
-  } = {},
+  } = {}
 ): Promise<void> {
   const { timeoutMs = 5000, intervalMs = 25, description = 'eventual condition' } = options;
   const startTime = Date.now();
@@ -103,7 +103,7 @@ export class FlakeRateTracker {
     const rate = this.getFlakeRate();
     if (rate >= maxAllowedFlakeRate) {
       throw new Error(
-        `Flake rate (${(rate * 100).toFixed(2)}%) exceeds maximum allowed threshold (${(maxAllowedFlakeRate * 100).toFixed(2)}%)`,
+        `Flake rate (${(rate * 100).toFixed(2)}%) exceeds maximum allowed threshold (${(maxAllowedFlakeRate * 100).toFixed(2)}%)`
       );
     }
   }
@@ -141,11 +141,11 @@ export const STRYKER_MUTATION_CONFIG = {
 export function assertMutationScoreGate(
   moduleName: string,
   mutationScore: number,
-  minimumThreshold = 70,
+  minimumThreshold = 70
 ): void {
   if (mutationScore < minimumThreshold) {
     throw new Error(
-      `Mutation score gate failure for module "${moduleName}": score is ${mutationScore}%, required >= ${minimumThreshold}%`,
+      `Mutation score gate failure for module "${moduleName}": score is ${mutationScore}%, required >= ${minimumThreshold}%`
     );
   }
 }
@@ -161,7 +161,7 @@ export function assertNoDatabaseMocking(dbInstance: any): void {
   // Check for common mocking tells
   if (dbInstance._isMockFunction || dbInstance.mockReset || dbInstance.mockImplementation) {
     throw new Error(
-      'Database mocking prohibited in integration tests. Use an isolated test transaction or test container.',
+      'Database mocking prohibited in integration tests. Use an isolated test transaction or test container.'
     );
   }
 }

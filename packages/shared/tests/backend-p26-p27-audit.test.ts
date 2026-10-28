@@ -8,7 +8,10 @@ import {
   DR_TARGETS,
 } from '../../../infra/backup/disaster-recovery';
 import { CrossRegionReplicator } from '../../../infra/backup/cross-region-copy';
-import { PerfSloEvaluator, PERF_SLO_LIMITS } from '../../../perf/k6/slo-evaluator';
+import {
+  PerfSloEvaluator,
+  PERF_SLO_LIMITS,
+} from '../../../perf/k6/slo-evaluator';
 
 describe('Backend and Workflows - P26: Backup and Disaster Recovery', () => {
   it('P26-1: Strictly enforces Disaster Recovery targets (RPO <= 5 min, RTO <= 1 h)', () => {
@@ -47,7 +50,7 @@ describe('Backend and Workflows - P26: Backup and Disaster Recovery', () => {
 
     // Identical keys: prohibited
     expect(() => assertKmsKeySeparation(primaryKey, primaryKey)).toThrow(
-      /Backup KMS key .* must be separate and isolated from primary DB key/,
+      /Backup KMS key .* must be separate and isolated from primary DB key/
     );
   });
 
@@ -120,7 +123,7 @@ describe('Backend and Workflows - P26: Backup and Disaster Recovery', () => {
     // Old drill report (> 90 days) must throw audit failure
     const ninetyOneDaysLater = new Date(Date.now() + 91 * 24 * 60 * 60 * 1000);
     expect(() => dr.assertDrillReportRecency(ninetyOneDaysLater)).toThrow(
-      /Last restore drill report is .* days old \(maximum allowed: < 90 days\)/,
+      /Last restore drill report is .* days old \(maximum allowed: < 90 days\)/
     );
   });
 });
@@ -228,7 +231,7 @@ describe('Backend and Workflows - P27: Performance and Load Testing', () => {
       evaluator.assertSafeExecutionEnv('production', {
         isApprovedWindow: false,
         killSwitchConfigured: true,
-      }),
+      })
     ).toThrow(/Prohibited to load test production outside an approved maintenance window/);
 
     // Production test without kill switch: throws
@@ -236,7 +239,7 @@ describe('Backend and Workflows - P27: Performance and Load Testing', () => {
       evaluator.assertSafeExecutionEnv('production', {
         isApprovedWindow: true,
         killSwitchConfigured: false,
-      }),
+      })
     ).toThrow(/Prohibited to load test production without an active kill switch/);
 
     // Approved production test with kill switch: passes safety guard
@@ -244,7 +247,7 @@ describe('Backend and Workflows - P27: Performance and Load Testing', () => {
       evaluator.assertSafeExecutionEnv('production', {
         isApprovedWindow: true,
         killSwitchConfigured: true,
-      }),
+      })
     ).not.toThrow();
 
     // Staging test: passes without requiring production window
@@ -270,9 +273,7 @@ describe('Backend and Workflows - P27: Performance and Load Testing', () => {
 
     expect(regressedRun.passed).toBe(true); // Still meets hard SLOs
     expect(regressedRun.regressions.length).toBe(2);
-    expect(regressedRun.regressions[0]).toContain(
-      'Search latency degraded: 250ms vs baseline 180ms',
-    );
+    expect(regressedRun.regressions[0]).toContain('Search latency degraded: 250ms vs baseline 180ms');
     expect(regressedRun.regressions[1]).toContain('FX latency degraded: 70ms vs baseline 45ms');
   });
 });

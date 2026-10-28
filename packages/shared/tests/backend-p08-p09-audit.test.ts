@@ -7,7 +7,10 @@ import {
   RedMetricsTracker,
   REDACTED_VALUE,
 } from '../../../apps/api/src/observability/redaction-logger';
-import { tracer, parseW3CTraceParent } from '../../../apps/api/src/observability/tracer';
+import {
+  tracer,
+  parseW3CTraceParent,
+} from '../../../apps/api/src/observability/tracer';
 import {
   buildCacheKey,
   CacheKeys,
@@ -85,7 +88,7 @@ describe('Backend and Workflows - P08: Logging, Metrics and Tracing', () => {
           route: `/api/v1/places?query=ramen&page=${i}&filter=halal`,
           statusCode: i === 50 ? 500 : 200,
         },
-        i * 2, // Latencies from 2ms to 200ms
+        i * 2 // Latencies from 2ms to 200ms
       );
     }
 
@@ -260,8 +263,6 @@ describe('Backend and Workflows - P09: Caching with Redis & Singleflight', () =>
   it('P09-7: Enforces prohibition against caching authorization longer than session TTL', () => {
     expect(() => assertAuthorizationCacheTtl('session', 3600)).not.toThrow();
     // Cannot exceed 14 days session TTL
-    expect(() => assertAuthorizationCacheTtl('session', 2000000)).toThrow(
-      /cannot exceed session TTL/,
-    );
+    expect(() => assertAuthorizationCacheTtl('session', 2000000)).toThrow(/cannot exceed session TTL/);
   });
 });

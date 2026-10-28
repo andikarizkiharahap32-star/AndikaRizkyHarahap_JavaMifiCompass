@@ -34,9 +34,7 @@ export function assertSafeCacheValue(value: unknown): void {
   const jsonStr = JSON.stringify(value);
   for (const pattern of FORBIDDEN_SECRET_KEYS) {
     if (pattern.test(jsonStr)) {
-      throw new Error(
-        `Security Violation (P09): Forbidden attempt to cache secret/credentials matching ${pattern}`,
-      );
+      throw new Error(`Security Violation (P09): Forbidden attempt to cache secret/credentials matching ${pattern}`);
     }
   }
 }
@@ -44,11 +42,11 @@ export function assertSafeCacheValue(value: unknown): void {
 export function assertAuthorizationCacheTtl(
   domain: string,
   requestedTtlSeconds: number,
-  sessionTtlSeconds = 1209600,
+  sessionTtlSeconds = 1209600
 ): void {
   if (domain === 'session' && requestedTtlSeconds > sessionTtlSeconds) {
     throw new Error(
-      `P09 Invariant: Authorization cache TTL (${requestedTtlSeconds}s) cannot exceed session TTL (${sessionTtlSeconds}s)`,
+      `P09 Invariant: Authorization cache TTL (${requestedTtlSeconds}s) cannot exceed session TTL (${sessionTtlSeconds}s)`
     );
   }
 }
@@ -65,7 +63,7 @@ export class SingleflightCache {
   async getOrFetch<T>(
     key: string,
     fetchFn: () => Promise<T>,
-    options: CacheOptions = {},
+    options: CacheOptions = {}
   ): Promise<T> {
     const now = Date.now();
     const entry = this.cache.get(key);
@@ -106,11 +104,7 @@ export class SingleflightCache {
     return promise;
   }
 
-  private revalidateInBackground<T>(
-    key: string,
-    fetchFn: () => Promise<T>,
-    options: CacheOptions,
-  ): void {
+  private revalidateInBackground<T>(key: string, fetchFn: () => Promise<T>, options: CacheOptions): void {
     if (this.inflight.has(key)) return;
 
     const promise = (async () => {

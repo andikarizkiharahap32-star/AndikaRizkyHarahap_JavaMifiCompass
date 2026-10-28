@@ -91,7 +91,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
+export default async function HomePage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   unstable_setRequestLocale(locale);
   const tHome = await getTranslations('home');
 
@@ -176,10 +180,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
       <DepartureBoardHero locale={locale} />
 
       {/* Journey Presets Section: Boarding Passes */}
-      <section
-        id="journey-presets"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 scroll-mt-28"
-      >
+      <section id="journey-presets" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 scroll-mt-28">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-paper-edge pb-4">
           <div className="space-y-1">
             <span className="text-xs font-bold uppercase tracking-wider text-secondary">
@@ -275,10 +276,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
       />
 
       {/* Trust & Differentiation Section: Perforated Receipt Chits */}
-      <section
-        id="trust-guarantees"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 scroll-mt-28"
-      >
+      <section id="trust-guarantees" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 scroll-mt-28">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-paper-edge pb-4">
           <div className="space-y-1">
             <span className="text-xs font-bold uppercase tracking-wider text-secondary">

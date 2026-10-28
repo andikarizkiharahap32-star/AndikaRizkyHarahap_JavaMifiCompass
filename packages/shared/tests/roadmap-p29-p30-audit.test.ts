@@ -7,15 +7,9 @@ describe('Roadmap P29–P30 Diagnostic & Verification Audit', () => {
 
   // P29 & P30 Paths
   const nextConfigPath = path.join(rootDir, 'apps/web/next.config.mjs');
-  const designSystemPagePath = path.join(
-    rootDir,
-    'apps/web/src/app/[locale]/design-system/page.tsx',
-  );
+  const designSystemPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/design-system/page.tsx');
   const restaurantCardPath = path.join(rootDir, 'packages/ui/src/dining/RestaurantCard.tsx');
-  const breakEvenCardPath = path.join(
-    rootDir,
-    'packages/ui/src/wayfinding/BreakEvenSchematicCard.tsx',
-  );
+  const breakEvenCardPath = path.join(rootDir, 'packages/ui/src/wayfinding/BreakEvenSchematicCard.tsx');
   const uiIndexPath = path.join(rootDir, 'packages/ui/src/index.ts');
   const tokensCssPath = path.join(rootDir, 'packages/ui/src/styles/tokens.css');
   const tokensSemanticsPath = path.join(rootDir, 'packages/ui/src/tokens/semantics.ts');

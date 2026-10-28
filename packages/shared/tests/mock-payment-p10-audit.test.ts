@@ -49,9 +49,7 @@ describe('PAY-P10 — Release Gates and Mock-Only Sign-Off Audit Suite', () => {
       const gate1 = report.gates.find((g) => g.gateId === 'GATE_01_ENV_ISOLATION');
       expect(gate1).toBeDefined();
       expect(gate1?.status).toBe('FAILED');
-      expect(gate1?.evidence).toContain(
-        'Production environment active without ALLOW_MOCK_PAYMENT=true',
-      );
+      expect(gate1?.evidence).toContain('Production environment active without ALLOW_MOCK_PAYMENT=true');
     });
 
     it('assertReleaseGatePass throws ForbiddenException in production when mock payment is not allowed', () => {
@@ -59,7 +57,7 @@ describe('PAY-P10 — Release Gates and Mock-Only Sign-Off Audit Suite', () => {
         guard.assertReleaseGatePass({
           isProduction: true,
           allowMockEnv: false,
-        }),
+        })
       ).toThrow('Mock payment release gates failed: GATE_01_ENV_ISOLATION');
     });
 
@@ -130,9 +128,7 @@ describe('PAY-P10 — Release Gates and Mock-Only Sign-Off Audit Suite', () => {
       expect(report.overallStatus).toBe('REJECTED');
       const gate6 = report.gates.find((g) => g.gateId === 'GATE_06_KEY_ISOLATION');
       expect(gate6?.status).toBe('FAILED');
-      expect(gate6?.evidence).toContain(
-        'BLOCKED: Mock signing key matches production secret credential',
-      );
+      expect(gate6?.evidence).toContain('BLOCKED: Mock signing key matches production secret credential');
     });
 
     it('passes Gate 06 when mock signing key is demonstrably isolated', () => {
@@ -186,12 +182,10 @@ describe('PAY-P10 — Release Gates and Mock-Only Sign-Off Audit Suite', () => {
       });
       expect(rollbackCheck.safe).toBe(false);
       expect(rollbackCheck.rollbackStatus).toBe('UNSAFE');
-      expect(rollbackCheck.reason).toContain(
-        'Cannot safely disable mock gateway while 3 mock payment intents remain unresolved',
-      );
+      expect(rollbackCheck.reason).toContain('Cannot safely disable mock gateway while 3 mock payment intents remain unresolved');
 
       expect(() => guard.assertRollbackSafety(3)).toThrow(
-        'Cannot safely disable mock gateway while 3 mock payment intents remain unresolved',
+        'Cannot safely disable mock gateway while 3 mock payment intents remain unresolved'
       );
 
       const report = evaluateReleaseSignoff({

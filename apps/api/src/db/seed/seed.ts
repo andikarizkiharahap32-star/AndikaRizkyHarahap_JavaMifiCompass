@@ -100,9 +100,7 @@ if (require.main === module) {
   runSeed()
     .then((result) => {
       console.log(`[Seed] Seeded successfully for environment '${result.environment}'.`);
-      console.log(
-        `[Seed] Reference items: ${result.seededReference.countries.length} countries, ${result.seededReference.certifyingBodies.length} bodies.`,
-      );
+      console.log(`[Seed] Reference items: ${result.seededReference.countries.length} countries, ${result.seededReference.certifyingBodies.length} bodies.`);
       console.log(`[Seed] Dev fixtures: ${result.seededFixtures.length} venues.`);
     })
     .catch((err) => {

@@ -95,18 +95,24 @@ export const PerforatedReceiptChit: React.FC<PerforatedReceiptChitProps> = ({
               <div className="flex items-center gap-2">
                 <span
                   className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs font-mono ${
-                    isWifi ? 'bg-line-wifi text-primary' : 'bg-line-esim text-on-primary'
+                    isWifi
+                      ? 'bg-line-wifi text-primary'
+                      : 'bg-line-esim text-on-primary'
                   }`}
                 >
                   {isWifi ? 'W' : 'E'}
                 </span>
-                <span className="font-bold text-lg text-primary tracking-tight">{routeTitle}</span>
+                <span className="font-bold text-lg text-primary tracking-tight">
+                  {routeTitle}
+                </span>
               </div>
               <span className="text-xs text-secondary mt-0.5">{productName}</span>
             </div>
 
             <div className="flex flex-col items-end text-right">
-              <span className="font-mono text-xs text-secondary font-medium">{tokenIdLabel}</span>
+              <span className="font-mono text-xs text-secondary font-medium">
+                {tokenIdLabel}
+              </span>
               <span className="font-mono text-sm font-bold text-primary tnum">
                 {orderNumber.slice(-8) || tokenId}
               </span>
@@ -134,7 +140,9 @@ export const PerforatedReceiptChit: React.FC<PerforatedReceiptChitProps> = ({
               <span className="text-xs text-secondary font-medium uppercase tracking-wider">
                 {rangeLabel}
               </span>
-              <span className="font-bold text-primary truncate tnum">{dateRangeText}</span>
+              <span className="font-bold text-primary truncate tnum">
+                {dateRangeText}
+              </span>
             </div>
             <div className="flex flex-col items-end text-right">
               <span className="text-xs text-secondary font-medium uppercase tracking-wider">
@@ -156,7 +164,10 @@ export const PerforatedReceiptChit: React.FC<PerforatedReceiptChitProps> = ({
           {/* Line Items Breakdown */}
           <div className="space-y-2 text-xs">
             <div className="flex justify-between text-secondary">
-              <span>{packageRentalLabel || `Sewa Paket (${durationDays} ${daysUnit})`}</span>
+              <span>
+                {packageRentalLabel ||
+                  `Sewa Paket (${durationDays} ${daysUnit})`}
+              </span>
               <span className="font-mono font-medium text-primary tnum">
                 Rp {subtotalIdr.toLocaleString('id-ID')}
               </span>
@@ -190,7 +201,9 @@ export const PerforatedReceiptChit: React.FC<PerforatedReceiptChitProps> = ({
                 <span className="font-bold text-sm text-primary uppercase">
                   {totalPaymentLabel}
                 </span>
-                <span className="text-xs text-secondary font-mono">{taxIncludedLabel}</span>
+                <span className="text-xs text-secondary font-mono">
+                  {taxIncludedLabel}
+                </span>
               </div>
               <span className="text-2xl font-black text-primary font-mono tnum">
                 Rp {totalIdr.toLocaleString('id-ID')}

@@ -8,10 +8,10 @@ import { z } from 'zod';
 
 /** Data Sensitivity Classification */
 export const DataClassificationEnum = z.enum([
-  'RESTRICTED', // Highly sensitive PII, passport numbers, raw credentials, payment tokens
+  'RESTRICTED',   // Highly sensitive PII, passport numbers, raw credentials, payment tokens
   'CONFIDENTIAL', // Business-sensitive, financial ledger, eSIM ICCID, internal audit records
-  'INTERNAL', // Operational data, internal order IDs, system metrics
-  'PUBLIC', // Catalog items, dining places, public content
+  'INTERNAL',     // Operational data, internal order IDs, system metrics
+  'PUBLIC',       // Catalog items, dining places, public content
 ]);
 export type DataClassification = z.infer<typeof DataClassificationEnum>;
 
@@ -25,10 +25,10 @@ export type EncryptionRequirement = z.infer<typeof EncryptionRequirementEnum>;
 
 /** Retention Period SLA */
 export const RetentionPeriodEnum = z.enum([
-  'EPHEMERAL_ZERO_DAYS', // Tokens, CVV, raw authorization payloads (purged immediately)
-  'OPERATIONAL_90_DAYS', // Customer shipping info, passport copies (purged at 90 days)
-  'FINANCIAL_7_YEARS', // Invoices, payment ledgers, tax accounting records
-  'PERMANENT', // Core user identity, catalog items
+  'EPHEMERAL_ZERO_DAYS',     // Tokens, CVV, raw authorization payloads (purged immediately)
+  'OPERATIONAL_90_DAYS',     // Customer shipping info, passport copies (purged at 90 days)
+  'FINANCIAL_7_YEARS',       // Invoices, payment ledgers, tax accounting records
+  'PERMANENT',               // Core user identity, catalog items
 ]);
 export type RetentionPeriod = z.infer<typeof RetentionPeriodEnum>;
 
@@ -120,7 +120,9 @@ export const AssetInventoryEvaluationReportSchema = z.object({
     inv04CriticalFindingsBlockRelease: z.boolean(),
   }),
 });
-export type AssetInventoryEvaluationReport = z.infer<typeof AssetInventoryEvaluationReportSchema>;
+export type AssetInventoryEvaluationReport = z.infer<
+  typeof AssetInventoryEvaluationReportSchema
+>;
 
 // ─────────────────────────────────────────────────────────────
 // Canonical Repositories for JavaMifi Compass
@@ -390,11 +392,7 @@ export function verifyTrustAnchorStrength(
 
   // Insecure default check
   if (INSECURE_DEFAULT_SECRETS.includes(cleanKey.toLowerCase())) {
-    return {
-      valid: false,
-      bitLength: cleanKey.length * 8,
-      reason: 'INSECURE_DEFAULT_KEY_DETECTED',
-    };
+    return { valid: false, bitLength: cleanKey.length * 8, reason: 'INSECURE_DEFAULT_KEY_DETECTED' };
   }
 
   // Bit length calculation (assuming 8 bits per ASCII byte or hex character)
@@ -429,10 +427,7 @@ export function validateDataFlowBoundary(
   // Unmasked CVV (3-4 digits in cvv/cvc field)
   const cvvRegex = /^\d{3,4}$/;
 
-  const inspect = (
-    obj: any,
-    path = '',
-  ): { allowed: boolean; violationField?: string; reason?: string } => {
+  const inspect = (obj: any, path = ''): { allowed: boolean; violationField?: string; reason?: string } => {
     if (obj === null || obj === undefined) return { allowed: true };
     if (typeof obj === 'string') {
       if (cardRegex.test(obj.replace(/\s+/g, '')) && !obj.includes('[REDACTED')) {
@@ -443,11 +438,7 @@ export function validateDataFlowBoundary(
       for (const [k, v] of Object.entries(obj)) {
         const currentPath = path ? `${path}.${k}` : k;
         if (/cvv|cvc/i.test(k) && typeof v === 'string' && cvvRegex.test(v)) {
-          return {
-            allowed: false,
-            violationField: currentPath,
-            reason: 'RAW_UNENCRYPTED_CVV_DETECTED',
-          };
+          return { allowed: false, violationField: currentPath, reason: 'RAW_UNENCRYPTED_CVV_DETECTED' };
         }
         const sub = inspect(v, currentPath);
         if (!sub.allowed) return sub;
@@ -492,7 +483,9 @@ export function evaluateAssetInventoryCompliance(
   );
 
   const redactedFlows = JAVAMIFI_DATA_FLOWS.filter((f) => f.redactionRequired).length;
-  const redactionCoverage = Number(((redactedFlows / JAVAMIFI_DATA_FLOWS.length) * 100).toFixed(1));
+  const redactionCoverage = Number(
+    ((redactedFlows / JAVAMIFI_DATA_FLOWS.length) * 100).toFixed(1),
+  );
 
   const status = criticalBlockers > 0 ? 'BLOCKED' : 'PASSED';
 

@@ -10,21 +10,12 @@ describe('Roadmap P27–P28 Diagnostic & Verification Audit', () => {
   const plannerEnginePath = path.join(rootDir, 'apps/api/src/modules/planner/planner.engine.ts');
   const plannerPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/planner/page.tsx');
   const diningDiscoveryPath = path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx');
-  const tripBoardingPassPath = path.join(
-    rootDir,
-    'packages/ui/src/wayfinding/TripBoardingPass.tsx',
-  );
-  const breakEvenCardPath = path.join(
-    rootDir,
-    'packages/ui/src/wayfinding/BreakEvenSchematicCard.tsx',
-  );
+  const tripBoardingPassPath = path.join(rootDir, 'packages/ui/src/wayfinding/TripBoardingPass.tsx');
+  const breakEvenCardPath = path.join(rootDir, 'packages/ui/src/wayfinding/BreakEvenSchematicCard.tsx');
 
   // P27 & P28 Admin CMS Paths
   const ordersScreenPath = path.join(rootDir, 'apps/admin/src/screens/OrdersScreen.tsx');
-  const diningQueueScreenPath = path.join(
-    rootDir,
-    'apps/admin/src/screens/DiningReviewQueueScreen.tsx',
-  );
+  const diningQueueScreenPath = path.join(rootDir, 'apps/admin/src/screens/DiningReviewQueueScreen.tsx');
 
   describe('P27: Page Templates and Route Consistency (Primary Roadmap)', () => {
     it('verifies route registry and page family layout structure in PlannerPage (TASK-01)', () => {
@@ -149,9 +140,7 @@ describe('Roadmap P27–P28 Diagnostic & Verification Audit', () => {
       const queueCode = fs.readFileSync(diningQueueScreenPath, 'utf8');
 
       expect(queueCode).toContain('filteredItems.length === 0');
-      expect(queueCode).toContain(
-        'Tidak ada tiket dalam antrean review saat ini. Semua data aman dan terverifikasi.',
-      );
+      expect(queueCode).toContain('Tidak ada tiket dalam antrean review saat ini. Semua data aman dan terverifikasi.');
     });
 
     it('verifies assertive error state and 48px retry mechanism (P28-WS06 & WS09)', () => {

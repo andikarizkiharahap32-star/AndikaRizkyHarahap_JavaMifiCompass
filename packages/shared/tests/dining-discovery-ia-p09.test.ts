@@ -6,10 +6,7 @@ describe('P09 — Dining Discovery Information Architecture', () => {
   const rootDir = path.resolve(__dirname, '../../..');
   const diningDiscoveryPath = path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx');
   const diningPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/dining/page.tsx');
-  const destinationEatPath = path.join(
-    rootDir,
-    'apps/web/src/app/[locale]/destinations/[slug]/eat/page.tsx',
-  );
+  const destinationEatPath = path.join(rootDir, 'apps/web/src/app/[locale]/destinations/[slug]/eat/page.tsx');
   const restaurantCardPath = path.join(rootDir, 'packages/ui/src/dining/RestaurantCard.tsx');
   const enMessagesPath = path.join(rootDir, 'apps/web/messages/en.json');
   const idMessagesPath = path.join(rootDir, 'apps/web/messages/id.json');
@@ -23,16 +20,12 @@ describe('P09 — Dining Discovery Information Architecture', () => {
 
   it('P09-WS01 & WS27: Dining entry point has unique semantic H1 and section H2 rhythm', () => {
     // Unique semantic H1 in DiningDiscovery when embeddedMode is false
-    expect(diningDiscoverySource).toContain(
-      '<h1 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase tracking-tight m-0">',
-    );
+    expect(diningDiscoverySource).toContain('<h1 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase tracking-tight m-0">');
     expect(diningDiscoverySource).toContain("{t('title')}");
     expect(diningDiscoverySource).toContain("{t('subtitle')}");
 
     // Section H2 rhythm above the dining places list
-    expect(diningDiscoverySource).toContain(
-      '<h2 className="text-lg font-display font-bold text-primary m-0">',
-    );
+    expect(diningDiscoverySource).toContain('<h2 className="text-lg font-display font-bold text-primary m-0">');
     expect(diningDiscoverySource).toContain("{t('placesSectionTitle')}");
     expect(diningDiscoverySource).toContain("{t('placesSectionSubtitle')}");
 
@@ -71,9 +64,7 @@ describe('P09 — Dining Discovery Information Architecture', () => {
   it('P09-WS11: Result count displays with tabular figures (tnum)', () => {
     // Tabular numbers enforced on places count badge
     expect(diningDiscoverySource).toContain("{places.length} {t('placesCount')}");
-    expect(diningDiscoverySource).toContain(
-      'font-mono font-bold text-primary bg-surface px-2.5 py-1 rounded border border-paper-edge tnum',
-    );
+    expect(diningDiscoverySource).toContain('font-mono font-bold text-primary bg-surface px-2.5 py-1 rounded border border-paper-edge tnum');
 
     // Tabular numbers on currency and distance displays
     expect(diningDiscoverySource).toContain('tnum');

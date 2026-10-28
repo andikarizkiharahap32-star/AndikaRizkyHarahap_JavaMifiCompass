@@ -244,11 +244,7 @@ describe('PAY-P07 — Status Reconciliation and Audit Trail Audit Suite', () => 
 
   describe('PAY-P07-CTRL-0025 & TEST-0024 / TEST-0025: Operator Override Controls & Role Policies', () => {
     it('accepts valid operator override from authorized roles (SUPER_ADMIN, ADMIN, FINANCE) with substantive justification', () => {
-      const validRoles: ('SUPER_ADMIN' | 'ADMIN' | 'FINANCE')[] = [
-        'SUPER_ADMIN',
-        'ADMIN',
-        'FINANCE',
-      ];
+      const validRoles: ('SUPER_ADMIN' | 'ADMIN' | 'FINANCE')[] = ['SUPER_ADMIN', 'ADMIN', 'FINANCE'];
 
       for (const role of validRoles) {
         const input: OperatorOverrideInput = {
@@ -387,7 +383,7 @@ describe('PAY-P07 — Status Reconciliation and Audit Trail Audit Suite', () => 
           resourceId: 'pay_crit_test',
           oldValue: { status: 'PENDING' },
           newValue: { status: 'SUCCESS' },
-        }),
+        })
       ).rejects.toThrow('CRITICAL_AUDIT_FAILURE');
 
       expect(failingAuditService.record).toHaveBeenCalledTimes(1);

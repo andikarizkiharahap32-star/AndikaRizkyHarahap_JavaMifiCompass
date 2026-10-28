@@ -146,9 +146,7 @@ describe('SEC-P05: Injection and Input Handling Defensive Audit', () => {
     it('should securely escape HTML entities to prevent rendering attacks', () => {
       const raw = `<script>alert("XSS & 'quotes'")</script>`;
       const encoded = encodeHtmlEntities(raw);
-      expect(encoded).toBe(
-        '&lt;script&gt;alert(&quot;XSS &amp; &#39;quotes&#39;&quot;)&lt;/script&gt;',
-      );
+      expect(encoded).toBe('&lt;script&gt;alert(&quot;XSS &amp; &#39;quotes&#39;&quot;)&lt;/script&gt;');
       expect(encoded).not.toContain('<');
       expect(encoded).not.toContain('>');
       expect(encoded).not.toContain('"');

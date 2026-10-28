@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Headers, Post, Query, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Post,
+  Query,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DiningService } from './dining.service';
 import { AuditService } from '../audit/audit.service';

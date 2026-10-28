@@ -7,10 +7,7 @@ describe('Roadmap P31–P32 Diagnostic & Verification Audit', () => {
 
   // P31 & P32 File Paths
   const restaurantCardPath = path.join(rootDir, 'packages/ui/src/dining/RestaurantCard.tsx');
-  const restaurantModalPath = path.join(
-    rootDir,
-    'packages/ui/src/dining/RestaurantDetailModal.tsx',
-  );
+  const restaurantModalPath = path.join(rootDir, 'packages/ui/src/dining/RestaurantDetailModal.tsx');
   const departureHeroPath = path.join(rootDir, 'apps/web/src/components/DepartureBoardHero.tsx');
   const diningDiscoveryPath = path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx');
   const navbarPath = path.join(rootDir, 'apps/web/src/components/Navbar.tsx');
@@ -88,9 +85,7 @@ describe('Roadmap P31–P32 Diagnostic & Verification Audit', () => {
       const diningCode = fs.readFileSync(diningDiscoveryPath, 'utf8');
 
       // Segmented control buttons
-      expect(diningCode).toContain(
-        'min-h-12 h-12 px-2 sm:px-3 rounded text-xs font-sans uppercase font-bold',
-      );
+      expect(diningCode).toContain('min-h-12 h-12 px-2 sm:px-3 rounded text-xs font-sans uppercase font-bold');
       // Radius buttons
       expect(diningCode).toContain('min-h-12 h-12 px-2.5 min-w-10 sm:min-w-12');
       // Search submit button

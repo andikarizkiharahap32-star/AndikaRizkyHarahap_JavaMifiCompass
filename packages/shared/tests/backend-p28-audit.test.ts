@@ -99,7 +99,7 @@ describe('Backend and Workflows - P28: Release, Runbooks and Operations', () => 
 
     // P28 Prohibition: Cannot close postmortem without owner
     expect(() => ops.closePostmortem(pmMissingOwner.incidentId)).toThrow(
-      /Postmortem closure failure: Action item .* has no assigned owner\. Owners are mandatory\./,
+      /Postmortem closure failure: Action item .* has no assigned owner\. Owners are mandatory\./
     );
 
     // Provide owner but missing due date
@@ -108,7 +108,7 @@ describe('Backend and Workflows - P28: Release, Runbooks and Operations', () => 
 
     // P28 Prohibition: Cannot close postmortem without date
     expect(() => ops.closePostmortem(pmMissingOwner.incidentId)).toThrow(
-      /Postmortem closure failure: Action item .* has no valid due date\. Due dates are mandatory\./,
+      /Postmortem closure failure: Action item .* has no valid due date\. Due dates are mandatory\./
     );
 
     // Provide valid owner and due date -> Closure succeeds
@@ -123,7 +123,7 @@ describe('Backend and Workflows - P28: Release, Runbooks and Operations', () => 
 
     // No game days recorded -> fails audit
     expect(() => ops.assertGameDayQuarterlyRecency()).toThrow(
-      /Game Day Audit Failure: No game day exercises recorded\./,
+      /Game Day Audit Failure: No game day exercises recorded\./
     );
 
     // Record game day executed today
@@ -134,9 +134,7 @@ describe('Backend and Workflows - P28: Release, Runbooks and Operations', () => 
       rtoAchievedMinutes: 14,
       passed: true,
       participants: ['alif.infra@javamifi.com', 'budi.ops@javamifi.com'],
-      findings: [
-        'Secondary replica promoted within 14 minutes; zero connection dropped on API pool.',
-      ],
+      findings: ['Secondary replica promoted within 14 minutes; zero connection dropped on API pool.'],
     });
 
     // Fresh game day -> passes audit
@@ -145,7 +143,7 @@ describe('Backend and Workflows - P28: Release, Runbooks and Operations', () => 
     // Stale game day (> 90 days) -> throws audit failure
     const ninetyOneDaysLater = new Date(Date.now() + 91 * 24 * 60 * 60 * 1000);
     expect(() => ops.assertGameDayQuarterlyRecency(ninetyOneDaysLater)).toThrow(
-      /Game Day Audit Failure: Last game day is .* days old \(maximum allowed: < 90 days\)\./,
+      /Game Day Audit Failure: Last game day is .* days old \(maximum allowed: < 90 days\)\./
     );
   });
 });

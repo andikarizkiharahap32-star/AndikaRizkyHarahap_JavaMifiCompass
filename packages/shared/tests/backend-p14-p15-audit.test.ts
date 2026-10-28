@@ -25,8 +25,8 @@ describe('Backend and Workflows - P14: Search Service', () => {
   it('P14-1: Ranking weights are in one file and sum precisely to 1.00', () => {
     expect(RANKING_WEIGHTS.halalStrength).toBe(0.45);
     expect(RANKING_WEIGHTS.proximity).toBe(0.25);
-    expect(RANKING_WEIGHTS.text).toBe(0.2);
-    expect(RANKING_WEIGHTS.quality).toBe(0.1);
+    expect(RANKING_WEIGHTS.text).toBe(0.20);
+    expect(RANKING_WEIGHTS.quality).toBe(0.10);
 
     const totalWeight =
       RANKING_WEIGHTS.halalStrength +
@@ -39,8 +39,8 @@ describe('Backend and Workflows - P14: Search Service', () => {
 
   it('P14-2: Halal strength score gives significant boost to verified over unverified or disputed venues', () => {
     expect(HALAL_STRENGTH_SCORES.verified).toBe(1.0);
-    expect(HALAL_STRENGTH_SCORES.self_declared).toBe(0.7);
-    expect(HALAL_STRENGTH_SCORES.unverified).toBe(0.3);
+    expect(HALAL_STRENGTH_SCORES.self_declared).toBe(0.70);
+    expect(HALAL_STRENGTH_SCORES.unverified).toBe(0.30);
     expect(HALAL_STRENGTH_SCORES.disputed).toBe(0.05);
 
     const verifiedCandidate = calculatePlaceRankScore({
@@ -69,7 +69,7 @@ describe('Backend and Workflows - P14: Search Service', () => {
     expect(verifiedCandidate.totalScore).toBeGreaterThan(unverifiedCandidate.totalScore);
     expect(verifiedCandidate.totalScore - unverifiedCandidate.totalScore).toBeCloseTo(
       (1.0 - 0.3) * 0.45,
-      2,
+      2
     );
   });
 
@@ -89,7 +89,7 @@ describe('Backend and Workflows - P14: Search Service', () => {
 
     const sponsoredCandidate = { id: 'plc_2', name: 'Sponsored Cafe', sponsored: true };
     expect(() => assertNoSponsoredAttributes(sponsoredCandidate)).toThrow(
-      /P14 Prohibition: Forbidden sponsored\/paid attribute/,
+      /P14 Prohibition: Forbidden sponsored\/paid attribute/
     );
   });
 
@@ -132,18 +132,18 @@ describe('Backend and Workflows - P15: Geo Queries (PostGIS)', () => {
   it('P15-1: Validates coordinate ranges and rejects invalid latitudes or longitudes', () => {
     // Valid coordinates
     expect(() =>
-      validateAndNormalizeGeoQuery({ latitude: 35.6895, longitude: 139.6917 }),
+      validateAndNormalizeGeoQuery({ latitude: 35.6895, longitude: 139.6917 })
     ).not.toThrow();
 
     // Invalid latitude (> 90)
-    expect(() => validateAndNormalizeGeoQuery({ latitude: 91.5, longitude: 139.6917 })).toThrow(
-      /Invalid latitude/,
-    );
+    expect(() =>
+      validateAndNormalizeGeoQuery({ latitude: 91.5, longitude: 139.6917 })
+    ).toThrow(/Invalid latitude/);
 
     // Invalid longitude (< -180)
-    expect(() => validateAndNormalizeGeoQuery({ latitude: 35.6895, longitude: -185.0 })).toThrow(
-      /Invalid longitude/,
-    );
+    expect(() =>
+      validateAndNormalizeGeoQuery({ latitude: 35.6895, longitude: -185.0 })
+    ).toThrow(/Invalid longitude/);
   });
 
   it('P15-2: Enforces strict radius cap of 25 km (25,000 meters)', () => {
@@ -163,7 +163,7 @@ describe('Backend and Workflows - P15: Geo Queries (PostGIS)', () => {
         latitude: 35.6895,
         longitude: 139.6917,
         radiusMeters: 30000,
-      }),
+      })
     ).toThrow(/Radius exceeds maximum allowed limit of 25000m/);
   });
 
@@ -191,16 +191,14 @@ describe('Backend and Workflows - P15: Geo Queries (PostGIS)', () => {
   it('P15-4: PostGIS migration defines geography(Point, 4326) and spatial GiST index', () => {
     const migrationPath = path.resolve(
       __dirname,
-      '../../../apps/api/drizzle/0001_postgis_geography.sql',
+      '../../../apps/api/drizzle/0001_postgis_geography.sql'
     );
     expect(fs.existsSync(migrationPath)).toBe(true);
 
     const sqlContent = fs.readFileSync(migrationPath, 'utf-8');
     expect(sqlContent).toContain('CREATE EXTENSION IF NOT EXISTS postgis');
     expect(sqlContent).toContain('geography(Point, 4326)');
-    expect(sqlContent).toContain(
-      'CREATE INDEX IF NOT EXISTS idx_places_location_gist ON places USING gist(location)',
-    );
+    expect(sqlContent).toContain('CREATE INDEX IF NOT EXISTS idx_places_location_gist ON places USING gist(location)');
   });
 
   it('P15-5: PostGIS query builder generates ST_DWithin and KNN (<->) sorting, and EXPLAIN verifies GiST scan', () => {

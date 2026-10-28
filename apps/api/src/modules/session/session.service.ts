@@ -37,11 +37,7 @@ export class SessionService {
   /**
    * Creates a new server-side session with sliding TTL and absolute cap.
    */
-  createSession(
-    userId: string,
-    role: Role,
-    metadata?: { userAgent?: string; ipAddress?: string },
-  ): SessionData {
+  createSession(userId: string, role: Role, metadata?: { userAgent?: string; ipAddress?: string }): SessionData {
     const sessionId = this.generateOpaqueSessionId();
     const now = Date.now();
     const session: SessionData = {

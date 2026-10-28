@@ -128,9 +128,7 @@ export const HalalCustomsStamp: React.FC<HalalCustomsStampProps> = ({
               <span>{def.icon}</span>
             </div>
             <div className="flex flex-col">
-              <span
-                className={`font-mono text-xs uppercase tracking-wider font-extrabold ${style.textColor}`}
-              >
+              <span className={`font-mono text-xs uppercase tracking-wider font-extrabold ${style.textColor}`}>
                 {style.sealText}
               </span>
               <span className="font-sans font-black text-sm text-primary tracking-tight">
@@ -184,9 +182,7 @@ export const HalalCustomsStamp: React.FC<HalalCustomsStampProps> = ({
           {isAlcoholNotMentioned && tier !== 'NOT_HALAL' && (
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-outline border border-paper-edge text-xs">
               <span aria-hidden="true">▲</span>
-              <span>
-                {isId ? 'Alkohol: Tidak Disebut (Cek ke Staf)' : 'Alcohol: Not Mentioned'}
-              </span>
+              <span>{isId ? 'Alkohol: Tidak Disebut (Cek ke Staf)' : 'Alcohol: Not Mentioned'}</span>
             </span>
           )}
 

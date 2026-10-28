@@ -26,9 +26,12 @@ export function getUtcDayKey(date = new Date()): string {
 }
 
 export function getSecondsUntilUtcMidnight(now = new Date()): number {
-  const nextMidnight = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0, 0),
-  );
+  const nextMidnight = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() + 1,
+    0, 0, 0, 0
+  ));
   return Math.max(1, Math.floor((nextMidnight.getTime() - now.getTime()) / 1000));
 }
 
@@ -42,7 +45,7 @@ export class CostBudgetService {
   consumeBudget(
     userId: string,
     costCredits = 1.0,
-    dailyLimit = DEFAULT_DAILY_ASSIST_BUDGET_CREDITS,
+    dailyLimit = DEFAULT_DAILY_ASSIST_BUDGET_CREDITS
   ): CostBudgetResult {
     const dayKey = getUtcDayKey();
     const storageKey = `${userId}:${dayKey}`;
@@ -82,14 +85,14 @@ export class CostBudgetService {
   assertWithinCostBudget(
     userId: string,
     costCredits = 1.0,
-    dailyLimit = DEFAULT_DAILY_ASSIST_BUDGET_CREDITS,
+    dailyLimit = DEFAULT_DAILY_ASSIST_BUDGET_CREDITS
   ): CostBudgetResult {
     const result = this.consumeBudget(userId, costCredits, dailyLimit);
 
     if (!result.allowed) {
       throw new RateLimitError(
         result.secondsUntilReset,
-        'Daily AI assist cost budget exceeded. Resets at midnight UTC.',
+        'Daily AI assist cost budget exceeded. Resets at midnight UTC.'
       );
     }
 

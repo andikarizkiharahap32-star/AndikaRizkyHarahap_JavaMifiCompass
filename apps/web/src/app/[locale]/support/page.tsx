@@ -18,7 +18,11 @@ import {
 } from 'lucide-react';
 import { apiClient } from '../../../lib/api';
 
-export default function SupportPage({ params: { locale } }: { params: { locale: string } }) {
+export default function SupportPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   const t = useTranslations('support');
 
   const [name, setName] = useState('');
@@ -102,7 +106,9 @@ export default function SupportPage({ params: { locale } }: { params: { locale: 
                 <MessageSquare className="w-5 h-5" />
                 <ArrowUpRight className="w-4 h-4 text-secondary group-hover:text-primary transition-colors" />
               </div>
-              <h3 className="text-sm font-bold text-primary leading-snug">{t('whatsappTitle')}</h3>
+              <h3 className="text-sm font-bold text-primary leading-snug">
+                {t('whatsappTitle')}
+              </h3>
               <p className="text-xs text-secondary leading-relaxed reading-prose">
                 {t('whatsappDesc')}
               </p>
@@ -122,7 +128,9 @@ export default function SupportPage({ params: { locale } }: { params: { locale: 
                 <ShieldCheck className="w-5 h-5" />
                 <ArrowRight className="w-4 h-4 text-secondary group-hover:text-primary transition-colors" />
               </div>
-              <h3 className="text-sm font-bold text-primary leading-snug">{t('tripHubTitle')}</h3>
+              <h3 className="text-sm font-bold text-primary leading-snug">
+                {t('tripHubTitle')}
+              </h3>
               <p className="text-xs text-secondary leading-relaxed reading-prose">
                 {t('tripHubDesc')}
               </p>
@@ -142,8 +150,12 @@ export default function SupportPage({ params: { locale } }: { params: { locale: 
                 <HelpCircle className="w-5 h-5" />
                 <ArrowRight className="w-4 h-4 text-secondary group-hover:text-primary transition-colors" />
               </div>
-              <h3 className="text-sm font-bold text-primary leading-snug">{t('faqTitle')}</h3>
-              <p className="text-xs text-secondary leading-relaxed reading-prose">{t('faqDesc')}</p>
+              <h3 className="text-sm font-bold text-primary leading-snug">
+                {t('faqTitle')}
+              </h3>
+              <p className="text-xs text-secondary leading-relaxed reading-prose">
+                {t('faqDesc')}
+              </p>
             </div>
             <span className="text-xs font-bold uppercase tracking-wider text-primary group-hover:underline inline-flex items-center gap-1 pt-1">
               {t('faqAction')}
@@ -175,7 +187,9 @@ export default function SupportPage({ params: { locale } }: { params: { locale: 
           <div className="p-8 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-success mx-auto" />
             <div className="space-y-1">
-              <h3 className="text-xl font-bold text-primary font-sans">{t('successTitle')}</h3>
+              <h3 className="text-xl font-bold text-primary font-sans">
+                {t('successTitle')}
+              </h3>
               <p className="text-sm text-secondary max-w-md mx-auto leading-relaxed reading-prose">
                 {t('successDesc')}
               </p>
@@ -314,19 +328,16 @@ export default function SupportPage({ params: { locale } }: { params: { locale: 
           </h2>
         </div>
 
-        <p className="text-sm text-secondary leading-relaxed reading-prose">{t('privacyDesc')}</p>
+        <p className="text-sm text-secondary leading-relaxed reading-prose">
+          {t('privacyDesc')}
+        </p>
 
-        <div
-          id="terms"
-          className="pt-2 border-t border-paper-edge flex flex-wrap items-center gap-4 text-xs font-mono text-secondary"
-        >
+        <div id="terms" className="pt-2 border-t border-paper-edge flex flex-wrap items-center gap-4 text-xs font-mono text-secondary">
           <span className="inline-flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-success shrink-0" />
             <span>ISO 27001 Security Standards</span>
           </span>
-          <span className="text-paper-edge" aria-hidden="true">
-            •
-          </span>
+          <span className="text-paper-edge" aria-hidden="true">•</span>
           <span className="inline-flex items-center gap-1.5">
             <FileText className="w-4 h-4 text-primary shrink-0" />
             <span>UU PDP No. 27/2022 Verified</span>

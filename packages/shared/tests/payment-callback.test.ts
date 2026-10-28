@@ -4,9 +4,7 @@ describe('Payment Gateway Callback Contract', () => {
   it('parses success status codes consistently across providers', () => {
     const successStatuses = ['SUCCESS', 'SETTLEMENT', 'PAID', 'COMPLETED'];
     for (const status of successStatuses) {
-      const isSuccess = ['SUCCESS', 'SETTLEMENT', 'PAID', 'COMPLETED'].includes(
-        status.toUpperCase(),
-      );
+      const isSuccess = ['SUCCESS', 'SETTLEMENT', 'PAID', 'COMPLETED'].includes(status.toUpperCase());
       expect(isSuccess).toBe(true);
     }
   });

@@ -109,9 +109,7 @@ describe('Roadmap P10–P11 Diagnostic & Verification Audit', () => {
       expect(h1Count).toBe(1);
 
       // Verify recommendation heading uses H2
-      expect(heroCode).toContain(
-        '<h2 className="text-base sm:text-lg font-bold text-primary mt-0.5">',
-      );
+      expect(heroCode).toContain('<h2 className="text-base sm:text-lg font-bold text-primary mt-0.5">');
 
       // HomePage sections follow with semantic H2 headings and informative eyebrow badges
       expect(homeCode).toContain("tHome('presets.badge')");

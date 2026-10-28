@@ -3,7 +3,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Global Prefers-Reduced-Motion Governance (WCAG 2.3.3)', () => {
-  const globalsCssPath = path.resolve(__dirname, '../../../apps/web/src/app/globals.css');
+  const globalsCssPath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/globals.css'
+  );
 
   it('verifies globals.css includes a global prefers-reduced-motion rule for universal accessibility', () => {
     expect(fs.existsSync(globalsCssPath)).toBe(true);

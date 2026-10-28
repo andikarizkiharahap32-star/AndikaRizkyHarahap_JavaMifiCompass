@@ -68,9 +68,7 @@ export function generatePlaceSlug(name: string, city: string): string {
 export function normalizeProviderPlace(details: ProviderPlaceDetails): IngestResult {
   const terms: ProviderLicenseTerms | undefined = PROVIDER_TERMS[details.providerName];
   if (!terms) {
-    throw new Error(
-      `Unregistered place provider: '${details.providerName}'. License terms required.`,
-    );
+    throw new Error(`Unregistered place provider: '${details.providerName}'. License terms required.`);
   }
 
   // P12 Prohibition: Never mix provider external IDs with internal IDs
@@ -110,7 +108,7 @@ export function normalizeProviderPlace(details: ProviderPlaceDetails): IngestRes
  */
 export function enforceProviderTtl(
   providerName: string,
-  requestedTtlSeconds: number,
+  requestedTtlSeconds: number
 ): { allowed: boolean; effectiveTtlSeconds: number } {
   const terms = PROVIDER_TERMS[providerName];
   if (!terms) {
@@ -133,14 +131,17 @@ export function enforceProviderTtl(
 /**
  * Verifies prohibited fields are not stored per provider license.
  */
-export function validateProviderStorageFields(providerName: string, fieldNames: string[]): void {
+export function validateProviderStorageFields(
+  providerName: string,
+  fieldNames: string[]
+): void {
   const terms = PROVIDER_TERMS[providerName];
   if (!terms) return;
 
   for (const field of fieldNames) {
     if (terms.prohibitedFields.includes(field)) {
       throw new Error(
-        `License Violation: Storage of field '${field}' is strictly prohibited by ${providerName} terms`,
+        `License Violation: Storage of field '${field}' is strictly prohibited by ${providerName} terms`
       );
     }
   }

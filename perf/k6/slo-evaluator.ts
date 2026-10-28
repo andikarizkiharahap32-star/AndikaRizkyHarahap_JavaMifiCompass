@@ -53,7 +53,7 @@ export class PerfSloEvaluator {
       searchP95Ms: 180,
       fxP95Ms: 45,
       errorRate: 0.001,
-    },
+    }
   ) {}
 
   /**
@@ -64,17 +64,17 @@ export class PerfSloEvaluator {
     options: {
       isApprovedWindow?: boolean;
       killSwitchConfigured?: boolean;
-    } = {},
+    } = {}
   ): void {
     if (targetEnv.toLowerCase() === 'production' || targetEnv.toLowerCase() === 'prod') {
       if (!options.isApprovedWindow) {
         throw new Error(
-          'Load test safety violation: Prohibited to load test production outside an approved maintenance window',
+          'Load test safety violation: Prohibited to load test production outside an approved maintenance window'
         );
       }
       if (!options.killSwitchConfigured) {
         throw new Error(
-          'Load test safety violation: Prohibited to load test production without an active kill switch',
+          'Load test safety violation: Prohibited to load test production without an active kill switch'
         );
       }
     }
@@ -103,7 +103,8 @@ export class PerfSloEvaluator {
    */
   evaluateRun(metrics: PerfRunMetrics): SloEvaluationResult {
     // 1. Dataset size verification (P27 Acceptance: >= 500k places)
-    const datasetThresholdMet = metrics.datasetPlacesCount >= PERF_SLO_LIMITS.MIN_DATASET_PLACES;
+    const datasetThresholdMet =
+      metrics.datasetPlacesCount >= PERF_SLO_LIMITS.MIN_DATASET_PLACES;
 
     // 2. SLO gates
     const searchSloMet = metrics.searchP95Ms < PERF_SLO_LIMITS.SEARCH_P95_MAX_MS;
@@ -117,7 +118,7 @@ export class PerfSloEvaluator {
         `Search latency degraded: ${metrics.searchP95Ms}ms vs baseline ${this.baseline.searchP95Ms}ms (+${(
           ((metrics.searchP95Ms - this.baseline.searchP95Ms) / this.baseline.searchP95Ms) *
           100
-        ).toFixed(1)}%)`,
+        ).toFixed(1)}%)`
       );
     }
     if (metrics.fxP95Ms > this.baseline.fxP95Ms * 1.15) {
@@ -125,11 +126,12 @@ export class PerfSloEvaluator {
         `FX latency degraded: ${metrics.fxP95Ms}ms vs baseline ${this.baseline.fxP95Ms}ms (+${(
           ((metrics.fxP95Ms - this.baseline.fxP95Ms) / this.baseline.fxP95Ms) *
           100
-        ).toFixed(1)}%)`,
+        ).toFixed(1)}%)`
       );
     }
 
-    const passed = datasetThresholdMet && searchSloMet && fxSloMet && errorRateSloMet;
+    const passed =
+      datasetThresholdMet && searchSloMet && fxSloMet && errorRateSloMet;
 
     const reportSummary = [
       `Perf Run Evaluation [${metrics.runId}]: ${passed ? 'PASSED' : 'FAILED'}`,
@@ -137,9 +139,7 @@ export class PerfSloEvaluator {
       `- Search P95: ${metrics.searchP95Ms}ms (SLO < 300ms): ${searchSloMet ? 'PASS' : 'FAIL'}`,
       `- FX P95: ${metrics.fxP95Ms}ms (SLO < 100ms): ${fxSloMet ? 'PASS' : 'FAIL'}`,
       `- Error Rate: ${(metrics.errorRate * 100).toFixed(2)}% (SLO < 0.5%): ${errorRateSloMet ? 'PASS' : 'FAIL'}`,
-      regressions.length > 0
-        ? `- Regressions: ${regressions.join('; ')}`
-        : '- Zero regressions detected against baseline',
+      regressions.length > 0 ? `- Regressions: ${regressions.join('; ')}` : '- Zero regressions detected against baseline',
     ].join('\n');
 
     return {

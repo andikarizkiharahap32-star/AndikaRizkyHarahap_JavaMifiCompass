@@ -103,83 +103,23 @@ export const App = () => {
   }
 
   const allNavItems = [
-    {
-      id: 'dashboard',
-      label: 'Dashboard',
-      icon: <LayoutDashboard className="w-4 h-4" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE', 'EDITOR', 'SUPPORT'],
-    },
-    {
-      id: 'dining',
-      label: 'Audit Halal & AI Discovery',
-      icon: <UtensilsCrossed className="w-4 h-4 text-emerald-400" />,
-      roles: ['SUPER_ADMIN', 'ADMIN'],
-    },
-    {
-      id: 'orders',
-      label: 'Pesanan & Ledger',
-      icon: <Package className="w-4 h-4" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE'],
-    },
-    {
-      id: 'catalog',
-      label: 'Katalog & Paket Kuota',
-      icon: <Tag className="w-4 h-4 text-amber-400" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
-    },
-    {
-      id: 'devices',
-      label: 'Armada Modem WiFi',
-      icon: <Wifi className="w-4 h-4" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'],
-    },
-    {
-      id: 'customers',
-      label: 'Pelanggan & Traveler',
-      icon: <Users className="w-4 h-4 text-sky-400" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT', 'FINANCE'],
-    },
-    {
-      id: 'content',
-      label: 'Editor Konten CMS',
-      icon: <FileText className="w-4 h-4" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
-    },
-    {
-      id: 'media',
-      label: 'Pustaka Media & Aset',
-      icon: <Image className="w-4 h-4 text-indigo-400" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
-    },
-    {
-      id: 'automation',
-      label: 'Konsol Otomasi n8n',
-      icon: <Activity className="w-4 h-4" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'],
-    },
-    {
-      id: 'support',
-      label: 'Tiket Dukungan',
-      icon: <Headphones className="w-4 h-4" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT'],
-    },
-    {
-      id: 'integrations',
-      label: 'Kesehatan & Adapter',
-      icon: <Sliders className="w-4 h-4" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'],
-    },
-    {
-      id: 'audit',
-      label: 'Audit Log',
-      icon: <ShieldCheck className="w-4 h-4" />,
-      roles: ['SUPER_ADMIN', 'ADMIN', 'FINANCE'],
-    },
+    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE', 'EDITOR', 'SUPPORT'] },
+    { id: 'dining', label: 'Audit Halal & AI Discovery', icon: <UtensilsCrossed className="w-4 h-4 text-emerald-400" />, roles: ['SUPER_ADMIN', 'ADMIN'] },
+    { id: 'orders', label: 'Pesanan & Ledger', icon: <Package className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE'] },
+    { id: 'catalog', label: 'Katalog & Paket Kuota', icon: <Tag className="w-4 h-4 text-amber-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
+    { id: 'devices', label: 'Armada Modem WiFi', icon: <Wifi className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
+    { id: 'customers', label: 'Pelanggan & Traveler', icon: <Users className="w-4 h-4 text-sky-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT', 'FINANCE'] },
+    { id: 'content', label: 'Editor Konten CMS', icon: <FileText className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
+    { id: 'media', label: 'Pustaka Media & Aset', icon: <Image className="w-4 h-4 text-indigo-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
+    { id: 'automation', label: 'Konsol Otomasi n8n', icon: <Activity className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
+    { id: 'support', label: 'Tiket Dukungan', icon: <Headphones className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT'] },
+    { id: 'integrations', label: 'Kesehatan & Adapter', icon: <Sliders className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
+    { id: 'audit', label: 'Audit Log', icon: <ShieldCheck className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'FINANCE'] },
   ];
 
   const currentRole = user?.role || 'SUPER_ADMIN';
-  const navItems = allNavItems.filter(
-    (item) => currentRole === 'SUPER_ADMIN' || item.roles.includes(currentRole),
+  const navItems = allNavItems.filter((item) =>
+    currentRole === 'SUPER_ADMIN' || item.roles.includes(currentRole),
   );
 
   return (
@@ -193,10 +133,7 @@ export const App = () => {
       </a>
 
       {/* Sidebar */}
-      <aside
-        aria-label="Navigasi Samping Admin"
-        className="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 shrink-0"
-      >
+      <aside aria-label="Navigasi Samping Admin" className="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 shrink-0">
         <div className="space-y-6">
           {/* Brand header */}
           <div className="flex items-center gap-3 px-2 py-3">
@@ -237,9 +174,7 @@ export const App = () => {
               {user.fullName ? user.fullName.charAt(0) : 'U'}
             </div>
             <div className="overflow-hidden">
-              <span className="text-xs font-bold text-white truncate block">
-                {user.fullName || user.email}
-              </span>
+              <span className="text-xs font-bold text-white truncate block">{user.fullName || user.email}</span>
               <span className="text-xs text-sky-400 font-mono block">{user.role}</span>
             </div>
           </div>
@@ -256,17 +191,10 @@ export const App = () => {
       </aside>
 
       {/* Main Screen Content */}
-      <main
-        id="admin-main-content"
-        tabIndex={-1}
-        className="flex-1 p-6 sm:p-10 overflow-y-auto focus:outline-none"
-      >
+      <main id="admin-main-content" tabIndex={-1} className="flex-1 p-6 sm:p-10 overflow-y-auto focus:outline-none">
         {/* Operations Header with Breadcrumbs, Environment Banner & Live Telemetry (P22-WS01, WS03, WS06, WS12) */}
         <header className="mb-6 pb-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <nav
-            aria-label="Breadcrumb"
-            className="flex items-center gap-2 text-xs font-mono text-slate-500"
-          >
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono text-slate-500">
             <span>JavaMifi CMS</span>
             <span aria-hidden="true">/</span>
             <span className="font-bold text-slate-900 uppercase">

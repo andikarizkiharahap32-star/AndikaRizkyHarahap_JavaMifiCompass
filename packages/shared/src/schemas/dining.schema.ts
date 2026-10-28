@@ -126,14 +126,12 @@ export const diningPlaceSummarySchema = z.object({
   images: z.array(venueImageSchema).default([]),
   wifiPickupBooth: wifiPickupBoothSchema.optional(),
   isSimulated: z.boolean().default(true),
-  prayerContext: z
-    .object({
-      nearestPrayerName: z.string(),
-      nearestPrayerTime: z.string(),
-      minutesRemaining: z.number(),
-      statusText: z.string(),
-    })
-    .optional(),
+  prayerContext: z.object({
+    nearestPrayerName: z.string(),
+    nearestPrayerTime: z.string(),
+    minutesRemaining: z.number(),
+    statusText: z.string(),
+  }).optional(),
 });
 export type DiningPlaceSummary = z.infer<typeof diningPlaceSummarySchema>;
 
@@ -146,7 +144,7 @@ export const diningPlaceDetailSchema = diningPlaceSummarySchema.extend({
     z.object({
       category: z.string(),
       items: z.array(menuItemSchema),
-    }),
+    })
   ),
   whyHalalExplanation: z.string().optional(),
   lastAssessedAt: z.string(),
@@ -201,7 +199,7 @@ export const llmSignalsOutputSchema = z.object({
         quote: z.string(),
         source: z.string(),
         claimedBy: z.enum(['OWNER', 'REGISTRY', 'REVIEWER', 'THIRD_PARTY']),
-      }),
+      })
     )
     .default([]),
   porkFlags: z
@@ -209,7 +207,7 @@ export const llmSignalsOutputSchema = z.object({
       z.object({
         quote: z.string(),
         dishOrIngredient: z.string(),
-      }),
+      })
     )
     .default([]),
   alcoholFlags: z
@@ -217,7 +215,7 @@ export const llmSignalsOutputSchema = z.object({
       z.object({
         quote: z.string(),
         detail: z.string(),
-      }),
+      })
     )
     .default([]),
   cookwareNotes: z.string().nullable().optional(),
@@ -266,7 +264,7 @@ export const validationResultSchema = z.object({
         term: z.string(),
         language: z.string(),
         matchedIn: z.string(),
-      }),
+      })
     ),
   }),
   priceSanity: z.object({
@@ -329,3 +327,5 @@ export const diningSafetyStatusSchema = z.object({
   lastResetAt: z.string(),
 });
 export type DiningSafetyStatus = z.infer<typeof diningSafetyStatusSchema>;
+
+

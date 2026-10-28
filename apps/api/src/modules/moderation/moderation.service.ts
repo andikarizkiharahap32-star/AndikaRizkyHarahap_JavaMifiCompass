@@ -28,7 +28,15 @@ export interface ModerationAuditEntry {
   timestamp: string;
 }
 
-const PROFANITY_PATTERNS = [/fuck/i, /shit/i, /bitch/i, /asshole/i, /bastard/i, /scam/i, /fraud/i];
+const PROFANITY_PATTERNS = [
+  /fuck/i,
+  /shit/i,
+  /bitch/i,
+  /asshole/i,
+  /bastard/i,
+  /scam/i,
+  /fraud/i,
+];
 
 const LINK_PATTERNS = [
   /https?:\/\/[^\s]+/i,
@@ -93,7 +101,7 @@ export class ModerationService {
    */
   evaluateReviewText(
     rawText: string,
-    existingPlaceReviewTexts: string[] = [],
+    existingPlaceReviewTexts: string[] = []
   ): PrePublishCheckResult {
     const sanitizedText = sanitizeHtmlToPlainText(rawText);
     const flags: string[] = [];
@@ -144,7 +152,7 @@ export class ModerationService {
     reviewId: string,
     moderatorId: string,
     action: 'approve' | 'reject' | 'flag',
-    reason: string,
+    reason: string
   ): ModerationAuditEntry {
     const entry: ModerationAuditEntry = {
       id: `mod_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,

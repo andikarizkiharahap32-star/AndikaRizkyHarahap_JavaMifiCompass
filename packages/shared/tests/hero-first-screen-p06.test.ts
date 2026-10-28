@@ -3,10 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('P06 — Hero and First-Screen Composition Verification', () => {
-  const heroPath = path.resolve(
-    __dirname,
-    '../../../apps/web/src/components/DepartureBoardHero.tsx',
-  );
+  const heroPath = path.resolve(__dirname, '../../../apps/web/src/components/DepartureBoardHero.tsx');
   const enMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/en.json');
   const idMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/id.json');
 
@@ -32,16 +29,14 @@ describe('P06 — Hero and First-Screen Composition Verification', () => {
 
   it('P06-WS02 & WS03: Primary & Secondary CTAs enforce min 48px touch targets and accessible routing', () => {
     // Primary CTA connects to planner wizard with dynamic query params
-    expect(heroSource).toContain(
-      'href={`/${locale}/planner?preset=${currentHub.id.toLowerCase()}&pax=${paxMode}&days=${tripDuration}`}',
-    );
+    expect(heroSource).toContain("href={`/${locale}/planner?preset=${currentHub.id.toLowerCase()}&pax=${paxMode}&days=${tripDuration}`}");
     expect(heroSource).toContain("aria-label={t('ctaPlanner')}");
     expect(heroSource).toContain('bg-primary');
     expect(heroSource).toContain('text-on-primary');
     expect(heroSource).toContain('min-h-12');
 
     // Secondary CTA connects to destinations index
-    expect(heroSource).toContain('href={`/${locale}/destinations`}');
+    expect(heroSource).toContain("href={`/${locale}/destinations`}");
     expect(heroSource).toContain("aria-label={t('ctaDestinations')}");
     expect(heroSource).toContain('bg-paper');
     expect(heroSource).toContain('text-primary');
@@ -98,9 +93,7 @@ describe('P06 — Hero and First-Screen Composition Verification', () => {
 
   it('P06-WS29 & WS30: Screen-Reader Naming & Visible Keyboard Focus Rings', () => {
     // Visible focus ring classes on all interactive buttons and links
-    expect(heroSource).toContain(
-      'focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none',
-    );
+    expect(heroSource).toContain('focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none');
 
     // Transparency strip labels
     expect(heroSource).toContain("t('speedLabel')");

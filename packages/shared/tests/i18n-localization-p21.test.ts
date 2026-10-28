@@ -10,10 +10,7 @@ describe('P21 — Indonesian & English Localization Governance', () => {
   const i18nConfigPath = path.join(rootDir, 'apps/web/src/i18n.ts');
   const navbarPath = path.join(rootDir, 'apps/web/src/components/Navbar.tsx');
   const destinationsPath = path.join(rootDir, 'apps/web/src/app/[locale]/destinations/page.tsx');
-  const faqAccordionPath = path.join(
-    rootDir,
-    'apps/web/src/components/FaqInteractiveAccordion.tsx',
-  );
+  const faqAccordionPath = path.join(rootDir, 'apps/web/src/components/FaqInteractiveAccordion.tsx');
 
   const en = JSON.parse(fs.readFileSync(enMessagesPath, 'utf8'));
   const id = JSON.parse(fs.readFileSync(idMessagesPath, 'utf8'));
@@ -38,14 +35,8 @@ describe('P21 — Indonesian & English Localization Governance', () => {
     const missingInEn = [...idKeys].filter((k) => !enKeys.has(k));
     const missingInId = [...enKeys].filter((k) => !idKeys.has(k));
 
-    expect(
-      missingInEn,
-      `Keys present in id.json but missing in en.json: ${missingInEn.join(', ')}`,
-    ).toEqual([]);
-    expect(
-      missingInId,
-      `Keys present in en.json but missing in id.json: ${missingInId.join(', ')}`,
-    ).toEqual([]);
+    expect(missingInEn, `Keys present in id.json but missing in en.json: ${missingInEn.join(', ')}`).toEqual([]);
+    expect(missingInId, `Keys present in en.json but missing in id.json: ${missingInId.join(', ')}`).toEqual([]);
     expect(idKeys.size).toBeGreaterThan(500);
     expect(idKeys.size).toBe(enKeys.size);
 
@@ -140,21 +131,7 @@ describe('P21 — Indonesian & English Localization Governance', () => {
   });
 
   it('P21-WS09: verifies bilingual country aliases and destination taxonomy', () => {
-    const coreCodes = [
-      'JP',
-      'CN',
-      'SA',
-      'SG',
-      'MY',
-      'TH',
-      'KR',
-      'GB',
-      'FR',
-      'DE',
-      'US',
-      'TR',
-      'AE',
-    ];
+    const coreCodes = ['JP', 'CN', 'SA', 'SG', 'MY', 'TH', 'KR', 'GB', 'FR', 'DE', 'US', 'TR', 'AE'];
 
     for (const code of coreCodes) {
       expect(id.countries[code], `Missing id.countries.${code}`).toBeTruthy();
@@ -192,7 +169,13 @@ describe('P21 — Indonesian & English Localization Governance', () => {
   });
 
   it('P21-WS14: verifies untranslatable tokens are preserved across languages', () => {
-    const preservedTokens = ['JavaMifi', 'Compass', 'Pocket WiFi', 'eSIM', '#AntiSusahSinyal'];
+    const preservedTokens = [
+      'JavaMifi',
+      'Compass',
+      'Pocket WiFi',
+      'eSIM',
+      '#AntiSusahSinyal',
+    ];
 
     for (const token of preservedTokens) {
       const inId = JSON.stringify(id).includes(token);

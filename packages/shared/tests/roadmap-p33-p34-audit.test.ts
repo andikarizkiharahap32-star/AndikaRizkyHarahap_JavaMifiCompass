@@ -9,10 +9,7 @@ describe('Roadmap P33–P34 Diagnostic & Verification Audit', () => {
   const enMessagesPath = path.join(rootDir, 'apps/web/messages/en.json');
   const idMessagesPath = path.join(rootDir, 'apps/web/messages/id.json');
   const diningDiscoveryPath = path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx');
-  const destinationsPagePath = path.join(
-    rootDir,
-    'apps/web/src/app/[locale]/destinations/page.tsx',
-  );
+  const destinationsPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/destinations/page.tsx');
   const supportPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/support/page.tsx');
   const footerPath = path.join(rootDir, 'apps/web/src/components/Footer.tsx');
   const baselinesDir = path.join(rootDir, '.gstack/qa-reports/baseline-screenshots');
@@ -108,9 +105,7 @@ describe('Roadmap P33–P34 Diagnostic & Verification Audit', () => {
       const destCode = fs.readFileSync(destinationsPagePath, 'utf8');
 
       expect(destCode).toContain('aspect-video');
-      expect(destCode).toContain(
-        'sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"',
-      );
+      expect(destCode).toContain('sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"');
       expect(destCode).toContain('object-cover');
     });
 

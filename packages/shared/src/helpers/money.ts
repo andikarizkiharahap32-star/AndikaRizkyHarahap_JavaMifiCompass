@@ -77,11 +77,7 @@ export function calculatePerPersonPerDay(totalIdr: number, persons: number, days
 /**
  * Apply percentage discount (0-100) and return discounted integer amount
  */
-export function applyDiscount(
-  amount: number,
-  discountPercent: number,
-  maxDiscountIdr?: number,
-): number {
+export function applyDiscount(amount: number, discountPercent: number, maxDiscountIdr?: number): number {
   if (discountPercent <= 0) return amount;
   let discount = Math.round((amount * Math.min(discountPercent, 100)) / 100);
   if (maxDiscountIdr && discount > maxDiscountIdr) {
@@ -101,11 +97,7 @@ export function applyFixedDiscount(amount: number, fixedDiscountIdr: number): nu
 /**
  * Formats a minor amount into a major currency representation
  */
-export function formatLocalAmount(
-  amountMinor: number,
-  currency: string,
-  locale: string = 'en-US',
-): string {
+export function formatLocalAmount(amountMinor: number, currency: string, locale: string = 'en-US'): string {
   const decimals = getCurrencyDecimals(currency);
   const factor = Math.pow(10, decimals);
   const majorValue = amountMinor / factor;
@@ -138,7 +130,7 @@ export function formatLocalPriceRange(
   minMinor: number,
   maxMinor: number,
   currency: string,
-  locale: string = 'en-US',
+  locale: string = 'en-US'
 ): string {
   const minFormatted = formatLocalAmount(minMinor, currency, locale);
   const maxFormatted = formatLocalAmount(maxMinor, currency, locale);

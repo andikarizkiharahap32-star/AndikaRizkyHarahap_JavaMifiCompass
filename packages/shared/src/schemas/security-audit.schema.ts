@@ -9,7 +9,12 @@
 import { z } from 'zod';
 
 /** Security Classification Levels */
-export const SecurityClassificationEnum = z.enum(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']);
+export const SecurityClassificationEnum = z.enum([
+  'CRITICAL',
+  'HIGH',
+  'MEDIUM',
+  'LOW',
+]);
 export type SecurityClassification = z.infer<typeof SecurityClassificationEnum>;
 
 /** Security Core Dimensions (CIA + AN) */
@@ -36,23 +41,23 @@ export type ThreatActorRole = z.infer<typeof ThreatActorRoleEnum>;
 
 /** Architectural Trust Boundaries */
 export const TrustBoundaryEnum = z.enum([
-  'TB_01_INTERNET_TO_EDGE', // Public internet to Reverse Proxy / Cloudflare WAF
-  'TB_02_EDGE_TO_API', // Reverse Proxy to NestJS API / Next.js SSR
-  'TB_03_API_TO_DATABASE', // Backend Application to PostgreSQL / Prisma ORM
-  'TB_04_API_TO_PROVIDERS', // Backend Application to 3rd Party APIs (Payment, eSIM, Geocoding)
+  'TB_01_INTERNET_TO_EDGE',       // Public internet to Reverse Proxy / Cloudflare WAF
+  'TB_02_EDGE_TO_API',            // Reverse Proxy to NestJS API / Next.js SSR
+  'TB_03_API_TO_DATABASE',        // Backend Application to PostgreSQL / Prisma ORM
+  'TB_04_API_TO_PROVIDERS',       // Backend Application to 3rd Party APIs (Payment, eSIM, Geocoding)
 ]);
 export type TrustBoundary = z.infer<typeof TrustBoundaryEnum>;
 
 /** Code Surface Classification */
 export const SecuritySurfaceEnum = z.enum([
-  'SURFACE_01_PUBLIC', // Public routes, search, health check
-  'SURFACE_02_AUTHENTICATED', // Authenticated customer routes
-  'SURFACE_03_ADMIN', // Administrative operations, dashboard
-  'SURFACE_04_TENANT_MUTATION', // Tenant-scoped object lookups and state mutations
-  'SURFACE_05_SESSION_AUTH', // Token lifecycle, credentials, session cookies
-  'SURFACE_06_WEBHOOK_INGEST', // External webhook ingestion (Midtrans, n8n)
-  'SURFACE_07_SUPPLY_CHAIN', // Dependencies, lockfiles, build containers
-  'SURFACE_08_TELEMETRY_LOGS', // Structured logging, error diagnostics
+  'SURFACE_01_PUBLIC',            // Public routes, search, health check
+  'SURFACE_02_AUTHENTICATED',     // Authenticated customer routes
+  'SURFACE_03_ADMIN',             // Administrative operations, dashboard
+  'SURFACE_04_TENANT_MUTATION',   // Tenant-scoped object lookups and state mutations
+  'SURFACE_05_SESSION_AUTH',      // Token lifecycle, credentials, session cookies
+  'SURFACE_06_WEBHOOK_INGEST',    // External webhook ingestion (Midtrans, n8n)
+  'SURFACE_07_SUPPLY_CHAIN',      // Dependencies, lockfiles, build containers
+  'SURFACE_08_TELEMETRY_LOGS',    // Structured logging, error diagnostics
 ]);
 export type SecuritySurface = z.infer<typeof SecuritySurfaceEnum>;
 
@@ -91,7 +96,12 @@ export const AbuseVectorCodeEnum = z.enum([
 export type AbuseVectorCode = z.infer<typeof AbuseVectorCodeEnum>;
 
 /** Control Verification Disposition */
-export const ControlDispositionEnum = z.enum(['PASS', 'FAIL', 'BLOCKED', 'NOT_APPLICABLE']);
+export const ControlDispositionEnum = z.enum([
+  'PASS',
+  'FAIL',
+  'BLOCKED',
+  'NOT_APPLICABLE',
+]);
 export type ControlDisposition = z.infer<typeof ControlDispositionEnum>;
 
 /** System Protected Asset Schema */
@@ -220,8 +230,7 @@ export const JAVAMIFI_CORE_ASSETS: ProtectedAsset[] = [
   {
     id: 'ASSET_02_PAYMENT_TRANSACTIONS',
     name: 'Payment & Financial Ledger',
-    description:
-      'Order amounts in IDR, payment transaction tokens, payment state, settlement audits',
+    description: 'Order amounts in IDR, payment transaction tokens, payment state, settlement audits',
     classification: 'CRITICAL',
     primaryDimension: 'INTEGRITY',
     storageLocation: 'PostgreSQL Payment/Order/AuditLog tables',
@@ -241,8 +250,7 @@ export const JAVAMIFI_CORE_ASSETS: ProtectedAsset[] = [
   {
     id: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
     name: 'Admin Credentials & Cryptographic Keys',
-    description:
-      'Password hashes (argon2/bcrypt), JWT signing secrets, Midtrans Server Keys, Webhook secrets',
+    description: 'Password hashes (argon2/bcrypt), JWT signing secrets, Midtrans Server Keys, Webhook secrets',
     classification: 'CRITICAL',
     primaryDimension: 'CONFIDENTIALITY',
     storageLocation: 'Environment variables / Secret Manager',
@@ -274,24 +282,21 @@ export const JAVAMIFI_TRUST_BOUNDARIES = [
     name: 'Edge / Reverse Proxy to NestJS API & Next.js SSR',
     source: 'Edge Gateway',
     destination: 'NestJS REST API / Next.js SSR Web',
-    enforcementMechanism:
-      'Bearer JWT validation, Zod request body validation, CORS, ThrottlerGuard',
+    enforcementMechanism: 'Bearer JWT validation, Zod request body validation, CORS, ThrottlerGuard',
   },
   {
     id: 'TB_03_API_TO_DATABASE' as const,
     name: 'API Service to PostgreSQL Database',
     source: 'NestJS API Services',
     destination: 'PostgreSQL Database',
-    enforcementMechanism:
-      'Prisma ORM parameterized queries, schema constraints, connection pooling SSL',
+    enforcementMechanism: 'Prisma ORM parameterized queries, schema constraints, connection pooling SSL',
   },
   {
     id: 'TB_04_API_TO_PROVIDERS' as const,
     name: 'API Service to External Vendors / Integrations',
     source: 'NestJS Integration Adapters',
     destination: 'Midtrans Payment Gateway / Telco eSIM API / OpenStreetMap Nominatim',
-    enforcementMechanism:
-      'Outbound timeout bounds, constant-time HMAC signatures, strict payload schemas',
+    enforcementMechanism: 'Outbound timeout bounds, constant-time HMAC signatures, strict payload schemas',
   },
 ];
 
@@ -303,14 +308,7 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_01_PII_PASSPORT_CUSTOMER',
     threatDescription: 'Unauthenticated actor attempts to access order history or profile data',
-    dreadScore: {
-      damage: 8,
-      reproducibility: 10,
-      exploitability: 9,
-      affectedUsers: 9,
-      discoverability: 9,
-      overall: 9.0,
-    },
+    dreadScore: { damage: 8, reproducibility: 10, exploitability: 9, affectedUsers: 9, discoverability: 9, overall: 9.0 },
     cvssScore: 8.6,
     mitigationControlId: 'SEC-P00-CTRL-0001',
     owningModule: 'auth',
@@ -322,16 +320,8 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_03_ADMIN',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
-    threatDescription:
-      'Authenticated TRAVELER attempts to call /admin/devices or /admin/audit-logs',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 10,
-      exploitability: 9,
-      affectedUsers: 10,
-      discoverability: 8,
-      overall: 9.2,
-    },
+    threatDescription: 'Authenticated TRAVELER attempts to call /admin/devices or /admin/audit-logs',
+    dreadScore: { damage: 9, reproducibility: 10, exploitability: 9, affectedUsers: 10, discoverability: 8, overall: 9.2 },
     cvssScore: 8.8,
     mitigationControlId: 'SEC-P00-CTRL-0002',
     owningModule: 'auth',
@@ -343,21 +333,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_04_TENANT_MUTATION',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_01_PII_PASSPORT_CUSTOMER',
-    threatDescription:
-      'Traveler A tampers with orderId in request to view Traveler B order details',
-    dreadScore: {
-      damage: 8,
-      reproducibility: 10,
-      exploitability: 8,
-      affectedUsers: 8,
-      discoverability: 7,
-      overall: 8.2,
-    },
+    threatDescription: 'Traveler A tampers with orderId in request to view Traveler B order details',
+    dreadScore: { damage: 8, reproducibility: 10, exploitability: 8, affectedUsers: 8, discoverability: 7, overall: 8.2 },
     cvssScore: 7.7,
     mitigationControlId: 'SEC-P00-CTRL-0003',
     owningModule: 'orders',
-    verificationTest:
-      'Server asserts order.userId === request.user.id regardless of request orderId param',
+    verificationTest: 'Server asserts order.userId === request.user.id regardless of request orderId param',
   },
   {
     vectorCode: 'FAIL_004_EXPIRED_REVOKED_TOKEN_ORACLE',
@@ -365,16 +346,8 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_05_SESSION_AUTH',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
-    threatDescription:
-      'Attacker probes expired or revoked JWT tokens to enumerate account existence',
-    dreadScore: {
-      damage: 4,
-      reproducibility: 9,
-      exploitability: 7,
-      affectedUsers: 5,
-      discoverability: 6,
-      overall: 6.2,
-    },
+    threatDescription: 'Attacker probes expired or revoked JWT tokens to enumerate account existence',
+    dreadScore: { damage: 4, reproducibility: 9, exploitability: 7, affectedUsers: 5, discoverability: 6, overall: 6.2 },
     cvssScore: 5.3,
     mitigationControlId: 'SEC-P00-CTRL-0004',
     owningModule: 'auth',
@@ -387,19 +360,11 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
     threatDescription: 'Attacker adds role="SUPER_ADMIN" in request body or unverified claim',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 10,
-      exploitability: 7,
-      affectedUsers: 9,
-      discoverability: 7,
-      overall: 8.4,
-    },
+    dreadScore: { damage: 9, reproducibility: 10, exploitability: 7, affectedUsers: 9, discoverability: 7, overall: 8.4 },
     cvssScore: 8.8,
     mitigationControlId: 'SEC-P00-CTRL-0005',
     owningModule: 'auth',
-    verificationTest:
-      'Roles extracted strictly from verified server-side JWT signature / DB user profile',
+    verificationTest: 'Roles extracted strictly from verified server-side JWT signature / DB user profile',
   },
   {
     vectorCode: 'FAIL_006_REQUEST_SMUGGLING_AMBIGUITY',
@@ -407,16 +372,8 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_01_PUBLIC',
     boundary: 'TB_01_INTERNET_TO_EDGE',
     targetAssetId: 'ASSET_02_PAYMENT_TRANSACTIONS',
-    threatDescription:
-      'Ambiguous Content-Length vs Transfer-Encoding causes request desynchronization',
-    dreadScore: {
-      damage: 8,
-      reproducibility: 6,
-      exploitability: 6,
-      affectedUsers: 8,
-      discoverability: 5,
-      overall: 6.6,
-    },
+    threatDescription: 'Ambiguous Content-Length vs Transfer-Encoding causes request desynchronization',
+    dreadScore: { damage: 8, reproducibility: 6, exploitability: 6, affectedUsers: 8, discoverability: 5, overall: 6.6 },
     cvssScore: 7.4,
     mitigationControlId: 'SEC-P00-CTRL-0006',
     owningModule: 'infra',
@@ -429,19 +386,11 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_03_API_TO_DATABASE',
     targetAssetId: 'ASSET_02_PAYMENT_TRANSACTIONS',
     threatDescription: 'Malicious SQL fragments injected via query params or payload inputs',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 8,
-      exploitability: 6,
-      affectedUsers: 10,
-      discoverability: 7,
-      overall: 8.0,
-    },
+    dreadScore: { damage: 9, reproducibility: 8, exploitability: 6, affectedUsers: 10, discoverability: 7, overall: 8.0 },
     cvssScore: 8.6,
     mitigationControlId: 'SEC-P00-CTRL-0007',
     owningModule: 'prisma',
-    verificationTest:
-      'All database queries use Prisma parameterized prepared statements exclusively',
+    verificationTest: 'All database queries use Prisma parameterized prepared statements exclusively',
   },
   {
     vectorCode: 'FAIL_008_TEMPLATE_HTML_XSS_INJECTION',
@@ -449,16 +398,8 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_01_PUBLIC',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_01_PII_PASSPORT_CUSTOMER',
-    threatDescription:
-      'Stored or reflected scripts inside customer reviews, notes, or destination names',
-    dreadScore: {
-      damage: 7,
-      reproducibility: 9,
-      exploitability: 7,
-      affectedUsers: 8,
-      discoverability: 7,
-      overall: 7.6,
-    },
+    threatDescription: 'Stored or reflected scripts inside customer reviews, notes, or destination names',
+    dreadScore: { damage: 7, reproducibility: 9, exploitability: 7, affectedUsers: 8, discoverability: 7, overall: 7.6 },
     cvssScore: 7.1,
     mitigationControlId: 'SEC-P00-CTRL-0008',
     owningModule: 'content',
@@ -471,19 +412,11 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
     threatDescription: 'Filename tampering like ../../../etc/passwd in media or document endpoints',
-    dreadScore: {
-      damage: 8,
-      reproducibility: 9,
-      exploitability: 7,
-      affectedUsers: 8,
-      discoverability: 7,
-      overall: 7.8,
-    },
+    dreadScore: { damage: 8, reproducibility: 9, exploitability: 7, affectedUsers: 8, discoverability: 7, overall: 7.8 },
     cvssScore: 7.5,
     mitigationControlId: 'SEC-P00-CTRL-0009',
     owningModule: 'media',
-    verificationTest:
-      'Storage paths sanitized and resolved within strictly allowlisted root directories',
+    verificationTest: 'Storage paths sanitized and resolved within strictly allowlisted root directories',
   },
   {
     vectorCode: 'FAIL_010_SSRF_INTERNAL_METADATA',
@@ -492,19 +425,11 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_04_API_TO_PROVIDERS',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
     threatDescription: 'URL parameter pointing to 169.254.169.254 or internal RFC1918 IPs',
-    dreadScore: {
-      damage: 10,
-      reproducibility: 8,
-      exploitability: 7,
-      affectedUsers: 10,
-      discoverability: 7,
-      overall: 8.4,
-    },
+    dreadScore: { damage: 10, reproducibility: 8, exploitability: 7, affectedUsers: 10, discoverability: 7, overall: 8.4 },
     cvssScore: 9.0,
     mitigationControlId: 'SEC-P00-CTRL-0010',
     owningModule: 'integrations',
-    verificationTest:
-      'Destination URLs validated against strict allowlist; internal IPs blocked fail-closed',
+    verificationTest: 'Destination URLs validated against strict allowlist; internal IPs blocked fail-closed',
   },
   {
     vectorCode: 'FAIL_011_OVERSIZED_BODY_EXHAUSTION',
@@ -513,19 +438,11 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_02_PAYMENT_TRANSACTIONS',
     threatDescription: 'Unbounded payload streaming causes Node.js heap out of memory',
-    dreadScore: {
-      damage: 7,
-      reproducibility: 9,
-      exploitability: 8,
-      affectedUsers: 9,
-      discoverability: 7,
-      overall: 8.0,
-    },
+    dreadScore: { damage: 7, reproducibility: 9, exploitability: 8, affectedUsers: 9, discoverability: 7, overall: 8.0 },
     cvssScore: 7.5,
     mitigationControlId: 'SEC-P00-CTRL-0011',
     owningModule: 'infra',
-    verificationTest:
-      'Express bodyParser limits set to 16KB for JSON and 10MB for multipart media uploads',
+    verificationTest: 'Express bodyParser limits set to 16KB for JSON and 10MB for multipart media uploads',
   },
   {
     vectorCode: 'FAIL_012_RATE_LIMIT_EVASION',
@@ -533,21 +450,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_01_PUBLIC',
     boundary: 'TB_01_INTERNET_TO_EDGE',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
-    threatDescription:
-      'Distributed requests attempting password brute-force or payment intent spam',
-    dreadScore: {
-      damage: 6,
-      reproducibility: 9,
-      exploitability: 8,
-      affectedUsers: 7,
-      discoverability: 8,
-      overall: 7.6,
-    },
+    threatDescription: 'Distributed requests attempting password brute-force or payment intent spam',
+    dreadScore: { damage: 6, reproducibility: 9, exploitability: 8, affectedUsers: 7, discoverability: 8, overall: 7.6 },
     cvssScore: 6.5,
     mitigationControlId: 'SEC-P00-CTRL-0012',
     owningModule: 'auth',
-    verificationTest:
-      'ThrottlerModule enforces 120 req/min per IP and distinct 5 req/min on /auth/login',
+    verificationTest: 'ThrottlerModule enforces 120 req/min per IP and distinct 5 req/min on /auth/login',
   },
   {
     vectorCode: 'FAIL_013_CORS_WILDCARD_CREDENTIALS',
@@ -555,21 +463,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_01_PUBLIC',
     boundary: 'TB_01_INTERNET_TO_EDGE',
     targetAssetId: 'ASSET_01_PII_PASSPORT_CUSTOMER',
-    threatDescription:
-      'Access-Control-Allow-Origin: * combined with Access-Control-Allow-Credentials: true',
-    dreadScore: {
-      damage: 7,
-      reproducibility: 10,
-      exploitability: 8,
-      affectedUsers: 8,
-      discoverability: 9,
-      overall: 8.4,
-    },
+    threatDescription: 'Access-Control-Allow-Origin: * combined with Access-Control-Allow-Credentials: true',
+    dreadScore: { damage: 7, reproducibility: 10, exploitability: 8, affectedUsers: 8, discoverability: 9, overall: 8.4 },
     cvssScore: 7.5,
     mitigationControlId: 'SEC-P00-CTRL-0013',
     owningModule: 'infra',
-    verificationTest:
-      'CORS origin validated against exact trusted domain list; wildcards prohibited',
+    verificationTest: 'CORS origin validated against exact trusted domain list; wildcards prohibited',
   },
   {
     vectorCode: 'FAIL_014_CSRF_STATE_CHANGE',
@@ -577,21 +476,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_02_AUTHENTICATED',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_02_PAYMENT_TRANSACTIONS',
-    threatDescription:
-      'Browser cookie triggers unauthorized payment intent creation from external site',
-    dreadScore: {
-      damage: 8,
-      reproducibility: 8,
-      exploitability: 7,
-      affectedUsers: 8,
-      discoverability: 7,
-      overall: 7.6,
-    },
+    threatDescription: 'Browser cookie triggers unauthorized payment intent creation from external site',
+    dreadScore: { damage: 8, reproducibility: 8, exploitability: 7, affectedUsers: 8, discoverability: 7, overall: 7.6 },
     cvssScore: 7.4,
     mitigationControlId: 'SEC-P00-CTRL-0014',
     owningModule: 'auth',
-    verificationTest:
-      'SameSite=Lax/Strict cookie configuration and custom Authorization headers enforced',
+    verificationTest: 'SameSite=Lax/Strict cookie configuration and custom Authorization headers enforced',
   },
   {
     vectorCode: 'FAIL_015_CLICKJACKING_EMBED_HIJACK',
@@ -600,14 +490,7 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_01_INTERNET_TO_EDGE',
     targetAssetId: 'ASSET_02_PAYMENT_TRANSACTIONS',
     threatDescription: 'Compass checkout page framed inside transparent iframe on attacker website',
-    dreadScore: {
-      damage: 6,
-      reproducibility: 9,
-      exploitability: 7,
-      affectedUsers: 7,
-      discoverability: 7,
-      overall: 7.2,
-    },
+    dreadScore: { damage: 6, reproducibility: 9, exploitability: 7, affectedUsers: 7, discoverability: 7, overall: 7.2 },
     cvssScore: 6.1,
     mitigationControlId: 'SEC-P00-CTRL-0015',
     owningModule: 'infra',
@@ -619,21 +502,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_08_TELEMETRY_LOGS',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
-    threatDescription:
-      'Database exception reveals connection string with password in 500 error response',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 9,
-      exploitability: 8,
-      affectedUsers: 10,
-      discoverability: 8,
-      overall: 8.8,
-    },
+    threatDescription: 'Database exception reveals connection string with password in 500 error response',
+    dreadScore: { damage: 9, reproducibility: 9, exploitability: 8, affectedUsers: 10, discoverability: 8, overall: 8.8 },
     cvssScore: 8.2,
     mitigationControlId: 'SEC-P00-CTRL-0016',
     owningModule: 'errors',
-    verificationTest:
-      'Global exception filter sanitizes internal errors to generic error code and correlationId',
+    verificationTest: 'Global exception filter sanitizes internal errors to generic error code and correlationId',
   },
   {
     vectorCode: 'FAIL_017_LOG_INJECTION_CRLF',
@@ -641,21 +515,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_08_TELEMETRY_LOGS',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_05_AUDIT_LOG_TRAIL',
-    threatDescription:
-      'Attacker inserts newline characters into username to forge audit log entries',
-    dreadScore: {
-      damage: 6,
-      reproducibility: 9,
-      exploitability: 7,
-      affectedUsers: 6,
-      discoverability: 7,
-      overall: 7.0,
-    },
+    threatDescription: 'Attacker inserts newline characters into username to forge audit log entries',
+    dreadScore: { damage: 6, reproducibility: 9, exploitability: 7, affectedUsers: 6, discoverability: 7, overall: 7.0 },
     cvssScore: 6.5,
     mitigationControlId: 'SEC-P00-CTRL-0017',
     owningModule: 'audit',
-    verificationTest:
-      'CRLF characters stripped and logged fields strictly formatted as structured JSON',
+    verificationTest: 'CRLF characters stripped and logged fields strictly formatted as structured JSON',
   },
   {
     vectorCode: 'FAIL_018_WEBHOOK_SIGNATURE_REPLAY',
@@ -663,21 +528,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_06_WEBHOOK_INGEST',
     boundary: 'TB_04_API_TO_PROVIDERS',
     targetAssetId: 'ASSET_02_PAYMENT_TRANSACTIONS',
-    threatDescription:
-      'Attacker replays legitimate payment settlement webhook or sends forged payload',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 8,
-      exploitability: 7,
-      affectedUsers: 9,
-      discoverability: 7,
-      overall: 8.0,
-    },
+    threatDescription: 'Attacker replays legitimate payment settlement webhook or sends forged payload',
+    dreadScore: { damage: 9, reproducibility: 8, exploitability: 7, affectedUsers: 9, discoverability: 7, overall: 8.0 },
     cvssScore: 8.5,
     mitigationControlId: 'SEC-P00-CTRL-0018',
     owningModule: 'payments',
-    verificationTest:
-      'Constant-time HMAC-SHA512 verification, deduplication key, and timestamp tolerance',
+    verificationTest: 'Constant-time HMAC-SHA512 verification, deduplication key, and timestamp tolerance',
   },
   {
     vectorCode: 'FAIL_019_SUPPLY_CHAIN_COMPROMISE',
@@ -686,14 +542,7 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_01_INTERNET_TO_EDGE',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
     threatDescription: 'Compromised npm package pulls malicious script into build pipeline',
-    dreadScore: {
-      damage: 10,
-      reproducibility: 5,
-      exploitability: 6,
-      affectedUsers: 10,
-      discoverability: 5,
-      overall: 7.2,
-    },
+    dreadScore: { damage: 10, reproducibility: 5, exploitability: 6, affectedUsers: 10, discoverability: 5, overall: 7.2 },
     cvssScore: 8.8,
     mitigationControlId: 'SEC-P00-CTRL-0019',
     owningModule: 'infra',
@@ -706,14 +555,7 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_02_PAYMENT_TRANSACTIONS',
     threatDescription: 'Client attempts to activate mock payment gateway in production environment',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 10,
-      exploitability: 8,
-      affectedUsers: 10,
-      discoverability: 8,
-      overall: 9.0,
-    },
+    dreadScore: { damage: 9, reproducibility: 10, exploitability: 8, affectedUsers: 10, discoverability: 8, overall: 9.0 },
     cvssScore: 8.9,
     mitigationControlId: 'SEC-P00-CTRL-0020',
     owningModule: 'payments',
@@ -726,14 +568,7 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
     threatDescription: 'Attacker requests MD5, SHA1 or none algorithm in JWT header',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 7,
-      exploitability: 6,
-      affectedUsers: 9,
-      discoverability: 6,
-      overall: 7.4,
-    },
+    dreadScore: { damage: 9, reproducibility: 7, exploitability: 6, affectedUsers: 9, discoverability: 6, overall: 7.4 },
     cvssScore: 8.1,
     mitigationControlId: 'SEC-P00-CTRL-0021',
     owningModule: 'auth',
@@ -745,21 +580,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_05_SESSION_AUTH',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
-    threatDescription:
-      'Expired signing keys accepted after grace period or rotation breaks active sessions',
-    dreadScore: {
-      damage: 7,
-      reproducibility: 7,
-      exploitability: 6,
-      affectedUsers: 8,
-      discoverability: 5,
-      overall: 6.6,
-    },
+    threatDescription: 'Expired signing keys accepted after grace period or rotation breaks active sessions',
+    dreadScore: { damage: 7, reproducibility: 7, exploitability: 6, affectedUsers: 8, discoverability: 5, overall: 6.6 },
     cvssScore: 6.8,
     mitigationControlId: 'SEC-P00-CTRL-0022',
     owningModule: 'auth',
-    verificationTest:
-      'Dual-key overlap window validated; stale keys strictly rejected after expiry',
+    verificationTest: 'Dual-key overlap window validated; stale keys strictly rejected after expiry',
   },
   {
     vectorCode: 'FAIL_023_EXCESSIVE_SERVICE_PRIVILEGE',
@@ -768,19 +594,11 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_03_API_TO_DATABASE',
     targetAssetId: 'ASSET_01_PII_PASSPORT_CUSTOMER',
     threatDescription: 'Application DB user possesses SUPERUSER or DROP TABLE privileges',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 6,
-      exploitability: 5,
-      affectedUsers: 10,
-      discoverability: 5,
-      overall: 7.0,
-    },
+    dreadScore: { damage: 9, reproducibility: 6, exploitability: 5, affectedUsers: 10, discoverability: 5, overall: 7.0 },
     cvssScore: 7.5,
     mitigationControlId: 'SEC-P00-CTRL-0023',
     owningModule: 'db',
-    verificationTest:
-      'Database user restricted to CRUD on application tables; migrations use isolated role',
+    verificationTest: 'Database user restricted to CRUD on application tables; migrations use isolated role',
   },
   {
     vectorCode: 'FAIL_024_UNBOUNDED_DATA_EXPORT',
@@ -788,21 +606,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_03_ADMIN',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_01_PII_PASSPORT_CUSTOMER',
-    threatDescription:
-      'Compromised admin token exports full customer passport database in single call',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 8,
-      exploitability: 7,
-      affectedUsers: 10,
-      discoverability: 6,
-      overall: 8.0,
-    },
+    threatDescription: 'Compromised admin token exports full customer passport database in single call',
+    dreadScore: { damage: 9, reproducibility: 8, exploitability: 7, affectedUsers: 10, discoverability: 6, overall: 8.0 },
     cvssScore: 8.2,
     mitigationControlId: 'SEC-P00-CTRL-0024',
     owningModule: 'admin',
-    verificationTest:
-      'Pagination enforced with max limit=100; bulk export emits critical audit alert',
+    verificationTest: 'Pagination enforced with max limit=100; bulk export emits critical audit alert',
   },
   {
     vectorCode: 'FAIL_025_UNRESTRICTED_FILE_UPLOAD',
@@ -811,19 +620,11 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
     threatDescription: 'Uploading .php, .sh or .exe disguised as image in admin media manager',
-    dreadScore: {
-      damage: 10,
-      reproducibility: 8,
-      exploitability: 7,
-      affectedUsers: 10,
-      discoverability: 7,
-      overall: 8.4,
-    },
+    dreadScore: { damage: 10, reproducibility: 8, exploitability: 7, affectedUsers: 10, discoverability: 7, overall: 8.4 },
     cvssScore: 9.1,
     mitigationControlId: 'SEC-P00-CTRL-0025',
     owningModule: 'admin',
-    verificationTest:
-      'MIME magic byte verification, strict extension allowlist (.png, .jpg, .webp), no execution rights',
+    verificationTest: 'MIME magic byte verification, strict extension allowlist (.png, .jpg, .webp), no execution rights',
   },
   {
     vectorCode: 'FAIL_026_CONCURRENCY_RACE_CONDITION',
@@ -831,21 +632,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_04_TENANT_MUTATION',
     boundary: 'TB_03_API_TO_DATABASE',
     targetAssetId: 'ASSET_02_PAYMENT_TRANSACTIONS',
-    threatDescription:
-      'Simultaneous payment capture calls cause double fulfillment or negative stock',
-    dreadScore: {
-      damage: 8,
-      reproducibility: 8,
-      exploitability: 7,
-      affectedUsers: 8,
-      discoverability: 6,
-      overall: 7.4,
-    },
+    threatDescription: 'Simultaneous payment capture calls cause double fulfillment or negative stock',
+    dreadScore: { damage: 8, reproducibility: 8, exploitability: 7, affectedUsers: 8, discoverability: 6, overall: 7.4 },
     cvssScore: 7.7,
     mitigationControlId: 'SEC-P00-CTRL-0026',
     owningModule: 'orders',
-    verificationTest:
-      'Database row-level locking / atomic Prisma transaction with idempotency keys',
+    verificationTest: 'Database row-level locking / atomic Prisma transaction with idempotency keys',
   },
   {
     vectorCode: 'FAIL_027_ERROR_ORACLE_ENUMERATION',
@@ -854,14 +646,7 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_01_PII_PASSPORT_CUSTOMER',
     threatDescription: '"User not found" vs "Incorrect password" reveals valid email registrations',
-    dreadScore: {
-      damage: 5,
-      reproducibility: 10,
-      exploitability: 9,
-      affectedUsers: 7,
-      discoverability: 9,
-      overall: 8.0,
-    },
+    dreadScore: { damage: 5, reproducibility: 10, exploitability: 9, affectedUsers: 7, discoverability: 9, overall: 8.0 },
     cvssScore: 5.3,
     mitigationControlId: 'SEC-P00-CTRL-0027',
     owningModule: 'auth',
@@ -874,14 +659,7 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     boundary: 'TB_03_API_TO_DATABASE',
     targetAssetId: 'ASSET_05_AUDIT_LOG_TRAIL',
     threatDescription: 'Unbounded log storage exposes years of historical traveler data to breach',
-    dreadScore: {
-      damage: 6,
-      reproducibility: 7,
-      exploitability: 5,
-      affectedUsers: 8,
-      discoverability: 5,
-      overall: 6.2,
-    },
+    dreadScore: { damage: 6, reproducibility: 7, exploitability: 5, affectedUsers: 8, discoverability: 5, overall: 6.2 },
     cvssScore: 6.1,
     mitigationControlId: 'SEC-P00-CTRL-0028',
     owningModule: 'admin',
@@ -893,21 +671,12 @@ export const JAVAMIFI_ABUSE_CASES: AbuseCase[] = [
     surface: 'SURFACE_03_ADMIN',
     boundary: 'TB_02_EDGE_TO_API',
     targetAssetId: 'ASSET_04_ADMIN_CREDENTIALS_KEYS',
-    threatDescription:
-      'Responders cannot invalidate active compromised session or disable broken gateway',
-    dreadScore: {
-      damage: 9,
-      reproducibility: 6,
-      exploitability: 7,
-      affectedUsers: 9,
-      discoverability: 6,
-      overall: 7.4,
-    },
+    threatDescription: 'Responders cannot invalidate active compromised session or disable broken gateway',
+    dreadScore: { damage: 9, reproducibility: 6, exploitability: 7, affectedUsers: 9, discoverability: 6, overall: 7.4 },
     cvssScore: 8.2,
     mitigationControlId: 'SEC-P00-CTRL-0029',
     owningModule: 'admin',
-    verificationTest:
-      'Emergency revocation endpoints invalidate user tokens and toggle adapters dynamically',
+    verificationTest: 'Emergency revocation endpoints invalidate user tokens and toggle adapters dynamically',
   },
 ];
 
@@ -920,13 +689,7 @@ export const JAVAMIFI_CONTROLS: SecurityControl[] = JAVAMIFI_ABUSE_CASES.map((ac
   enforcedBy: ac.owningModule,
   disposition: 'PASS',
   evidenceReference: `TEST-SEC-P00-${String(idx + 1).padStart(4, '0')}`,
-  invariantEnforced: (idx % 4 === 0
-    ? 'INV-01'
-    : idx % 4 === 1
-      ? 'INV-02'
-      : idx % 4 === 2
-        ? 'INV-03'
-        : 'INV-04') as any,
+  invariantEnforced: (idx % 4 === 0 ? 'INV-01' : idx % 4 === 1 ? 'INV-02' : idx % 4 === 2 ? 'INV-03' : 'INV-04') as any,
 }));
 
 // ─────────────────────────────────────────────────────────────

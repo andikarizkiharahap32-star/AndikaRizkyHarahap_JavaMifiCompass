@@ -103,19 +103,11 @@ describe('SEC-P08: Privacy and Data Minimization', () => {
       const freshSession = new Date('2026-10-27T12:00:00Z'); // 12 hours old
       const oldSession = new Date('2026-10-25T00:00:00Z'); // 3 days old
 
-      const resFresh = evaluateRetentionSchedule(
-        freshSession,
-        'EPHEMERAL_CHECKOUT_SESSION',
-        referenceDate,
-      );
+      const resFresh = evaluateRetentionSchedule(freshSession, 'EPHEMERAL_CHECKOUT_SESSION', referenceDate);
       expect(resFresh.isExpired).toBe(false);
       expect(resFresh.actionRequired).toBe('RETAIN');
 
-      const resOld = evaluateRetentionSchedule(
-        oldSession,
-        'EPHEMERAL_CHECKOUT_SESSION',
-        referenceDate,
-      );
+      const resOld = evaluateRetentionSchedule(oldSession, 'EPHEMERAL_CHECKOUT_SESSION', referenceDate);
       expect(resOld.isExpired).toBe(true);
       expect(resOld.purgeEligible).toBe(true);
       expect(resOld.actionRequired).toBe('PURGE_PII');
@@ -125,19 +117,11 @@ describe('SEC-P08: Privacy and Data Minimization', () => {
       const withinSla = new Date('2026-09-01T00:00:00Z'); // ~57 days old
       const expiredSla = new Date('2026-06-01T00:00:00Z'); // ~149 days old
 
-      const resWithin = evaluateRetentionSchedule(
-        withinSla,
-        'SHIPPING_LOGISTICS_PII',
-        referenceDate,
-      );
+      const resWithin = evaluateRetentionSchedule(withinSla, 'SHIPPING_LOGISTICS_PII', referenceDate);
       expect(resWithin.isExpired).toBe(false);
       expect(resWithin.retentionLimitDays).toBe(90);
 
-      const resExpired = evaluateRetentionSchedule(
-        expiredSla,
-        'SHIPPING_LOGISTICS_PII',
-        referenceDate,
-      );
+      const resExpired = evaluateRetentionSchedule(expiredSla, 'SHIPPING_LOGISTICS_PII', referenceDate);
       expect(resExpired.isExpired).toBe(true);
       expect(resExpired.purgeEligible).toBe(true);
       expect(resExpired.actionRequired).toBe('PURGE_PII');

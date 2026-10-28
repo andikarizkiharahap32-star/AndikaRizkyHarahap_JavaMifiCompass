@@ -9,10 +9,7 @@ describe('Roadmap P35–P36 Diagnostic & Verification Audit', () => {
   const checkoutPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/checkout/page.tsx');
   const plannerWizardPath = path.join(rootDir, 'apps/web/src/components/PlannerWizard.tsx');
   const diningDiscoveryPath = path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx');
-  const restaurantModalPath = path.join(
-    rootDir,
-    'packages/ui/src/dining/RestaurantDetailModal.tsx',
-  );
+  const restaurantModalPath = path.join(rootDir, 'packages/ui/src/dining/RestaurantDetailModal.tsx');
   const buttonPrimitivePath = path.join(rootDir, 'packages/ui/src/primitives/Button.tsx');
   const globalsCssPath = path.join(rootDir, 'apps/web/src/app/globals.css');
   const typographyTokensPath = path.join(rootDir, 'packages/ui/src/tokens/typography.ts');

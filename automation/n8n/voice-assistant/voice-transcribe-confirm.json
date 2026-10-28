@@ -6,7 +6,10 @@
       "name": "Sticky - Purpose",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [-400, -120],
+      "position": [
+        -400,
+        -120
+      ],
       "parameters": {
         "content": "## Voice - Transcribe & Confirm\nPush-to-talk endpoint. Client taps to record, uploads one short clip, and gets the raw transcript back to **display, let the user edit or re-say, before anything is acted on** (ASR fails hardest on proper nouns - station names, romanized dish names, certifying-body initials like 'JHF'). Only after the client confirms does it call the `/voice/query` workflow.",
         "height": 260,
@@ -18,7 +21,10 @@
       "name": "Receive Audio",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-400, 160],
+      "position": [
+        -400,
+        160
+      ],
       "parameters": {
         "httpMethod": "POST",
         "path": "voice/transcribe",
@@ -32,7 +38,10 @@
       "name": "Validate Audio Input",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-160, 160],
+      "position": [
+        -160,
+        160
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -44,7 +53,10 @@
       "name": "IF - Valid Input",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [80, 160],
+      "position": [
+        80,
+        160
+      ],
       "parameters": {
         "conditions": {
           "options": {
@@ -72,7 +84,10 @@
       "name": "Speech-to-Text",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [320, 60],
+      "position": [
+        320,
+        60
+      ],
       "parameters": {
         "method": "POST",
         "url": "https://api.openai.com/v1/audio/transcriptions",
@@ -117,7 +132,10 @@
       "name": "Format Transcript Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [560, 60],
+      "position": [
+        560,
+        60
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -129,7 +147,10 @@
       "name": "Respond - Return Transcript",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [800, 60],
+      "position": [
+        800,
+        60
+      ],
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ $json }}",
@@ -143,7 +164,10 @@
       "name": "Build Invalid Input Response",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [320, 260],
+      "position": [
+        320,
+        260
+      ],
       "parameters": {
         "mode": "manual",
         "assignments": {
@@ -163,7 +187,10 @@
       "name": "Respond - Invalid Input",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [560, 260],
+      "position": [
+        560,
+        260
+      ],
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ $json }}",

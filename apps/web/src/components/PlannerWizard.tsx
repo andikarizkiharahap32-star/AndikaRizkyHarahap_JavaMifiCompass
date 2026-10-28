@@ -24,23 +24,18 @@ import {
 import dynamic from 'next/dynamic';
 import { SignalBadge, BreakEvenSchematicCard, Price } from '@javamifi/ui';
 import { calculatePlannerRecommendation } from '../../../api/src/modules/planner/planner.engine';
-import {
-  PlannerInput,
-  PlannerResult,
-  RecommendationOption,
-} from '../../../api/src/modules/planner/planner.types';
+import { PlannerInput, PlannerResult, RecommendationOption } from '../../../api/src/modules/planner/planner.types';
 import { cartStore } from '../lib/cart-store';
 import { usePlannerQuery, plannerParsers } from '../lib/planner-params';
 
 // Dynamic-import date picker (desktop only). Loaded on interaction or when idle (requestIdleCallback)
 const DynamicDesktopDatePicker = dynamic(
-  () =>
-    import('@javamifi/ui').then((mod) => {
-      return function DatePickerPlaceholder(props: any) {
-        return null;
-      };
-    }),
-  { ssr: false },
+  () => import('@javamifi/ui').then((mod) => {
+    return function DatePickerPlaceholder(props: any) {
+      return null;
+    };
+  }),
+  { ssr: false }
 );
 
 export const PlannerWizard = ({ locale }: { locale: string }) => {
@@ -65,9 +60,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
   const [travelerCount, setTravelerCount] = useState(4);
   const [deviceCount, setDeviceCount] = useState(4);
 
-  const [usageProfile, setUsageProfile] = useState<'LIGHT' | 'MODERATE' | 'HEAVY' | 'WORK'>(
-    'HEAVY',
-  );
+  const [usageProfile, setUsageProfile] = useState<'LIGHT' | 'MODERATE' | 'HEAVY' | 'WORK'>('HEAVY');
   const [esimCompatible, setEsimCompatible] = useState(true);
   const [needsVPN, setNeedsVPN] = useState(false);
   const [shareMode, setShareMode] = useState<'shared' | 'split'>('shared');
@@ -124,13 +117,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
         if (qPax.toLowerCase() === 'solo' || qPax === '1') {
           count = 1;
           tier = 'solo';
-        } else if (
-          qPax.toLowerCase() === 'duo' ||
-          qPax.toLowerCase() === 'couple' ||
-          qPax.toLowerCase() === 'family' ||
-          qPax === '2' ||
-          qPax === '4'
-        ) {
+        } else if (qPax.toLowerCase() === 'duo' || qPax.toLowerCase() === 'couple' || qPax.toLowerCase() === 'family' || qPax === '2' || qPax === '4') {
           count = Number(qPax) || 4;
           tier = 'keluarga';
         } else if (!isNaN(Number(qPax)) && Number(qPax) >= 5) {
@@ -179,10 +166,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
     try {
       const params = new URLSearchParams(window.location.search);
       params.set('dest', (destinations[0] || 'JP').toLowerCase());
-      params.set(
-        'pax',
-        travelerCount === 1 ? 'solo' : travelerCount <= 4 ? 'family' : travelerCount.toString(),
-      );
+      params.set('pax', travelerCount === 1 ? 'solo' : travelerCount <= 4 ? 'family' : travelerCount.toString());
       params.set('days', (computedDays || 7).toString());
       params.set('step', activeStep.toString());
       const newUrl = `${window.location.pathname}?${params.toString()}`;
@@ -193,65 +177,20 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
   }, [destinations, travelerCount, computedDays, activeStep]);
 
   const destinationOptions = [
-    {
-      code: 'JP',
-      name: 'Jepang',
-      highlight: 'Tokyo & Osaka • 2 Kota',
-      label: 'JP • Japan (Tokyo & Osaka • 2 Kota)',
-    },
-    {
-      code: 'CN',
-      name: 'China',
-      highlight: 'Shanghai & Beijing • Bypass VPN',
-      label: 'CN • China (Shanghai & Beijing • Bypass VPN)',
-    },
-    {
-      code: 'SA',
-      name: 'Arab Saudi',
-      highlight: 'Makkah & Madinah • Umrah / Haji',
-      label: 'SA • Saudi Arabia (Makkah & Madinah • Umrah / Haji)',
-    },
-    {
-      code: 'SG',
-      name: 'Singapura',
-      highlight: 'Changi Transit Hub',
-      label: 'SG • Singapore (Changi Hub)',
-    },
-    {
-      code: 'MY',
-      name: 'Malaysia',
-      highlight: 'Kuala Lumpur & Penang',
-      label: 'MY • Malaysia (Kuala Lumpur & Penang)',
-    },
-    {
-      code: 'TH',
-      name: 'Thailand',
-      highlight: 'Bangkok & Phuket',
-      label: 'TH • Thailand (Bangkok & Phuket)',
-    },
-    {
-      code: 'KR',
-      name: 'Korea Selatan',
-      highlight: 'Seoul & Busan',
-      label: 'KR • South Korea (Seoul & Busan)',
-    },
-    {
-      code: 'FR',
-      name: 'Eropa Schengen',
-      highlight: 'Paris & Wilayah Schengen',
-      label: 'FR • Europe Multi-Country (Schengen Area)',
-    },
+    { code: 'JP', name: 'Jepang', highlight: 'Tokyo & Osaka • 2 Kota', label: 'JP • Japan (Tokyo & Osaka • 2 Kota)' },
+    { code: 'CN', name: 'China', highlight: 'Shanghai & Beijing • Bypass VPN', label: 'CN • China (Shanghai & Beijing • Bypass VPN)' },
+    { code: 'SA', name: 'Arab Saudi', highlight: 'Makkah & Madinah • Umrah / Haji', label: 'SA • Saudi Arabia (Makkah & Madinah • Umrah / Haji)' },
+    { code: 'SG', name: 'Singapura', highlight: 'Changi Transit Hub', label: 'SG • Singapore (Changi Hub)' },
+    { code: 'MY', name: 'Malaysia', highlight: 'Kuala Lumpur & Penang', label: 'MY • Malaysia (Kuala Lumpur & Penang)' },
+    { code: 'TH', name: 'Thailand', highlight: 'Bangkok & Phuket', label: 'TH • Thailand (Bangkok & Phuket)' },
+    { code: 'KR', name: 'Korea Selatan', highlight: 'Seoul & Busan', label: 'KR • South Korea (Seoul & Busan)' },
+    { code: 'FR', name: 'Eropa Schengen', highlight: 'Paris & Wilayah Schengen', label: 'FR • Europe Multi-Country (Schengen Area)' },
   ];
 
   const filteredDestOptions = useMemo(() => {
     if (!destSearch.trim()) return destinationOptions;
     const q = destSearch.toLowerCase();
-    return destinationOptions.filter(
-      (d) =>
-        d.name.toLowerCase().includes(q) ||
-        d.code.toLowerCase().includes(q) ||
-        d.highlight.toLowerCase().includes(q),
-    );
+    return destinationOptions.filter((d) => d.name.toLowerCase().includes(q) || d.code.toLowerCase().includes(q) || d.highlight.toLowerCase().includes(q));
   }, [destSearch]);
 
   const currentDestObj = useMemo(() => {
@@ -262,10 +201,9 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
   const wifiEstPerDayTotal = 48000;
   const wifiPerPersonPerDay = Math.round(wifiEstPerDayTotal / Math.max(1, travelerCount));
   const esimEstPerDay = 35000;
-  const totalEstPrice =
-    travelerCount >= 2 && shareMode === 'shared'
-      ? wifiEstPerDayTotal * (computedDays || 7)
-      : esimEstPerDay * travelerCount * (computedDays || 7);
+  const totalEstPrice = travelerCount >= 2 && shareMode === 'shared'
+    ? wifiEstPerDayTotal * (computedDays || 7)
+    : esimEstPerDay * travelerCount * (computedDays || 7);
 
   // Announce price change with aria-live="polite"
   useEffect(() => {
@@ -362,8 +300,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
           Rencanakan Koneksi Wisata Mancanegara
         </h1>
         <p className="text-sm text-secondary break-words">
-          Algoritma titik impas transit membandingkan tarif harian Pocket WiFi vs kartu eSIM
-          terpisah berdasarkan rute destinasi dan rombongan Anda.
+          Algoritma titik impas transit membandingkan tarif harian Pocket WiFi vs kartu eSIM terpisah berdasarkan rute destinasi dan rombongan Anda.
         </p>
 
         {/* Mobile Progress Bar: Langkah X dari 4 */}
@@ -409,18 +346,15 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                       isCurrent
                         ? 'bg-primary text-on-primary ring-4 ring-sunken z-10'
                         : isDone
-                          ? 'bg-primary text-on-primary z-10'
-                          : 'bg-paper border-2 border-outline text-outline z-10'
+                        ? 'bg-primary text-on-primary z-10'
+                        : 'bg-paper border-2 border-outline text-outline z-10'
                     }`}
                     title={s.label}
                   >
                     {isDone ? '✓' : s.step}
                   </li>
                   {idx < 3 && (
-                    <li
-                      aria-hidden="true"
-                      className={`w-1.5 h-28 my-0.5 ${isDone ? 'bg-primary' : 'border-l-2 border-dashed border-outline'}`}
-                    />
+                    <li aria-hidden="true" className={`w-1.5 h-28 my-0.5 ${isDone ? 'bg-primary' : 'border-l-2 border-dashed border-outline'}`} />
                   )}
                 </React.Fragment>
               );
@@ -498,12 +432,8 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                             {isSel && <Check className="w-4 h-4 text-primary" />}
                           </div>
                           <div>
-                            <span className="text-xs font-bold text-primary block leading-tight">
-                              {opt.name}
-                            </span>
-                            <span className="text-xs text-outline block mt-0.5">
-                              {opt.highlight}
-                            </span>
+                            <span className="text-xs font-bold text-primary block leading-tight">{opt.name}</span>
+                            <span className="text-xs text-outline block mt-0.5">{opt.highlight}</span>
                           </div>
                         </button>
                       );
@@ -553,17 +483,10 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
 
             {/* Mobile Bottom-sheet List with Search Modal */}
             {mobileDestOpen && (
-              <div
-                className="fixed inset-0 z-50 bg-scrim flex flex-col justify-end"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Pilih Destinasi"
-              >
+              <div className="fixed inset-0 z-50 bg-scrim flex flex-col justify-end" role="dialog" aria-modal="true" aria-label="Pilih Destinasi">
                 <div className="bg-paper rounded-t-2xl p-4 max-h-screen flex flex-col gap-3 pb-safe-bottom-bar border-t border-paper-edge">
                   <div className="flex items-center justify-between border-b border-paper-edge pb-2">
-                    <h3 className="text-sm font-bold text-primary font-mono uppercase">
-                      Pilih Destinasi
-                    </h3>
+                    <h3 className="text-sm font-bold text-primary font-mono uppercase">Pilih Destinasi</h3>
                     <button
                       type="button"
                       onClick={() => setMobileDestOpen(false)}
@@ -601,14 +524,10 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                         }`}
                       >
                         <div>
-                          <span className="font-bold text-primary block">
-                            {opt.name} ({opt.code})
-                          </span>
+                          <span className="font-bold text-primary block">{opt.name} ({opt.code})</span>
                           <span className="text-xs text-outline font-normal">{opt.highlight}</span>
                         </div>
-                        {destinations.includes(opt.code) && (
-                          <Check className="w-4 h-4 text-primary" />
-                        )}
+                        {destinations.includes(opt.code) && <Check className="w-4 h-4 text-primary" />}
                       </button>
                     ))}
                   </div>
@@ -656,10 +575,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                     <div>
-                      <label
-                        htmlFor="start-date-input"
-                        className="block text-xs font-bold uppercase tracking-wider text-outline mb-1"
-                      >
+                      <label htmlFor="start-date-input" className="block text-xs font-bold uppercase tracking-wider text-outline mb-1">
                         Tanggal Berangkat (WIB)
                       </label>
                       <input
@@ -673,10 +589,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                       />
                     </div>
                     <div>
-                      <label
-                        htmlFor="end-date-input"
-                        className="block text-xs font-bold uppercase tracking-wider text-outline mb-1"
-                      >
+                      <label htmlFor="end-date-input" className="block text-xs font-bold uppercase tracking-wider text-outline mb-1">
                         Tanggal Pulang (Tiba di CGK)
                       </label>
                       <input
@@ -689,9 +602,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                         aria-invalid={isDateInvalid}
                         aria-describedby={isDateInvalid ? 'date-error' : undefined}
                         className={`w-full h-12 px-3.5 rounded-md border bg-surface text-primary text-sm font-mono font-medium tnum focus:outline-none ${
-                          isDateInvalid
-                            ? 'border-danger text-danger'
-                            : 'border-outline focus:border-primary'
+                          isDateInvalid ? 'border-danger text-danger' : 'border-outline focus:border-primary'
                         }`}
                       />
                     </div>
@@ -699,11 +610,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
 
                   {/* Inline Date Validation: return > depart */}
                   {isDateInvalid && dateBlurred && (
-                    <div
-                      id="date-error"
-                      role="alert"
-                      className="text-xs text-danger font-medium flex items-center gap-1.5 pt-1"
-                    >
+                    <div id="date-error" role="alert" className="text-xs text-danger font-medium flex items-center gap-1.5 pt-1">
                       <AlertTriangle className="w-3.5 h-3.5 text-danger shrink-0" />
                       <span>Tanggal pulang harus setelah tanggal berangkat</span>
                     </div>
@@ -712,9 +619,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                   {/* Live Duration: "7 hari · 6 malam" */}
                   <div className="flex items-center justify-between text-xs pt-1">
                     <span className="text-secondary font-medium">
-                      {startDate && endDate
-                        ? `${startDate} s/d ${endDate}`
-                        : 'Pilih rentang tanggal perjalanan'}
+                      {startDate && endDate ? `${startDate} s/d ${endDate}` : 'Pilih rentang tanggal perjalanan'}
                     </span>
                     {computedDays > 0 && (
                       <span className="px-2.5 py-1 rounded bg-sunken border border-paper-edge font-mono font-bold text-primary tnum">
@@ -751,8 +656,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                   Siapa & Berapa Banyak yang Terhubung?
                 </h2>
                 <p className="text-xs text-secondary mt-0.5">
-                  Pilih tipe rombongan. Untuk rombongan keluarga atau grup, atur jumlah gadget aktif
-                  untuk menghitung pembagian modem WiFi.
+                  Pilih tipe rombongan. Untuk rombongan keluarga atau grup, atur jumlah gadget aktif untuk menghitung pembagian modem WiFi.
                 </p>
               </div>
 
@@ -873,18 +777,11 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                   <strong>Estimasi terbaik saat ini:</strong>{' '}
                   {travelerCount >= 2 ? (
                     <>
-                      Garis WiFi <strong>[W]</strong> lebih hemat untuk rombongan {travelerCount}{' '}
-                      orang (~Rp {wifiEstPerDayTotal.toLocaleString('id-ID')}/hari (per perangkat) ={' '}
-                      <strong className="tnum">
-                        Rp {wifiPerPersonPerDay.toLocaleString('id-ID')} / orang / hari
-                      </strong>
-                      ).
+                      Garis WiFi <strong>[W]</strong> lebih hemat untuk rombongan {travelerCount} orang (~Rp {wifiEstPerDayTotal.toLocaleString('id-ID')}/hari (per perangkat) = <strong className="tnum">Rp {wifiPerPersonPerDay.toLocaleString('id-ID')} / orang / hari</strong>).
                     </>
                   ) : (
                     <>
-                      Garis eSIM <strong>[E]</strong> instan tanpa modem fisik (~Rp{' '}
-                      {esimEstPerDay.toLocaleString('id-ID')}/hari per orang) ideal untuk mobilitas
-                      mandiri.
+                      Garis eSIM <strong>[E]</strong> instan tanpa modem fisik (~Rp {esimEstPerDay.toLocaleString('id-ID')}/hari per orang) ideal untuk mobilitas mandiri.
                     </>
                   )}
                 </div>
@@ -904,10 +801,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label
-                    htmlFor="usage-profile-select"
-                    className="block text-xs font-bold uppercase tracking-wider text-outline mb-1.5"
-                  >
+                  <label htmlFor="usage-profile-select" className="block text-xs font-bold uppercase tracking-wider text-outline mb-1.5">
                     Gaya Pemakaian Data
                   </label>
                   <select
@@ -918,12 +812,8 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                   >
                     <option value="LIGHT">Ringan: Maps & Chatting (1 GB/hari)</option>
                     <option value="MODERATE">Standar: Sosmed, Story, Browsing (2-3 GB/hari)</option>
-                    <option value="HEAVY">
-                      Berat: Live Video & Streaming Musik (Unlimited FUP)
-                    </option>
-                    <option value="WORK">
-                      Kerja: Zoom Meeting & Tethering Laptop (High Speed Prioritas)
-                    </option>
+                    <option value="HEAVY">Berat: Live Video & Streaming Musik (Unlimited FUP)</option>
+                    <option value="WORK">Kerja: Zoom Meeting & Tethering Laptop (High Speed Prioritas)</option>
                   </select>
                 </div>
 
@@ -969,8 +859,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
               </div>
 
               <p className="text-xs text-secondary">
-                Jalankan kalkulasi berbasis aturan break-even untuk mendapatkan rekomendasi produk
-                koneksi paling hemat, garansi sinyal 100%, serta opsi pengambilan di Bandara CGK T3.
+                Jalankan kalkulasi berbasis aturan break-even untuk mendapatkan rekomendasi produk koneksi paling hemat, garansi sinyal 100%, serta opsi pengambilan di Bandara CGK T3.
               </p>
 
               <button
@@ -1009,33 +898,29 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
           <div className="space-y-3 text-xs">
             <div className="flex items-center justify-between">
               <span className="text-secondary">Rute Tujuan</span>
-              <span className="font-mono font-bold text-primary tnum">
-                CGK → {destinations.join(' & ')}
-              </span>
+              <span className="font-mono font-bold text-primary tnum">CGK → {destinations.join(' & ')}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-secondary">Jadwal</span>
-              <span className="font-mono font-medium text-primary tnum">
-                {startDate} s/d {endDate}
-              </span>
+              <span className="font-mono font-medium text-primary tnum">{startDate} s/d {endDate}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-secondary">Durasi</span>
-              <span className="font-mono font-bold text-primary tnum">
-                {computedDays} hari · {computedNights} malam
-              </span>
+              <span className="font-mono font-bold text-primary tnum">{computedDays} hari · {computedNights} malam</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-secondary">Rombongan</span>
-              <span className="font-mono font-bold text-primary tnum">
-                {travelerCount} Orang ({deviceCount} Gadget)
-              </span>
+              <span className="font-mono font-bold text-primary tnum">{travelerCount} Orang ({deviceCount} Gadget)</span>
             </div>
             <div className="pt-2 border-t border-paper-edge flex items-center justify-between price-crossfade">
               <span className="text-secondary font-medium">Estimasi Harian</span>
               <span className="font-mono font-extrabold text-primary text-sm tnum">
                 {/* Unified Price: Rp {wifiPerPersonPerDay}/orang/hari */}
-                <Price amountIdr={wifiPerPersonPerDay} unit="per-person-day" locale={locale} />
+                <Price
+                  amountIdr={wifiPerPersonPerDay}
+                  unit="per-person-day"
+                  locale={locale}
+                />
               </span>
             </div>
           </div>
@@ -1073,10 +958,10 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
               {isAddedToCart
                 ? 'Ditambahkan ✓'
                 : isCalculating
-                  ? 'Menghitung...'
-                  : result
-                    ? 'Tambah ke Keranjang'
-                    : 'Hitung Rekomendasi'}
+                ? 'Menghitung...'
+                : result
+                ? 'Tambah ke Keranjang'
+                : 'Hitung Rekomendasi'}
             </span>
           </button>
         </aside>
@@ -1127,7 +1012,9 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-warning m-0">
                   Pemberitahuan Firewall China (Great Firewall)
                 </h4>
-                <p className="text-xs text-warning mt-1">{result.destinationNotes.vpnAdvice}</p>
+                <p className="text-xs text-warning mt-1">
+                  {result.destinationNotes.vpnAdvice}
+                </p>
               </div>
             </div>
           )}
@@ -1175,9 +1062,7 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
                   totalCostIdr={result.recommendedOption.totalEstimatedPriceIdr}
                   comparisonSavingsPct={calculatedSavingsPct}
                   savingsAmountIdr={calculatedSavingsIdr}
-                  alternativeProductTitle={
-                    result.alternativeOptions[0]?.title || '4× eSIM Roaming Terpisah'
-                  }
+                  alternativeProductTitle={result.alternativeOptions[0]?.title || '4× eSIM Roaming Terpisah'}
                   alternativeTotalCostIdr={altCost}
                   breakEvenDayText={
                     result.breakEvenAnalysis?.crossOverGroupSize
@@ -1214,14 +1099,9 @@ export const PlannerWizard = ({ locale }: { locale: string }) => {
               <div className="text-right">
                 <span className="text-xs text-secondary block">Tarif Patungan Bersama</span>
                 <span className="text-2xl font-black text-primary font-mono tnum">
-                  Rp{' '}
-                  {Math.round(
-                    result.recommendedOption.totalEstimatedPriceIdr / splitCount,
-                  ).toLocaleString('id-ID')}
+                  Rp {Math.round(result.recommendedOption.totalEstimatedPriceIdr / splitCount).toLocaleString('id-ID')}
                 </span>
-                <span className="text-xs text-secondary block tnum">
-                  / orang / hari (total {result.tripDays} hari)
-                </span>
+                <span className="text-xs text-secondary block tnum">/ orang / hari (total {result.tripDays} hari)</span>
               </div>
             </div>
           )}

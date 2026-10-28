@@ -14,7 +14,7 @@ describe('Audit P0 Remediation Quality Gates', () => {
     // Card accepts savingsAmountIdr and renders dynamic hemat string
     expect(cardCode).toContain('savingsAmountIdr?: number;');
     expect(cardCode).toContain('savingsAmountIdr && savingsAmountIdr > 0');
-    expect(cardCode).toContain("Total Rp {totalCostIdr.toLocaleString('id-ID')}");
+    expect(cardCode).toContain('Total Rp {totalCostIdr.toLocaleString(\'id-ID\')}');
 
     // Wizard computes savings dynamically from leadCost and altCost
     expect(wizardCode).toContain('const calculatedSavingsIdr = Math.max(0, altCost - leadCost);');
@@ -32,15 +32,11 @@ describe('Audit P0 Remediation Quality Gates', () => {
     // Engine eliminates sloppy (s)
     expect(engineCode).not.toContain('traveler(s)');
     expect(engineCode).not.toContain('device(s)');
-    expect(engineCode).toContain(
-      "travelers === 1 ? '1 traveler' : `group of ${travelers} travelers`",
-    );
+    expect(engineCode).toContain('travelers === 1 ? \'1 traveler\' : `group of ${travelers} travelers`');
 
     // Wizard provides localized natural Indonesian route explanation
     expect(wizardCode).toContain('Sewa WiFi adalah pilihan #1 karena untuk rombongan');
-    expect(wizardCode).toContain(
-      'Cocok kalau kalian jalan bareng; jika sering berpencar, eSIM lebih aman.',
-    );
+    expect(wizardCode).toContain('Cocok kalau kalian jalan bareng; jika sering berpencar, eSIM lebih aman.');
   });
 
   it('P0-3: fixes "Seafood Halal Dekat Masjidil Haram" chip copy and assistant placeholder', () => {
@@ -62,10 +58,7 @@ describe('Audit P0 Remediation Quality Gates', () => {
   it('P0-4 & P0-7: Cart and Checkout handle demo mode guard, dates, fulfillment, and modem deposit', () => {
     const cartPath = path.join(rootDir, 'apps/web/src/app/[locale]/cart/page.tsx');
     const checkoutPath = path.join(rootDir, 'apps/web/src/app/[locale]/checkout/page.tsx');
-    const mockPaymentPath = path.join(
-      rootDir,
-      'apps/web/src/app/[locale]/checkout/mock-payment/page.tsx',
-    );
+    const mockPaymentPath = path.join(rootDir, 'apps/web/src/app/[locale]/checkout/mock-payment/page.tsx');
     const cartCode = fs.readFileSync(cartPath, 'utf8');
     const checkoutCode = fs.readFileSync(checkoutPath, 'utf8');
     const mockPaymentCode = fs.readFileSync(mockPaymentPath, 'utf8');
@@ -79,9 +72,7 @@ describe('Audit P0 Remediation Quality Gates', () => {
     expect(cartCode).toContain('Bandara CGK T3');
 
     // Conditional modem deposit
-    expect(cartCode).toContain(
-      "isWifi ? (isId ? 'Deposit Modem' : 'Device Deposit') : (isId ? 'Pengiriman' : 'Fulfillment')",
-    );
+    expect(cartCode).toContain('isWifi ? (isId ? \'Deposit Modem\' : \'Device Deposit\') : (isId ? \'Pengiriman\' : \'Fulfillment\')');
     expect(cartCode).toContain('100% Digital via QR');
 
     // Checkout explicit demo-mode banner guard and environment gate
@@ -118,7 +109,7 @@ describe('Audit P0 Remediation Quality Gates', () => {
     const modalCode = fs.readFileSync(modalPath, 'utf8');
 
     // Environment guard for DATA SIMULASI badge (Audit §7 Don't #12)
-    expect(cardCode).toContain("process.env.NODE_ENV !== 'production' && isSimulated");
+    expect(cardCode).toContain('process.env.NODE_ENV !== \'production\' && isSimulated');
 
     // Restaurant card: solid container with onError fallback and placeholder to avoid leaking broken alt text
     expect(cardCode).toContain('bg-sunken');
@@ -134,10 +125,7 @@ describe('Audit P0 Remediation Quality Gates', () => {
   it('Video Motion Governance: Lazy-loadable How It Works section, WCAG 2.2.2 pause control, zero hero LCP impact', () => {
     const pagePath = path.join(rootDir, 'apps/web/src/app/[locale]/page.tsx');
     const heroPath = path.join(rootDir, 'apps/web/src/components/DepartureBoardHero.tsx');
-    const videoSectionPath = path.join(
-      rootDir,
-      'apps/web/src/components/HowItWorksVideoSection.tsx',
-    );
+    const videoSectionPath = path.join(rootDir, 'apps/web/src/components/HowItWorksVideoSection.tsx');
     const pageCode = fs.readFileSync(pagePath, 'utf8');
     const heroCode = fs.readFileSync(heroPath, 'utf8');
     const videoSectionCode = fs.readFileSync(videoSectionPath, 'utf8');
@@ -163,15 +151,9 @@ describe('Audit P0 Remediation Quality Gates', () => {
     expect(videoSectionCode).toContain('/videos/captions-en.vtt');
 
     // Verify optimized public assets exist on disk
-    const posterExists = fs.existsSync(
-      path.join(rootDir, 'apps/web/public/videos/javamifi-compass-motion-poster.jpg'),
-    );
-    const mp4Exists = fs.existsSync(
-      path.join(rootDir, 'apps/web/public/videos/javamifi-compass-motion-optimized.mp4'),
-    );
-    const webmExists = fs.existsSync(
-      path.join(rootDir, 'apps/web/public/videos/javamifi-compass-motion-25s.webm'),
-    );
+    const posterExists = fs.existsSync(path.join(rootDir, 'apps/web/public/videos/javamifi-compass-motion-poster.jpg'));
+    const mp4Exists = fs.existsSync(path.join(rootDir, 'apps/web/public/videos/javamifi-compass-motion-optimized.mp4'));
+    const webmExists = fs.existsSync(path.join(rootDir, 'apps/web/public/videos/javamifi-compass-motion-25s.webm'));
     const vttIdExists = fs.existsSync(path.join(rootDir, 'apps/web/public/videos/captions-id.vtt'));
     const vttEnExists = fs.existsSync(path.join(rootDir, 'apps/web/public/videos/captions-en.vtt'));
 
@@ -182,9 +164,7 @@ describe('Audit P0 Remediation Quality Gates', () => {
     expect(vttEnExists).toBe(true);
 
     // Optimized MP4 is under 1MB as required by audit budget
-    const mp4Size = fs.statSync(
-      path.join(rootDir, 'apps/web/public/videos/javamifi-compass-motion-optimized.mp4'),
-    ).size;
+    const mp4Size = fs.statSync(path.join(rootDir, 'apps/web/public/videos/javamifi-compass-motion-optimized.mp4')).size;
     expect(mp4Size).toBeLessThan(1024 * 1024);
   });
 });

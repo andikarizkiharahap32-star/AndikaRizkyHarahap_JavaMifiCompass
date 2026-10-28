@@ -147,16 +147,11 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
         {thumbnail ? (
           <div className="w-full h-36 rounded overflow-hidden border border-paper-edge bg-sunken relative flex items-center justify-center">
             {/* Base branded station placeholder in solid container if image is loading or fails */}
-            <div
-              className="flex flex-col items-center justify-center gap-1.5 text-outline text-xs font-sans text-center px-4 select-none pointer-events-none"
-              aria-hidden="true"
-            >
+            <div className="flex flex-col items-center justify-center gap-1.5 text-outline text-xs font-sans text-center px-4 select-none pointer-events-none" aria-hidden="true">
               <div className="w-8 h-8 rounded bg-paper border border-paper-edge flex items-center justify-center shrink-0">
                 <UtensilsCrossed className="w-4 h-4 text-outline" />
               </div>
-              <span className="font-mono text-xs font-bold uppercase tracking-wider">
-                Dokumentasi Visual Tersedia di Lokasi
-              </span>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider">Dokumentasi Visual Tersedia di Lokasi</span>
             </div>
             <img
               src={thumbnail.url}
@@ -173,8 +168,8 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
               {thumbnail.type === 'STOREFRONT'
                 ? 'Fasad Depan'
                 : thumbnail.type === 'DISH'
-                  ? 'Menu Andalan'
-                  : 'Sertifikat'}
+                ? 'Menu Andalan'
+                : 'Sertifikat'}
             </div>
             {thumbnail.caption && (
               <div className="absolute bottom-0 inset-x-0 bg-primary/90 text-on-primary px-2.5 py-1 text-xs font-sans truncate pointer-events-none">
@@ -187,9 +182,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
             <div className="w-8 h-8 rounded bg-paper border border-paper-edge flex items-center justify-center shrink-0">
               <UtensilsCrossed className="w-4 h-4 text-outline" />
             </div>
-            <span className="font-mono text-xs font-bold uppercase tracking-wider">
-              Dokumentasi Visual Tersedia di Lokasi
-            </span>
+            <span className="font-mono text-xs font-bold uppercase tracking-wider">Dokumentasi Visual Tersedia di Lokasi</span>
           </div>
         )}
 
@@ -198,7 +191,9 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           <h3 className="text-base font-bold text-primary leading-snug m-0">
             {name}{' '}
             {nameOriginal && nameOriginal !== name && (
-              <span className="text-xs font-normal text-outline">({nameOriginal})</span>
+              <span className="text-xs font-normal text-outline">
+                ({nameOriginal})
+              </span>
             )}
           </h3>
         </div>
@@ -263,8 +258,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
         <div className="p-2.5 rounded bg-sunken border border-paper-edge text-xs font-sans text-secondary leading-snug flex items-start gap-1.5">
           <Info className="w-4 h-4 text-outline shrink-0 mt-0.5" />
           <p className="m-0">
-            Harap selalu konfirmasi status kehalalan bahan dan alat masak langsung ke staf restoran
-            sebelum memesan.
+            Harap selalu konfirmasi status kehalalan bahan dan alat masak langsung ke staf restoran sebelum memesan.
           </p>
         </div>
       </div>

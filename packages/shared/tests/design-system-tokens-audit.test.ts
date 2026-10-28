@@ -17,7 +17,10 @@ import {
   monoLabelTokens,
   fontPreloadTokens,
 } from '../../ui/src/tokens/typography';
-import { semanticColors, calculateContrastRatio } from '../../ui/src/tokens/semantics';
+import {
+  semanticColors,
+  calculateContrastRatio,
+} from '../../ui/src/tokens/semantics';
 
 describe('Design System Tokens Audit (Section 3)', () => {
   const rootDir = path.resolve(__dirname, '../../..');
@@ -153,68 +156,38 @@ describe('Design System Tokens Audit (Section 3)', () => {
 
     it('verifies all text/background pairs satisfy >= 4.5:1 (>= 3:1 for large/borders)', () => {
       // Light Mode Contrasts
-      const lightTextBg = calculateContrastRatio(
-        semanticColors.light.text,
-        semanticColors.light.bg,
-      );
+      const lightTextBg = calculateContrastRatio(semanticColors.light.text, semanticColors.light.bg);
       expect(lightTextBg).toBeGreaterThanOrEqual(4.5); // ~17:1
 
-      const lightMutedBg = calculateContrastRatio(
-        semanticColors.light.textMuted,
-        semanticColors.light.bg,
-      );
+      const lightMutedBg = calculateContrastRatio(semanticColors.light.textMuted, semanticColors.light.bg);
       expect(lightMutedBg).toBeGreaterThanOrEqual(4.5); // 7.1:1
 
-      const lightHalalSurface = calculateContrastRatio(
-        semanticColors.light.accentHalal,
-        semanticColors.light.surface,
-      );
+      const lightHalalSurface = calculateContrastRatio(semanticColors.light.accentHalal, semanticColors.light.surface);
       expect(lightHalalSurface).toBeGreaterThanOrEqual(4.5); // ~6.6:1
 
-      const lightWarning = calculateContrastRatio(
-        semanticColors.light.warning,
-        semanticColors.light.warningBg,
-      );
+      const lightWarning = calculateContrastRatio(semanticColors.light.warning, semanticColors.light.warningBg);
       expect(lightWarning).toBeGreaterThanOrEqual(4.5); // ~5.5:1
 
-      const lightDanger = calculateContrastRatio(
-        semanticColors.light.danger,
-        semanticColors.light.surface,
-      );
+      const lightDanger = calculateContrastRatio(semanticColors.light.danger, semanticColors.light.surface);
       expect(lightDanger).toBeGreaterThanOrEqual(4.5); // ~6.8:1
 
       // Dark Mode Contrasts
       const darkTextBg = calculateContrastRatio(semanticColors.dark.text, semanticColors.dark.bg);
       expect(darkTextBg).toBeGreaterThanOrEqual(4.5); // ~15.5:1
 
-      const darkMutedBg = calculateContrastRatio(
-        semanticColors.dark.textMuted,
-        semanticColors.dark.bg,
-      );
+      const darkMutedBg = calculateContrastRatio(semanticColors.dark.textMuted, semanticColors.dark.bg);
       expect(darkMutedBg).toBeGreaterThanOrEqual(4.5); // ~8.3:1
 
-      const darkBrandSurface = calculateContrastRatio(
-        semanticColors.dark.brand,
-        semanticColors.dark.surface,
-      );
+      const darkBrandSurface = calculateContrastRatio(semanticColors.dark.brand, semanticColors.dark.surface);
       expect(darkBrandSurface).toBeGreaterThanOrEqual(4.5); // ~7.8:1
 
-      const darkHalalSurface = calculateContrastRatio(
-        semanticColors.dark.accentHalal,
-        semanticColors.dark.surface,
-      );
+      const darkHalalSurface = calculateContrastRatio(semanticColors.dark.accentHalal, semanticColors.dark.surface);
       expect(darkHalalSurface).toBeGreaterThanOrEqual(4.5); // ~10.1:1
 
-      const darkWarning = calculateContrastRatio(
-        semanticColors.dark.warning,
-        semanticColors.dark.warningBg,
-      );
+      const darkWarning = calculateContrastRatio(semanticColors.dark.warning, semanticColors.dark.warningBg);
       expect(darkWarning).toBeGreaterThanOrEqual(4.5); // ~9.1:1
 
-      const darkDanger = calculateContrastRatio(
-        semanticColors.dark.danger,
-        semanticColors.dark.surface,
-      );
+      const darkDanger = calculateContrastRatio(semanticColors.dark.danger, semanticColors.dark.surface);
       expect(darkDanger).toBeGreaterThanOrEqual(4.5); // ~5.8:1
     });
 
@@ -222,11 +195,9 @@ describe('Design System Tokens Audit (Section 3)', () => {
       // Follows prefers-color-scheme first
       expect(navbarCode).toContain("window.matchMedia('(prefers-color-scheme: dark)').matches");
       // Reads cookie
-      expect(navbarCode).toContain('document.cookie.match(/(?:^|; )javamifi-theme=([^;]*)/)');
+      expect(navbarCode).toContain("document.cookie.match(/(?:^|; )javamifi-theme=([^;]*)/)");
       // Persists cookie on toggle with 1 year max-age and SameSite=Lax
-      expect(navbarCode).toContain(
-        'document.cookie = `javamifi-theme=${nextTheme}; path=/; max-age=31536000; SameSite=Lax`',
-      );
+      expect(navbarCode).toContain("document.cookie = `javamifi-theme=${nextTheme}; path=/; max-age=31536000; SameSite=Lax`");
     });
   });
 

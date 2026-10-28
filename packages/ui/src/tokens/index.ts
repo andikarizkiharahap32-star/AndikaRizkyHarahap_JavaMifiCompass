@@ -8,13 +8,7 @@ export * from './typography';
 export * from './halal-tiers';
 export * from './spacing';
 
-import {
-  transitLineTokens,
-  surfaceTokens,
-  inkTokens,
-  statusTokens,
-  borderTokens,
-} from './semantics';
+import { transitLineTokens, surfaceTokens, inkTokens, statusTokens, borderTokens } from './semantics';
 import { fontFamilies } from './typography';
 import { halalTierTokens } from './halal-tiers';
 import { spacingTokens, radiiTokens, motionTokens, zIndexTokens, elevationTokens } from './spacing';

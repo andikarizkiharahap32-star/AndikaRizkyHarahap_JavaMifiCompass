@@ -99,7 +99,7 @@ describe('6. Anti-Patterns & Pitfalls Governance Audit', () => {
     const globalsCssSrc = readComponent('apps/web/src/app/globals.css');
 
     it('implements size-adjust font fallbacks for Inter and Mono to prevent layout shifts', () => {
-      expect(globalsCssSrc).toContain('@font-face');
+      expect(globalsCssSrc).toContain("@font-face");
       expect(globalsCssSrc).toContain("font-family: 'Inter-Fallback'");
       expect(globalsCssSrc).toContain('size-adjust: 107%;');
       expect(globalsCssSrc).toContain("font-family: 'JetBrains-Mono-Fallback'");
@@ -125,7 +125,7 @@ describe('6. Anti-Patterns & Pitfalls Governance Audit', () => {
     it('attaches popstate event listener so browser back button steps through the wizard flow', () => {
       expect(plannerWizardSrc).toContain("window.addEventListener('popstate'");
       expect(plannerWizardSrc).toContain("window.removeEventListener('popstate'");
-      expect(plannerWizardSrc).toContain('setActiveStep');
+      expect(plannerWizardSrc).toContain("setActiveStep");
     });
   });
 

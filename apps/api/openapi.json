@@ -11,7 +11,9 @@
             "description": ""
           }
         },
-        "tags": ["health"]
+        "tags": [
+          "health"
+        ]
       }
     },
     "/health/live": {
@@ -24,7 +26,9 @@
             "description": ""
           }
         },
-        "tags": ["health"]
+        "tags": [
+          "health"
+        ]
       }
     },
     "/health/ready": {
@@ -37,7 +41,9 @@
             "description": ""
           }
         },
-        "tags": ["health"]
+        "tags": [
+          "health"
+        ]
       }
     },
     "/auth/register": {
@@ -50,7 +56,9 @@
             "description": ""
           }
         },
-        "tags": ["auth"]
+        "tags": [
+          "auth"
+        ]
       }
     },
     "/auth/login": {
@@ -63,7 +71,9 @@
             "description": ""
           }
         },
-        "tags": ["auth"]
+        "tags": [
+          "auth"
+        ]
       }
     },
     "/auth/refresh": {
@@ -76,7 +86,9 @@
             "description": ""
           }
         },
-        "tags": ["auth"]
+        "tags": [
+          "auth"
+        ]
       }
     },
     "/auth/me": {
@@ -89,7 +101,9 @@
             "description": ""
           }
         },
-        "tags": ["auth"],
+        "tags": [
+          "auth"
+        ],
         "security": [
           {
             "bearer": []
@@ -116,7 +130,9 @@
             "description": ""
           }
         },
-        "tags": ["catalog"]
+        "tags": [
+          "catalog"
+        ]
       }
     },
     "/catalog/destinations/{slug}": {
@@ -146,7 +162,9 @@
             "description": ""
           }
         },
-        "tags": ["catalog"]
+        "tags": [
+          "catalog"
+        ]
       }
     },
     "/catalog/products": {
@@ -168,7 +186,9 @@
             "description": ""
           }
         },
-        "tags": ["catalog"]
+        "tags": [
+          "catalog"
+        ]
       }
     },
     "/catalog/presets": {
@@ -190,7 +210,9 @@
             "description": ""
           }
         },
-        "tags": ["catalog"]
+        "tags": [
+          "catalog"
+        ]
       }
     },
     "/catalog/promos/validate": {
@@ -203,7 +225,9 @@
             "description": ""
           }
         },
-        "tags": ["catalog"]
+        "tags": [
+          "catalog"
+        ]
       }
     },
     "/planner/recommend": {
@@ -216,7 +240,9 @@
             "description": "Ranked options with explainable reasons"
           }
         },
-        "tags": ["planner"]
+        "tags": [
+          "planner"
+        ]
       }
     },
     "/orders": {
@@ -229,7 +255,9 @@
             "description": ""
           }
         },
-        "tags": ["orders"]
+        "tags": [
+          "orders"
+        ]
       },
       "get": {
         "operationId": "OrdersController_listOrders",
@@ -265,7 +293,9 @@
             "description": ""
           }
         },
-        "tags": ["orders"],
+        "tags": [
+          "orders"
+        ],
         "security": [
           {
             "bearer": []
@@ -283,7 +313,9 @@
             "description": ""
           }
         },
-        "tags": ["orders"]
+        "tags": [
+          "orders"
+        ]
       }
     },
     "/orders/{orderNumber}": {
@@ -305,7 +337,9 @@
             "description": ""
           }
         },
-        "tags": ["orders"]
+        "tags": [
+          "orders"
+        ]
       }
     },
     "/orders/{orderNumber}/refund": {
@@ -327,7 +361,9 @@
             "description": ""
           }
         },
-        "tags": ["orders"],
+        "tags": [
+          "orders"
+        ],
         "security": [
           {
             "bearer": []
@@ -354,7 +390,9 @@
             "description": ""
           }
         },
-        "tags": ["orders"]
+        "tags": [
+          "orders"
+        ]
       }
     },
     "/orders/{id}/status": {
@@ -376,7 +414,9 @@
             "description": ""
           }
         },
-        "tags": ["orders"],
+        "tags": [
+          "orders"
+        ],
         "security": [
           {
             "bearer": []
@@ -394,7 +434,9 @@
             "description": ""
           }
         },
-        "tags": ["payments"]
+        "tags": [
+          "payments"
+        ]
       }
     },
     "/payments/webhook/midtrans": {
@@ -407,7 +449,9 @@
             "description": ""
           }
         },
-        "tags": ["payments"]
+        "tags": [
+          "payments"
+        ]
       }
     },
     "/payments/mock/callback": {
@@ -420,7 +464,9 @@
             "description": ""
           }
         },
-        "tags": ["payments"]
+        "tags": [
+          "payments"
+        ]
       }
     },
     "/payments/webhook/stripe": {
@@ -450,7 +496,9 @@
             "description": ""
           }
         },
-        "tags": ["payments"]
+        "tags": [
+          "payments"
+        ]
       }
     },
     "/payments/ledger/{orderId}": {
@@ -472,7 +520,9 @@
             "description": ""
           }
         },
-        "tags": ["payments"],
+        "tags": [
+          "payments"
+        ],
         "security": [
           {
             "bearer": []
@@ -490,7 +540,9 @@
             "description": ""
           }
         },
-        "tags": ["fulfillment"],
+        "tags": [
+          "fulfillment"
+        ],
         "security": [
           {
             "bearer": []
@@ -508,7 +560,9 @@
             "description": ""
           }
         },
-        "tags": ["fulfillment"],
+        "tags": [
+          "fulfillment"
+        ],
         "security": [
           {
             "bearer": []
@@ -535,7 +589,9 @@
             "description": ""
           }
         },
-        "tags": ["fulfillment"],
+        "tags": [
+          "fulfillment"
+        ],
         "security": [
           {
             "bearer": []
@@ -553,7 +609,9 @@
             "description": ""
           }
         },
-        "tags": ["fulfillment"],
+        "tags": [
+          "fulfillment"
+        ],
         "security": [
           {
             "bearer": []
@@ -571,7 +629,9 @@
             "description": ""
           }
         },
-        "tags": ["fulfillment"],
+        "tags": [
+          "fulfillment"
+        ],
         "security": [
           {
             "bearer": []
@@ -598,7 +658,9 @@
             "description": "Destination Readiness Card data"
           }
         },
-        "tags": ["integrations"]
+        "tags": [
+          "integrations"
+        ]
       }
     },
     "/automation/callbacks/order-expired": {
@@ -628,7 +690,9 @@
             "description": ""
           }
         },
-        "tags": ["automation"]
+        "tags": [
+          "automation"
+        ]
       }
     },
     "/automation/callbacks/usage-alert": {
@@ -658,7 +722,9 @@
             "description": ""
           }
         },
-        "tags": ["automation"]
+        "tags": [
+          "automation"
+        ]
       }
     },
     "/automation/runs": {
@@ -688,7 +754,9 @@
             "description": ""
           }
         },
-        "tags": ["automation"],
+        "tags": [
+          "automation"
+        ],
         "security": [
           {
             "bearer": []
@@ -731,7 +799,9 @@
             "description": ""
           }
         },
-        "tags": ["automation"],
+        "tags": [
+          "automation"
+        ],
         "security": [
           {
             "bearer": []
@@ -758,7 +828,9 @@
             "description": ""
           }
         },
-        "tags": ["automation"],
+        "tags": [
+          "automation"
+        ],
         "security": [
           {
             "bearer": []
@@ -793,7 +865,9 @@
             "description": ""
           }
         },
-        "tags": ["content"]
+        "tags": [
+          "content"
+        ]
       }
     },
     "/content/faqs": {
@@ -823,7 +897,9 @@
             "description": ""
           }
         },
-        "tags": ["content"]
+        "tags": [
+          "content"
+        ]
       }
     },
     "/content/banners": {
@@ -853,7 +929,9 @@
             "description": ""
           }
         },
-        "tags": ["content"]
+        "tags": [
+          "content"
+        ]
       }
     },
     "/content/pages/{id}/publish": {
@@ -875,7 +953,9 @@
             "description": ""
           }
         },
-        "tags": ["content"],
+        "tags": [
+          "content"
+        ],
         "security": [
           {
             "bearer": []
@@ -893,7 +973,9 @@
             "description": ""
           }
         },
-        "tags": ["support"]
+        "tags": [
+          "support"
+        ]
       },
       "get": {
         "operationId": "SupportController_getTickets",
@@ -929,7 +1011,9 @@
             "description": ""
           }
         },
-        "tags": ["support"],
+        "tags": [
+          "support"
+        ],
         "security": [
           {
             "bearer": []
@@ -956,7 +1040,9 @@
             "description": ""
           }
         },
-        "tags": ["support"],
+        "tags": [
+          "support"
+        ],
         "security": [
           {
             "bearer": []
@@ -974,7 +1060,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -992,7 +1080,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"]
+        "tags": [
+          "admin"
+        ]
       }
     },
     "/admin/automation/runs/record-error": {
@@ -1005,7 +1095,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"]
+        "tags": [
+          "admin"
+        ]
       }
     },
     "/admin/devices": {
@@ -1027,7 +1119,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1054,7 +1148,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1097,7 +1193,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1115,7 +1213,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1133,7 +1233,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1149,7 +1251,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1176,7 +1280,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1194,7 +1300,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1212,7 +1320,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1230,7 +1340,9 @@
             "description": ""
           }
         },
-        "tags": ["admin"],
+        "tags": [
+          "admin"
+        ],
         "security": [
           {
             "bearer": []
@@ -1248,7 +1360,9 @@
             "description": "Countries with currency and venue counts"
           }
         },
-        "tags": ["Dining (Compass Rasa Public Discovery)"]
+        "tags": [
+          "Dining (Compass Rasa Public Discovery)"
+        ]
       }
     },
     "/v1/dining/rates": {
@@ -1261,7 +1375,9 @@
             "description": "FX conversion rates"
           }
         },
-        "tags": ["Dining (Compass Rasa Public Discovery)"]
+        "tags": [
+          "Dining (Compass Rasa Public Discovery)"
+        ]
       }
     },
     "/v1/dining/places": {
@@ -1293,7 +1409,11 @@
             "in": "query",
             "description": "HALAL, NON_HALAL, or ALL",
             "schema": {
-              "enum": ["HALAL", "NON_HALAL", "ALL"],
+              "enum": [
+                "HALAL",
+                "NON_HALAL",
+                "ALL"
+              ],
               "type": "string"
             }
           },
@@ -1330,7 +1450,11 @@
             "in": "query",
             "description": "Sort criteria",
             "schema": {
-              "enum": ["relevance", "rating", "distance"],
+              "enum": [
+                "relevance",
+                "rating",
+                "distance"
+              ],
               "type": "string"
             }
           },
@@ -1340,7 +1464,10 @@
             "in": "query",
             "description": "Sort direction",
             "schema": {
-              "enum": ["asc", "desc"],
+              "enum": [
+                "asc",
+                "desc"
+              ],
               "type": "string"
             }
           },
@@ -1366,7 +1493,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining (Compass Rasa Public Discovery)"]
+        "tags": [
+          "Dining (Compass Rasa Public Discovery)"
+        ]
       }
     },
     "/v1/dining/places/{id}": {
@@ -1391,7 +1520,9 @@
             "description": "Venue not found"
           }
         },
-        "tags": ["Dining (Compass Rasa Public Discovery)"]
+        "tags": [
+          "Dining (Compass Rasa Public Discovery)"
+        ]
       }
     },
     "/v1/dining/parse-intent": {
@@ -1404,7 +1535,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining (Compass Rasa Public Discovery)"]
+        "tags": [
+          "Dining (Compass Rasa Public Discovery)"
+        ]
       }
     },
     "/v1/dining/reports": {
@@ -1417,7 +1550,9 @@
             "description": "Report accepted into review queue"
           }
         },
-        "tags": ["Dining (Compass Rasa Public Discovery)"]
+        "tags": [
+          "Dining (Compass Rasa Public Discovery)"
+        ]
       }
     },
     "/v1/dining/orchestration/expiring-venues": {
@@ -1439,7 +1574,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining Automation & n8n"]
+        "tags": [
+          "Dining Automation & n8n"
+        ]
       }
     },
     "/v1/dining/orchestration/chat-webhook": {
@@ -1452,7 +1589,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining Automation & n8n"]
+        "tags": [
+          "Dining Automation & n8n"
+        ]
       }
     },
     "/v1/dining/admin/review-queue": {
@@ -1465,7 +1604,9 @@
             "description": "List of review items"
           }
         },
-        "tags": ["Dining Admin & Moderation"],
+        "tags": [
+          "Dining Admin & Moderation"
+        ],
         "security": [
           {
             "bearer": []
@@ -1492,7 +1633,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining Admin & Moderation"],
+        "tags": [
+          "Dining Admin & Moderation"
+        ],
         "security": [
           {
             "bearer": []
@@ -1510,7 +1653,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining Admin & Moderation"],
+        "tags": [
+          "Dining Admin & Moderation"
+        ],
         "security": [
           {
             "bearer": []
@@ -1528,7 +1673,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining Admin & Moderation"],
+        "tags": [
+          "Dining Admin & Moderation"
+        ],
         "security": [
           {
             "bearer": []
@@ -1546,7 +1693,9 @@
             "description": "Evaluation report summary with quality gate metrics"
           }
         },
-        "tags": ["Dining Admin & Moderation"],
+        "tags": [
+          "Dining Admin & Moderation"
+        ],
         "security": [
           {
             "bearer": []
@@ -1581,7 +1730,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining Automation & n8n"]
+        "tags": [
+          "Dining Automation & n8n"
+        ]
       }
     },
     "/v1/dining/enrich/simulate": {
@@ -1594,7 +1745,9 @@
             "description": ""
           }
         },
-        "tags": ["Dining Automation & n8n"]
+        "tags": [
+          "Dining Automation & n8n"
+        ]
       }
     }
   },

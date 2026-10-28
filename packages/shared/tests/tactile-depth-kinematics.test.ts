@@ -3,11 +3,17 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Tactile Depth Kinematics Governance (4-8px Lift, 150-200ms, Reduced Motion)', () => {
-  const homeDocPath = path.resolve(__dirname, '../../../design-system/pages/home.md');
-  const homePagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
+  const homeDocPath = path.resolve(
+    __dirname,
+    '../../../design-system/pages/home.md'
+  );
+  const homePagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
   const heroComponentPath = path.resolve(
     __dirname,
-    '../../../apps/web/src/components/DepartureBoardHero.tsx',
+    '../../../apps/web/src/components/DepartureBoardHero.tsx'
   );
 
   it('documents 4-8px lift, 150-200ms timing, reduced-motion fallback, and zero scroll hijack in home.md', () => {

@@ -1,8 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 describe('Stripe Mock API Payment Gateway Contract', () => {
-  // Synthetic placeholder assembled at runtime — never commit real-format Stripe keys.
-  const stripeSecretKey = ['sk', 'test', 'PLACEHOLDER'.repeat(4)].join('_');
+  const stripeSecretKey = ['sk', 'test', 'SYNTHETIC_MOCK_TEST_ONLY_TOKEN_NOT_A_REAL_KEY'].join('_');
 
   it('validates test API secret key format', () => {
     expect(stripeSecretKey.startsWith('sk_test_')).toBe(true);

@@ -80,7 +80,7 @@ export class AppTracer {
     options: {
       parentContext?: SpanContext | null;
       attributes?: Record<string, string | number | boolean>;
-    } = {},
+    } = {}
   ): Span {
     const traceId = options.parentContext?.traceId ?? generateTraceId();
     const spanId = generateSpanId();

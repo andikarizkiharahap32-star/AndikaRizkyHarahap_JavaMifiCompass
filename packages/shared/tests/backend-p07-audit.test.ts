@@ -32,41 +32,13 @@ describe('Backend and Workflows - P07: Error Model (RFC 9457)', () => {
 
   it('maps all standard AppError subclasses to their expected HTTP status codes', () => {
     const cases = [
-      {
-        err: new ValidationError(),
-        expectedStatus: 400,
-        expectedCode: ERROR_CODES.VALIDATION_FAILED,
-      },
-      {
-        err: new AuthenticationError(),
-        expectedStatus: 401,
-        expectedCode: ERROR_CODES.AUTHENTICATION_REQUIRED,
-      },
-      {
-        err: new ForbiddenError(),
-        expectedStatus: 403,
-        expectedCode: ERROR_CODES.FORBIDDEN_ACCESS,
-      },
-      {
-        err: new NotFoundError('Place', 'tokyo-ramen'),
-        expectedStatus: 404,
-        expectedCode: ERROR_CODES.RESOURCE_NOT_FOUND,
-      },
-      {
-        err: new ConflictError(),
-        expectedStatus: 409,
-        expectedCode: ERROR_CODES.RESOURCE_CONFLICT,
-      },
-      {
-        err: new RateLimitError(30),
-        expectedStatus: 429,
-        expectedCode: ERROR_CODES.RATE_LIMIT_EXCEEDED,
-      },
-      {
-        err: new InternalServerError(),
-        expectedStatus: 500,
-        expectedCode: ERROR_CODES.INTERNAL_SERVER_ERROR,
-      },
+      { err: new ValidationError(), expectedStatus: 400, expectedCode: ERROR_CODES.VALIDATION_FAILED },
+      { err: new AuthenticationError(), expectedStatus: 401, expectedCode: ERROR_CODES.AUTHENTICATION_REQUIRED },
+      { err: new ForbiddenError(), expectedStatus: 403, expectedCode: ERROR_CODES.FORBIDDEN_ACCESS },
+      { err: new NotFoundError('Place', 'tokyo-ramen'), expectedStatus: 404, expectedCode: ERROR_CODES.RESOURCE_NOT_FOUND },
+      { err: new ConflictError(), expectedStatus: 409, expectedCode: ERROR_CODES.RESOURCE_CONFLICT },
+      { err: new RateLimitError(30), expectedStatus: 429, expectedCode: ERROR_CODES.RATE_LIMIT_EXCEEDED },
+      { err: new InternalServerError(), expectedStatus: 500, expectedCode: ERROR_CODES.INTERNAL_SERVER_ERROR },
     ];
 
     for (const { err, expectedStatus, expectedCode } of cases) {
@@ -86,11 +58,8 @@ describe('Backend and Workflows - P07: Error Model (RFC 9457)', () => {
 
   it('strict security prohibition: strips stack traces and SQL queries from non-dev responses', () => {
     // Simulated raw database error with sensitive SQL query
-    const sqlError = new Error(
-      'syntax error at or near "SELECT password_hash FROM users" at line 1',
-    );
-    sqlError.stack =
-      'Error: syntax error at ...\n    at Client.query (/node_modules/pg/client.js:123)';
+    const sqlError = new Error('syntax error at or near "SELECT password_hash FROM users" at line 1');
+    sqlError.stack = 'Error: syntax error at ...\n    at Client.query (/node_modules/pg/client.js:123)';
 
     // In non-dev environment:
     const problem = formatProblemDetails(sqlError, 'corr_sec_test', false);

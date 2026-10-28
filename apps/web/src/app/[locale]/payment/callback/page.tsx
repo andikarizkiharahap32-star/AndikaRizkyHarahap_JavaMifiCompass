@@ -79,12 +79,12 @@ function PaymentCallbackContent({ locale }: { locale: string }) {
                 ? 'Pembayaran Berhasil Dikonfirmasi'
                 : 'Payment Confirmed'
               : isFailed
-                ? isId
-                  ? 'Pembayaran Dibatalkan / Gagal'
-                  : 'Payment Cancelled / Denied'
-                : isId
-                  ? 'Menunggu Konfirmasi Pembayaran'
-                  : 'Awaiting Settlement Confirmation'}
+              ? isId
+                ? 'Pembayaran Dibatalkan / Gagal'
+                : 'Payment Cancelled / Denied'
+              : isId
+              ? 'Menunggu Konfirmasi Pembayaran'
+              : 'Awaiting Settlement Confirmation'}
           </h1>
 
           <p className="text-xs text-outline font-medium">
@@ -93,12 +93,12 @@ function PaymentCallbackContent({ locale }: { locale: string }) {
                 ? `Pesanan Anda #${orderNumber} telah berhasil diverifikasi oleh server JavaMifi.`
                 : `Your order #${orderNumber} has been verified by the JavaMifi server.`
               : isFailed
-                ? isId
-                  ? 'Transaksi tidak dapat diselesaikan atau dibatalkan oleh pengguna.'
-                  : 'The transaction could not be completed or was cancelled.'
-                : isId
-                  ? 'Server sedang memproses bukti transfer atau QRIS settlement.'
-                  : 'The server is currently processing settlement validation.'}
+              ? isId
+                ? 'Transaksi tidak dapat diselesaikan atau dibatalkan oleh pengguna.'
+                : 'The transaction could not be completed or was cancelled.'
+              : isId
+              ? 'Server sedang memproses bukti transfer atau QRIS settlement.'
+              : 'The server is currently processing settlement validation.'}
           </p>
         </div>
 
@@ -108,7 +108,9 @@ function PaymentCallbackContent({ locale }: { locale: string }) {
             <span className="text-outline font-medium">
               {isId ? 'Nomor Pesanan:' : 'Order Number:'}
             </span>
-            <span className="font-mono font-bold text-primary tnum">#{orderNumber}</span>
+            <span className="font-mono font-bold text-primary tnum">
+              #{orderNumber}
+            </span>
           </div>
 
           <div className="flex items-center justify-between text-xs">
@@ -120,8 +122,8 @@ function PaymentCallbackContent({ locale }: { locale: string }) {
                 isSuccess
                   ? 'bg-success-surface text-success'
                   : isFailed
-                    ? 'bg-danger-surface text-danger'
-                    : 'bg-warning-surface text-warning'
+                  ? 'bg-danger-surface text-danger'
+                  : 'bg-warning-surface text-warning'
               }`}
             >
               {rawStatus}
@@ -148,9 +150,7 @@ function PaymentCallbackContent({ locale }: { locale: string }) {
                 onClick={() => router.push(`/${locale}/trip-hub/${orderNumber}`)}
                 className="w-full min-h-12 px-6 rounded bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary font-bold text-xs uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-2"
               >
-                <span>
-                  {isId ? 'Buka Tiket Perjalanan (Trip Hub)' : 'Open Trip Hub Boarding Pass'}
-                </span>
+                <span>{isId ? 'Buka Tiket Perjalanan (Trip Hub)' : 'Open Trip Hub Boarding Pass'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 

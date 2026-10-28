@@ -3,13 +3,22 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Meaningful Destination Photography & Next/Image Governance', () => {
-  const homeDocPath = path.resolve(__dirname, '../../../design-system/pages/home.md');
-  const homePagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
+  const homeDocPath = path.resolve(
+    __dirname,
+    '../../../design-system/pages/home.md'
+  );
+  const homePagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
   const destinationsPagePath = path.resolve(
     __dirname,
-    '../../../apps/web/src/app/[locale]/destinations/page.tsx',
+    '../../../apps/web/src/app/[locale]/destinations/page.tsx'
   );
-  const nextConfigPath = path.resolve(__dirname, '../../../apps/web/next.config.mjs');
+  const nextConfigPath = path.resolve(
+    __dirname,
+    '../../../apps/web/next.config.mjs'
+  );
 
   it('documents meaningful photography policy and ban on abstract art in home.md', () => {
     expect(fs.existsSync(homeDocPath)).toBe(true);

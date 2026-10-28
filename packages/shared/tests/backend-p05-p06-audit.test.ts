@@ -2,10 +2,7 @@ import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import { authz, type Subject } from '../../../apps/api/src/plugins/authz';
-import {
-  sessionService,
-  SESSION_CONSTANTS,
-} from '../../../apps/api/src/modules/session/session.service';
+import { sessionService, SESSION_CONSTANTS } from '../../../apps/api/src/modules/session/session.service';
 import {
   cursorPaginationQuerySchema,
   createPlaceBodySchema,
@@ -113,10 +110,7 @@ describe('Backend and Workflows - P06: API Conventions and Validation', () => {
     expect(tooHigh.success).toBe(false);
 
     // Rejects unexpected query keys (strict)
-    const unknownField = cursorPaginationQuerySchema.safeParse({
-      cursor: 'cur_123',
-      unexpected: 'bad',
-    });
+    const unknownField = cursorPaginationQuerySchema.safeParse({ cursor: 'cur_123', unexpected: 'bad' });
     expect(unknownField.success).toBe(false);
   });
 

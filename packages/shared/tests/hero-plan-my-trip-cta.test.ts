@@ -5,10 +5,16 @@ import * as path from 'path';
 describe('DepartureBoardHero "Plan my trip" CTA Verification', () => {
   const heroComponentPath = path.resolve(
     __dirname,
-    '../../../apps/web/src/components/DepartureBoardHero.tsx',
+    '../../../apps/web/src/components/DepartureBoardHero.tsx'
   );
-  const enMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/en.json');
-  const idMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/id.json');
+  const enMessagesPath = path.resolve(
+    __dirname,
+    '../../../apps/web/messages/en.json'
+  );
+  const idMessagesPath = path.resolve(
+    __dirname,
+    '../../../apps/web/messages/id.json'
+  );
 
   it('renders a visible "Plan my trip" CTA that routes to /planner', () => {
     const heroCode = fs.readFileSync(heroComponentPath, 'utf8');

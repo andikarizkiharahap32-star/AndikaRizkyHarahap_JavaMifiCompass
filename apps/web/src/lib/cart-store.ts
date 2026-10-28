@@ -43,9 +43,7 @@ function saveToLocalStorage(items: CartItem[]) {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    window.dispatchEvent(
-      new CustomEvent('javamifi-cart-updated', { detail: { count: items.length } }),
-    );
+    window.dispatchEvent(new CustomEvent('javamifi-cart-updated', { detail: { count: items.length } }));
   } catch (err) {
     console.warn('Failed to persist cart to localStorage', err);
   }
@@ -106,8 +104,7 @@ export const cartStore = {
       items: currentState.items.map((item) => {
         if (item.id === id) {
           const newDays = Math.max(1, durationDays);
-          const newTotal =
-            item.unitPriceIdr * newDays * (item.type === 'WIFI_RENTAL' ? 1 : item.travelerCount);
+          const newTotal = item.unitPriceIdr * newDays * (item.type === 'WIFI_RENTAL' ? 1 : item.travelerCount);
           return {
             ...item,
             durationDays: newDays,
@@ -145,10 +142,11 @@ export const cartStore = {
  * React hook for consuming cart store with SSR safe hydration.
  */
 export function useCart() {
-  const state = useSyncExternalStore(cartStore.subscribe, cartStore.getState, () => ({
-    items: [],
-    isHydrated: false,
-  }));
+  const state = useSyncExternalStore(
+    cartStore.subscribe,
+    cartStore.getState,
+    () => ({ items: [], isHydrated: false })
+  );
 
   useEffect(() => {
     cartStore.hydrate();

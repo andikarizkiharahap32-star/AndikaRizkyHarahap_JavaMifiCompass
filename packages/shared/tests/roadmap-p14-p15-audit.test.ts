@@ -87,8 +87,8 @@ describe('Roadmap P14–P15 Diagnostic & Verification Audit', () => {
 
       // Tabular numbers across order code, duration, traveler, subtotal, and total
       expect(receiptCode).toContain('tnum');
-      expect(receiptCode).toContain("subtotalIdr.toLocaleString('id-ID')");
-      expect(receiptCode).toContain("totalIdr.toLocaleString('id-ID')");
+      expect(receiptCode).toContain('subtotalIdr.toLocaleString(\'id-ID\')');
+      expect(receiptCode).toContain('totalIdr.toLocaleString(\'id-ID\')');
 
       // Numeric alignment and currency units
       expect(receiptCode).toContain('Rp');

@@ -1,7 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
-import { CanaryController, CanaryMetrics, canaryController } from '../../../infra/deploy/canary';
+import {
+  CanaryController,
+  CanaryMetrics,
+  canaryController,
+} from '../../../infra/deploy/canary';
 
 describe('Backend and Workflows - P24: CI/CD Pipeline & Progressive Delivery', () => {
   const ciWorkflowPath = path.resolve(__dirname, '../../../.github/workflows/ci.yml');

@@ -8,23 +8,11 @@ describe('Roadmap P25–P26 Diagnostic & Verification Audit', () => {
   // P25 & P26 Public Web Paths
   const diningDiscoveryPath = path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx');
   const checkoutPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/checkout/page.tsx');
-  const mockPaymentPagePath = path.join(
-    rootDir,
-    'apps/web/src/app/[locale]/checkout/mock-payment/page.tsx',
-  );
-  const mockPaymentSimulatorPath = path.join(
-    rootDir,
-    'apps/web/src/components/MockPaymentSimulator.tsx',
-  );
-  const tripHubPagePath = path.join(
-    rootDir,
-    'apps/web/src/app/[locale]/trip-hub/[orderNumber]/page.tsx',
-  );
+  const mockPaymentPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/checkout/mock-payment/page.tsx');
+  const mockPaymentSimulatorPath = path.join(rootDir, 'apps/web/src/components/MockPaymentSimulator.tsx');
+  const tripHubPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/trip-hub/[orderNumber]/page.tsx');
   const tripHubViewPath = path.join(rootDir, 'apps/web/src/components/TripHubView.tsx');
-  const tripBoardingPassPath = path.join(
-    rootDir,
-    'packages/ui/src/wayfinding/TripBoardingPass.tsx',
-  );
+  const tripBoardingPassPath = path.join(rootDir, 'packages/ui/src/wayfinding/TripBoardingPass.tsx');
 
   describe('P25: Search, Filters, and Discovery Controls (Primary Roadmap)', () => {
     it('verifies explicit query, filter, sort, and radius parameters in DiningDiscovery (TASK-01)', () => {
@@ -40,10 +28,10 @@ describe('Roadmap P25–P26 Diagnostic & Verification Audit', () => {
     it('verifies active filter display and live result count announcements (TASK-02)', () => {
       const discoveryCode = fs.readFileSync(diningDiscoveryPath, 'utf8');
 
-      expect(discoveryCode).toContain('role="status"');
-      expect(discoveryCode).toContain('aria-live="polite"');
-      expect(discoveryCode).toContain('places.length');
-      expect(discoveryCode).toContain('placesCount');
+      expect(discoveryCode).toContain("role=\"status\"");
+      expect(discoveryCode).toContain("aria-live=\"polite\"");
+      expect(discoveryCode).toContain("places.length");
+      expect(discoveryCode).toContain("placesCount");
     });
 
     it('verifies debounced user search input handling (TASK-03)', () => {

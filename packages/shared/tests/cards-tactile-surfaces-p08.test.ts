@@ -7,10 +7,7 @@ describe('P08 — Cards, Tactile Surfaces, and Content Density', () => {
   const cardPath = path.join(rootDir, 'packages/ui/src/primitives/Card.tsx');
   const restaurantCardPath = path.join(rootDir, 'packages/ui/src/dining/RestaurantCard.tsx');
   const boardingPassPath = path.join(rootDir, 'packages/ui/src/wayfinding/TripBoardingPass.tsx');
-  const receiptChitPath = path.join(
-    rootDir,
-    'packages/ui/src/wayfinding/PerforatedReceiptChit.tsx',
-  );
+  const receiptChitPath = path.join(rootDir, 'packages/ui/src/wayfinding/PerforatedReceiptChit.tsx');
 
   const cardSource = fs.readFileSync(cardPath, 'utf8');
   const restaurantCardSource = fs.readFileSync(restaurantCardPath, 'utf8');
@@ -19,13 +16,9 @@ describe('P08 — Cards, Tactile Surfaces, and Content Density', () => {
 
   it('P08-WS01 & WS02: Card Primitives and Tactile Lower Lip Borders', () => {
     // Card supports tactile variant definitions
-    expect(cardSource).toContain(
-      "card: 'bg-paper border border-paper-edge border-b-2 text-primary'",
-    );
+    expect(cardSource).toContain("card: 'bg-paper border border-paper-edge border-b-2 text-primary'");
     expect(cardSource).toContain("flat: 'bg-paper border border-paper-edge text-primary'");
-    expect(cardSource).toContain(
-      "raised: 'bg-paper border border-paper-edge border-b-4 text-primary'",
-    );
+    expect(cardSource).toContain("raised: 'bg-paper border border-paper-edge border-b-4 text-primary'");
     expect(cardSource).toContain("sunken: 'bg-sunken border border-paper-edge text-primary'");
 
     // Lower lip tactile borders
@@ -60,16 +53,12 @@ describe('P08 — Cards, Tactile Surfaces, and Content Density', () => {
 
     // Accessibility attributes in interactive mode
     expect(cardSource).toContain("role={isInteractive && !role ? 'button' : role}");
-    expect(cardSource).toContain(
-      'tabIndex={isInteractive && tabIndex === undefined ? 0 : tabIndex}',
-    );
+    expect(cardSource).toContain("tabIndex={isInteractive && tabIndex === undefined ? 0 : tabIndex}");
     expect(cardSource).toContain("e.key === 'Enter' || e.key === ' '");
   });
 
   it('P08-WS08: Disabled Card State Handling', () => {
-    expect(cardSource).toContain(
-      "disabledClasses = 'opacity-60 cursor-not-allowed pointer-events-none'",
-    );
+    expect(cardSource).toContain("disabledClasses = 'opacity-60 cursor-not-allowed pointer-events-none'");
     expect(cardSource).toContain('aria-disabled={disabled ? true : undefined}');
   });
 

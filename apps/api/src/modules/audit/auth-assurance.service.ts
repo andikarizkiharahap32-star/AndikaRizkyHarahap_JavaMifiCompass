@@ -103,10 +103,7 @@ export class AuthAssuranceService {
    * Validates step-up re-authentication freshness for sensitive mutations (INV-02).
    */
   validateReauthentication(lastAuthTimeMs: number): { fresh: boolean; elapsedSeconds: number } {
-    return validateReauthenticationFreshness(
-      lastAuthTimeMs,
-      DEFAULT_REAUTH_POLICY.maxReauthAgeSeconds,
-    );
+    return validateReauthenticationFreshness(lastAuthTimeMs, DEFAULT_REAUTH_POLICY.maxReauthAgeSeconds);
   }
 
   /**

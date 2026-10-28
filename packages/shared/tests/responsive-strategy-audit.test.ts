@@ -97,13 +97,13 @@ describe('Responsive Strategy & Decision-Compression Architecture Audit', () => 
     it('verifies mobile persistent bottom nav bar on <768px with Planner, Destinasi, Kuliner, Bantuan', () => {
       // Bottom nav is restricted to mobile (<768px, md:hidden)
       expect(navbarCode).toContain('md:hidden fixed bottom-0 inset-x-0 z-sticky');
-      expect(navbarCode).toContain('aria-label="Navigasi Bawah Mobile"');
+      expect(navbarCode).toContain("aria-label=\"Navigasi Bawah Mobile\"");
 
       // All 4 primary navigation routes present
-      expect(navbarCode).toContain('href: `/${currentLocale}/planner`');
-      expect(navbarCode).toContain('href: `/${currentLocale}/destinations`');
-      expect(navbarCode).toContain('href: `/${currentLocale}/dining`');
-      expect(navbarCode).toContain('href: `/${currentLocale}/support`');
+      expect(navbarCode).toContain("href: `/${currentLocale}/planner`");
+      expect(navbarCode).toContain("href: `/${currentLocale}/destinations`");
+      expect(navbarCode).toContain("href: `/${currentLocale}/dining`");
+      expect(navbarCode).toContain("href: `/${currentLocale}/support`");
 
       // Persistent Trip Planner bottom CTA bar on non-planner pages
       expect(navbarCode).toContain('Rencanakan Perjalanan (Trip Planner)');

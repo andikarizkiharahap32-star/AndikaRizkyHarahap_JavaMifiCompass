@@ -48,7 +48,10 @@ export class OrdersService {
     const planIdentifiers = dto.items.map((i) => i.planId);
     const plans = await this.prisma.plan.findMany({
       where: {
-        OR: [{ id: { in: planIdentifiers } }, { slug: { in: planIdentifiers } }],
+        OR: [
+          { id: { in: planIdentifiers } },
+          { slug: { in: planIdentifiers } },
+        ],
         isActive: true,
       },
       include: { product: true },
@@ -308,10 +311,7 @@ export class OrdersService {
         status: targetStatus,
         paidAt: targetStatus === 'PAID' ? new Date() : order.paidAt,
         completedAt: targetStatus === 'COMPLETED' ? new Date() : order.completedAt,
-        cancelledAt:
-          targetStatus === 'CANCELLED' || targetStatus === 'EXPIRED'
-            ? new Date()
-            : order.cancelledAt,
+        cancelledAt: targetStatus === 'CANCELLED' || targetStatus === 'EXPIRED' ? new Date() : order.cancelledAt,
         statusHistory: {
           create: {
             fromStatus: order.status,
@@ -355,9 +355,7 @@ export class OrdersService {
       (r) => r === 'SUPER_ADMIN' || r === 'ADMIN' || r === 'FINANCE',
     );
     if (!hasAdminPrivileges) {
-      throw new ForbiddenException(
-        'Refunds can only be processed by authorized Finance or Admin staff.',
-      );
+      throw new ForbiddenException('Refunds can only be processed by authorized Finance or Admin staff.');
     }
 
     const order = await this.prisma.order.findUnique({
@@ -368,9 +366,7 @@ export class OrdersService {
     if (!order) throw new NotFoundException(`Order ${orderNumber} not found`);
 
     if (order.status !== 'PAID' && order.status !== 'CANCELLED') {
-      throw new BadRequestException(
-        `Order ${orderNumber} in status ${order.status} is not eligible for refund`,
-      );
+      throw new BadRequestException(`Order ${orderNumber} in status ${order.status} is not eligible for refund`);
     }
 
     // 1. Create immutable refund ledger entry if payment exists

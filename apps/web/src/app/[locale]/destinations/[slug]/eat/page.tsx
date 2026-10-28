@@ -36,7 +36,11 @@ export default function DestinationEatPage({
 
   return (
     <main className="w-full bg-surface min-h-screen">
-      <DiningDiscovery initialCountry={countryCode} cityName={searchParams?.city} locale={locale} />
+      <DiningDiscovery
+        initialCountry={countryCode}
+        cityName={searchParams?.city}
+        locale={locale}
+      />
     </main>
   );
 }

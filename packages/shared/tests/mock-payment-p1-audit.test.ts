@@ -17,21 +17,15 @@ describe('PAY-P01 Audit: Payment Threat Model & Invariants', () => {
   describe('Trust Boundaries & Threat Invariants Model', () => {
     it('defines explicit trust boundaries separating untrusted client from authoritative server', () => {
       expect(PAYMENT_TRUST_BOUNDARIES.CLIENT_BROWSER).toBe('UNTRUSTED');
-      expect(PAYMENT_TRUST_BOUNDARIES.EXTERNAL_WEBHOOK).toBe(
-        'SEMI_TRUSTED_NEEDS_CRYPTO_VERIFICATION',
-      );
+      expect(PAYMENT_TRUST_BOUNDARIES.EXTERNAL_WEBHOOK).toBe('SEMI_TRUSTED_NEEDS_CRYPTO_VERIFICATION');
       expect(PAYMENT_TRUST_BOUNDARIES.SERVER_DATABASE).toBe('AUTHORITATIVE_SOURCE_OF_TRUTH');
     });
 
     it('documents all four primary threat model invariants (INV-01 to INV-04)', () => {
       expect(PAYMENT_THREAT_INVARIANTS.INV_01_NO_REAL_FUNDS).toContain('move real funds');
-      expect(PAYMENT_THREAT_INVARIANTS.INV_02_AUTHORITATIVE_STATE).toContain(
-        'authoritative server-side records',
-      );
+      expect(PAYMENT_THREAT_INVARIANTS.INV_02_AUTHORITATIVE_STATE).toContain('authoritative server-side records');
       expect(PAYMENT_THREAT_INVARIANTS.INV_03_REPLAY_AND_ORDERING).toContain('out-of-order events');
-      expect(PAYMENT_THREAT_INVARIANTS.INV_04_ENVIRONMENT_ISOLATION).toContain(
-        'isolated from production',
-      );
+      expect(PAYMENT_THREAT_INVARIANTS.INV_04_ENVIRONMENT_ISOLATION).toContain('isolated from production');
     });
   });
 
@@ -41,9 +35,7 @@ describe('PAY-P01 Audit: Payment Threat Model & Invariants', () => {
       expect(containsRealPaymentCredentials({ cvv: '123' })).toBe(true);
       expect(containsRealPaymentCredentials({ cvc: '999' })).toBe(true);
       expect(containsRealPaymentCredentials({ pan: '5424000011112222' })).toBe(true);
-      expect(containsRealPaymentCredentials({ syntheticToken: 'tok_mock_visa_success' })).toBe(
-        false,
-      );
+      expect(containsRealPaymentCredentials({ syntheticToken: 'tok_mock_visa_success' })).toBe(false);
     });
   });
 

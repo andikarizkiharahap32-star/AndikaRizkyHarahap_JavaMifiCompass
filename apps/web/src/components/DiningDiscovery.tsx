@@ -25,23 +25,21 @@ import {
 
 // Dynamic-import PlaceMap and ChatSheet loaded on interaction or when idle (requestIdleCallback)
 const DynamicPlaceMap = dynamic(
-  () =>
-    import('@javamifi/ui').then((mod) => {
-      return function PlaceMapLoader(props: any) {
-        return null;
-      };
-    }),
-  { ssr: false },
+  () => import('@javamifi/ui').then((mod) => {
+    return function PlaceMapLoader(props: any) {
+      return null;
+    };
+  }),
+  { ssr: false }
 );
 
 const DynamicChatSheet = dynamic(
-  () =>
-    import('@javamifi/ui').then((mod) => {
-      return function ChatSheetLoader(props: any) {
-        return null;
-      };
-    }),
-  { ssr: false },
+  () => import('@javamifi/ui').then((mod) => {
+    return function ChatSheetLoader(props: any) {
+      return null;
+    };
+  }),
+  { ssr: false }
 );
 import {
   Search,
@@ -136,14 +134,14 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
       setAiFeedbackMessage(
         locale === 'id'
           ? `✓ Parameter pencarian diperbarui otomatis: Wilayah ${parsed.country || selectedCountry}, Kuliner: ${parsed.cuisine || 'Semua'}, Radius: ${parsed.radiusKm || 5} km.`
-          : `✓ Search parameters updated: Region ${parsed.country || selectedCountry}, Cuisine: ${parsed.cuisine || 'All'}, Radius: ${parsed.radiusKm || 5} km.`,
+          : `✓ Search parameters updated: Region ${parsed.country || selectedCountry}, Cuisine: ${parsed.cuisine || 'All'}, Radius: ${parsed.radiusKm || 5} km.`
       );
     } catch (err) {
       console.warn('AI search error', err);
       setAiFeedbackMessage(
         locale === 'id'
           ? 'Gagal memproses pertanyaan. Silakan gunakan kata kunci lain.'
-          : 'Failed to process inquiry. Please try another keyword.',
+          : 'Failed to process inquiry. Please try another keyword.'
       );
     } finally {
       setIsAiSearching(false);
@@ -381,17 +379,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
         }
       })
       .finally(() => setLoading(false));
-  }, [
-    selectedCountry,
-    selectedCity,
-    cityName,
-    filterMode,
-    debouncedSearch,
-    radiusKm,
-    includeUnverified,
-    sortBy,
-    retryCount,
-  ]);
+  }, [selectedCountry, selectedCity, cityName, filterMode, debouncedSearch, radiusKm, includeUnverified, sortBy, retryCount]);
 
   // Open place detail modal
   const handleOpenPlace = (placeId: string) => {
@@ -406,7 +394,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
   };
 
   const selectedCountryObj = countries.find(
-    (c) => c.code.toUpperCase() === selectedCountry.toUpperCase(),
+    (c) => c.code.toUpperCase() === selectedCountry.toUpperCase()
   );
 
   const availableCities = useMemo(() => {
@@ -433,16 +421,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
     if (includeUnverified) count++;
     if (selectedCity) count++;
     return count;
-  }, [
-    searchQuery,
-    filterMode,
-    radiusKm,
-    selectedCountry,
-    initialCountry,
-    sortBy,
-    includeUnverified,
-    selectedCity,
-  ]);
+  }, [searchQuery, filterMode, radiusKm, selectedCountry, initialCountry, sortBy, includeUnverified, selectedCity]);
 
   const hasActiveFilters = Boolean(
     searchQuery ||
@@ -450,7 +429,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
     radiusKm !== 5 ||
     sortBy !== 'relevance' ||
     selectedCountry !== (initialCountry || 'JP') ||
-    includeUnverified,
+    includeUnverified
   );
 
   // Single unified data derivation for all dining metrics across hero banner, filter bar, and results list
@@ -466,9 +445,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
   }, [places]);
 
   return (
-    <div
-      className={`w-full ${embeddedMode ? '' : 'bg-surface min-h-screen py-8 text-primary overflow-x-hidden'}`}
-    >
+    <div className={`w-full ${embeddedMode ? '' : 'bg-surface min-h-screen py-8 text-primary overflow-x-hidden'}`}>
       <div className={`${embeddedMode ? '' : 'max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-6'}`}>
         {/* Top Feature Brand Banner */}
         {!embeddedMode && (
@@ -479,26 +456,11 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 <h1 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase tracking-tight m-0">
                   {t('title')}
                 </h1>
-                <p className="text-sm text-secondary font-medium m-0 mt-1">{t('subtitle')}</p>
+                <p className="text-sm text-secondary font-medium m-0 mt-1">
+                  {t('subtitle')}
+                </p>
                 <p className="text-xs text-outline font-sans mt-1 m-0 tnum break-words">
-                  {locale === 'id'
-                    ? 'Kurs harian per 26 Okt 2026'
-                    : 'Daily rates as of Oct 26, 2026'}
-                  : 1 JPY = Rp{' '}
-                  {new Intl.NumberFormat(locale === 'id' ? 'id-ID' : 'en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(104.5)}{' '}
-                  &bull; 1 SAR = Rp{' '}
-                  {new Intl.NumberFormat(locale === 'id' ? 'id-ID' : 'en-US', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  }).format(4220)}{' '}
-                  &bull; 1 SGD = Rp{' '}
-                  {new Intl.NumberFormat(locale === 'id' ? 'id-ID' : 'en-US', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  }).format(12150)}
+                  {locale === 'id' ? 'Kurs harian per 26 Okt 2026' : 'Daily rates as of Oct 26, 2026'}: 1 JPY = Rp {new Intl.NumberFormat(locale === 'id' ? 'id-ID' : 'en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(104.5)} &bull; 1 SAR = Rp {new Intl.NumberFormat(locale === 'id' ? 'id-ID' : 'en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(4220)} &bull; 1 SGD = Rp {new Intl.NumberFormat(locale === 'id' ? 'id-ID' : 'en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(12150)}
                 </p>
               </div>
             </div>
@@ -507,9 +469,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               <div className="flex items-center gap-2 bg-surface border border-paper-edge rounded px-3 py-2 text-xs font-sans text-primary">
                 <span className="w-2 h-2 rounded-full bg-success shrink-0" />
                 <span className="font-bold text-primary tnum">{diningStats.certified}</span>
-                <span>
-                  {locale === 'id' ? 'Tempat Kuliner Terverifikasi' : 'Verified Culinary Venues'}
-                </span>
+                <span>{locale === 'id' ? 'Tempat Kuliner Terverifikasi' : 'Verified Culinary Venues'}</span>
               </div>
               <div className="flex items-center gap-1.5 bg-surface border border-paper-edge rounded px-2.5 py-2 text-xs font-mono text-secondary">
                 <span className="text-xs uppercase font-bold text-outline">Data Footprint:</span>
@@ -563,9 +523,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             >
               <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
               <span>
-                Waktu Sholat {selectedCountryObj?.city || 'Kota'}:{' '}
-                <strong className="text-primary font-bold">Dzuhur 11:45</strong> (25 menit lagi) •
-                Ketuk selengkapnya {isPrayerTimesExpanded ? '▲' : '▼'}
+                Waktu Sholat {selectedCountryObj?.city || 'Kota'}: <strong className="text-primary font-bold">Dzuhur 11:45</strong> (25 menit lagi) • Ketuk selengkapnya {isPrayerTimesExpanded ? '▲' : '▼'}
               </span>
             </button>
           </div>
@@ -578,8 +536,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-primary" />
                 <h4 className="text-xs font-bold uppercase tracking-wider text-primary m-0">
-                  Jadwal Sholat Hari Ini — {selectedCountryObj?.city || 'Tokyo'},{' '}
-                  {selectedCountryObj?.name || 'Jepang'}
+                  Jadwal Sholat Hari Ini — {selectedCountryObj?.city || 'Tokyo'}, {selectedCountryObj?.name || 'Jepang'}
                 </h4>
               </div>
               <button
@@ -617,9 +574,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               </div>
             </div>
             <p className="text-xs text-secondary m-0">
-              Arah Kiblat dari {selectedCountryObj?.city || 'Tokyo'}:{' '}
-              <strong>293° Barat Laut</strong>. Waktu sholat dihitung berdasarkan koordinat
-              astronomis stasiun JavaMifi.
+              Arah Kiblat dari {selectedCountryObj?.city || 'Tokyo'}: <strong>293° Barat Laut</strong>. Waktu sholat dihitung berdasarkan koordinat astronomis stasiun JavaMifi.
             </p>
           </div>
         )}
@@ -633,8 +588,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   Estimasi Kebutuhan Kas Makan Rombongan (Trip Food Cash)
                 </h4>
                 <p className="text-xs text-secondary m-0 mt-0.5">
-                  Terkoneksi dengan konteks sewa pocket-WiFi & eSIM JavaMifi untuk{' '}
-                  {selectedCountryObj?.name || 'Tujuan'}.
+                  Terkoneksi dengan konteks sewa pocket-WiFi & eSIM JavaMifi untuk {selectedCountryObj?.name || 'Tujuan'}.
                 </p>
               </div>
               <span className="text-xs font-sans font-bold uppercase bg-paper px-2.5 py-1 rounded border border-paper-edge text-primary tnum">
@@ -708,9 +662,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
 
             <div className="pt-2 border-t border-paper-edge flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-secondary">
               <p className="m-0">
-                <strong>Catatan Pajak & Tunai:</strong> Di Jepang & Eropa, pajak 10–20% (VAT/内税)
-                sudah tercantum di menu. Kedai ramen tradisional & penjual tiket mesin umumnya{' '}
-                <strong>hanya menerima uang tunai (Cash Only)</strong>.
+                <strong>Catatan Pajak & Tunai:</strong> Di Jepang & Eropa, pajak 10–20% (VAT/内税) sudah tercantum di menu. Kedai ramen tradisional & penjual tiket mesin umumnya <strong>hanya menerima uang tunai (Cash Only)</strong>.
               </p>
             </div>
           </div>
@@ -731,11 +683,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </button>
 
             {/* List vs Map Toggle (List-first for slow networks) */}
-            <div
-              className="flex items-center bg-surface border border-paper-edge rounded p-1 min-h-12 shrink-0"
-              role="radiogroup"
-              aria-label="Mode Tampilan"
-            >
+            <div className="flex items-center bg-surface border border-paper-edge rounded p-1 min-h-12 shrink-0" role="radiogroup" aria-label="Mode Tampilan">
               <button
                 type="button"
                 role="radio"
@@ -770,11 +718,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           {/* Desktop Filter Grid (Inline on lg+) */}
           <div className="hidden lg:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 items-center">
             {/* 1. Halal / Non-Halal Segmented Control (52px Touch Height, horizontal scroll-snap on <480px) */}
-            <div
-              className="flex items-center bg-surface p-1 rounded border border-paper-edge min-h-12 min-w-0 segmented-control-snap"
-              role="group"
-              aria-label="Halal filter selection"
-            >
+            <div className="flex items-center bg-surface p-1 rounded border border-paper-edge min-h-12 min-w-0 segmented-control-snap" role="group" aria-label="Halal filter selection">
               <button
                 type="button"
                 onClick={() => setFilterMode('HALAL')}
@@ -826,9 +770,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 onChange={(e) => {
                   const newCountry = e.target.value;
                   setSelectedCountry(newCountry);
-                  const found = countries.find(
-                    (c) => c.code.toUpperCase() === newCountry.toUpperCase(),
-                  );
+                  const found = countries.find((c) => c.code.toUpperCase() === newCountry.toUpperCase());
                   if (found?.city && !cityName) {
                     setSelectedCity(found.city);
                   }
@@ -872,14 +814,8 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
 
             {/* 4. Radius Control (52px Height container, 48x48px touch targets & 8px gap) */}
-            <div
-              className="flex items-center justify-between gap-2 bg-surface border border-paper-edge rounded px-2 min-h-12 text-xs font-sans min-w-0 segmented-control-snap touch-target-gap"
-              role="group"
-              aria-label={t('topBar.radiusLabel')}
-            >
-              <span className="text-outline text-xs uppercase font-bold px-1 shrink-0">
-                {t('topBar.radiusLabel')}:
-              </span>
+            <div className="flex items-center justify-between gap-2 bg-surface border border-paper-edge rounded px-2 min-h-12 text-xs font-sans min-w-0 segmented-control-snap touch-target-gap" role="group" aria-label={t('topBar.radiusLabel')}>
+              <span className="text-outline text-xs uppercase font-bold px-1 shrink-0">{t('topBar.radiusLabel')}:</span>
               {[1, 2, 5, 10].map((r) => (
                 <button
                   key={r}
@@ -898,10 +834,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
 
             {/* 5. Natural Language Intent Search (52px Height with Cari Trigger and Clear Button) */}
-            <form
-              onSubmit={handleParseIntentSearch}
-              className="relative h-13 flex items-center min-w-0"
-            >
+            <form onSubmit={handleParseIntentSearch} className="relative h-13 flex items-center min-w-0">
               <Search className="w-4 h-4 text-outline absolute left-3 pointer-events-none" />
               <input
                 type="text"
@@ -942,26 +875,14 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   {selectedCountryObj?.name || selectedCountry}
                 </strong>{' '}
                 <span className="tnum">
-                  ({locale === 'id' ? 'Mata uang: ' : 'Currency: '}
-                  {selectedCountryObj?.currency || 'Lokal'}) •{' '}
-                  {locale === 'id' ? 'Cakupan: ' : 'Coverage: '}
-                  {diningStats.certified} {locale === 'id' ? 'terverifikasi resmi' : 'certified'}
-                  {diningStats.underAudit > 0
-                    ? `, ${diningStats.underAudit} ${locale === 'id' ? 'dalam proses audit' : 'under audit'}`
-                    : ''}{' '}
-                  ({diningStats.total}{' '}
-                  {locale === 'id' ? 'tempat di wilayah ini' : 'venues in this region'})
+                  ({locale === 'id' ? 'Mata uang: ' : 'Currency: '}{selectedCountryObj?.currency || 'Lokal'}) • {locale === 'id' ? 'Cakupan: ' : 'Coverage: '}{diningStats.certified} {locale === 'id' ? 'terverifikasi resmi' : 'certified'}{diningStats.underAudit > 0 ? `, ${diningStats.underAudit} ${locale === 'id' ? 'dalam proses audit' : 'under audit'}` : ''} ({diningStats.total} {locale === 'id' ? 'tempat di wilayah ini' : 'venues in this region'})
                 </span>
               </span>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
               {/* List vs Map Toggle (Desktop) */}
-              <div
-                className="flex items-center bg-surface border border-paper-edge rounded p-1 min-h-12"
-                role="radiogroup"
-                aria-label="Pilihan Tampilan Desktop"
-              >
+              <div className="flex items-center bg-surface border border-paper-edge rounded p-1 min-h-12" role="radiogroup" aria-label="Pilihan Tampilan Desktop">
                 <button
                   type="button"
                   role="radio"
@@ -1021,13 +942,8 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
 
           {/* Active Filter Chips Bar (P11-WS10, P11-WS11) */}
           {hasActiveFilters && (
-            <div
-              className="pt-2 border-t border-paper-edge flex flex-wrap items-center gap-2 text-xs"
-              aria-label="Filter aktif"
-            >
-              <span className="text-outline text-xs uppercase font-bold font-sans">
-                Filter Aktif:
-              </span>
+            <div className="pt-2 border-t border-paper-edge flex flex-wrap items-center gap-2 text-xs" aria-label="Filter aktif">
+              <span className="text-outline text-xs uppercase font-bold font-sans">Filter Aktif:</span>
               {searchQuery && (
                 <span className="inline-flex items-center gap-1 bg-surface border border-paper-edge rounded-full pl-3 pr-1 py-0.5 text-xs font-sans text-primary">
                   <span>Cari: &ldquo;{searchQuery}&rdquo;</span>
@@ -1082,9 +998,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               )}
               {sortBy !== 'relevance' && (
                 <span className="inline-flex items-center gap-1 bg-surface border border-paper-edge rounded-full pl-3 pr-1 py-0.5 text-xs font-sans text-primary">
-                  <span>
-                    Urutkan: {sortBy === 'rating' ? 'Rating Tertinggi' : 'Jarak Terdekat'}
-                  </span>
+                  <span>Urutkan: {sortBy === 'rating' ? 'Rating Tertinggi' : 'Jarak Terdekat'}</span>
                   <button
                     type="button"
                     onClick={() => setSortBy('relevance')}
@@ -1156,17 +1070,13 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
               <div className="space-y-4 text-xs font-sans">
                 {/* Halal mode */}
                 <div>
-                  <label className="block font-bold text-outline uppercase mb-1">
-                    Status Sertifikasi
-                  </label>
+                  <label className="block font-bold text-outline uppercase mb-1">Status Sertifikasi</label>
                   <div className="grid grid-cols-3 gap-2">
                     <button
                       type="button"
                       onClick={() => setFilterMode('HALAL')}
                       className={`min-h-12 px-2 rounded text-xs font-bold border transition ${
-                        filterMode === 'HALAL'
-                          ? 'bg-primary text-on-primary border-primary'
-                          : 'bg-surface text-primary border-outline'
+                        filterMode === 'HALAL' ? 'bg-primary text-on-primary border-primary' : 'bg-surface text-primary border-outline'
                       }`}
                     >
                       ✓ Halal
@@ -1175,9 +1085,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                       type="button"
                       onClick={() => setFilterMode('ALL')}
                       className={`min-h-12 px-2 rounded text-xs font-bold border transition ${
-                        filterMode === 'ALL'
-                          ? 'bg-primary text-on-primary border-primary'
-                          : 'bg-surface text-primary border-outline'
+                        filterMode === 'ALL' ? 'bg-primary text-on-primary border-primary' : 'bg-surface text-primary border-outline'
                       }`}
                     >
                       Semua
@@ -1186,9 +1094,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                       type="button"
                       onClick={() => setFilterMode('NON_HALAL')}
                       className={`min-h-12 px-2 rounded text-xs font-bold border transition ${
-                        filterMode === 'NON_HALAL'
-                          ? 'bg-danger text-on-primary border-danger'
-                          : 'bg-surface text-primary border-outline'
+                        filterMode === 'NON_HALAL' ? 'bg-danger text-on-primary border-danger' : 'bg-surface text-primary border-outline'
                       }`}
                     >
                       Non-Halal
@@ -1198,17 +1104,13 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
 
                 {/* Country */}
                 <div>
-                  <label className="block font-bold text-outline uppercase mb-1">
-                    {t('topBar.countryLabel')}
-                  </label>
+                  <label className="block font-bold text-outline uppercase mb-1">{t('topBar.countryLabel')}</label>
                   <select
                     value={selectedCountry}
                     onChange={(e) => {
                       const newCountry = e.target.value;
                       setSelectedCountry(newCountry);
-                      const found = countries.find(
-                        (c) => c.code.toUpperCase() === newCountry.toUpperCase(),
-                      );
+                      const found = countries.find((c) => c.code.toUpperCase() === newCountry.toUpperCase());
                       if (found?.city && !cityName) setSelectedCity(found.city);
                     }}
                     className="w-full min-h-12 px-3 rounded bg-surface border border-outline text-primary text-xs font-bold"
@@ -1223,9 +1125,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
 
                 {/* City */}
                 <div>
-                  <label className="block font-bold text-outline uppercase mb-1">
-                    {t('topBar.cityLabel')}
-                  </label>
+                  <label className="block font-bold text-outline uppercase mb-1">{t('topBar.cityLabel')}</label>
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
@@ -1242,9 +1142,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
 
                 {/* Radius */}
                 <div>
-                  <label className="block font-bold text-outline uppercase mb-1">
-                    {t('topBar.radiusLabel')}
-                  </label>
+                  <label className="block font-bold text-outline uppercase mb-1">{t('topBar.radiusLabel')}</label>
                   <div className="grid grid-cols-4 gap-2">
                     {[1, 2, 5, 10].map((r) => (
                       <button
@@ -1252,9 +1150,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                         type="button"
                         onClick={() => setRadiusKm(r)}
                         className={`min-h-12 rounded text-xs font-bold border transition tnum ${
-                          radiusKm === r
-                            ? 'bg-primary text-on-primary border-primary'
-                            : 'bg-surface text-primary border-outline'
+                          radiusKm === r ? 'bg-primary text-on-primary border-primary' : 'bg-surface text-primary border-outline'
                         }`}
                       >
                         {r} km
@@ -1285,9 +1181,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                     onChange={(e) => setIncludeUnverified(e.target.checked)}
                     className="w-4 h-4 rounded border-outline text-primary focus:ring-primary"
                   />
-                  <span className="text-xs text-primary font-bold">
-                    {t('topBar.includeUnverified')}
-                  </span>
+                  <span className="text-xs text-primary font-bold">{t('topBar.includeUnverified')}</span>
                 </label>
               </div>
 
@@ -1321,7 +1215,9 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             <h2 className="text-lg font-display font-bold text-primary m-0">
               {t('placesSectionTitle')}
             </h2>
-            <p className="text-xs text-secondary m-0 mt-0.5">{t('placesSectionSubtitle')}</p>
+            <p className="text-xs text-secondary m-0 mt-0.5">
+              {t('placesSectionSubtitle')}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold text-primary bg-surface px-2.5 py-1 rounded border border-paper-edge tnum">
@@ -1358,18 +1254,13 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </span>
           </div>
         ) : hasError && places.length === 0 ? (
-          <div
-            role="alert"
-            aria-live="assertive"
-            className="bg-paper border border-danger border-b-2 rounded p-8 sm:p-12 text-center space-y-4"
-          >
+          <div role="alert" aria-live="assertive" className="bg-paper border border-danger border-b-2 rounded p-8 sm:p-12 text-center space-y-4">
             <AlertCircle className="w-10 h-10 text-danger mx-auto mb-2" />
             <h4 className="text-base font-bold text-danger m-0">
               {t('status.errorTitle') || 'Gagal Memuat Data Kuliner'}
             </h4>
             <p className="text-xs text-secondary max-w-md mx-auto m-0 leading-relaxed">
-              {t('status.errorDesc') ||
-                'Terjadi kendala saat menghubungi server verifikasi. Silakan periksa koneksi atau coba lagi.'}
+              {t('status.errorDesc') || 'Terjadi kendala saat menghubungi server verifikasi. Silakan periksa koneksi atau coba lagi.'}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <button
@@ -1389,16 +1280,13 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
             </div>
           </div>
         ) : places.length === 0 ? (
-          <div
-            role="status"
-            aria-live="polite"
-            className="bg-paper border border-paper-edge border-b-2 rounded p-12 text-center space-y-4"
-          >
+          <div role="status" aria-live="polite" className="bg-paper border border-paper-edge border-b-2 rounded p-12 text-center space-y-4">
             <AlertCircle className="w-10 h-10 text-outline mx-auto opacity-60" />
-            <h4 className="text-base font-bold text-primary m-0">{t('status.empty')}</h4>
+            <h4 className="text-base font-bold text-primary m-0">
+              {t('status.empty')}
+            </h4>
             <p className="text-xs text-secondary max-w-md mx-auto m-0 leading-relaxed">
-              Tidak ada restoran yang memenuhi kriteria filter di area {selectedCountryObj?.name}.
-              Coba perluas radius pencarian atau gunakan filter Semua Menu.
+              Tidak ada restoran yang memenuhi kriteria filter di area {selectedCountryObj?.name}. Coba perluas radius pencarian atau gunakan filter Semua Menu.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <button
@@ -1431,10 +1319,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
         ) : (
           <div className="space-y-6">
             {hasError && (
-              <div
-                role="alert"
-                className="p-4 rounded bg-warning-surface border border-warning/40 text-warning flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-              >
+              <div role="alert" className="p-4 rounded bg-warning-surface border border-warning/40 text-warning flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <AlertCircle className="w-5 h-5 shrink-0" />
                   <span className="text-xs font-bold font-sans">
@@ -1466,13 +1351,10 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   <div>
                     <h3 className="text-base font-bold text-primary m-0 flex items-center gap-2">
                       <MapPin className="w-5 h-5 text-primary" />
-                      <span>
-                        Peta Waypoint Kuliner Halal — {selectedCountryObj?.name || 'Jepang'}
-                      </span>
+                      <span>Peta Waypoint Kuliner Halal — {selectedCountryObj?.name || 'Jepang'}</span>
                     </h3>
                     <p className="text-xs text-secondary m-0 mt-0.5">
-                      Mode Daftar-Pertama (List-First). Peta interaktif teroptimasi untuk jaringan
-                      seluler & koneksi offline.
+                      Mode Daftar-Pertama (List-First). Peta interaktif teroptimasi untuk jaringan seluler & koneksi offline.
                     </p>
                   </div>
                   <button
@@ -1488,12 +1370,9 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 {/* Map Canvas Visualizer */}
                 <div className="relative w-full h-80 sm:h-96 rounded bg-surface border border-paper-edge overflow-hidden p-4 flex flex-col justify-between">
                   <div className="bg-paper p-3 rounded border border-paper-edge max-w-xs text-xs space-y-1">
-                    <span className="font-bold text-primary block">
-                      Stasiun Transit & Radius {radiusKm} km
-                    </span>
+                    <span className="font-bold text-primary block">Stasiun Transit & Radius {radiusKm} km</span>
                     <span className="text-outline text-xs block tnum">
-                      Pusat: {selectedCity || selectedCountryObj?.city || 'Tokyo'} ({places.length}{' '}
-                      stasiun terdeteksi)
+                      Pusat: {selectedCity || selectedCountryObj?.city || 'Tokyo'} ({places.length} stasiun terdeteksi)
                     </span>
                   </div>
 
@@ -1510,9 +1389,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                           <span className="w-4 h-4 rounded-full bg-primary text-on-primary text-xs flex items-center justify-center font-bold">
                             {idx + 1}
                           </span>
-                          <span className="text-xs font-bold text-primary truncate">
-                            {place.name}
-                          </span>
+                          <span className="text-xs font-bold text-primary truncate">{place.name}</span>
                         </div>
                         <span className="text-xs text-outline block truncate mt-0.5">
                           {place.tier === 'CERTIFIED' ? '✓ Sertifikat resmi' : '▲ Dalam audit'}
@@ -1562,9 +1439,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                       sampleDishes={place.sampleDishes}
                       dietaryFlags={place.dietaryFlags}
                       isSimulated={place.isSimulated !== false}
-                      phraseCardLabel={
-                        locale === 'id' ? 'Kartu Tanya Mirin & Babi' : 'Mirin & Pork Dietary Card'
-                      }
+                      phraseCardLabel={locale === 'id' ? 'Kartu Tanya Mirin & Babi' : 'Mirin & Pork Dietary Card'}
                       onShowTaxiCard={() => setSelectedTaxiPlace(place)}
                       onShowPhraseCard={() => setIsPhraseCardOpen(true)}
                       onClick={() => handleOpenPlace(place.id)}
@@ -1573,8 +1448,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 ))}
                 {places.length > 50 && (
                   <div className="col-span-full p-3 rounded bg-surface border border-paper-edge text-center text-xs font-mono text-outline tnum">
-                    Menampilkan 50 dari {places.length} tempat &bull; Virtualisasi aktif untuk
-                    performa responsif
+                    Menampilkan 50 dari {places.length} tempat &bull; Virtualisasi aktif untuk performa responsif
                   </div>
                 )}
               </div>
@@ -1603,9 +1477,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 <span className="text-xs font-mono text-success font-semibold">Field Mask</span>
               </div>
               <p className="text-secondary text-xs m-0 leading-relaxed">
-                Data tempat, jam buka, dan rating diakses via Google Places API (New) dengan field
-                mask terverifikasi. Tidak melakukan scraping HTML Google Maps. Caching mematuhi
-                batas ToS Google (maks 30 hari untuk atribut tempat; ID tempat disimpan permanen).
+                Data tempat, jam buka, dan rating diakses via Google Places API (New) dengan field mask terverifikasi. Tidak melakukan scraping HTML Google Maps. Caching mematuhi batas ToS Google (maks 30 hari untuk atribut tempat; ID tempat disimpan permanen).
               </p>
             </div>
 
@@ -1615,28 +1487,17 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                 <span className="text-xs font-mono text-primary font-semibold">ODbL & CDLA</span>
               </div>
               <p className="text-secondary text-xs m-0 leading-relaxed">
-                Geodata dan tag{' '}
-                <code className="font-mono text-xs bg-paper px-1 rounded border border-paper-edge">
-                  diet:halal
-                </code>{' '}
-                bersumber dari <strong>OpenStreetMap (© OpenStreetMap contributors)</strong> dan{' '}
-                <strong>Overture Maps Foundation</strong>. Public Nominatim dibatasi (tidak
-                digunakan untuk bulk query).
+                Geodata dan tag <code className="font-mono text-xs bg-paper px-1 rounded border border-paper-edge">diet:halal</code> bersumber dari <strong>OpenStreetMap (© OpenStreetMap contributors)</strong> dan <strong>Overture Maps Foundation</strong>. Public Nominatim dibatasi (tidak digunakan untuk bulk query).
               </p>
             </div>
 
             <div className="p-3 rounded bg-surface border border-paper-edge space-y-1">
               <div className="font-bold text-primary flex items-center justify-between">
                 <span>Kurs Harian (Bukan Real-time FX)</span>
-                <span className="text-xs font-mono text-secondary font-semibold">
-                  Daily Banking
-                </span>
+                <span className="text-xs font-mono text-secondary font-semibold">Daily Banking</span>
               </div>
               <p className="text-secondary text-xs m-0 leading-relaxed">
-                Kurs harian diterbitkan setiap hari kerja dari European Central Bank (ECB) serta
-                fallback Bank Sentral (SAMA, CBUAE, CBE, Bank Al-Maghrib, CBC Taiwan, QCB). Jika
-                kurs tidak tersedia, sistem menampilkan status tidak tersedia tanpa menebak nilai
-                tukar.
+                Kurs harian diterbitkan setiap hari kerja dari European Central Bank (ECB) serta fallback Bank Sentral (SAMA, CBUAE, CBE, Bank Al-Maghrib, CBC Taiwan, QCB). Jika kurs tidak tersedia, sistem menampilkan status tidak tersedia tanpa menebak nilai tukar.
               </p>
             </div>
           </div>
@@ -1644,11 +1505,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
           <div className="p-3 rounded bg-sunken border border-paper-edge text-xs text-secondary leading-relaxed flex items-start gap-2">
             <ShieldCheck className="w-4 h-4 text-outline shrink-0 mt-0.5" />
             <p className="m-0">
-              <strong>Model Keamanan Chatbot:</strong> Input pencarian pengguna hanya dikonversi
-              oleh model bahasa menjadi parameter pencarian terstruktur (negara, kota, jenis
-              kuliner, batas anggaran, radius). Sistem backend deterministik yang mengeksekusi
-              pencarian fail-closed. AI tidak pernah menghasilkan klaim status halal dalam bentuk
-              teks bebas.
+              <strong>Model Keamanan Chatbot:</strong> Input pencarian pengguna hanya dikonversi oleh model bahasa menjadi parameter pencarian terstruktur (negara, kota, jenis kuliner, batas anggaran, radius). Sistem backend deterministik yang mengeksekusi pencarian fail-closed. AI tidak pernah menghasilkan klaim status halal dalam bentuk teks bebas.
             </p>
           </div>
         </div>
@@ -1698,9 +1555,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   <CheckCircle2 className="w-8 h-8 text-success mx-auto" />
                   <h4 className="text-sm font-bold text-success m-0">Laporan Berhasil Diterima</h4>
                   <p className="text-xs text-primary m-0">
-                    Nomor Tiket Review:{' '}
-                    <strong className="font-mono">{reportSuccessReceipt}</strong>. Tim verifikasi
-                    akan mengaudit bukti ini dalam 1×24 jam.
+                    Nomor Tiket Review: <strong className="font-mono">{reportSuccessReceipt}</strong>. Tim verifikasi akan mengaudit bukti ini dalam 1×24 jam.
                   </p>
                 </div>
               ) : (
@@ -1718,24 +1573,18 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-bold text-primary mb-1">Alasan Pelaporan:</label>
+                    <label className="block font-bold text-primary mb-1">
+                      Alasan Pelaporan:
+                    </label>
                     <select
                       value={reportReason}
                       onChange={(e) => setReportReason(e.target.value)}
                       className="w-full h-10 px-3 rounded bg-surface border border-outline text-primary font-semibold"
                     >
-                      <option value="PORK_DETECTED">
-                        Menemukan menu olahan babi (Pork detected)
-                      </option>
-                      <option value="ALCOHOL_SERVED">
-                        Menyajikan minuman beralkohol tanpa pemisahan
-                      </option>
-                      <option value="CERTIFICATE_EXPIRED">
-                        Sertifikat halal kedaluwarsa atau tidak valid
-                      </option>
-                      <option value="CROSS_CONTAMINATION">
-                        Peralatan masak bercampur dengan non-halal
-                      </option>
+                      <option value="PORK_DETECTED">Menemukan menu olahan babi (Pork detected)</option>
+                      <option value="ALCOHOL_SERVED">Menyajikan minuman beralkohol tanpa pemisahan</option>
+                      <option value="CERTIFICATE_EXPIRED">Sertifikat halal kedaluwarsa atau tidak valid</option>
+                      <option value="CROSS_CONTAMINATION">Peralatan masak bercampur dengan non-halal</option>
                       <option value="OTHER">Lainnya (Perubahan kepemilikan / menu baru)</option>
                     </select>
                   </div>
@@ -1912,7 +1761,9 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                       <span className="text-xs font-mono font-bold uppercase tracking-wider px-1.5 py-0.2 rounded bg-surface border border-paper-edge text-primary">
                         Tanya AI
                       </span>
-                      <span className="text-xs text-outline font-mono">Fail-Closed Engine</span>
+                      <span className="text-xs text-outline font-mono">
+                        Fail-Closed Engine
+                      </span>
                     </div>
                     <h3 className="text-sm font-bold text-primary mt-0.5">
                       {locale === 'id' ? 'Asisten Cerdas Navigasi Halal' : 'Halal Dining Concierge'}
@@ -1944,15 +1795,9 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {[
-                      {
-                        label: 'Ramen Halal Tokyo < ¥2.000',
-                        query: 'ramen halal tokyo under 2000 yen',
-                      },
+                      { label: 'Ramen Halal Tokyo < ¥2.000', query: 'ramen halal tokyo under 2000 yen' },
                       { label: 'Wagyu Halal Bersertifikat', query: 'wagyu certified halal' },
-                      {
-                        label: 'Seafood Halal Dekat Masjidil Haram',
-                        query: 'seafood halal masjidil haram mecca',
-                      },
+                      { label: 'Seafood Halal Dekat Masjidil Haram', query: 'seafood halal masjidil haram mecca' },
                       { label: 'Sisa Waktu Paket Saya', query: 'sisa waktu paket saya' },
                     ].map((preset, idx) => (
                       <button
@@ -1995,7 +1840,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                       disabled={isAiSearching}
                       className="absolute right-0 top-0 min-h-12 h-12 px-4 rounded-r bg-primary hover:bg-primary-hover text-on-primary font-bold text-xs uppercase transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     >
-                      {isAiSearching ? '...' : locale === 'id' ? 'Kirim' : 'Send'}
+                      {isAiSearching ? '...' : (locale === 'id' ? 'Kirim' : 'Send')}
                     </button>
                   </div>
                 </form>
@@ -2009,11 +1854,7 @@ export const DiningDiscovery: React.FC<DiningDiscoveryProps> = ({
                       onClick={() => setIsAiConciergeOpen(false)}
                       className="inline-flex items-center gap-1 font-bold text-xs uppercase text-primary underline"
                     >
-                      <span>
-                        {locale === 'id'
-                          ? 'Lihat Restoran di Halaman'
-                          : 'View Matching Restaurants'}
-                      </span>
+                      <span>{locale === 'id' ? 'Lihat Restoran di Halaman' : 'View Matching Restaurants'}</span>
                     </button>
                   </div>
                 )}

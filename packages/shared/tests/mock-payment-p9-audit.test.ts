@@ -49,7 +49,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       delete process.env.ALLOW_MOCK_PAYMENT;
 
       expect(() => guard.assertMockAllowed()).toThrow(
-        'Mock payment simulation is strictly disabled in production environments',
+        'Mock payment simulation is strictly disabled in production environments'
       );
     });
 
@@ -60,19 +60,19 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       expect(() =>
         guard.assertMockAllowed({
           queryParams: { mock: 'true' },
-        }),
+        })
       ).toThrow('Activating mock payment via client query parameters is strictly prohibited');
 
       expect(() =>
         guard.assertMockAllowed({
           queryParams: { isMock: '1' },
-        }),
+        })
       ).toThrow('Activating mock payment via client query parameters is strictly prohibited');
 
       expect(() =>
         guard.assertMockAllowed({
           queryParams: { mode: 'mock' },
-        }),
+        })
       ).toThrow('Activating mock payment via client query parameters is strictly prohibited');
     });
 
@@ -83,13 +83,13 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       expect(() =>
         guard.assertMockAllowed({
           headers: { 'x-mock-mode': '1' },
-        }),
+        })
       ).toThrow('Activating mock payment via client request headers is strictly prohibited');
 
       expect(() =>
         guard.assertMockAllowed({
           headers: { 'x-payment-mode': 'mock' },
-        }),
+        })
       ).toThrow('Activating mock payment via client request headers is strictly prohibited');
     });
 
@@ -109,7 +109,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       };
       expect(containsRealPaymentCredentials(payload)).toBe(true);
       expect(() => guard.validateSyntheticCredentials(payload)).toThrow(
-        'Real payment credentials (PAN/CVV) are strictly prohibited',
+        'Real payment credentials (PAN/CVV) are strictly prohibited'
       );
     });
 
@@ -119,7 +119,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       };
       expect(containsRealPaymentCredentials(payload)).toBe(true);
       expect(() => guard.validateSyntheticCredentials(payload)).toThrow(
-        'Real payment credentials (PAN/CVV) are strictly prohibited',
+        'Real payment credentials (PAN/CVV) are strictly prohibited'
       );
     });
 
@@ -129,7 +129,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       };
       expect(containsRealPaymentCredentials(payload)).toBe(true);
       expect(() => guard.validateSyntheticCredentials(payload)).toThrow(
-        'Real payment credentials (PAN/CVV) are strictly prohibited',
+        'Real payment credentials (PAN/CVV) are strictly prohibited'
       );
     });
 
@@ -139,7 +139,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       };
       expect(containsRealPaymentCredentials(payload)).toBe(true);
       expect(() => guard.validateSyntheticCredentials(payload)).toThrow(
-        'Real payment credentials (PAN/CVV) are strictly prohibited',
+        'Real payment credentials (PAN/CVV) are strictly prohibited'
       );
     });
 
@@ -157,7 +157,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
         syntheticToken: 'live_token_abc123',
       };
       expect(() => guard.validateSyntheticCredentials(payload)).toThrow(
-        'Synthetic tokens must start with "tok_mock_"',
+        'Synthetic tokens must start with "tok_mock_"'
       );
     });
   });
@@ -179,9 +179,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       expect(res3.detected).toBe(true);
       expect(res3.vector).toBe('SQLI');
 
-      expect(() => guard.assertNoInjection(sqli1)).toThrow(
-        'Security policy violation: suspicious input detected (SQLI)',
-      );
+      expect(() => guard.assertNoInjection(sqli1)).toThrow('Security policy violation: suspicious input detected (SQLI)');
     });
 
     it('detects XSS attack vectors in payload fields', () => {
@@ -200,9 +198,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       expect(res3.detected).toBe(true);
       expect(res3.vector).toBe('XSS');
 
-      expect(() => guard.assertNoInjection(xss1)).toThrow(
-        'Security policy violation: suspicious input detected (XSS)',
-      );
+      expect(() => guard.assertNoInjection(xss1)).toThrow('Security policy violation: suspicious input detected (XSS)');
     });
 
     it('detects Prototype Pollution attempts in keys and strings', () => {
@@ -216,9 +212,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       expect(res2.detected).toBe(true);
       expect(res2.vector).toBe('PROTOTYPE_POLLUTION');
 
-      expect(() => guard.assertNoInjection(proto1)).toThrow(
-        'Security policy violation: suspicious input detected (PROTOTYPE_POLLUTION)',
-      );
+      expect(() => guard.assertNoInjection(proto1)).toThrow('Security policy violation: suspicious input detected (PROTOTYPE_POLLUTION)');
     });
 
     it('detects Path Traversal vectors in string inputs', () => {
@@ -232,9 +226,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       expect(res2.detected).toBe(true);
       expect(res2.vector).toBe('PATH_TRAVERSAL');
 
-      expect(() => guard.assertNoInjection(traversal1)).toThrow(
-        'Security policy violation: suspicious input detected (PATH_TRAVERSAL)',
-      );
+      expect(() => guard.assertNoInjection(traversal1)).toThrow('Security policy violation: suspicious input detected (PATH_TRAVERSAL)');
     });
 
     it('permits clean, legitimate inputs without false positives', () => {
@@ -260,10 +252,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
 
     it('accepts payloads within configured intent limit (16 KB)', () => {
       const smallPayload = { orderNumber: 'JM-ORD-01', amountIdr: 250000 };
-      const res = validatePayloadBounds(
-        smallPayload,
-        PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES,
-      );
+      const res = validatePayloadBounds(smallPayload, PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES);
       expect(res.valid).toBe(true);
       expect(res.sizeBytes).toBeLessThan(PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES);
       expect(() => guard.assertPayloadBounds(smallPayload)).not.toThrow();
@@ -273,15 +262,12 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       const hugeString = 'a'.repeat(20 * 1024); // 20 KB
       const largePayload = { data: hugeString };
 
-      const res = validatePayloadBounds(
-        largePayload,
-        PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES,
-      );
+      const res = validatePayloadBounds(largePayload, PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES);
       expect(res.valid).toBe(false);
       expect(res.reason).toContain('exceeds maximum allowable limit');
 
       expect(() =>
-        guard.assertPayloadBounds(largePayload, PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES),
+        guard.assertPayloadBounds(largePayload, PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES)
       ).toThrow('exceeds maximum allowable limit');
     });
   });
@@ -298,7 +284,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
 
       // 6th request should exceed the quota
       expect(() => guard.assertRateLimit(rateLimitKey, maxRequests, windowMs)).toThrow(
-        'Rate limit exceeded',
+        'Rate limit exceeded'
       );
     });
   });
@@ -316,7 +302,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
         guard.assertOrderTenantBinding({
           requestOrderNumber: 'JM-ORD-TENANT-A',
           targetOrderNumber: 'JM-ORD-TENANT-B',
-        }),
+        })
       ).toThrow('Cross-order reference tampering detected');
     });
 
@@ -336,7 +322,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
           targetOrderNumber: 'JM-ORD-01',
           requestTenantId: 'tenant-user-123',
           orderTenantId: 'tenant-user-999',
-        }),
+        })
       ).toThrow('Cross-tenant reference tampering detected');
     });
 
@@ -354,7 +340,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
           targetOrderNumber: 'JM-ORD-01',
           requestTenantId: 'tenant-alpha',
           orderTenantId: 'tenant-alpha',
-        }),
+        })
       ).not.toThrow();
     });
   });
@@ -365,7 +351,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       const clientTamperedAmount = 1000;
 
       expect(() => guard.assertAuthoritativeAmount(orderTotalIdr, clientTamperedAmount)).toThrow(
-        'Payment amount 1000 does not match authoritative order total 250000',
+        'Payment amount 1000 does not match authoritative order total 250000'
       );
     });
 
@@ -379,7 +365,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
       expect(() => guard.assertAuthoritativeAmountMatch(250000, '250000.00')).not.toThrow();
       expect(() => guard.assertAuthoritativeAmountMatch(250000, 250000)).not.toThrow();
       expect(() => guard.assertAuthoritativeAmountMatch(250000, 249999)).toThrow(
-        'Authoritative amount mismatch',
+        'Authoritative amount mismatch'
       );
     });
   });
@@ -472,7 +458,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
           syntheticToken: 'tok_mock_visa_success',
           orderNumber: 'JM-ORD-SHIELD-01',
           amountIdr: 120000,
-        }),
+        })
       ).not.toThrow();
     });
 
@@ -483,7 +469,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
           syntheticToken: 'tok_mock_visa_success',
           orderNumber: 'JM-ORD-SHIELD-02',
           note: '<script>alert("hack")</script>',
-        }),
+        })
       ).toThrow('Security policy violation: suspicious input detected (XSS)');
     });
 
@@ -494,7 +480,7 @@ describe('PAY-P09 — Negative Testing and Abuse Controls Audit Suite', () => {
           syntheticToken: 'tok_mock_visa_success',
           orderNumber: 'JM-ORD-SHIELD-03',
           card: '4242424242424242',
-        }),
+        })
       ).toThrow('Real payment credentials (PAN/CVV) are strictly prohibited');
     });
   });

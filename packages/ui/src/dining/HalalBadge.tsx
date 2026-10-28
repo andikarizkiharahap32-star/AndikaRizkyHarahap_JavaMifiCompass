@@ -46,12 +46,8 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
   // Evidence level calculation: Never relies on color alone
   const isCertified = tier === 'CERTIFIED';
   const evidenceLevelLabel = isCertified
-    ? isId
-      ? 'Sertifikat resmi'
-      : 'Official Certificate'
-    : isId
-      ? 'Dalam audit'
-      : 'Under Audit';
+    ? (isId ? 'Sertifikat resmi' : 'Official Certificate')
+    : (isId ? 'Dalam audit' : 'Under Audit');
   const evidenceLevelIcon = isCertified ? '✓' : '▲';
 
   return (
@@ -76,13 +72,9 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
               ? 'bg-success-surface text-success border-success'
               : 'bg-warning-surface text-warning border-warning'
           }`}
-          aria-label={
-            isId ? `Tingkat bukti: ${evidenceLevelLabel}` : `Evidence level: ${evidenceLevelLabel}`
-          }
+          aria-label={isId ? `Tingkat bukti: ${evidenceLevelLabel}` : `Evidence level: ${evidenceLevelLabel}`}
         >
-          <span className="text-xs font-black" aria-hidden="true">
-            {evidenceLevelIcon}
-          </span>
+          <span className="text-xs font-black" aria-hidden="true">{evidenceLevelIcon}</span>
           <span>{evidenceLevelLabel}</span>
         </span>
 
@@ -130,14 +122,12 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
           )}
           {validUntil && (
             <span className="tnum">
-              • {isId ? 'Berlaku s/d' : 'Valid until'}:{' '}
-              <strong className="text-primary font-mono">{validUntil}</strong>
+              • {isId ? 'Berlaku s/d' : 'Valid until'}: <strong className="text-primary font-mono">{validUntil}</strong>
             </span>
           )}
           {lastVerified && (
             <span className="text-outline tnum">
-              • {isId ? 'Diverifikasi' : 'Verified'}:{' '}
-              <strong className="text-primary font-mono">{lastVerified}</strong>
+              • {isId ? 'Diverifikasi' : 'Verified'}: <strong className="text-primary font-mono">{lastVerified}</strong>
             </span>
           )}
         </div>

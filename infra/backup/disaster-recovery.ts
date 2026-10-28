@@ -80,7 +80,7 @@ export function assertKmsKeySeparation(primaryKeyArn: string, backupKeyArn: stri
   }
   if (primaryKeyArn.trim() === backupKeyArn.trim()) {
     throw new Error(
-      `Disaster recovery violation: Backup KMS key (${backupKeyArn}) must be separate and isolated from primary DB key (${primaryKeyArn})`,
+      `Disaster recovery violation: Backup KMS key (${backupKeyArn}) must be separate and isolated from primary DB key (${primaryKeyArn})`
     );
   }
 }
@@ -93,7 +93,7 @@ export class DisasterRecoveryManager {
     readonly kmsConfig: KmsConfig = {
       primaryKeyArn: 'arn:aws:kms:ap-southeast-1:123456789012:key/primary-db-enc-key-01',
       backupKeyArn: 'arn:aws:kms:ap-southeast-2:123456789012:key/dr-backup-isolated-key-02',
-    },
+    }
   ) {
     assertKmsKeySeparation(this.kmsConfig.primaryKeyArn, this.kmsConfig.backupKeyArn);
   }
@@ -102,7 +102,9 @@ export class DisasterRecoveryManager {
    * Registers a newly generated backup snapshot or WAL segment.
    * P26 Prohibition: Cannot be marked as valid until tested via restore drill.
    */
-  registerBackup(params: Omit<BackupArtifact, 'verified' | 'lastDrillReport'>): BackupArtifact {
+  registerBackup(
+    params: Omit<BackupArtifact, 'verified' | 'lastDrillReport'>
+  ): BackupArtifact {
     // Assert KMS key separation
     assertKmsKeySeparation(this.kmsConfig.primaryKeyArn, params.kmsKeyArn);
 
@@ -134,7 +136,7 @@ export class DisasterRecoveryManager {
       simulateMeasuredRpoMinutes?: number;
       simulateMeasuredRtoMinutes?: number;
       simulatedRestoredChecksum?: string;
-    } = {},
+    } = {}
   ): RestoreDrillReport {
     const backup = this.backups.get(backupId);
     if (!backup) {
@@ -199,7 +201,7 @@ export class DisasterRecoveryManager {
 
     if (ageInDays >= DR_TARGETS.MAX_DRILL_AGE_DAYS) {
       throw new Error(
-        `Disaster Recovery Audit Failure: Last restore drill report is ${ageInDays.toFixed(1)} days old (maximum allowed: < ${DR_TARGETS.MAX_DRILL_AGE_DAYS} days)`,
+        `Disaster Recovery Audit Failure: Last restore drill report is ${ageInDays.toFixed(1)} days old (maximum allowed: < ${DR_TARGETS.MAX_DRILL_AGE_DAYS} days)`
       );
     }
   }

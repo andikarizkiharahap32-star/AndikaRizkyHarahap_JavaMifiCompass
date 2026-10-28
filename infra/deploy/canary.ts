@@ -37,7 +37,7 @@ export class CanaryController {
     readonly slo: SloThresholds = {
       maxErrorRate: 0.001, // 0.1% max errors allowed
       maxP95LatencyMs: 250, // 250ms max p95 latency
-    },
+    }
   ) {}
 
   getCurrentWeight(): number {
@@ -80,7 +80,7 @@ export class CanaryController {
    */
   progressCanary(
     stepIndex: number,
-    metrics: CanaryMetrics,
+    metrics: CanaryMetrics
   ): { nextWeight: number; rolledBack: boolean; reason?: string } {
     if (stepIndex < 0 || stepIndex >= this.steps.length) {
       throw new Error(`Invalid canary step index: ${stepIndex}`);

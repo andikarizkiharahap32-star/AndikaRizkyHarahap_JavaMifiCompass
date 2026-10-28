@@ -3,14 +3,26 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Content Semantics & Internationalization (i18n) Governance', () => {
-  const homeDocPath = path.resolve(__dirname, '../../../design-system/pages/home.md');
-  const homePagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
+  const homeDocPath = path.resolve(
+    __dirname,
+    '../../../design-system/pages/home.md'
+  );
+  const homePagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
   const heroComponentPath = path.resolve(
     __dirname,
-    '../../../apps/web/src/components/DepartureBoardHero.tsx',
+    '../../../apps/web/src/components/DepartureBoardHero.tsx'
   );
-  const enMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/en.json');
-  const idMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/id.json');
+  const enMessagesPath = path.resolve(
+    __dirname,
+    '../../../apps/web/messages/en.json'
+  );
+  const idMessagesPath = path.resolve(
+    __dirname,
+    '../../../apps/web/messages/id.json'
+  );
 
   it('documents content semantics and rejection of abstract art in design-system/pages/home.md', () => {
     expect(fs.existsSync(homeDocPath)).toBe(true);

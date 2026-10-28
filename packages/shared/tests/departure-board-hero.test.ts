@@ -9,41 +9,11 @@ interface DestinationHub {
 }
 
 const TEST_HUBS: DestinationHub[] = [
-  {
-    id: 'JP',
-    stationCode: 'HND',
-    wifiDailyRate: 70000,
-    esimDailyRate: 35000,
-    socketType: 'Tipe A/B (100V)',
-  },
-  {
-    id: 'SA',
-    stationCode: 'JED',
-    wifiDailyRate: 75000,
-    esimDailyRate: 45000,
-    socketType: 'Tipe G (220V)',
-  },
-  {
-    id: 'GB',
-    stationCode: 'LHR',
-    wifiDailyRate: 80000,
-    esimDailyRate: 40000,
-    socketType: 'Tipe G (230V)',
-  },
-  {
-    id: 'SG',
-    stationCode: 'SIN',
-    wifiDailyRate: 60000,
-    esimDailyRate: 30000,
-    socketType: 'Tipe G (230V)',
-  },
-  {
-    id: 'CN',
-    stationCode: 'PEK',
-    wifiDailyRate: 75000,
-    esimDailyRate: 45000,
-    socketType: 'Tipe A/I (220V)',
-  },
+  { id: 'JP', stationCode: 'HND', wifiDailyRate: 70000, esimDailyRate: 35000, socketType: 'Tipe A/B (100V)' },
+  { id: 'SA', stationCode: 'JED', wifiDailyRate: 75000, esimDailyRate: 45000, socketType: 'Tipe G (220V)' },
+  { id: 'GB', stationCode: 'LHR', wifiDailyRate: 80000, esimDailyRate: 40000, socketType: 'Tipe G (230V)' },
+  { id: 'SG', stationCode: 'SIN', wifiDailyRate: 60000, esimDailyRate: 30000, socketType: 'Tipe G (230V)' },
+  { id: 'CN', stationCode: 'PEK', wifiDailyRate: 75000, esimDailyRate: 45000, socketType: 'Tipe A/I (220V)' },
 ];
 
 function resolveHeroRecommendation(hub: DestinationHub, paxCount: number) {

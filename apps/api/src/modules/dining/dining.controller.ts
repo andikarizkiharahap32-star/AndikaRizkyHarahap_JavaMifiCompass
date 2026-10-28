@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Param, Query, Body, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Query,
+  Body,
+  BadRequestException,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { DiningService } from './dining.service';
 import { FxService } from './fx.service';
@@ -30,43 +38,14 @@ export class DiningController {
 
   @Get('places')
   @ApiOperation({ summary: 'Search dining venues with Halal filtering and dual currency pricing' })
-  @ApiQuery({
-    name: 'country',
-    required: false,
-    description: 'ISO 2-letter country code (e.g. JP, SA, SG)',
-  })
+  @ApiQuery({ name: 'country', required: false, description: 'ISO 2-letter country code (e.g. JP, SA, SG)' })
   @ApiQuery({ name: 'city', required: false, description: 'City name' })
-  @ApiQuery({
-    name: 'filter',
-    enum: DiningFilterMode,
-    required: false,
-    description: 'HALAL, NON_HALAL, or ALL',
-  })
+  @ApiQuery({ name: 'filter', enum: DiningFilterMode, required: false, description: 'HALAL, NON_HALAL, or ALL' })
   @ApiQuery({ name: 'search', required: false, description: 'Search term for venue or dish' })
-  @ApiQuery({
-    name: 'radiusKm',
-    required: false,
-    type: Number,
-    description: 'Radius in km (default 5)',
-  })
-  @ApiQuery({
-    name: 'includeUnverified',
-    required: false,
-    type: Boolean,
-    description: 'Include UNKNOWN tiers',
-  })
-  @ApiQuery({
-    name: 'sortBy',
-    required: false,
-    enum: ['relevance', 'rating', 'distance'],
-    description: 'Sort criteria',
-  })
-  @ApiQuery({
-    name: 'sortOrder',
-    required: false,
-    enum: ['asc', 'desc'],
-    description: 'Sort direction',
-  })
+  @ApiQuery({ name: 'radiusKm', required: false, type: Number, description: 'Radius in km (default 5)' })
+  @ApiQuery({ name: 'includeUnverified', required: false, type: Boolean, description: 'Include UNKNOWN tiers' })
+  @ApiQuery({ name: 'sortBy', required: false, enum: ['relevance', 'rating', 'distance'], description: 'Sort criteria' })
+  @ApiQuery({ name: 'sortOrder', required: false, enum: ['asc', 'desc'], description: 'Sort direction' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   searchPlaces(
@@ -104,9 +83,7 @@ export class DiningController {
   }
 
   @Post('parse-intent')
-  @ApiOperation({
-    summary: 'Threat-model safe query parser: turns traveler prompt into structured search params',
-  })
+  @ApiOperation({ summary: 'Threat-model safe query parser: turns traveler prompt into structured search params' })
   parseSearchIntent(@Body() body: { query: string }) {
     if (!body || !body.query) {
       throw new BadRequestException('Query string is required');
@@ -119,9 +96,7 @@ export class DiningController {
   @ApiResponse({ status: 201, description: 'Report accepted into review queue' })
   submitReport(@Body() dto: DiningReportCreateDto) {
     if (!dto.placeId || !dto.placeName || !dto.userComment || !dto.disputeReason) {
-      throw new BadRequestException(
-        'placeId, placeName, disputeReason, and userComment are required',
-      );
+      throw new BadRequestException('placeId, placeName, disputeReason, and userComment are required');
     }
     return this.diningReview.submitReport(dto);
   }
@@ -134,10 +109,7 @@ export class DiningController {
   }
 
   @Post('orchestration/chat-webhook')
-  @ApiOperation({
-    summary:
-      'n8n Chatbot Webhook: Parses query and returns structured fail-closed restaurant results',
-  })
+  @ApiOperation({ summary: 'n8n Chatbot Webhook: Parses query and returns structured fail-closed restaurant results' })
   handleChatbotWebhook(@Body() body: { userMessage: string; userId?: string; channel?: string }) {
     if (!body || !body.userMessage) {
       throw new BadRequestException('userMessage is required');

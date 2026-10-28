@@ -3,12 +3,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Performance Cost & Mobile Hardware Budget Governance', () => {
-  const homeDocPath = path.resolve(__dirname, '../../../design-system/pages/home.md');
+  const homeDocPath = path.resolve(
+    __dirname,
+    '../../../design-system/pages/home.md'
+  );
   const heroComponentPath = path.resolve(
     __dirname,
-    '../../../apps/web/src/components/DepartureBoardHero.tsx',
+    '../../../apps/web/src/components/DepartureBoardHero.tsx'
   );
-  const homePagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
+  const homePagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
 
   it('documents low-end mobile targeting, compositor layer budgets, and raw img bans in home.md', () => {
     expect(fs.existsSync(homeDocPath)).toBe(true);

@@ -32,7 +32,10 @@ export class JavaMifiApiClient {
     this.onUnauthorized = config.onUnauthorized;
   }
 
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {},
+  ): Promise<T> {
     const url = `${this.baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
     const headers = new Headers(options.headers);
 
@@ -106,22 +109,21 @@ export class JavaMifiApiClient {
       this.request<any[]>(`/catalog/destinations?locale=${locale}`),
     getDestinationBySlug: (slug: string, locale = 'id') =>
       this.request<any>(`/catalog/destinations/${slug}?locale=${locale}`),
-    getProducts: (locale = 'id') => this.request<any[]>(`/catalog/products?locale=${locale}`),
+    getProducts: (locale = 'id') =>
+      this.request<any[]>(`/catalog/products?locale=${locale}`),
     getProductBySlug: (slug: string, locale = 'id') =>
       this.request<any>(`/catalog/products/${slug}?locale=${locale}`),
     getPlans: (params?: { destinationId?: string; productId?: string }) => {
       const query = new URLSearchParams(params as Record<string, string>).toString();
       return this.request<any[]>(`/catalog/plans?${query}`);
     },
-    getPresets: (locale = 'id') => this.request<any[]>(`/catalog/presets?locale=${locale}`),
+    getPresets: (locale = 'id') =>
+      this.request<any[]>(`/catalog/presets?locale=${locale}`),
     validatePromo: (code: string, subtotalIdr: number) =>
-      this.request<{ valid: boolean; discountIdr: number; promoCode?: any }>(
-        '/catalog/promos/validate',
-        {
-          method: 'POST',
-          body: JSON.stringify({ code, subtotalIdr }),
-        },
-      ),
+      this.request<{ valid: boolean; discountIdr: number; promoCode?: any }>('/catalog/promos/validate', {
+        method: 'POST',
+        body: JSON.stringify({ code, subtotalIdr }),
+      }),
   };
 
   // ── Planner Endpoints ───────────────────────────────────────
@@ -149,7 +151,8 @@ export class JavaMifiApiClient {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
-    getOrder: (orderNumber: string) => this.request<any>(`/orders/${orderNumber}`),
+    getOrder: (orderNumber: string) =>
+      this.request<any>(`/orders/${orderNumber}`),
     getTripHub: (orderNumber: string, token?: string) =>
       this.request<any>(`/orders/${orderNumber}/trip-hub${token ? `?token=${token}` : ''}`),
     listOrders: (params?: { page?: number; limit?: number; status?: string }) => {
@@ -185,15 +188,13 @@ export class JavaMifiApiClient {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
-    simulateMockPayment: (payload: {
-      paymentId: string;
-      status: 'SUCCESS' | 'FAILED' | 'EXPIRED';
-    }) =>
+    simulateMockPayment: (payload: { paymentId: string; status: 'SUCCESS' | 'FAILED' | 'EXPIRED' }) =>
       this.request<any>('/payments/mock/callback', {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
-    getLedger: (orderId: string) => this.request<any[]>(`/payments/ledger/${orderId}`),
+    getLedger: (orderId: string) =>
+      this.request<any[]>(`/payments/ledger/${orderId}`),
   };
 
   // ── Readiness Card / Integrations ───────────────────────────
@@ -213,22 +214,14 @@ export class JavaMifiApiClient {
     getPage: (slug: string, locale = 'id') =>
       this.request<any>(`/content/pages/${slug}?locale=${locale}`),
     getFaqs: (category?: string, locale = 'id') =>
-      this.request<any[]>(
-        `/content/faqs?locale=${locale}${category ? `&category=${category}` : ''}`,
-      ),
+      this.request<any[]>(`/content/faqs?locale=${locale}${category ? `&category=${category}` : ''}`),
     getBanners: (position = 'HOME_HERO', locale = 'id') =>
       this.request<any[]>(`/content/banners?position=${position}&locale=${locale}`),
   };
 
   // ── Support Tickets ─────────────────────────────────────────
   support = {
-    createTicket: (payload: {
-      name: string;
-      email: string;
-      subject: string;
-      message: string;
-      orderNumber?: string;
-    }) =>
+    createTicket: (payload: { name: string; email: string; subject: string; message: string; orderNumber?: string }) =>
       this.request<any>('/support/tickets', {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -311,7 +304,7 @@ export class JavaMifiApiClient {
       if (params?.limit) q.set('limit', String(params.limit));
       const qs = q.toString();
       return this.request<{ items: any[]; total: number; page: number; limit: number }>(
-        `/v1/dining/places${qs ? `?${qs}` : ''}`,
+        `/v1/dining/places${qs ? `?${qs}` : ''}`
       );
     },
     getPlaceDetail: (id: string) => this.request<any>(`/v1/dining/places/${id}`),
@@ -347,7 +340,7 @@ export class JavaMifiApiClient {
         overrideTier?: string;
         resolvedBy: string;
         notes?: string;
-      },
+      }
     ) =>
       this.request<any>(`/v1/dining/admin/review-queue/${id}/resolve`, {
         method: 'POST',

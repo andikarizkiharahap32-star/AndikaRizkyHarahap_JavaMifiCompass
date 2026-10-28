@@ -43,19 +43,13 @@ describe('Roadmap P8–P9 Diagnostic & Verification Audit', () => {
       const cardCode = fs.readFileSync(cardPath, 'utf8');
 
       // Tactile lower-lip elevations
-      expect(cardCode).toContain(
-        "card: 'bg-paper border border-paper-edge border-b-2 text-primary'",
-      );
-      expect(cardCode).toContain(
-        "raised: 'bg-paper border border-paper-edge border-b-4 text-primary'",
-      );
+      expect(cardCode).toContain("card: 'bg-paper border border-paper-edge border-b-2 text-primary'");
+      expect(cardCode).toContain("raised: 'bg-paper border border-paper-edge border-b-4 text-primary'");
       expect(cardCode).toContain("flat: 'bg-paper border border-paper-edge text-primary'");
 
       // Keyboard activation & accessible role
       expect(cardCode).toContain("role={isInteractive && !role ? 'button' : role}");
-      expect(cardCode).toContain(
-        'tabIndex={isInteractive && tabIndex === undefined ? 0 : tabIndex}',
-      );
+      expect(cardCode).toContain("tabIndex={isInteractive && tabIndex === undefined ? 0 : tabIndex}");
       expect(cardCode).toContain("e.key === 'Enter' || e.key === ' '");
 
       // Zero drop shadows
@@ -83,9 +77,7 @@ describe('Roadmap P8–P9 Diagnostic & Verification Audit', () => {
       expect(navbarCode).toContain('if (e.target === e.currentTarget) setMobileMenuOpen(false);');
 
       // Drawer container has safe-area padding and zero backdrop blur
-      expect(navbarCode).toContain(
-        'z-drawer bg-scrim flex flex-col justify-start overflow-y-auto pb-safe',
-      );
+      expect(navbarCode).toContain('z-drawer bg-scrim flex flex-col justify-start overflow-y-auto pb-safe');
       expect(navbarCode).not.toContain('backdrop-blur');
 
       // Quick access thumb controls for mobile
@@ -99,12 +91,8 @@ describe('Roadmap P8–P9 Diagnostic & Verification Audit', () => {
       const restCardCode = fs.readFileSync(restaurantCardPath, 'utf8');
 
       // Semantic H1 & H2 rhythm
-      expect(diningCode).toContain(
-        '<h1 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase tracking-tight m-0">',
-      );
-      expect(diningCode).toContain(
-        '<h2 className="text-lg font-display font-bold text-primary m-0">',
-      );
+      expect(diningCode).toContain('<h1 className="text-2xl sm:text-3xl font-display font-black text-primary uppercase tracking-tight m-0">');
+      expect(diningCode).toContain('<h2 className="text-lg font-display font-bold text-primary m-0">');
 
       // Segmented control group and pressed state
       expect(diningCode).toContain('role="group" aria-label="Halal filter selection"');

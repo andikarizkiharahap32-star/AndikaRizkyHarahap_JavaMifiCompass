@@ -129,12 +129,7 @@ export class FxConversionService {
     return result;
   }
 
-  setRate(
-    base: string,
-    rate: number,
-    provider: string,
-    fetchedAt = new Date().toISOString(),
-  ): void {
+  setRate(base: string, rate: number, provider: string, fetchedAt = new Date().toISOString()): void {
     this.rates.set(base.toUpperCase(), {
       base: base.toUpperCase(),
       quote: 'IDR',

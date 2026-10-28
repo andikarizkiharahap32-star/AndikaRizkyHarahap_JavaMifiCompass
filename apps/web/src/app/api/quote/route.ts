@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
           message: 'Parameter kalkulasi kuotasi tidak valid',
           details: parsed.error.format(),
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -71,8 +71,7 @@ export async function GET(request: NextRequest) {
             totalEstimatedPriceIdr: esimTotal,
             pricePerPersonPerDayIdr: esimPerPersonDay,
             isRecommended: false,
-            recommendationReason:
-              'Pilihan kartu digital individu jika anggota rombongan sering berpencar.',
+            recommendationReason: 'Pilihan kartu digital individu jika anggota rombongan sering berpencar.',
             features: [
               'Aktivasi instan via scan QR code',
               'Setiap orang memiliki kuota mandiri',
@@ -102,8 +101,7 @@ export async function GET(request: NextRequest) {
           totalEstimatedPriceIdr: esimTotal,
           pricePerPersonPerDayIdr: esimPerPersonDay,
           isRecommended: true,
-          recommendationReason:
-            'Pilihan paling praktis dan ekonomis untuk 1 orang tanpa perlu membawa modem fisik.',
+          recommendationReason: 'Pilihan paling praktis dan ekonomis untuk 1 orang tanpa perlu membawa modem fisik.',
           features: [
             'Aktivasi instan via scan QR code',
             'Tanpa antre ambil & kembalikan modem di bandara',
@@ -119,8 +117,7 @@ export async function GET(request: NextRequest) {
             totalEstimatedPriceIdr: wifiTotal,
             pricePerPersonPerDayIdr: wifiDailyTotal,
             isRecommended: false,
-            recommendationReason:
-              'Opsi router jika membawa laptop kerja atau perangkat tanpa dukungan eSIM.',
+            recommendationReason: 'Opsi router jika membawa laptop kerja atau perangkat tanpa dukungan eSIM.',
             features: [
               'Bisa berbagi koneksi ke laptop & tablet',
               'Baterai cadangan tahan seharian',
@@ -153,7 +150,7 @@ export async function GET(request: NextRequest) {
         error: 'QUOTE_CALCULATION_FAILED',
         message: 'Gagal menghitung kuotasi harga perjalanan',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -169,7 +166,7 @@ export async function POST(request: NextRequest) {
           message: 'Data formulir kuotasi tidak valid',
           details: parsed.error.format(),
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -190,7 +187,7 @@ export async function POST(request: NextRequest) {
         error: 'INVALID_JSON_PAYLOAD',
         message: 'Format payload kuotasi tidak valid',
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 }

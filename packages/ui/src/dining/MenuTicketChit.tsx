@@ -42,7 +42,7 @@ export const MenuTicketChit: React.FC<MenuTicketChitProps> = ({
   className = '',
 }) => {
   const isId = locale.startsWith('id');
-  const title = isId ? nameId || nameEn : nameEn || nameId;
+  const title = isId ? (nameId || nameEn) : (nameEn || nameId);
 
   return (
     <div
@@ -69,13 +69,17 @@ export const MenuTicketChit: React.FC<MenuTicketChitProps> = ({
         <h4 className="text-sm font-bold text-primary leading-tight m-0">
           {title}{' '}
           {nameOriginal && nameOriginal !== title && (
-            <span className="text-xs font-normal text-outline ml-1">({nameOriginal})</span>
+            <span className="text-xs font-normal text-outline ml-1">
+              ({nameOriginal})
+            </span>
           )}
         </h4>
 
         {/* Venue's Own Description (Unmodified) */}
         {sourceDescription && (
-          <p className="text-xs text-secondary leading-relaxed m-0">{sourceDescription}</p>
+          <p className="text-xs text-secondary leading-relaxed m-0">
+            {sourceDescription}
+          </p>
         )}
 
         {/* Separately Labeled AI Explanation */}

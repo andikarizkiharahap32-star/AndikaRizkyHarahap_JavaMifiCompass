@@ -56,11 +56,7 @@ export function calculateJitteredTtl(baseTtlSeconds: number): number {
 }
 
 export function buildCacheKey(domain: CacheDomain, id: string, variant = 'default'): string {
-  const sanitize = (val: string) =>
-    val
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9_-]/g, '_');
+  const sanitize = (val: string) => val.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_');
   return `v1:${domain}:${sanitize(id)}:${sanitize(variant)}`;
 }
 
@@ -71,6 +67,5 @@ export const CacheKeys = Object.freeze({
     buildCacheKey('catalog', countryCode, `${currency}_${locale}`),
   session: (sessionId: string) => buildCacheKey('session', sessionId, 'auth'),
   weather: (destinationSlug: string) => buildCacheKey('weather', destinationSlug, 'current'),
-  destinations: (destinationSlug: string, locale = 'id') =>
-    buildCacheKey('destinations', destinationSlug, locale),
+  destinations: (destinationSlug: string, locale = 'id') => buildCacheKey('destinations', destinationSlug, locale),
 });

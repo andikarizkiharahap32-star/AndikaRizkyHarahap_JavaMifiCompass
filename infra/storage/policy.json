@@ -40,7 +40,10 @@
           "https://admin.javamifi.com"
         ],
         "AllowedMethods": ["PUT", "GET", "HEAD"],
-        "AllowedHeaders": ["Content-Type", "x-amz-server-side-encryption"],
+        "AllowedHeaders": [
+          "Content-Type",
+          "x-amz-server-side-encryption"
+        ],
         "ExposeHeaders": ["ETag"],
         "MaxAgeSeconds": 3600
       }

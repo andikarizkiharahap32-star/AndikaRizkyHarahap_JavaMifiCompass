@@ -127,9 +127,7 @@ describe('SEC-P07: Secrets & Cryptographic Configuration Verification', () => {
       expect(scanResult.leaksDetected).toBe(true);
       expect(scanResult.findings.length).toBeGreaterThanOrEqual(2);
       expect(scanResult.findings.some((f) => f.patternType === 'MIDTRANS_SERVER_KEY')).toBe(true);
-      expect(scanResult.findings.some((f) => f.patternType === 'SENSITIVE_KEY_EXPOSURE')).toBe(
-        true,
-      );
+      expect(scanResult.findings.some((f) => f.patternType === 'SENSITIVE_KEY_EXPOSURE')).toBe(true);
     });
 
     it('confirms clean or redacted payloads pass leak scanner without findings', () => {
@@ -243,12 +241,8 @@ describe('SEC-P07: Secrets & Cryptographic Configuration Verification', () => {
 
       const res = validateEnvironmentSecrets(placeholderEnv, 'production');
       expect(res.compliant).toBe(false);
-      expect(res.violations.some((v) => v.includes('INSECURE_PLACEHOLDER_SECRET_JWT_SECRET'))).toBe(
-        true,
-      );
-      expect(
-        res.violations.some((v) => v.includes('INSECURE_PLACEHOLDER_SECRET_MIDTRANS_SERVER_KEY')),
-      ).toBe(true);
+      expect(res.violations.some((v) => v.includes('INSECURE_PLACEHOLDER_SECRET_JWT_SECRET'))).toBe(true);
+      expect(res.violations.some((v) => v.includes('INSECURE_PLACEHOLDER_SECRET_MIDTRANS_SERVER_KEY'))).toBe(true);
     });
 
     it('detects insufficient entropy (short keys) on production secrets', () => {
@@ -261,9 +255,7 @@ describe('SEC-P07: Secrets & Cryptographic Configuration Verification', () => {
       const res = validateEnvironmentSecrets(shortKeyEnv, 'production');
       expect(res.compliant).toBe(false);
       expect(res.violations.some((v) => v.includes('INSUFFICIENT_ENTROPY_JWT_SECRET'))).toBe(true);
-      expect(
-        res.violations.some((v) => v.includes('INSUFFICIENT_ENTROPY_DATABASE_ENCRYPTION_KEY')),
-      ).toBe(true);
+      expect(res.violations.some((v) => v.includes('INSUFFICIENT_ENTROPY_DATABASE_ENCRYPTION_KEY'))).toBe(true);
     });
   });
 

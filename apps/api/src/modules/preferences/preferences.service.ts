@@ -50,7 +50,7 @@ export function assertNoInferredAttributes(data: Record<string, any>): void {
   for (const pattern of FORBIDDEN_INFERRED_ATTRIBUTES) {
     if (pattern.test(jsonStr)) {
       throw new Error(
-        `Privacy Violation (P18): Storing inferred beliefs or sensitive personal profiles is strictly prohibited matching ${pattern}`,
+        `Privacy Violation (P18): Storing inferred beliefs or sensitive personal profiles is strictly prohibited matching ${pattern}`
       );
     }
   }
@@ -64,7 +64,7 @@ export class PreferencesService {
    */
   async updatePreferences(
     userId: string,
-    input: Partial<Omit<UserPreferences, 'userId' | 'updatedAt'>>,
+    input: Partial<Omit<UserPreferences, 'userId' | 'updatedAt'>>
   ): Promise<UserPreferences> {
     assertNoInferredAttributes(input);
 
@@ -85,17 +85,10 @@ export class PreferencesService {
       existing.locale = input.locale.trim().toLowerCase();
     }
     if (input.dietaryStrictness) {
-      const validStrictness: DietaryStrictness[] = [
-        'strict_halal',
-        'halal_only',
-        'muslim_friendly',
-      ];
+      const validStrictness: DietaryStrictness[] = ['strict_halal', 'halal_only', 'muslim_friendly'];
       if (!validStrictness.includes(input.dietaryStrictness)) {
         throw new ValidationError('Invalid dietaryStrictness value', [
-          {
-            name: 'dietaryStrictness',
-            reason: 'Must be strict_halal, halal_only, or muslim_friendly',
-          },
+          { name: 'dietaryStrictness', reason: 'Must be strict_halal, halal_only, or muslim_friendly' },
         ]);
       }
       existing.dietaryStrictness = input.dietaryStrictness;
@@ -133,15 +126,9 @@ export class PreferencesService {
     userId: string,
     mockStores?: {
       favorites?: Array<{ placeId: string; addedAt: string }>;
-      reviews?: Array<{
-        id: string;
-        placeId: string;
-        rating: number;
-        body: string;
-        createdAt: string;
-      }>;
+      reviews?: Array<{ id: string; placeId: string; rating: number; body: string; createdAt: string }>;
       sessionsCount?: number;
-    },
+    }
   ): Promise<UserDataExport> {
     return {
       userId,
@@ -162,7 +149,7 @@ export class PreferencesService {
       deleteFavorites?: (uid: string) => void;
       anonymizeReviews?: (uid: string) => void;
       deleteSessions?: (uid: string) => void;
-    },
+    }
   ): Promise<{ deleted: boolean; tablesAffected: string[] }> {
     const tablesAffected: string[] = [];
 

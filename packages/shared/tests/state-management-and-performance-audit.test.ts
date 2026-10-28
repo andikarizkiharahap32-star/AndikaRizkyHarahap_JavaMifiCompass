@@ -1,7 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
-import { quoteRequestSchema, quoteResponseSchema, QuoteRequest, QuoteResponse } from '../src';
+import {
+  quoteRequestSchema,
+  quoteResponseSchema,
+  QuoteRequest,
+  QuoteResponse,
+} from '../src';
 
 describe('State Management and Performance Plan Comprehensive Audit', () => {
   const rootDir = path.resolve(__dirname, '../../..');
@@ -105,7 +110,7 @@ describe('State Management and Performance Plan Comprehensive Audit', () => {
           dest: 'JP',
           startDate: '2026-11-10',
           endDate: '2026-11-05',
-        }),
+        })
       ).toThrow();
 
       const validDates = quoteRequestSchema.parse({

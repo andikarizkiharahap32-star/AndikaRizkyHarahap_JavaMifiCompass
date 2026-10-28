@@ -15,12 +15,8 @@ describe('Audit P1 Remediation Tests', () => {
     const enLocale = JSON.parse(fs.readFileSync(enLocalePath, 'utf8'));
 
     // Chat intro explicitly informs users about 3 evidence tiers without hallucinated claims
-    expect(diningDiscoveryCode).toContain(
-      '3 tingkatan bukti (Tersertifikasi, Terverifikasi Muslim, dan Menu Ramah Muslim)',
-    );
-    expect(diningDiscoveryCode).toContain(
-      'three evidence tiers (Certified, Muslim-Verified, and Muslim-Friendly)',
-    );
+    expect(diningDiscoveryCode).toContain('3 tingkatan bukti (Tersertifikasi, Terverifikasi Muslim, dan Menu Ramah Muslim)');
+    expect(diningDiscoveryCode).toContain('three evidence tiers (Certified, Muslim-Verified, and Muslim-Friendly)');
 
     // TopBar tooltip references 3 evidence tiers
     expect(idLocale.dining.topBar.filterHalalTooltip).toContain('3 Tingkat Bukti');
@@ -48,9 +44,7 @@ describe('Audit P1 Remediation Tests', () => {
 
     // Credibility caveat per §4.7
     expect(cardCode).toContain('Kapan rekomendasi ini kurang cocok?');
-    expect(cardCode).toContain(
-      'Cocok kalau kalian jalan bareng; kalau sering berpencar, eSIM lebih aman',
-    );
+    expect(cardCode).toContain('Cocok kalau kalian jalan bareng; kalau sering berpencar, eSIM lebih aman');
 
     // Named for the outcome instead of vague technical line
     expect(cardCode).toContain('ESTIMASI KEBUTUHAN KAS PERJALANAN');

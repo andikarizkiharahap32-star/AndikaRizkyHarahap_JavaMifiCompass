@@ -1,4 +1,7 @@
-import { StandardQueueName, STANDARD_QUEUES } from '../../api/src/queues/queue-registry';
+import {
+  StandardQueueName,
+  STANDARD_QUEUES,
+} from '../../api/src/queues/queue-registry';
 
 /**
  * P11: Standalone Worker Service Architecture
@@ -80,9 +83,7 @@ export class WorkerManager {
    */
   async executeJob<T>(queue: StandardQueueName, data: T): Promise<void> {
     if (!this.isRunning) {
-      throw new Error(
-        `Worker service is currently stopped. Cannot process job on queue '${queue}'`,
-      );
+      throw new Error(`Worker service is currently stopped. Cannot process job on queue '${queue}'`);
     }
 
     const limit = QUEUE_CONCURRENCY_LIMITS[queue];
@@ -90,7 +91,7 @@ export class WorkerManager {
 
     if (currentActive >= limit) {
       throw new Error(
-        `Queue '${queue}' exceeded concurrency limit of ${limit}. Active: ${currentActive}`,
+        `Queue '${queue}' exceeded concurrency limit of ${limit}. Active: ${currentActive}`
       );
     }
 

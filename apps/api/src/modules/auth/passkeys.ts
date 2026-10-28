@@ -129,10 +129,7 @@ export class PasskeyService {
   /**
    * Verifies a magic link raw token against its stored hash.
    */
-  verifyMagicLinkToken(
-    rawToken: string,
-    storedRecord: MagicLinkRecord,
-  ): { valid: boolean; reason?: string } {
+  verifyMagicLinkToken(rawToken: string, storedRecord: MagicLinkRecord): { valid: boolean; reason?: string } {
     if (storedRecord.used) {
       return { valid: false, reason: 'Token already used' };
     }
@@ -159,8 +156,7 @@ export class PasskeyService {
   getGenericAuthResponse() {
     return {
       status: 'success',
-      message:
-        'If an account matches that address, authentication instructions have been dispatched.',
+      message: 'If an account matches that address, authentication instructions have been dispatched.',
     };
   }
 }

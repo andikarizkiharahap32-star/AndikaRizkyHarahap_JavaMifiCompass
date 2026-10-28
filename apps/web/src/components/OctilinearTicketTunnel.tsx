@@ -1,11 +1,25 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion, MotionValue } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  MotionValue,
+} from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { RouteLine } from '@javamifi/ui';
 import { TripBoardingPass } from '../../../../packages/ui/src/wayfinding/TripBoardingPass';
-import { MapPin, QrCode, Wifi, ShieldCheck, ArrowDown, Navigation, Layers } from 'lucide-react';
+import {
+  MapPin,
+  QrCode,
+  Wifi,
+  ShieldCheck,
+  ArrowDown,
+  Navigation,
+  Layers,
+} from 'lucide-react';
 
 export interface OctilinearTicketTunnelProps {
   locale?: string;
@@ -52,7 +66,7 @@ function AnimatedTicketCard({ item, progress, index, total }: AnimatedCardProps)
     isFinal
       ? [item.startScroll, item.peakScroll, 1.0]
       : [item.startScroll, item.peakScroll, item.endScroll],
-    isFinal ? [-1200, 0, 0] : [-1200, 0, 420],
+    isFinal ? [-1200, 0, 0] : [-1200, 0, 420]
   );
 
   // Opacity fade in as card arrives, fade out as card passes camera (final card stays visible)
@@ -60,8 +74,13 @@ function AnimatedTicketCard({ item, progress, index, total }: AnimatedCardProps)
     progress,
     isFinal
       ? [item.startScroll, item.peakScroll - 0.05, 1.0]
-      : [item.startScroll, item.startScroll + 0.08, item.endScroll - 0.08, item.endScroll],
-    isFinal ? [0, 1, 1] : [0, 1, 1, 0],
+      : [
+          item.startScroll,
+          item.startScroll + 0.08,
+          item.endScroll - 0.08,
+          item.endScroll,
+        ],
+    isFinal ? [0, 1, 1] : [0, 1, 1, 0]
   );
 
   // Scale curve
@@ -70,26 +89,26 @@ function AnimatedTicketCard({ item, progress, index, total }: AnimatedCardProps)
     isFinal
       ? [item.startScroll, item.peakScroll, 1.0]
       : [item.startScroll, item.peakScroll, item.endScroll],
-    isFinal ? [0.7, 1.0, 1.0] : [0.7, 1.0, 1.12],
+    isFinal ? [0.7, 1.0, 1.0] : [0.7, 1.0, 1.12]
   );
 
   // 45-degree octilinear offset shifts
   const x = useTransform(
     progress,
     [item.startScroll, item.peakScroll, item.endScroll],
-    [item.xOffset * 2.2, item.xOffset, item.xOffset * 0.4],
+    [item.xOffset * 2.2, item.xOffset, item.xOffset * 0.4]
   );
 
   const y = useTransform(
     progress,
     [item.startScroll, item.peakScroll, item.endScroll],
-    [item.yOffset * 2.2, item.yOffset, item.yOffset * 0.4],
+    [item.yOffset * 2.2, item.yOffset, item.yOffset * 0.4]
   );
 
   const transform = useTransform(
     [x, y, z, scale],
     ([currX, currY, currZ, currScale]) =>
-      `translate3d(calc(-50% + ${currX}px), calc(-50% + ${currY}px), ${currZ}px) scale(${currScale}) rotateZ(${item.rotZ}deg)`,
+      `translate3d(calc(-50% + ${currX}px), calc(-50% + ${currY}px), ${currZ}px) scale(${currScale}) rotateZ(${item.rotZ}deg)`
   );
 
   return (
@@ -108,7 +127,9 @@ function AnimatedTicketCard({ item, progress, index, total }: AnimatedCardProps)
             <item.icon className="w-3.5 h-3.5 text-secondary" />
             <span className="tracking-wider uppercase">{item.stageKey}</span>
           </div>
-          <span className="text-secondary font-medium uppercase text-xs tnum">{item.tag}</span>
+          <span className="text-secondary font-medium uppercase text-xs tnum">
+            {item.tag}
+          </span>
         </div>
 
         {/* Tactile Boarding Pass */}
@@ -128,7 +149,9 @@ function AnimatedTicketCard({ item, progress, index, total }: AnimatedCardProps)
         {/* Waypoint Context Note */}
         <div className="px-4 py-2 bg-paper rounded-xl border border-paper-edge border-b-2 flex items-center justify-between text-xs text-secondary font-sans">
           <span>{item.descKey}</span>
-          <span className="font-mono font-bold text-primary tnum">{item.orderNumber}</span>
+          <span className="font-mono font-bold text-primary tnum">
+            {item.orderNumber}
+          </span>
         </div>
       </div>
     </motion.div>
@@ -153,7 +176,8 @@ export function OctilinearTicketTunnel({
 
       const handleResize = () => {
         setIsTouchOrCompact(
-          window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 1024,
+          window.matchMedia('(pointer: coarse)').matches ||
+            window.innerWidth < 1024
         );
       };
 
@@ -307,7 +331,9 @@ export function OctilinearTicketTunnel({
             <h2 className="text-2xl sm:text-3xl font-black text-primary tracking-tight">
               {t('title')}
             </h2>
-            <p className="text-xs sm:text-sm text-secondary max-w-2xl font-sans">{t('subtitle')}</p>
+            <p className="text-xs sm:text-sm text-secondary max-w-2xl font-sans">
+              {t('subtitle')}
+            </p>
           </div>
 
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-paper border border-paper-edge border-b-2 text-xs font-mono text-secondary font-medium">
@@ -350,7 +376,9 @@ export function OctilinearTicketTunnel({
 
               <div className="px-4 py-2 bg-sunken rounded-xl border border-paper-edge flex items-center justify-between text-xs text-secondary font-sans">
                 <span>{config.descKey}</span>
-                <span className="font-mono font-bold text-primary tnum">{config.orderNumber}</span>
+                <span className="font-mono font-bold text-primary tnum">
+                  {config.orderNumber}
+                </span>
               </div>
             </div>
           ))}
@@ -380,7 +408,9 @@ export function OctilinearTicketTunnel({
             <h2 className="text-2xl sm:text-3xl font-black text-primary tracking-tight">
               {t('title')}
             </h2>
-            <p className="text-xs sm:text-sm text-secondary max-w-2xl font-sans">{t('subtitle')}</p>
+            <p className="text-xs sm:text-sm text-secondary max-w-2xl font-sans">
+              {t('subtitle')}
+            </p>
           </div>
 
           {/* Sequential Waypoint Indicator */}
@@ -444,69 +474,21 @@ export function OctilinearTicketTunnel({
             />
 
             {/* Octilinear Station Interchange Nodes */}
-            <circle
-              cx="220"
-              cy="300"
-              r="10"
-              fill="var(--color-paper)"
-              stroke="var(--color-primary)"
-              strokeWidth="4"
-            />
-            <circle
-              cx="370"
-              cy="150"
-              r="10"
-              fill="var(--color-paper)"
-              stroke="var(--color-line-esim)"
-              strokeWidth="4"
-            />
-            <circle
-              cx="630"
-              cy="450"
-              r="10"
-              fill="var(--color-paper)"
-              stroke="var(--color-line-wifi)"
-              strokeWidth="4"
-            />
-            <circle
-              cx="780"
-              cy="300"
-              r="10"
-              fill="var(--color-paper)"
-              stroke="var(--color-success)"
-              strokeWidth="4"
-            />
+            <circle cx="220" cy="300" r="10" fill="var(--color-paper)" stroke="var(--color-primary)" strokeWidth="4" />
+            <circle cx="370" cy="150" r="10" fill="var(--color-paper)" stroke="var(--color-line-esim)" strokeWidth="4" />
+            <circle cx="630" cy="450" r="10" fill="var(--color-paper)" stroke="var(--color-line-wifi)" strokeWidth="4" />
+            <circle cx="780" cy="300" r="10" fill="var(--color-paper)" stroke="var(--color-success)" strokeWidth="4" />
 
-            <text
-              x="220"
-              y="335"
-              textAnchor="middle"
-              className="text-xs font-mono fill-primary font-bold"
-            >
+            <text x="220" y="335" textAnchor="middle" className="text-xs font-mono fill-primary font-bold">
               01 • DEST
             </text>
-            <text
-              x="370"
-              y="125"
-              textAnchor="middle"
-              className="text-xs font-mono fill-secondary font-bold"
-            >
+            <text x="370" y="125" textAnchor="middle" className="text-xs font-mono fill-secondary font-bold">
               02 • eSIM
             </text>
-            <text
-              x="630"
-              y="485"
-              textAnchor="middle"
-              className="text-xs font-mono fill-secondary font-bold"
-            >
+            <text x="630" y="485" textAnchor="middle" className="text-xs font-mono fill-secondary font-bold">
               03 • WiFi
             </text>
-            <text
-              x="780"
-              y="335"
-              textAnchor="middle"
-              className="text-xs font-mono fill-primary font-bold"
-            >
+            <text x="780" y="335" textAnchor="middle" className="text-xs font-mono fill-primary font-bold">
               04 • ESCROW
             </text>
           </svg>

@@ -7,10 +7,7 @@ describe('Screenshot Audit Fixes Contract (UI / UX Polish)', () => {
   const idLocalePath = path.join(rootDir, 'apps/web/messages/id.json');
   const enLocalePath = path.join(rootDir, 'apps/web/messages/en.json');
   const diningDiscoveryPath = path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx');
-  const destinationCardPath = path.join(
-    rootDir,
-    'apps/web/src/components/DestinationReadinessCard.tsx',
-  );
+  const destinationCardPath = path.join(rootDir, 'apps/web/src/components/DestinationReadinessCard.tsx');
   const plannerWizardPath = path.join(rootDir, 'apps/web/src/components/PlannerWizard.tsx');
 
   const idLocale = JSON.parse(fs.readFileSync(idLocalePath, 'utf8'));
@@ -53,24 +50,16 @@ describe('Screenshot Audit Fixes Contract (UI / UX Polish)', () => {
     // Recovery copy defined in locale files
     expect(idLocale.dining.status.errorTitle).toBe('Gagal Memuat Data Kuliner');
     expect(idLocale.dining.status.retryButton).toBe('Coba Lagi');
-    expect(idLocale.dining.status.offlineFallbackNotice).toContain(
-      'Menampilkan data tersimpan terakhir saat offline',
-    );
-    expect(idLocale.dining.status.offlineMirinCardCta).toBe(
-      'Buka Kartu Komunikasi Offline Mirin & Babi',
-    );
+    expect(idLocale.dining.status.offlineFallbackNotice).toContain('Menampilkan data tersimpan terakhir saat offline');
+    expect(idLocale.dining.status.offlineMirinCardCta).toBe('Buka Kartu Komunikasi Offline Mirin & Babi');
 
     expect(enLocale.dining.status.errorTitle).toBe('Failed to Load Dining Data');
     expect(enLocale.dining.status.retryButton).toBe('Retry');
-    expect(enLocale.dining.status.offlineFallbackNotice).toContain(
-      'last cached data while offline',
-    );
-    expect(enLocale.dining.status.offlineMirinCardCta).toBe(
-      'Open Offline Mirin & Pork Dietary Card',
-    );
+    expect(enLocale.dining.status.offlineFallbackNotice).toContain('last cached data while offline');
+    expect(enLocale.dining.status.offlineMirinCardCta).toBe('Open Offline Mirin & Pork Dietary Card');
 
     // DiningDiscovery contains retry handler and offline fallback trigger
-    expect(diningDiscoveryCode).toContain('setIsPhraseCardOpen(true)');
+    expect(diningDiscoveryCode).toContain("setIsPhraseCardOpen(true)");
     expect(diningDiscoveryCode).toContain("t('status.offlineMirinCardCta')");
     expect(diningDiscoveryCode).toContain("t('status.retryButton')");
     expect(diningDiscoveryCode).toContain('lastGoodPlaces');
@@ -81,12 +70,8 @@ describe('Screenshot Audit Fixes Contract (UI / UX Polish)', () => {
     expect(destinationCardCode).toContain('RTE');
     expect(destinationCardCode).toContain('{countryInfo.countryCode}');
     // Bare 48px square tile and double bracket badge removed
-    expect(destinationCardCode).not.toContain(
-      '<div className="w-12 h-12 rounded bg-sunken border border-paper-edge flex items-center justify-center font-mono font-bold text-sm text-primary tracking-wider tnum">',
-    );
-    expect(destinationCardCode).not.toContain(
-      '{countryInfo.name}\n              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-sunken border border-paper-edge text-secondary tnum">\n                {countryInfo.countryCode}\n              </span>',
-    );
+    expect(destinationCardCode).not.toContain('<div className="w-12 h-12 rounded bg-sunken border border-paper-edge flex items-center justify-center font-mono font-bold text-sm text-primary tracking-wider tnum">');
+    expect(destinationCardCode).not.toContain('{countryInfo.name}\n              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-sunken border border-paper-edge text-secondary tnum">\n                {countryInfo.countryCode}\n              </span>');
   });
 
   it('Issue 5: Price consistency - explicit unit qualifiers (per perangkat vs per orang)', () => {
@@ -113,8 +98,7 @@ describe('Screenshot Audit Fixes Contract (UI / UX Polish)', () => {
 
   it('Issue 7: Dense mono-uppercase microcopy kept under 3 words for brand accents, not instructions', () => {
     // Rendered station brand accent headers strictly <= 3 words
-    const renderedSpans =
-      plannerWizardCode.match(/<span[^>]*font-mono[^>]*>\s*STN-\d+\s*•\s*[^<]+/g) || [];
+    const renderedSpans = plannerWizardCode.match(/<span[^>]*font-mono[^>]*>\s*STN-\d+\s*•\s*[^<]+/g) || [];
     expect(renderedSpans.length).toBeGreaterThanOrEqual(5);
 
     renderedSpans.forEach((spanTag) => {
@@ -127,8 +111,6 @@ describe('Screenshot Audit Fixes Contract (UI / UX Polish)', () => {
 
     // Action button uses readable font-sans and standard tracking
     expect(plannerWizardCode).toContain('font-sans text-sm tracking-normal font-bold');
-    expect(plannerWizardCode).not.toContain(
-      'font-mono text-sm uppercase tracking-wider font-bold transition flex items-center justify-center gap-2',
-    );
+    expect(plannerWizardCode).not.toContain('font-mono text-sm uppercase tracking-wider font-bold transition flex items-center justify-center gap-2');
   });
 });

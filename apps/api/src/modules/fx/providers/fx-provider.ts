@@ -39,7 +39,7 @@ export interface DivergenceCheckResult {
 export function checkProviderDivergence(
   quoteA: FxRateQuote,
   quoteB: FxRateQuote,
-  threshold = DIVERGENCE_THRESHOLD,
+  threshold = DIVERGENCE_THRESHOLD
 ): DivergenceCheckResult {
   const minRate = Math.min(quoteA.rate, quoteB.rate);
   if (minRate <= 0) {

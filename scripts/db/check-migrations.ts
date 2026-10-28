@@ -47,8 +47,7 @@ if (require.main === module) {
     if (!r.isValid) {
       console.error(`❌ Migration failed checks: ${r.migrationFile}`);
       if (!r.hasLockTimeout) console.error('   Missing SET lock_timeout statement.');
-      if (r.hasDestructiveDrop)
-        console.error('   Contains unapproved DROP COLUMN without expand-contract.');
+      if (r.hasDestructiveDrop) console.error('   Contains unapproved DROP COLUMN without expand-contract.');
       hasFailure = true;
     } else {
       console.log(`✓ ${r.migrationFile}: Valid (lock_timeout enforced, zero-downtime safe)`);

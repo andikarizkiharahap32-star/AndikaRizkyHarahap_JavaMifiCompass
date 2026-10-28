@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { FxConversionService, roundHalfEven } from '../../../apps/api/src/modules/fx/fx.service';
+import {
+  FxConversionService,
+  roundHalfEven,
+} from '../../../apps/api/src/modules/fx/fx.service';
 import {
   checkProviderDivergence,
   FxRateQuote,
@@ -111,7 +114,7 @@ describe('Backend and Workflows - P16: FX Service (Currency to IDR)', () => {
     expect(freshResult.stale).toBe(false);
   });
 
-  it("P16-5: Banker's rounding (ROUND_HALF_EVEN) correctly rounds half-way ties to even integers", () => {
+  it('P16-5: Banker\'s rounding (ROUND_HALF_EVEN) correctly rounds half-way ties to even integers', () => {
     // Half-way ties round to the nearest EVEN integer
     expect(roundHalfEven(2.5)).toBe(2); // 2 is even
     expect(roundHalfEven(3.5)).toBe(4); // 4 is even
@@ -142,7 +145,7 @@ describe('Backend and Workflows - P17: Reviews and Moderation', () => {
         reviewerDisplayName: 'Guest',
         rating: 5,
         body: 'Great halal ramen in Shinjuku!',
-      }),
+      })
     ).rejects.toThrow(/Authentication required/);
 
     // 2. Body too short (< 20 chars)
@@ -153,7 +156,7 @@ describe('Backend and Workflows - P17: Reviews and Moderation', () => {
         reviewerDisplayName: 'Ahmad',
         rating: 5,
         body: 'Short text',
-      }),
+      })
     ).rejects.toThrow(/between 20 and 2000 characters/);
 
     // 3. Body too long (> 2000 chars)
@@ -164,7 +167,7 @@ describe('Backend and Workflows - P17: Reviews and Moderation', () => {
         reviewerDisplayName: 'Ahmad',
         rating: 5,
         body: 'x'.repeat(2001),
-      }),
+      })
     ).rejects.toThrow(/between 20 and 2000 characters/);
   });
 
@@ -183,7 +186,7 @@ describe('Backend and Workflows - P17: Reviews and Moderation', () => {
 
     // Duplicate review within 90 days is rejected
     await expect(reviewService.submitReview(input)).rejects.toThrow(
-      /Only one review per place is permitted every 90 days/,
+      /Only one review per place is permitted every 90 days/
     );
   });
 
@@ -283,7 +286,7 @@ describe('Backend and Workflows - P17: Reviews and Moderation', () => {
       'rev_9921',
       'mod_usr_admin',
       'approve',
-      'Reviewed and verified text compliance',
+      'Reviewed and verified text compliance'
     );
 
     expect(entry.reviewId).toBe('rev_9921');

@@ -2,10 +2,7 @@ import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import { HalalTierType, TIER_DEFINITIONS } from '../src';
-import {
-  evaluateHalalTier,
-  ACCREDITED_CERTIFIERS,
-} from '../../../apps/api/src/modules/dining/validation/tier-engine';
+import { evaluateHalalTier, ACCREDITED_CERTIFIERS } from '../../../apps/api/src/modules/dining/validation/tier-engine';
 import { HalalTier, DietaryFlag } from '../src';
 
 describe('P10 — Halal Trust, Evidence, and Dietary Taxonomy', () => {
@@ -14,10 +11,7 @@ describe('P10 — Halal Trust, Evidence, and Dietary Taxonomy', () => {
   const customsStampPath = path.join(rootDir, 'packages/ui/src/dining/HalalCustomsStamp.tsx');
   const phraseCardPath = path.join(rootDir, 'packages/ui/src/dining/DietaryPhraseCard.tsx');
   const detailModalPath = path.join(rootDir, 'packages/ui/src/dining/RestaurantDetailModal.tsx');
-  const tierEnginePath = path.join(
-    rootDir,
-    'apps/api/src/modules/dining/validation/tier-engine.ts',
-  );
+  const tierEnginePath = path.join(rootDir, 'apps/api/src/modules/dining/validation/tier-engine.ts');
 
   const halalBadgeSource = fs.readFileSync(halalBadgePath, 'utf8');
   const customsStampSource = fs.readFileSync(customsStampPath, 'utf8');
@@ -79,8 +73,7 @@ describe('P10 — Halal Trust, Evidence, and Dietary Taxonomy', () => {
       porkDetected: false,
       alcoholDetected: false,
       quotesVerified: true,
-      rawEvidenceText:
-        'Warning: unaccredited and fake halal certificate reported by visitors. Does not offer halal.',
+      rawEvidenceText: 'Warning: unaccredited and fake halal certificate reported by visitors. Does not offer halal.',
     });
 
     expect(conflictingResult.tier).toBe(HalalTier.UNKNOWN);

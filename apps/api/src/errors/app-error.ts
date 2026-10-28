@@ -61,9 +61,7 @@ export class AppError extends Error {
     this.name = this.constructor.name;
     this.statusCode = params.statusCode;
     this.code = params.code;
-    this.type =
-      params.type ||
-      `https://api.javamifi.com/errors/${params.code.toLowerCase().replace(/_/g, '-')}`;
+    this.type = params.type || `https://api.javamifi.com/errors/${params.code.toLowerCase().replace(/_/g, '-')}`;
     this.detail = params.detail || params.message;
     this.invalidParams = params.invalidParams;
     this.retryAfter = params.retryAfter;
@@ -72,10 +70,7 @@ export class AppError extends Error {
 }
 
 export class ValidationError extends AppError {
-  constructor(
-    message = 'Validation failed for one or more fields',
-    invalidParams?: InvalidParam[],
-  ) {
+  constructor(message = 'Validation failed for one or more fields', invalidParams?: InvalidParam[]) {
     super({
       message,
       statusCode: 400,
@@ -107,9 +102,7 @@ export class ForbiddenError extends AppError {
 
 export class NotFoundError extends AppError {
   constructor(resource = 'Resource', identifier?: string) {
-    const detail = identifier
-      ? `${resource} '${identifier}' was not found.`
-      : `${resource} was not found.`;
+    const detail = identifier ? `${resource} '${identifier}' was not found.` : `${resource} was not found.`;
     super({
       message: detail,
       statusCode: 404,
@@ -178,33 +171,16 @@ export function formatProblemDetails(
   }
 
   // Handle standard NestJS HttpExceptions if present
-  if (
-    err &&
-    typeof err === 'object' &&
-    'getStatus' in err &&
-    typeof (err as any).getStatus === 'function'
-  ) {
+  if (err && typeof err === 'object' && 'getStatus' in err && typeof (err as any).getStatus === 'function') {
     const nestStatus = (err as any).getStatus();
     const nestResponse = (err as any).getResponse?.() || {};
-    const message =
-      typeof nestResponse === 'string'
-        ? nestResponse
-        : (nestResponse as any).message || (err as any).message || 'HTTP Error';
+    const message = typeof nestResponse === 'string' ? nestResponse : (nestResponse as any).message || (err as any).message || 'HTTP Error';
 
     return {
       type: `https://api.javamifi.com/errors/http-${nestStatus}`,
       title: Array.isArray(message) ? message.join('; ') : String(message),
       status: nestStatus,
-      code:
-        nestStatus === 400
-          ? ERROR_CODES.VALIDATION_FAILED
-          : nestStatus === 401
-            ? ERROR_CODES.AUTHENTICATION_REQUIRED
-            : nestStatus === 403
-              ? ERROR_CODES.FORBIDDEN_ACCESS
-              : nestStatus === 404
-                ? ERROR_CODES.RESOURCE_NOT_FOUND
-                : ERROR_CODES.INTERNAL_SERVER_ERROR,
+      code: nestStatus === 400 ? ERROR_CODES.VALIDATION_FAILED : nestStatus === 401 ? ERROR_CODES.AUTHENTICATION_REQUIRED : nestStatus === 403 ? ERROR_CODES.FORBIDDEN_ACCESS : nestStatus === 404 ? ERROR_CODES.RESOURCE_NOT_FOUND : ERROR_CODES.INTERNAL_SERVER_ERROR,
       correlationId,
     };
   }

@@ -3,9 +3,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Home Page Brand Identity & Transit Wayfinding Governance', () => {
-  const homePagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
-  const homeOverrideDocPath = path.resolve(__dirname, '../../../design-system/pages/home.md');
-  const masterDocPath = path.resolve(__dirname, '../../../design-system/MASTER.md');
+  const homePagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
+  const homeOverrideDocPath = path.resolve(
+    __dirname,
+    '../../../design-system/pages/home.md'
+  );
+  const masterDocPath = path.resolve(
+    __dirname,
+    '../../../design-system/MASTER.md'
+  );
 
   it('preserves transit wayfinding identity and excludes sci-fi/warp tunnel from home page', () => {
     const pageCode = fs.readFileSync(homePagePath, 'utf8');

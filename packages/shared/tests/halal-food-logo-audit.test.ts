@@ -8,10 +8,7 @@ describe('Halal Food PNG Logo Verification Audit', () => {
   const pngPath = path.join(rootDir, 'apps/web/public/images/halal-food-logo.png');
   const diningLogoPath = path.join(rootDir, 'packages/ui/src/dining/DiningLogo.tsx');
   const diningDiscoveryPath = path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx');
-  const readinessCardPath = path.join(
-    rootDir,
-    'apps/web/src/components/DestinationReadinessCard.tsx',
-  );
+  const readinessCardPath = path.join(rootDir, 'apps/web/src/components/DestinationReadinessCard.tsx');
 
   it('verifies the PNG screenshot asset exists in apps/web/public/images/ and has valid PNG header', () => {
     expect(fs.existsSync(pngPath)).toBe(true);
@@ -35,10 +32,10 @@ describe('Halal Food PNG Logo Verification Audit', () => {
     expect(HALAL_FOOD_LOGO_PNG).toBe('/images/halal-food-logo.png');
 
     const content = fs.readFileSync(diningLogoPath, 'utf8');
-    expect(content).toContain('src = HALAL_FOOD_LOGO_PNG');
-    expect(content).toContain('<img');
-    expect(content).toContain('rounded-full');
-    expect(content).toContain('alt={alt}');
+    expect(content).toContain("src = HALAL_FOOD_LOGO_PNG");
+    expect(content).toContain("<img");
+    expect(content).toContain("rounded-full");
+    expect(content).toContain("alt={alt}");
 
     // Confirms legacy SVG cloche with 'D' glyph is no longer used
     expect(content).not.toContain('<circle cx="32" cy="16"');

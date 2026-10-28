@@ -80,10 +80,7 @@ describe('SEC-P10: API Abuse and Resource Exhaustion Defense Audit', () => {
       const validPayload = {
         name: 'Normal User',
         email: 'user@example.com',
-        items: [
-          { id: 1, name: 'Item 1' },
-          { id: 2, name: 'Item 2' },
-        ],
+        items: [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }],
       };
 
       const result = validatePayloadResourceBounds(validPayload);
@@ -129,9 +126,7 @@ describe('SEC-P10: API Abuse and Resource Exhaustion Defense Audit', () => {
 
       const result = validatePayloadResourceBounds(cyclic);
       expect(result.isWithinBounds).toBe(false);
-      expect(result.violations.some((v) => v.includes('circular') || v.includes('Cyclic'))).toBe(
-        true,
-      );
+      expect(result.violations.some((v) => v.includes('circular') || v.includes('Cyclic'))).toBe(true);
     });
 
     it('evaluates decompression ratios and flags decompression bombs (> 10:1)', () => {

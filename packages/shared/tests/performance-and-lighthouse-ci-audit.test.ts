@@ -20,13 +20,13 @@ describe('Performance Plan & State Management Governance Audit', () => {
     it('generates deterministic query keys matching TanStack query hashing semantics', () => {
       expect(culinaryQuerySrc).toContain('function getCulinaryQueryKey');
       expect(culinaryQuerySrc).toContain('culinary:${params.country}:${params.city');
-      expect(culinaryQuerySrc).toContain("params.sortBy || 'relevance'");
+      expect(culinaryQuerySrc).toContain('params.sortBy || \'relevance\'');
     });
 
     it('persists and restores query data via offline storage fallback', () => {
       expect(culinaryQuerySrc).toContain('persistCulinaryToIndexedDB');
       expect(culinaryQuerySrc).toContain('getCulinaryFromIndexedDB');
-      expect(culinaryQuerySrc).toContain("IDB_DB_NAME = 'javamifi-culinary-cache'");
+      expect(culinaryQuerySrc).toContain('IDB_DB_NAME = \'javamifi-culinary-cache\'');
       expect(culinaryQuerySrc).toContain('idb_fallback_');
       expect(culinaryQuerySrc).toContain('useCulinaryQuery');
     });
@@ -59,9 +59,9 @@ describe('Performance Plan & State Management Governance Audit', () => {
 
     it('wires cartStore.addItem on Add to Cart interaction', () => {
       expect(plannerWizardSrc).toContain('cartStore.addItem');
-      expect(plannerWizardSrc).toContain('type: option.type');
-      expect(plannerWizardSrc).toContain('durationDays: computedDays || 7');
-      expect(plannerWizardSrc).toContain('Ditambahkan ✓');
+      expect(plannerWizardSrc).toContain("type: option.type");
+      expect(plannerWizardSrc).toContain("durationDays: computedDays || 7");
+      expect(plannerWizardSrc).toContain("Ditambahkan ✓");
     });
 
     it('dynamically imports desktop date picker to avoid main-thread bloat on mobile', () => {

@@ -4,20 +4,7 @@ import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import {
-  ShoppingCart,
-  Tag,
-  ShieldCheck,
-  ArrowRight,
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  AlertCircle,
-  Calendar,
-  Wifi,
-  QrCode,
-} from 'lucide-react';
+import { ShoppingCart, Tag, ShieldCheck, ArrowRight, User, Mail, Phone, MapPin, AlertCircle, Calendar, Wifi, QrCode } from 'lucide-react';
 import { PerforatedReceiptChit, Button } from '@javamifi/ui';
 import { apiClient } from '../../../lib/api';
 
@@ -123,7 +110,9 @@ function CheckoutContent({ locale }: { locale: string }) {
         <h1 className="text-3xl font-black text-primary mt-1 font-display tracking-tight">
           {t('title')}
         </h1>
-        <p className="text-sm text-secondary mt-1">{t('subtitle')}</p>
+        <p className="text-sm text-secondary mt-1">
+          {t('subtitle')}
+        </p>
       </div>
 
       {errorMessage && (
@@ -140,21 +129,14 @@ function CheckoutContent({ locale }: { locale: string }) {
         </div>
       )}
 
-      <form
-        onSubmit={handleCheckout}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20 lg:pb-0"
-        noValidate={false}
-      >
+      <form onSubmit={handleCheckout} className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20 lg:pb-0" noValidate={false}>
         {/* Left 2 Cols: Contact & Shipping */}
         <div className="lg:col-span-2 space-y-6">
           {/* Mobile Cart & Order Item Summary (Part 1 §4.7 / P1-4) */}
           <div className="p-5 bg-paper border border-paper-edge border-b-2 rounded space-y-4">
             <div className="flex items-start justify-between gap-3 border-b border-paper-edge pb-3">
               <div className="flex items-start gap-3">
-                <div
-                  className="w-12 h-12 rounded bg-sunken border border-paper-edge flex items-center justify-center shrink-0 mt-0.5"
-                  aria-hidden="true"
-                >
+                <div className="w-12 h-12 rounded bg-sunken border border-paper-edge flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">
                   {isWifi ? (
                     <Wifi className="w-6 h-6 text-line-wifi" />
                   ) : (
@@ -172,25 +154,17 @@ function CheckoutContent({ locale }: { locale: string }) {
                     </span>
                   </div>
                   <h3 className="font-bold text-sm sm:text-base text-primary mt-1">
-                    {isWifi
-                      ? 'Pocket WiFi Router Unlimited (3GB/hari FUP)'
-                      : 'Digital Travel eSIM High-Speed'}
+                    {isWifi ? 'Pocket WiFi Router Unlimited (3GB/hari FUP)' : 'Digital Travel eSIM High-Speed'}
                   </h3>
                   <p className="text-xs text-secondary font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
                     <span>{destCode === 'JP' ? 'Jepang (Japan)' : destCode}</span>
                     <span>•</span>
-                    <span className="tnum">
-                      {travelers} {isId ? 'Traveler' : 'Travelers'}
-                    </span>
+                    <span className="tnum">{travelers} {isId ? 'Traveler' : 'Travelers'}</span>
                     <span>•</span>
                     <span className="text-primary font-bold">
                       {isWifi
-                        ? isId
-                          ? 'Pengambilan: Bandara CGK T3 / Drop Box 24 Jam'
-                          : 'Pickup: CGK T3 Airport / 24h Drop Box'
-                        : isId
-                          ? 'Pengiriman: 100% Digital via QR Code'
-                          : 'Fulfillment: 100% Digital via QR Code'}
+                        ? (isId ? 'Pengambilan: Bandara CGK T3 / Drop Box 24 Jam' : 'Pickup: CGK T3 Airport / 24h Drop Box')
+                        : (isId ? 'Pengiriman: 100% Digital via QR Code' : 'Fulfillment: 100% Digital via QR Code')}
                     </span>
                   </p>
                 </div>
@@ -208,29 +182,17 @@ function CheckoutContent({ locale }: { locale: string }) {
             {/* Price lines with zero-tax transparent breakdown */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
               <div className="p-2.5 rounded bg-surface border border-paper-edge">
-                <span className="text-outline text-xs block">
-                  {isId ? 'Tarif/Hari' : 'Daily Rate'}
-                </span>
-                <span className="font-bold text-primary tnum">
-                  Rp {unitRateIdr.toLocaleString('id-ID')}
-                </span>
+                <span className="text-outline text-xs block">{isId ? 'Tarif/Hari' : 'Daily Rate'}</span>
+                <span className="font-bold text-primary tnum">Rp {unitRateIdr.toLocaleString('id-ID')}</span>
               </div>
               <div className="p-2.5 rounded bg-surface border border-paper-edge">
                 <span className="text-outline text-xs block">{isId ? 'Durasi' : 'Duration'}</span>
-                <span className="font-bold text-primary tnum">
-                  {durationDays} {isId ? 'Hari' : 'Days'}
-                </span>
+                <span className="font-bold text-primary tnum">{durationDays} {isId ? 'Hari' : 'Days'}</span>
               </div>
               <div className="p-2.5 rounded bg-surface border border-paper-edge">
-                <span className="text-outline text-xs block">
-                  {isWifi ? 'Deposit' : 'Biaya Admin'}
-                </span>
+                <span className="text-outline text-xs block">{isWifi ? 'Deposit' : 'Biaya Admin'}</span>
                 <span className="font-bold text-primary tnum">
-                  {isWifi
-                    ? depositIdr > 0
-                      ? `Rp ${depositIdr.toLocaleString('id-ID')}`
-                      : 'Bebas Deposit'
-                    : 'Rp 0 (Gratis)'}
+                  {isWifi ? (depositIdr > 0 ? `Rp ${depositIdr.toLocaleString('id-ID')}` : 'Bebas Deposit') : 'Rp 0 (Gratis)'}
                 </span>
               </div>
               <div className="p-2.5 rounded bg-surface border border-paper-edge">
@@ -245,10 +207,7 @@ function CheckoutContent({ locale }: { locale: string }) {
                 <ShieldCheck className="w-4 h-4 text-success shrink-0" />
                 <span>
                   {isId ? 'Garansi sinyal uang kembali' : 'Signal money-back guarantee'}{' '}
-                  <Link
-                    href={`/${locale}/support`}
-                    className="underline font-semibold text-primary hover:text-primary-hover"
-                  >
+                  <Link href={`/${locale}/support`} className="underline font-semibold text-primary hover:text-primary-hover">
                     ({isId ? 'Syarat & Ketentuan Berlaku' : 'T&Cs apply'})
                   </Link>
                 </span>
@@ -271,10 +230,7 @@ function CheckoutContent({ locale }: { locale: string }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label
-                  htmlFor="checkout-fullname"
-                  className="block text-xs font-bold text-secondary mb-1.5"
-                >
+                <label htmlFor="checkout-fullname" className="block text-xs font-bold text-secondary mb-1.5">
                   {t('fullName')} <span className="text-danger">*</span>
                 </label>
                 <input
@@ -290,10 +246,7 @@ function CheckoutContent({ locale }: { locale: string }) {
               </div>
 
               <div>
-                <label
-                  htmlFor="checkout-email"
-                  className="block text-xs font-bold text-secondary mb-1.5"
-                >
+                <label htmlFor="checkout-email" className="block text-xs font-bold text-secondary mb-1.5">
                   {t('email')} <span className="text-danger">*</span>
                 </label>
                 <input
@@ -314,10 +267,7 @@ function CheckoutContent({ locale }: { locale: string }) {
               </div>
 
               <div className="sm:col-span-2">
-                <label
-                  htmlFor="checkout-phone"
-                  className="block text-xs font-bold text-secondary mb-1.5"
-                >
+                <label htmlFor="checkout-phone" className="block text-xs font-bold text-secondary mb-1.5">
                   {t('phone')} <span className="text-danger">*</span>
                 </label>
                 <input
@@ -340,10 +290,7 @@ function CheckoutContent({ locale }: { locale: string }) {
 
             {isWifi && (
               <div className="pt-4 border-t border-paper-edge space-y-1.5">
-                <label
-                  htmlFor="checkout-address"
-                  className="block text-xs font-bold text-secondary mb-1.5 flex items-center gap-1.5"
-                >
+                <label htmlFor="checkout-address" className="block text-xs font-bold text-secondary mb-1.5 flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-line-wifi" />
                   {t('deliveryAddress')} <span className="text-danger">*</span>
                 </label>
@@ -379,9 +326,7 @@ function CheckoutContent({ locale }: { locale: string }) {
                   <ShieldCheck className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
                   <div>
                     <span className="font-bold uppercase tracking-wider block text-primary">
-                      {isId
-                        ? 'Mode Uji Coba Transaksi (Demo Sandbox)'
-                        : 'Transaction Demo Mode (Sandbox)'}
+                      {isId ? 'Mode Uji Coba Transaksi (Demo Sandbox)' : 'Transaction Demo Mode (Sandbox)'}
                     </span>
                     <span className="text-outline font-medium">
                       {isId
@@ -391,11 +336,7 @@ function CheckoutContent({ locale }: { locale: string }) {
                   </div>
                 </div>
 
-                <div
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-3"
-                  role="radiogroup"
-                  aria-label={t('paymentMethod')}
-                >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-label={t('paymentMethod')}>
                   <label
                     htmlFor="gateway-mode-mock"
                     className={`p-4 rounded border cursor-pointer flex flex-col justify-between transition-colors min-h-12 ${
@@ -418,7 +359,9 @@ function CheckoutContent({ locale }: { locale: string }) {
                         className="w-5 h-5 accent-primary cursor-pointer"
                       />
                     </div>
-                    <p className="text-xs text-secondary">{t('gatewayMockDesc')}</p>
+                    <p className="text-xs text-secondary">
+                      {t('gatewayMockDesc')}
+                    </p>
                   </label>
 
                   <label
@@ -443,7 +386,9 @@ function CheckoutContent({ locale }: { locale: string }) {
                         className="w-5 h-5 accent-primary cursor-pointer"
                       />
                     </div>
-                    <p className="text-xs text-secondary">{t('gatewayMidtransDesc')}</p>
+                    <p className="text-xs text-secondary">
+                      {t('gatewayMidtransDesc')}
+                    </p>
                   </label>
                 </div>
               </>
@@ -472,11 +417,7 @@ function CheckoutContent({ locale }: { locale: string }) {
           <PerforatedReceiptChit
             orderNumber={`JMC-2610-${Math.floor(1000 + Math.random() * 9000)}`}
             routeTitle={`CGK ➔ ${destCode}`}
-            productName={
-              isWifi
-                ? 'Pocket WiFi Router Unlimited (3GB/hari FUP)'
-                : 'Digital Travel eSIM High-Speed'
-            }
+            productName={isWifi ? 'Pocket WiFi Router Unlimited (3GB/hari FUP)' : 'Digital Travel eSIM High-Speed'}
             productType={productType}
             durationDays={durationDays}
             dateRangeText="26 Okt – 01 Nov 2026"
@@ -488,22 +429,15 @@ function CheckoutContent({ locale }: { locale: string }) {
             isDepositRefundable={isWifi}
             taxIncludedLabel={
               isWifi
-                ? isId
-                  ? 'Termasuk PPN & Jaminan Deposit'
-                  : 'Tax & Device Deposit Included'
-                : isId
-                  ? 'Termasuk PPN & Layanan Digital'
-                  : 'Tax & Digital Service Included'
+                ? (isId ? 'Termasuk PPN & Jaminan Deposit' : 'Tax & Device Deposit Included')
+                : (isId ? 'Termasuk PPN & Layanan Digital' : 'Tax & Digital Service Included')
             }
           />
 
           <div className="p-6 bg-paper border border-paper-edge border-b-2 rounded space-y-4">
             {/* Promo Code Input */}
             <div>
-              <label
-                htmlFor="checkout-promo"
-                className="block text-xs font-bold text-secondary mb-1.5 flex items-center gap-1"
-              >
+              <label htmlFor="checkout-promo" className="block text-xs font-bold text-secondary mb-1.5 flex items-center gap-1">
                 <Tag className="w-3.5 h-3.5" />
                 {t('promoCode')}
               </label>
@@ -579,15 +513,13 @@ function CheckoutContent({ locale }: { locale: string }) {
   );
 }
 
-export default function CheckoutPage({ params: { locale } }: { params: { locale: string } }) {
+export default function CheckoutPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   return (
-    <Suspense
-      fallback={
-        <div className="max-w-7xl mx-auto px-4 py-16 text-center text-outline">
-          Loading checkout...
-        </div>
-      }
-    >
+    <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-16 text-center text-outline">Loading checkout...</div>}>
       <CheckoutContent locale={locale} />
     </Suspense>
   );

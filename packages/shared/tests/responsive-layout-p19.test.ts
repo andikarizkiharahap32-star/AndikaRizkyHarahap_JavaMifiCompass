@@ -25,7 +25,10 @@ describe('P19 — Responsive Layout & Mobile Ergonomics Specification Verificati
   });
 
   it('WS10: verifies safe-area insets and viewport containment in globals.css', () => {
-    const globalsCss = fs.readFileSync(path.join(rootDir, 'apps/web/src/app/globals.css'), 'utf-8');
+    const globalsCss = fs.readFileSync(
+      path.join(rootDir, 'apps/web/src/app/globals.css'),
+      'utf-8'
+    );
 
     expect(globalsCss).toContain('.pt-safe');
     expect(globalsCss).toContain('.pb-safe');
@@ -40,13 +43,13 @@ describe('P19 — Responsive Layout & Mobile Ergonomics Specification Verificati
   it('WS07 & WS17: verifies mobile navigation drawer & thumb ergonomics in Navbar.tsx', () => {
     const navbarCode = fs.readFileSync(
       path.join(rootDir, 'apps/web/src/components/Navbar.tsx'),
-      'utf-8',
+      'utf-8'
     );
 
     // Mobile drawer should have safe-area padding and thumb zone
     expect(navbarCode).toContain('pb-safe');
     expect(navbarCode).toContain('Akses Cepat & Pengaturan');
-
+    
     // Interactive touch targets must meet 48px standard
     expect(navbarCode).toContain('min-h-12');
     expect(navbarCode).toContain('min-w-12');
@@ -59,7 +62,7 @@ describe('P19 — Responsive Layout & Mobile Ergonomics Specification Verificati
   it('WS14 & WS18 & WS22: verifies DiningDiscovery responsive wrapping and 48px touch targets', () => {
     const diningCode = fs.readFileSync(
       path.join(rootDir, 'apps/web/src/components/DiningDiscovery.tsx'),
-      'utf-8',
+      'utf-8'
     );
 
     // Layout should contain overflow-x-hidden on outer container
@@ -74,7 +77,7 @@ describe('P19 — Responsive Layout & Mobile Ergonomics Specification Verificati
   it('WS15 & WS19 & WS31: verifies PlannerWizard 48px steppers, tabular prices, and responsive layout', () => {
     const plannerCode = fs.readFileSync(
       path.join(rootDir, 'apps/web/src/components/PlannerWizard.tsx'),
-      'utf-8',
+      'utf-8'
     );
 
     // Steppers must have 48px touch targets

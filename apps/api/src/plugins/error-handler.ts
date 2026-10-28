@@ -47,9 +47,7 @@ export class ProblemDetailsFilter implements ExceptionFilter {
         exception instanceof Error ? exception.stack : undefined,
       );
     } else {
-      this.logger.warn(
-        `[${correlationId}] ${problem.status} on ${request.method} ${request.url}: ${problem.title}`,
-      );
+      this.logger.warn(`[${correlationId}] ${problem.status} on ${request.method} ${request.url}: ${problem.title}`);
     }
 
     // 4. Set headers and response

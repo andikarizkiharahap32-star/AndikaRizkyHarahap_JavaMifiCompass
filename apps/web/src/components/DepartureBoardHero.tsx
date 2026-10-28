@@ -117,6 +117,7 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
   return (
     <section className="relative overflow-hidden pt-8 sm:pt-14 pb-14 bg-surface border-b border-paper-edge">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        
         {/* Header Signage Plate with Tactile Hero Compass Object (P18-WS02, WS06, WS18) */}
         <div className="text-center space-y-4 max-w-4xl mx-auto">
           <div
@@ -134,8 +135,7 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
               {currentHub.bearingDeg}° {currentHub.bearingCardinal}
             </span>
             <span className="sr-only">
-              {t('bearingPrefix')} {currentHub.bearingDeg} degrees {currentHub.bearingCardinal} from
-              CGK Jakarta
+              {t('bearingPrefix')} {currentHub.bearingDeg} degrees {currentHub.bearingCardinal} from CGK Jakarta
             </span>
           </div>
 
@@ -150,6 +150,7 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
 
         {/* Tactile Departure Board & Wayfinding Dock */}
         <div className="rounded bg-paper border border-paper-edge border-b-2 p-6 sm:p-8 space-y-8">
+          
           {/* Top Board: Destination Station Selector */}
           <div className="space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-paper-edge pb-2">
@@ -157,7 +158,9 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
                 <Globe2 className="w-4 h-4 text-primary" />
                 {t('stationsLabel')}
               </span>
-              <span className="text-xs font-mono text-outline font-medium">{t('stationsSub')}</span>
+              <span className="text-xs font-mono text-outline font-medium">
+                {t('stationsSub')}
+              </span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
@@ -177,14 +180,12 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
                   >
                     <div className="flex items-center justify-between w-full">
                       <span className="text-xs font-mono font-bold tnum">{hub.stationCode}</span>
-                      <span className="text-xs font-mono text-outline tnum font-semibold">
-                        {hub.bearingCardinal}
-                      </span>
-                      <span
-                        className={`w-2 h-2 rounded-full ${isSelected ? 'bg-primary' : 'bg-outline'}`}
-                      />
+                      <span className="text-xs font-mono text-outline tnum font-semibold">{hub.bearingCardinal}</span>
+                      <span className={`w-2 h-2 rounded-full ${isSelected ? 'bg-primary' : 'bg-outline'}`} />
                     </div>
-                    <span className="text-sm truncate mt-1">{t(`hubs.${hub.id}.name`)}</span>
+                    <span className="text-sm truncate mt-1">
+                      {t(`hubs.${hub.id}.name`)}
+                    </span>
                     <span className="text-xs text-secondary font-mono truncate">{hub.city}</span>
                   </button>
                 );
@@ -194,13 +195,14 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
 
           {/* Middle Board: Traveler & Trip Duration Parameters */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+            
             {/* Traveler Pax Count */}
             <div className="space-y-3">
               <span className="text-xs font-bold uppercase tracking-wider text-secondary flex items-center gap-2">
                 <Users className="w-4 h-4 text-primary" />
                 {t('paxLabel')}
               </span>
-
+              
               <div className="grid grid-cols-3 gap-2">
                 {PAX_OPTIONS.map((opt) => {
                   const isSelected = paxMode === opt.pax;
@@ -217,9 +219,7 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
                       }`}
                     >
                       <span className="text-xs sm:text-sm block">{t(`pax.${opt.key}.label`)}</span>
-                      <span
-                        className={`text-xs block ${isSelected ? 'text-on-primary' : 'text-secondary font-medium'}`}
-                      >
+                      <span className={`text-xs block ${isSelected ? 'text-on-primary' : 'text-secondary font-medium'}`}>
                         {t(`pax.${opt.key}.sub`)}
                       </span>
                     </button>
@@ -299,10 +299,7 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
                 </span>
                 <div className="text-xl sm:text-2xl font-mono font-bold text-primary tnum">
                   Rp {costPerPerson.toLocaleString('id-ID')}
-                  <span className="text-xs text-secondary font-normal font-sans">
-                    {' '}
-                    {t('perDay')}
-                  </span>
+                  <span className="text-xs text-secondary font-normal font-sans"> {t('perDay')}</span>
                 </div>
               </div>
             </div>
@@ -311,21 +308,15 @@ export function DepartureBoardHero({ locale }: DepartureBoardHeroProps) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-paper-edge text-xs text-secondary">
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-warning flex-shrink-0" />
-                <span>
-                  {t('speedLabel')}: {currentHubSpeed}
-                </span>
+                <span>{t('speedLabel')}: {currentHubSpeed}</span>
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-success flex-shrink-0" />
-                <span>
-                  {t('socketLabel')}: {currentHubSocket}
-                </span>
+                <span>{t('socketLabel')}: {currentHubSocket}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
-                <span>
-                  {t('currencyLabel')}: {currentHub.currency}
-                </span>
+                <span>{t('currencyLabel')}: {currentHub.currency}</span>
               </div>
             </div>
 

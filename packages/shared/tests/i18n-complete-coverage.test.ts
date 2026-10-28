@@ -5,17 +5,26 @@ import * as path from 'path';
 describe('Complete i18n Dictionary Coverage & Zero-Inline String Governance', () => {
   const heroComponentPath = path.resolve(
     __dirname,
-    '../../../apps/web/src/components/DepartureBoardHero.tsx',
+    '../../../apps/web/src/components/DepartureBoardHero.tsx'
   );
-  const homePagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
-  const enMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/en.json');
-  const idMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/id.json');
+  const homePagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
+  const enMessagesPath = path.resolve(
+    __dirname,
+    '../../../apps/web/messages/en.json'
+  );
+  const idMessagesPath = path.resolve(
+    __dirname,
+    '../../../apps/web/messages/id.json'
+  );
 
   it('DepartureBoardHero contains zero inline language ternaries and uses useTranslations', () => {
     const heroCode = fs.readFileSync(heroComponentPath, 'utf8');
 
     // Asserts zero inline ternary language branching
-    expect(heroCode).not.toContain('isId ?');
+    expect(heroCode).not.toContain("isId ?");
     expect(heroCode).not.toContain("locale === 'id'");
 
     // Asserts next-intl hook usage

@@ -1,7 +1,12 @@
 import React from 'react';
 
 export type PriceUnit =
-  'per-person-day' | 'per-device-day' | 'per-day' | 'per-person' | 'per-device' | 'total';
+  | 'per-person-day'
+  | 'per-device-day'
+  | 'per-day'
+  | 'per-person'
+  | 'per-device'
+  | 'total';
 
 export interface PriceProps {
   amountIdr: number;
@@ -34,7 +39,7 @@ export const Price: React.FC<PriceProps> = ({
     'per-day': { id: '/hari', en: '/day' },
     'per-person': { id: '/orang', en: '/person' },
     'per-device': { id: '/perangkat', en: '/device' },
-    total: { id: ' total', en: ' total' },
+    'total': { id: ' total', en: ' total' },
   };
 
   const unitText = isId ? unitLabels[unit].id : unitLabels[unit].en;
@@ -51,10 +56,11 @@ export const Price: React.FC<PriceProps> = ({
   return (
     <span className={`inline-flex items-baseline gap-1 tnum ${className}`} data-unit={unit}>
       <span className={`${currentSize.amount} text-primary`}>
-        {showCurrency ? (isId ? 'Rp ' : 'IDR ') : ''}
-        {formattedAmount}
+        {showCurrency ? (isId ? 'Rp ' : 'IDR ') : ''}{formattedAmount}
       </span>
-      <span className={currentSize.unit}>{unitText}</span>
+      <span className={currentSize.unit}>
+        {unitText}
+      </span>
     </span>
   );
 };

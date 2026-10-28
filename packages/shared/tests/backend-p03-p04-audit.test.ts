@@ -2,12 +2,7 @@ import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import { checkMigrations } from '../../../scripts/db/check-migrations';
-import {
-  runSeed,
-  REFERENCE_COUNTRIES,
-  CERTIFYING_BODIES,
-  DEV_FIXTURES,
-} from '../../../apps/api/src/db/seed/seed';
+import { runSeed, REFERENCE_COUNTRIES, CERTIFYING_BODIES, DEV_FIXTURES } from '../../../apps/api/src/db/seed/seed';
 import { passkeyService, ARGON2_CONFIG } from '../../../apps/api/src/modules/auth/passkeys';
 
 describe('Backend and Workflows - P03: Migrations and Seed Data', () => {

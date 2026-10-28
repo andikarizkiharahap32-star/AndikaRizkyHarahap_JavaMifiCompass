@@ -1,4 +1,8 @@
-import { ValidationError, AuthenticationError, ConflictError } from '../../errors/app-error';
+import {
+  ValidationError,
+  AuthenticationError,
+  ConflictError,
+} from '../../errors/app-error';
 import { moderationService } from '../moderation/moderation.service';
 
 /**
@@ -65,19 +69,18 @@ export class ReviewService {
     // 2. Length check: 20 to 2000 characters
     const trimmedBody = (input.body || '').trim();
     if (trimmedBody.length < 20 || trimmedBody.length > 2000) {
-      throw new ValidationError('Review body must be between 20 and 2000 characters', [
-        { name: 'body', reason: 'Length must be in range [20, 2000]' },
-      ]);
+      throw new ValidationError(
+        'Review body must be between 20 and 2000 characters',
+        [{ name: 'body', reason: 'Length must be in range [20, 2000]' }]
+      );
     }
 
     // 3. Frequency check: 1 review per place per 90 days
     const existing = this.findRecentUserReview(input.userId, input.placeId);
     if (existing) {
-      const remainingDays = Math.ceil(
-        (existing.createdAt + REVIEW_COOLDOWN_MS - Date.now()) / 86400000,
-      );
+      const remainingDays = Math.ceil((existing.createdAt + REVIEW_COOLDOWN_MS - Date.now()) / 86400000);
       throw new ConflictError(
-        `Only one review per place is permitted every 90 days. Please wait ${remainingDays} day(s).`,
+        `Only one review per place is permitted every 90 days. Please wait ${remainingDays} day(s).`
       );
     }
 

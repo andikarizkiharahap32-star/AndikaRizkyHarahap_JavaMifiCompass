@@ -23,10 +23,8 @@ export interface NotifyJobData {
 
 export async function processNotifyJob(
   jobData: NotifyJobData,
-  mockTransport?: (
-    data: NotifyJobData,
-  ) => Promise<{ status: 'sent' | 'hard_bounce' | 'transient_error' }>,
-  notifyService = notificationService,
+  mockTransport?: (data: NotifyJobData) => Promise<{ status: 'sent' | 'hard_bounce' | 'transient_error' }>,
+  notifyService = notificationService
 ): Promise<'sent' | 'suppressed'> {
   // 1. Check suppression list before calling transport
   if (notifyService.isSuppressed(jobData.recipient)) {
@@ -34,7 +32,9 @@ export async function processNotifyJob(
   }
 
   // 2. Mock or real transport dispatch
-  const transport = mockTransport || (async () => ({ status: 'sent' as const }));
+  const transport =
+    mockTransport ||
+    (async () => ({ status: 'sent' as const }));
 
   const result = await transport(jobData);
 
@@ -44,7 +44,7 @@ export async function processNotifyJob(
 
     // P20 Invariant: Never retry hard bounces. Throw NonRetryableJobError
     throw new NonRetryableJobError(
-      `Hard bounce encountered for recipient '${jobData.recipient}'. Suppressed from future sends.`,
+      `Hard bounce encountered for recipient '${jobData.recipient}'. Suppressed from future sends.`
     );
   }
 

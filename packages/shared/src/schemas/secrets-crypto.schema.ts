@@ -225,12 +225,7 @@ export function scanPayloadForSecretLeaks(
       const currentPath = `${fieldPath}.${key}`;
       const isSensitiveKey = SENSITIVE_KEY_PATTERNS.some((p) => p.test(key));
 
-      if (
-        isSensitiveKey &&
-        typeof value === 'string' &&
-        value.length > 0 &&
-        value !== '[REDACTED_SECRET]'
-      ) {
+      if (isSensitiveKey && typeof value === 'string' && value.length > 0 && value !== '[REDACTED_SECRET]') {
         findings.push({
           field: currentPath,
           patternType: 'SENSITIVE_KEY_EXPOSURE',

@@ -72,7 +72,7 @@ export function validateAndNormalizeGeoQuery(params: GeoQueryParams): ValidatedG
   if (requestedRadius > MAX_RADIUS_METERS) {
     throw new ValidationError(
       `Radius exceeds maximum allowed limit of ${MAX_RADIUS_METERS}m (25 km)`,
-      [{ name: 'radiusMeters', reason: `Radius capped at ${MAX_RADIUS_METERS}m` }],
+      [{ name: 'radiusMeters', reason: `Radius capped at ${MAX_RADIUS_METERS}m` }]
     );
   }
 
@@ -94,7 +94,7 @@ export function buildPostGisRadiusQuery(
   lng: number,
   lat: number,
   radiusMeters: number,
-  limit = 20,
+  limit = 20
 ): { sql: string; values: [number, number, number, number] } {
   const sql = `
     SELECT

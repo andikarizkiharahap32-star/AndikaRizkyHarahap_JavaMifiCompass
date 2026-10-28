@@ -40,7 +40,7 @@ export class CrossRegionReplicator {
       primaryBucket?: string;
       drIsolatedBucket?: string;
       drKmsKeyArn?: string;
-    } = {},
+    } = {}
   ) {
     this.primaryRegion = config.primaryRegion || 'ap-southeast-1';
     this.drRegion = config.drRegion || 'ap-southeast-2';
@@ -52,7 +52,7 @@ export class CrossRegionReplicator {
     // P26 Prohibition: Cannot replicate to same region without cross-region isolation
     if (this.primaryRegion === this.drRegion) {
       throw new Error(
-        `Disaster recovery violation: Secondary DR region (${this.drRegion}) must be distinct from primary region (${this.primaryRegion})`,
+        `Disaster recovery violation: Secondary DR region (${this.drRegion}) must be distinct from primary region (${this.primaryRegion})`
       );
     }
   }

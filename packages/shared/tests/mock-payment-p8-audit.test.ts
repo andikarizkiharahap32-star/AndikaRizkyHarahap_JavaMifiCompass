@@ -231,14 +231,12 @@ describe('PAY-P08 — Test Fixtures and Scenario Matrix Audit Suite', () => {
   describe('PAY-P08-CTRL-0001: Environment Guard Scenario Validation', () => {
     it('accepts allowlisted scenario IDs', () => {
       expect(guard.assertScenarioPermitted('SCN_SUCCESS_VISA')).toBe('SCN_SUCCESS_VISA');
-      expect(guard.assertScenarioPermitted('SCN_REFUND_SETTLED_PAYMENT')).toBe(
-        'SCN_REFUND_SETTLED_PAYMENT',
-      );
+      expect(guard.assertScenarioPermitted('SCN_REFUND_SETTLED_PAYMENT')).toBe('SCN_REFUND_SETTLED_PAYMENT');
     });
 
     it('rejects unknown or invalid scenario IDs', () => {
       expect(() => guard.assertScenarioPermitted('SCN_INVALID_UNKNOWN')).toThrow(
-        /Unknown payment scenario/,
+        /Unknown payment scenario/
       );
     });
   });

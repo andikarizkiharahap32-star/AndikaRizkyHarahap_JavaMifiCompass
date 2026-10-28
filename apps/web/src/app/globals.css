@@ -33,7 +33,7 @@
   body {
     font-size: 1rem; /* Minimum 16px to prevent iOS auto-zoom on input focus */
     @apply bg-surface font-title text-primary min-h-screen flex flex-col antialiased selection:bg-selection;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   /* Force tabular figures on all machine, numeric, and currency codes */
@@ -42,7 +42,7 @@
   .font-code-md,
   .font-mono,
   .tnum {
-    font-feature-settings: 'tnum' 1;
+    font-feature-settings: "tnum" 1;
     font-variant-numeric: tabular-nums;
   }
 
@@ -84,13 +84,13 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--brand, var(--color-primary, #0b1033));
+    outline: 2px solid var(--brand, var(--color-primary, #0B1033));
     outline-offset: 2px;
   }
 
   .dark :focus-visible,
-  [data-theme='night'] :focus-visible {
-    outline-color: var(--brand, #8fa8ff);
+  [data-theme="night"] :focus-visible {
+    outline-color: var(--brand, #8FA8FF);
   }
 
   /* Compact chips and tags exempt from 48px height */
@@ -229,30 +229,22 @@
   /* Section 4 Micro-interactions */
   /* Selecting a chip: 120ms background and border transition */
   .chip-transition {
-    transition:
-      background-color 120ms cubic-bezier(0.2, 0, 0, 1),
-      border-color 120ms cubic-bezier(0.2, 0, 0, 1),
-      color 120ms cubic-bezier(0.2, 0, 0, 1);
+    transition: background-color 120ms cubic-bezier(0.2, 0, 0, 1),
+                border-color 120ms cubic-bezier(0.2, 0, 0, 1),
+                color 120ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   /* Price change: number cross-fade (200ms) */
   .price-crossfade {
-    transition:
-      opacity 200ms cubic-bezier(0.2, 0, 0, 1),
-      transform 200ms cubic-bezier(0.2, 0, 0, 1);
+    transition: opacity 200ms cubic-bezier(0.2, 0, 0, 1),
+                transform 200ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   /* Add to cart: cart badge scales 1→1.15→1 over 200ms */
   @keyframes cartBadgeScale {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.15);
-    }
-    100% {
-      transform: scale(1);
-    }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
   }
 
   .animate-cart-bounce {
@@ -261,15 +253,9 @@
 
   /* Skeletons: matching final dimensions, delay display by 150ms to avoid flicker */
   @keyframes skeletonDelayedFade {
-    0% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+    0% { opacity: 0; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
   }
 
   .skeleton-delayed {

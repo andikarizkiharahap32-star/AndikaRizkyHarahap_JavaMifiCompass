@@ -33,12 +33,7 @@ export default async function LocaleLayout({
       <body className="flex flex-col min-h-screen">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar currentLocale={locale} />
-          <main
-            id="main-content"
-            tabIndex={-1}
-            role="main"
-            className="flex-1 focus:outline-none scroll-mt-28"
-          >
+          <main id="main-content" tabIndex={-1} role="main" className="flex-1 focus:outline-none scroll-mt-28">
             {children}
           </main>
           <Footer currentLocale={locale} />

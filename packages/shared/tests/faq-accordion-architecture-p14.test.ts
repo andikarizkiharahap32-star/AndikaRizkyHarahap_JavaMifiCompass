@@ -6,10 +6,7 @@ import { FALLBACK_FAQS } from '../../../apps/web/src/components/FaqInteractiveAc
 describe('P14 — FAQ Content Architecture, Categories, and Accessible Accordion Behavior', () => {
   const rootDir = path.resolve(__dirname, '../../..');
   const faqPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/faq/page.tsx');
-  const accordionCompPath = path.join(
-    rootDir,
-    'apps/web/src/components/FaqInteractiveAccordion.tsx',
-  );
+  const accordionCompPath = path.join(rootDir, 'apps/web/src/components/FaqInteractiveAccordion.tsx');
   const enMessagesPath = path.join(rootDir, 'apps/web/messages/en.json');
   const idMessagesPath = path.join(rootDir, 'apps/web/messages/id.json');
 
@@ -36,7 +33,7 @@ describe('P14 — FAQ Content Architecture, Categories, and Accessible Accordion
     expect(accordionSource).toContain('type="search"');
     expect(accordionSource).toContain('id="faq-search"');
     expect(accordionSource).toContain('searchQuery');
-    expect(accordionSource).toContain("aria-label={t('clearSearch')}");
+    expect(accordionSource).toContain('aria-label={t(\'clearSearch\')}');
     // Clear button touch target >= 48px
     expect(accordionSource).toContain('w-12 h-12 min-w-12 min-h-12');
   });

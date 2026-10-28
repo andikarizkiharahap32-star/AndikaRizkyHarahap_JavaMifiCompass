@@ -26,12 +26,7 @@ const fallbackMetrics = {
     { orderNumber: 'JMF-9X2L8K4P', contactName: 'Rina Kusuma', status: 'PAID', totalIdr: 490000 },
     { orderNumber: 'JMF-7M1Q3T5V', contactName: 'Ahmad Faiz', status: 'IN_USE', totalIdr: 595000 },
     { orderNumber: 'JMF-4B8W2R9Y', contactName: 'Siti Rahma', status: 'SHIPPED', totalIdr: 765000 },
-    {
-      orderNumber: 'JMF-2D6P9N1Z',
-      contactName: 'David Tan',
-      status: 'PENDING_PAYMENT',
-      totalIdr: 185000,
-    },
+    { orderNumber: 'JMF-2D6P9N1Z', contactName: 'David Tan', status: 'PENDING_PAYMENT', totalIdr: 185000 },
   ],
 };
 
@@ -51,9 +46,7 @@ export const DashboardScreen = () => {
           devicesOut: data.devicesOut ?? fallbackMetrics.devicesOut,
           totalDevices: data.totalDevices ?? fallbackMetrics.totalDevices,
           deadLetters: data.deadLetters ?? fallbackMetrics.deadLetters,
-          recentOrders: data.recentOrders?.length
-            ? data.recentOrders
-            : fallbackMetrics.recentOrders,
+          recentOrders: data.recentOrders?.length ? data.recentOrders : fallbackMetrics.recentOrders,
         });
       }
     } catch {
@@ -71,12 +64,9 @@ export const DashboardScreen = () => {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-            Operations Dashboard
-          </h1>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Operations Dashboard</h1>
           <p className="text-xs text-slate-500 mt-1">
-            Ringkasan penjualan real-time, sirkulasi modem WiFi, keterlambatan pengembalian, dan
-            status otomasi
+            Ringkasan penjualan real-time, sirkulasi modem WiFi, keterlambatan pengembalian, dan status otomasi
           </p>
         </div>
         <button
@@ -94,9 +84,7 @@ export const DashboardScreen = () => {
         {/* Revenue */}
         <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
           <div className="flex items-center justify-between text-emerald-600">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Total Pendapatan
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Pendapatan</span>
             <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
               <DollarSign className="w-4 h-4" />
             </div>
@@ -114,63 +102,44 @@ export const DashboardScreen = () => {
         {/* Devices In Use */}
         <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
           <div className="flex items-center justify-between text-sky-600">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Modem Digunakan (Out)
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Modem Digunakan (Out)</span>
             <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center">
               <Wifi className="w-4 h-4" />
             </div>
           </div>
           <div>
             <span className="text-2xl font-black text-slate-900 font-mono tnum">
-              {metrics.devicesOut}{' '}
-              <span className="text-xs text-slate-400 font-normal">
-                / {metrics.totalDevices} unit
-              </span>
+              {metrics.devicesOut} <span className="text-xs text-slate-400 font-normal">/ {metrics.totalDevices} unit</span>
             </span>
-            <span className="text-xs text-slate-500 block mt-1 font-mono tnum">
-              48% utilisasi armada WiFi
-            </span>
+            <span className="text-xs text-slate-500 block mt-1 font-mono tnum">48% utilisasi armada WiFi</span>
           </div>
         </div>
 
         {/* Paid Orders */}
         <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
           <div className="flex items-center justify-between text-indigo-600">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Pesanan Terbayar
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Pesanan Terbayar</span>
             <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
               <Package className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <span className="text-2xl font-black text-slate-900 font-mono tnum">
-              {metrics.paidOrders}
-            </span>
-            <span className="text-xs text-slate-500 block mt-1 font-mono tnum">
-              dari total {metrics.totalOrders} checkout
-            </span>
+            <span className="text-2xl font-black text-slate-900 font-mono tnum">{metrics.paidOrders}</span>
+            <span className="text-xs text-slate-500 block mt-1 font-mono tnum">dari total {metrics.totalOrders} checkout</span>
           </div>
         </div>
 
         {/* Dead Letters / Failures */}
         <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
           <div className="flex items-center justify-between text-rose-600">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Dead-Letter Otomasi
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Dead-Letter Otomasi</span>
             <div className="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center">
               <AlertOctagon className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <span className="text-2xl font-black text-slate-900 font-mono tnum">
-              {metrics.deadLetters}
-            </span>
-            <span className="text-xs text-slate-500 block mt-1">
-              Seluruh 8 workflow n8n berjalan normal
-            </span>
+            <span className="text-2xl font-black text-slate-900 font-mono tnum">{metrics.deadLetters}</span>
+            <span className="text-xs text-slate-500 block mt-1">Seluruh 8 workflow n8n berjalan normal</span>
           </div>
         </div>
       </div>
@@ -198,9 +167,7 @@ export const DashboardScreen = () => {
           {/* Gate 1: False-Halal Rate */}
           <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2">
             <div className="flex items-center justify-between text-emerald-400">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
-                False-Halal Rate
-              </span>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">False-Halal Rate</span>
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div className="flex items-baseline gap-2">
@@ -208,17 +175,14 @@ export const DashboardScreen = () => {
               <span className="text-xs text-emerald-300 font-mono tnum">0 Insiden</span>
             </div>
             <p className="text-xs text-slate-400 leading-tight">
-              Kualitas Gate: Nol Toleransi. Divalidasi lewat 100 golden-set venues & anti-prompt
-              injection.
+              Kualitas Gate: Nol Toleransi. Divalidasi lewat 100 golden-set venues & anti-prompt injection.
             </p>
           </div>
 
           {/* Gate 2: Evidence Coverage */}
           <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2">
             <div className="flex items-center justify-between text-sky-400">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
-                Bukti Kutipan Valid
-              </span>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">Bukti Kutipan Valid</span>
               <FileCheck className="w-4 h-4" />
             </div>
             <div className="flex items-baseline gap-2">
@@ -226,17 +190,14 @@ export const DashboardScreen = () => {
               <span className="text-xs text-sky-300 font-mono">Exact Match</span>
             </div>
             <p className="text-xs text-slate-400 leading-tight">
-              Setiap klaim halal terikat kutipan teks nyata. Klaim tanpa bukti langsung diturunkan
-              ke UNKNOWN.
+              Setiap klaim halal terikat kutipan teks nyata. Klaim tanpa bukti langsung diturunkan ke UNKNOWN.
             </p>
           </div>
 
           {/* Gate 3: Dispute Queue */}
           <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2">
             <div className="flex items-center justify-between text-amber-400">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
-                Antrean Moderasi
-              </span>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">Antrean Moderasi</span>
               <ShieldAlert className="w-4 h-4" />
             </div>
             <div className="flex items-baseline gap-2">
@@ -251,9 +212,7 @@ export const DashboardScreen = () => {
           {/* Gate 4: FX Rate Coverage */}
           <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2">
             <div className="flex items-center justify-between text-indigo-400">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
-                Kurs Harian Aktif
-              </span>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">Kurs Harian Aktif</span>
               <CheckCheck className="w-4 h-4" />
             </div>
             <div className="flex items-baseline gap-2">
@@ -261,8 +220,7 @@ export const DashboardScreen = () => {
               <span className="text-xs text-indigo-300 font-mono">Negara</span>
             </div>
             <p className="text-xs text-slate-400 leading-tight">
-              Termasuk SAR, AED, EGP, MAD, TWD, QAR via fallback daily bank rates. Tanpa konversi
-              tebakan.
+              Termasuk SAR, AED, EGP, MAD, TWD, QAR via fallback daily bank rates. Tanpa konversi tebakan.
             </p>
           </div>
         </div>
@@ -288,9 +246,7 @@ export const DashboardScreen = () => {
             <tbody className="divide-y divide-slate-100">
               {metrics.recentOrders.map((ord: any) => (
                 <tr key={ord.orderNumber} className="hover:bg-slate-50/50">
-                  <td className="px-5 py-3 font-mono font-bold text-sky-600 tnum">
-                    {ord.orderNumber}
-                  </td>
+                  <td className="px-5 py-3 font-mono font-bold text-sky-600 tnum">{ord.orderNumber}</td>
                   <td className="px-5 py-3 font-semibold text-slate-800">{ord.contactName}</td>
                   <td className="px-5 py-3">
                     <span
@@ -298,10 +254,10 @@ export const DashboardScreen = () => {
                         ord.status === 'PAID'
                           ? 'bg-emerald-50 text-emerald-700'
                           : ord.status === 'IN_USE'
-                            ? 'bg-sky-50 text-sky-700'
-                            : ord.status === 'SHIPPED'
-                              ? 'bg-indigo-50 text-indigo-700'
-                              : 'bg-amber-50 text-amber-700'
+                          ? 'bg-sky-50 text-sky-700'
+                          : ord.status === 'SHIPPED'
+                          ? 'bg-indigo-50 text-indigo-700'
+                          : 'bg-amber-50 text-amber-700'
                       }`}
                     >
                       {ord.status}

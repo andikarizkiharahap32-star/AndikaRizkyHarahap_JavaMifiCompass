@@ -57,12 +57,8 @@ describe('UI/UX Audit & Remediation Verification (28 Oct 2026)', () => {
     // Home page anchor sections also have scroll-mt-28
     const homePath = path.join(rootDir, 'apps/web/src/app/[locale]/page.tsx');
     const homeCode = fs.readFileSync(homePath, 'utf8');
-    expect(homeCode).toContain(
-      'id="journey-presets" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 scroll-mt-28"',
-    );
-    expect(homeCode).toContain(
-      'id="trust-guarantees" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 scroll-mt-28"',
-    );
+    expect(homeCode).toContain('id="journey-presets" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 scroll-mt-28"');
+    expect(homeCode).toContain('id="trust-guarantees" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 scroll-mt-28"');
   });
 
   it('Issue 4: Substantiates 160+ destinations claim with expanded regional corridors and global coverage plate', () => {
@@ -70,10 +66,10 @@ describe('UI/UX Audit & Remediation Verification (28 Oct 2026)', () => {
     const destinationsCode = fs.readFileSync(destinationsPath, 'utf8');
 
     // Expanded corridors beyond the 4 initial hubs
-    expect(destinationsCode).toContain("countryCode: 'MY'");
-    expect(destinationsCode).toContain("countryCode: 'KR'");
-    expect(destinationsCode).toContain("countryCode: 'GB'");
-    expect(destinationsCode).toContain("countryCode: 'FR'");
+    expect(destinationsCode).toContain('countryCode: \'MY\'');
+    expect(destinationsCode).toContain('countryCode: \'KR\'');
+    expect(destinationsCode).toContain('countryCode: \'GB\'');
+    expect(destinationsCode).toContain('countryCode: \'FR\'');
 
     // Global 160+ coverage reassurance plate
     expect(destinationsCode).toContain('Melayani 160+ Negara & Wilayah di Seluruh Dunia');
@@ -86,10 +82,8 @@ describe('UI/UX Audit & Remediation Verification (28 Oct 2026)', () => {
 
     // "Alkohol: Tidak Disebut" uses neutral bullet '•' and text-secondary instead of caution triangle '▲'
     expect(badgeCode).toContain('<span aria-hidden="true">•</span>');
-    expect(badgeCode).toContain("{isId ? 'Alkohol: Tidak Disebut' : 'Alcohol: Not Mentioned'}");
-    expect(badgeCode).not.toContain(
-      '<span aria-hidden="true">▲</span>\n            <span>{isId ? \'Alkohol: Tidak Disebut\'',
-    );
+    expect(badgeCode).toContain('{isId ? \'Alkohol: Tidak Disebut\' : \'Alcohol: Not Mentioned\'}');
+    expect(badgeCode).not.toContain('<span aria-hidden="true">▲</span>\n            <span>{isId ? \'Alkohol: Tidak Disebut\'');
   });
 
   it('Issue 6: Enriches all 20 destinations with authentic storefront photography and OpenStreetMap provenance tags', () => {
@@ -97,9 +91,7 @@ describe('UI/UX Audit & Remediation Verification (28 Oct 2026)', () => {
     const dataCode = fs.readFileSync(dataPath, 'utf8');
 
     // VENUE_STOREFRONT_PHOTOS dictionary exported
-    expect(dataCode).toContain(
-      'export const VENUE_STOREFRONT_PHOTOS: Record<string, { url: string; caption: string }>',
-    );
+    expect(dataCode).toContain('export const VENUE_STOREFRONT_PHOTOS: Record<string, { url: string; caption: string }>');
 
     // Real photos for each destination (e.g. Albaik Makkah, Zam Zam Singapore, Village Park Malaysia, Dishoom London, etc.)
     expect(dataCode).toContain('sa-makkah-albaik');

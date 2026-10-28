@@ -3,9 +3,7 @@ import { z } from 'zod';
 export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().default(3001),
-  DATABASE_URL: z
-    .string()
-    .default('postgresql://postgres:postgres@localhost:5432/javamifi_compass'),
+  DATABASE_URL: z.string().default('postgresql://postgres:postgres@localhost:5432/javamifi_compass'),
   JWT_SECRET: z.string().min(8).default('development-jwt-secret-not-for-production'),
   APP_URL: z.string().url().default('http://localhost:3000'),
   ADMIN_URL: z.string().url().default('http://localhost:3002'),

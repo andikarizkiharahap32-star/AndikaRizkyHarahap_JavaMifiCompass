@@ -152,7 +152,7 @@ export class NotificationService {
       const consentGiven = input.hasMarketingConsent || this.hasMarketingConsent(input.userId);
       if (!consentGiven) {
         throw new Error(
-          'P20 Prohibition: Cannot send marketing notification without recorded explicit user consent',
+          'P20 Prohibition: Cannot send marketing notification without recorded explicit user consent'
         );
       }
     }
@@ -185,11 +185,7 @@ export class NotificationService {
     }
 
     // 4. Quiet hours check (deferred unless security alert or ignoreQuietHours is set)
-    if (
-      !input.ignoreQuietHours &&
-      template.category !== 'security' &&
-      this.isWithinQuietHours(new Date(), input.userTimezone)
-    ) {
+    if (!input.ignoreQuietHours && template.category !== 'security' && this.isWithinQuietHours(new Date(), input.userTimezone)) {
       const record: NotificationRecord = {
         id: `notif_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
         userId: input.userId,

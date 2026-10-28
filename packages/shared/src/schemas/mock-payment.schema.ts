@@ -49,8 +49,7 @@ export const SYNTHETIC_FIXTURES: Record<
     description: string;
     expectedStatus: 'SUCCESS' | 'FAILED' | 'EXPIRED' | 'TIMEOUT';
     statusCode: string;
-    transactionStatus:
-      'settlement' | 'capture' | 'deny' | 'expire' | 'timeout' | 'error' | 'cancel' | 'refund';
+    transactionStatus: 'settlement' | 'capture' | 'deny' | 'expire' | 'timeout' | 'error' | 'cancel' | 'refund';
     declineReason?: string;
   }
 > = {
@@ -228,6 +227,7 @@ export function resolveSyntheticOutcome(token: string): {
   throw new Error(`Unrecognized synthetic token "${token}". Use documented synthetic fixtures.`);
 }
 
+
 // Prohibited real card credential patterns
 const REAL_PAN_REGEX = /\b(?:\d[ -]*?){13,19}\b/;
 const REAL_CVV_REGEX = /\b\d{3,4}\b/;
@@ -279,8 +279,7 @@ export const mockPaymentIntentSchema = z
     syntheticToken: z
       .enum(ALLOWLISTED_MOCK_TOKENS, {
         errorMap: () => ({
-          message:
-            'Invalid synthetic token. Must be a documented mock token (e.g., tok_mock_visa_success)',
+          message: 'Invalid synthetic token. Must be a documented mock token (e.g., tok_mock_visa_success)',
         }),
       })
       .default('tok_mock_visa_success'),
@@ -300,8 +299,7 @@ export const mockPaymentIntentSchema = z
     message: 'Either orderId or orderNumber must be provided',
   })
   .refine((data) => !containsRealPaymentCredentials(data), {
-    message:
-      'Real payment credentials (PAN/CVV) are strictly prohibited in the mock payment gateway',
+    message: 'Real payment credentials (PAN/CVV) are strictly prohibited in the mock payment gateway',
   });
 
 export type MockPaymentIntentInput = z.infer<typeof mockPaymentIntentSchema>;
@@ -339,7 +337,7 @@ export function validateIntentIdempotencyMatch(
   newRequest: {
     orderId: string;
     amountIdr: number;
-  },
+  }
 ): { match: boolean; reason?: string } {
   if (existingPayment.orderId !== newRequest.orderId) {
     return {
@@ -421,14 +419,10 @@ export const PAYMENT_TRUST_BOUNDARIES = {
 } as const;
 
 export const PAYMENT_THREAT_INVARIANTS = {
-  INV_01_NO_REAL_FUNDS:
-    'The mock system cannot collect real payment credentials or move real funds.',
-  INV_02_AUTHORITATIVE_STATE:
-    'Order amount, currency, and status are derived from authoritative server-side records, never trusted from browser.',
-  INV_03_REPLAY_AND_ORDERING:
-    'Duplicate, forged, delayed, or out-of-order events cannot create an invalid terminal payment state.',
-  INV_04_ENVIRONMENT_ISOLATION:
-    'Test credentials and mock routes are demonstrably isolated from production configuration and provider namespaces.',
+  INV_01_NO_REAL_FUNDS: 'The mock system cannot collect real payment credentials or move real funds.',
+  INV_02_AUTHORITATIVE_STATE: 'Order amount, currency, and status are derived from authoritative server-side records, never trusted from browser.',
+  INV_03_REPLAY_AND_ORDERING: 'Duplicate, forged, delayed, or out-of-order events cannot create an invalid terminal payment state.',
+  INV_04_ENVIRONMENT_ISOLATION: 'Test credentials and mock routes are demonstrably isolated from production configuration and provider namespaces.',
 } as const;
 
 /**
@@ -458,16 +452,7 @@ export const ALLOWED_ORDER_STATUS_TRANSITIONS: Record<string, string[]> = {
   CLOSED: [],
 };
 
-export const TERMINAL_ORDER_STATUSES = [
-  'PAID',
-  'FULFILLED',
-  'IN_USE',
-  'RETURNED',
-  'CLOSED',
-  'CANCELLED',
-  'EXPIRED',
-  'REFUNDED',
-] as const;
+export const TERMINAL_ORDER_STATUSES = ['PAID', 'FULFILLED', 'IN_USE', 'RETURNED', 'CLOSED', 'CANCELLED', 'EXPIRED', 'REFUNDED'] as const;
 
 export const TERMINAL_PAYMENT_STATUSES = ['FAILED', 'EXPIRED', 'REFUNDED'] as const;
 export type TerminalPaymentStatus = (typeof TERMINAL_PAYMENT_STATUSES)[number];
@@ -486,7 +471,7 @@ export function isTerminalOrderStatus(status: string): boolean {
  */
 export function isPaymentIntentExpired(
   expiresAt?: Date | string | null,
-  now = Date.now(),
+  now = Date.now()
 ): boolean {
   if (!expiresAt) return false;
   const expMs =
@@ -504,7 +489,7 @@ export function isPaymentIntentExpired(
  */
 export function validatePaymentTransition(
   fromStatus: string,
-  toStatus: string,
+  toStatus: string
 ): { valid: boolean; reason?: string; isTerminal: boolean } {
   if (fromStatus === toStatus) {
     return { valid: true, isTerminal: isTerminalPaymentStatus(fromStatus) };
@@ -545,7 +530,7 @@ export function validatePaymentTransition(
  */
 export function validateOrderTransition(
   fromStatus: string,
-  toStatus: string,
+  toStatus: string
 ): { valid: boolean; reason?: string; isTerminal: boolean } {
   if (fromStatus === toStatus) {
     return { valid: true, isTerminal: isTerminalOrderStatus(fromStatus) };
@@ -585,7 +570,7 @@ export function isLegalOrderTransition(fromStatus: string, toStatus: string): bo
  */
 export function validateAuthoritativeAmountMatch(
   authoritativeTotalIdr: number,
-  rawGrossAmount: string | number,
+  rawGrossAmount: string | number
 ): { valid: boolean; normalizedMinorUnits: number; diff: number } {
   let parsedUnits: number;
 
@@ -635,7 +620,7 @@ export const MAX_WEBHOOK_TIMESTAMP_DRIFT_SEC = 300;
 export function validateWebhookTimestampFreshness(
   timestamp: string | number | Date | undefined,
   maxDriftSec = MAX_WEBHOOK_TIMESTAMP_DRIFT_SEC,
-  now = Date.now(),
+  now = Date.now()
 ): { valid: boolean; reason?: string } {
   if (timestamp === undefined || timestamp === null) {
     return { valid: true };
@@ -645,9 +630,7 @@ export function validateWebhookTimestampFreshness(
     typeof timestamp === 'number'
       ? timestamp
       : typeof timestamp === 'string'
-        ? Number.isFinite(Number(timestamp))
-          ? Number(timestamp)
-          : new Date(timestamp).getTime()
+        ? (Number.isFinite(Number(timestamp)) ? Number(timestamp) : new Date(timestamp).getTime())
         : timestamp.getTime();
 
   if (isNaN(timeMs) || !Number.isFinite(timeMs)) {
@@ -679,8 +662,7 @@ export const mockPaymentSimulateRequestSchema = z
     orderNumber: z.string().min(1, 'Order number is required'),
     syntheticToken: z.enum(ALLOWLISTED_MOCK_TOKENS, {
       errorMap: () => ({
-        message:
-          'Invalid synthetic token. Must be an allowlisted mock token (e.g., tok_mock_visa_success)',
+        message: 'Invalid synthetic token. Must be an allowlisted mock token (e.g., tok_mock_visa_success)',
       }),
     }),
     idempotencyKey: z.string().min(1).optional(),
@@ -693,8 +675,7 @@ export const mockPaymentSimulateRequestSchema = z
     expiryYear: z.never().optional(),
   })
   .refine((data) => !containsRealPaymentCredentials(data), {
-    message:
-      'Real payment credentials (PAN/CVV) are strictly prohibited in the mock payment gateway',
+    message: 'Real payment credentials (PAN/CVV) are strictly prohibited in the mock payment gateway',
   });
 
 export type MockPaymentSimulateRequest = z.infer<typeof mockPaymentSimulateRequestSchema>;
@@ -708,16 +689,7 @@ export const mockWebhookSimulationPayloadSchema = z
     statusCode: z.string().min(1, 'statusCode is required'),
     grossAmount: z.union([z.string().min(1), z.number().positive()]),
     signatureKey: z.string().min(1, 'signatureKey is required'),
-    transactionStatus: z.enum([
-      'settlement',
-      'capture',
-      'deny',
-      'expire',
-      'timeout',
-      'error',
-      'cancel',
-      'refund',
-    ]),
+    transactionStatus: z.enum(['settlement', 'capture', 'deny', 'expire', 'timeout', 'error', 'cancel', 'refund']),
     transactionId: z.string().min(1, 'transactionId is required'),
     syntheticToken: z.enum(ALLOWLISTED_MOCK_TOKENS).optional(),
     paymentType: z.string().default('MOCK'),
@@ -730,8 +702,7 @@ export const mockWebhookSimulationPayloadSchema = z
     pan: z.never().optional(),
   })
   .refine((data) => !containsRealPaymentCredentials(data), {
-    message:
-      'Real payment credentials (PAN/CVV) are strictly prohibited in webhook simulation payload',
+    message: 'Real payment credentials (PAN/CVV) are strictly prohibited in webhook simulation payload',
   });
 
 export type MockWebhookSimulationPayload = z.infer<typeof mockWebhookSimulationPayloadSchema>;
@@ -752,7 +723,7 @@ export function generateMockWebhookSignature(
     statusCode: string;
     grossAmount: string | number;
   },
-  secret: string = MOCK_DEFAULT_SIGNING_SECRET,
+  secret: string = MOCK_DEFAULT_SIGNING_SECRET
 ): string {
   const payloadString = `${params.orderNumber}:${params.statusCode}:${params.grossAmount}`;
   return generateHmacSha256(payloadString, secret);
@@ -769,7 +740,7 @@ export function verifyMockWebhookSignature(
     grossAmount: string | number;
     signatureKey?: string | null;
   },
-  secret: string = MOCK_DEFAULT_SIGNING_SECRET,
+  secret: string = MOCK_DEFAULT_SIGNING_SECRET
 ): boolean {
   if (!params.signatureKey) {
     return false;
@@ -798,12 +769,11 @@ export function generateMockWebhookEvent(params: {
       statusCode: outcome.statusCode,
       grossAmount,
     },
-    params.secret,
+    params.secret
   );
   const txId = params.transactionId || `mock-tx-${Date.now()}`;
 
-  const mappedTxStatus:
-    'settlement' | 'capture' | 'deny' | 'expire' | 'timeout' | 'error' | 'cancel' | 'refund' =
+  const mappedTxStatus: 'settlement' | 'capture' | 'deny' | 'expire' | 'timeout' | 'error' | 'cancel' | 'refund' =
     outcome.transactionStatus === 'settlement' || outcome.transactionStatus === 'capture'
       ? outcome.transactionStatus
       : outcome.transactionStatus === 'expire'
@@ -943,10 +913,7 @@ export function reconcileSimulatedRecord(params: {
 
   // 2. Amount and Currency Mismatch (PAY-P07-CTRL-0015 / PAY-P07-CTRL-0023)
   if (simulatedEvent) {
-    const amountMatch = validateAuthoritativeAmountMatch(
-      authoritativeOrder.totalIdr,
-      simulatedEvent.grossAmount,
-    );
+    const amountMatch = validateAuthoritativeAmountMatch(authoritativeOrder.totalIdr, simulatedEvent.grossAmount);
     if (!amountMatch.valid) {
       return {
         status: 'DISCREPANCY',
@@ -957,10 +924,7 @@ export function reconcileSimulatedRecord(params: {
           type: 'AMOUNT_MISMATCH',
           severity: 'CRITICAL',
           message: `Amount mismatch: authoritative order total is ${authoritativeOrder.totalIdr} IDR, simulated event has ${simulatedEvent.grossAmount}`,
-          authoritativeState: {
-            totalIdr: authoritativeOrder.totalIdr,
-            currency: authoritativeOrder.currency,
-          },
+          authoritativeState: { totalIdr: authoritativeOrder.totalIdr, currency: authoritativeOrder.currency },
           simulatedState: { grossAmount: simulatedEvent.grossAmount },
           actionRequired: 'MANUAL_REVIEW',
           timestamp,
@@ -1032,11 +996,7 @@ export function reconcileSimulatedRecord(params: {
       }
     }
 
-    if (
-      payment &&
-      payment.status === 'SUCCESS' &&
-      (simulatedEvent.transactionStatus === 'deny' || simulatedEvent.transactionStatus === 'expire')
-    ) {
+    if (payment && payment.status === 'SUCCESS' && (simulatedEvent.transactionStatus === 'deny' || simulatedEvent.transactionStatus === 'expire')) {
       return {
         status: 'DISCREPANCY',
         discrepancy: {
@@ -1086,7 +1046,7 @@ export function validateOperatorOverride(
   currentStatus: {
     orderStatus: string;
     paymentStatus: string;
-  },
+  }
 ): { valid: boolean; reason?: string } {
   // 1. Role verification
   if (!OPERATOR_OVERRIDE_ROLES.includes(input.operatorRole)) {
@@ -1100,8 +1060,7 @@ export function validateOperatorOverride(
   if (!input.reason || input.reason.trim().length < 10) {
     return {
       valid: false,
-      reason:
-        'Operator override rejected: a substantive audit justification (minimum 10 chars) is mandatory',
+      reason: 'Operator override rejected: a substantive audit justification (minimum 10 chars) is mandatory',
     };
   }
 
@@ -1109,8 +1068,7 @@ export function validateOperatorOverride(
   if (!input.evidenceRef || input.evidenceRef.trim().length < 1) {
     return {
       valid: false,
-      reason:
-        'Operator override rejected: an immutable evidence reference (ticket/runbook ID) is mandatory',
+      reason: 'Operator override rejected: an immutable evidence reference (ticket/runbook ID) is mandatory',
     };
   }
 
@@ -1408,8 +1366,7 @@ export const PAYMENT_SCENARIO_MATRIX: Record<PaymentScenarioId, PaymentScenarioD
     name: 'Duplicate Webhook Deduplication',
     category: 'IDEMPOTENCY',
     syntheticToken: 'tok_mock_visa_success',
-    description:
-      'Simulated webhook event replayed with identical transaction ID; deduplicated idempotently',
+    description: 'Simulated webhook event replayed with identical transaction ID; deduplicated idempotently',
     expectedPaymentStatus: 'SUCCESS',
     expectedOrderStatus: 'PAID',
     expectedHttpStatus: 200,
@@ -1420,8 +1377,7 @@ export const PAYMENT_SCENARIO_MATRIX: Record<PaymentScenarioId, PaymentScenarioD
     name: 'Intent Creation Idempotent Replay',
     category: 'IDEMPOTENCY',
     syntheticToken: 'tok_mock_visa_success',
-    description:
-      'Duplicate intent creation request with identical idempotencyKey returns existing intent without re-initiating',
+    description: 'Duplicate intent creation request with identical idempotencyKey returns existing intent without re-initiating',
     expectedPaymentStatus: 'PENDING',
     expectedOrderStatus: 'PENDING_PAYMENT',
     expectedHttpStatus: 200,
@@ -1449,8 +1405,7 @@ export const PAYMENT_SCENARIO_MATRIX: Record<PaymentScenarioId, PaymentScenarioD
     id: 'SCN_AMOUNT_TAMPERING',
     name: 'Client Amount Tampering Rejection',
     category: 'TAMPERING',
-    description:
-      'Client attempts to submit amount different from authoritative order total; rejected immediately',
+    description: 'Client attempts to submit amount different from authoritative order total; rejected immediately',
     expectedHttpStatus: 400,
     expectedErrorCode: 'Authoritative amount mismatch',
     invariants: ['INV-02'],
@@ -1468,8 +1423,7 @@ export const PAYMENT_SCENARIO_MATRIX: Record<PaymentScenarioId, PaymentScenarioD
     id: 'SCN_REAL_CREDENTIAL_INJECTION',
     name: 'Real PAN/CVV Credential Detection',
     category: 'SECURITY',
-    description:
-      'Real credit card PAN or CVV detected in payload; fail-closed rejection without persistence',
+    description: 'Real credit card PAN or CVV detected in payload; fail-closed rejection without persistence',
     expectedHttpStatus: 400,
     expectedErrorCode: 'Real payment credentials (PAN/CVV) are strictly prohibited',
     invariants: ['INV-01', 'INV-04'],
@@ -1478,8 +1432,7 @@ export const PAYMENT_SCENARIO_MATRIX: Record<PaymentScenarioId, PaymentScenarioD
     id: 'SCN_OUT_OF_ORDER_SETTLEMENT',
     name: 'Out-of-Order Settlement Quarantine',
     category: 'STATE_MACHINE',
-    description:
-      'Settlement event received after order is already in terminal CANCELLED state; quarantined',
+    description: 'Settlement event received after order is already in terminal CANCELLED state; quarantined',
     expectedHttpStatus: 400,
     expectedErrorCode: 'Illegal state transition',
     invariants: ['INV-03'],
@@ -1489,8 +1442,7 @@ export const PAYMENT_SCENARIO_MATRIX: Record<PaymentScenarioId, PaymentScenarioD
     name: 'Refund on Settled Payment',
     category: 'REFUND',
     syntheticToken: 'tok_mock_refund_success',
-    description:
-      'Refund transition executed on confirmed SUCCESS payment; creates negative ledger entry and updates order',
+    description: 'Refund transition executed on confirmed SUCCESS payment; creates negative ledger entry and updates order',
     expectedPaymentStatus: 'REFUNDED',
     expectedOrderStatus: 'REFUNDED',
     expectedHttpStatus: 200,
@@ -1521,7 +1473,7 @@ export function evaluatePaymentScenarioOutcome(
     paymentStatus?: string;
     orderStatus?: string;
     errorCode?: string;
-  },
+  }
 ): {
   scenarioId: PaymentScenarioId;
   passed: boolean;
@@ -1541,11 +1493,7 @@ export function evaluatePaymentScenarioOutcome(
   }
 
   // Check payment status
-  if (
-    def.expectedPaymentStatus &&
-    actual.paymentStatus &&
-    actual.paymentStatus !== def.expectedPaymentStatus
-  ) {
+  if (def.expectedPaymentStatus && actual.paymentStatus && actual.paymentStatus !== def.expectedPaymentStatus) {
     return {
       scenarioId,
       passed: false,
@@ -1555,11 +1503,7 @@ export function evaluatePaymentScenarioOutcome(
   }
 
   // Check order status
-  if (
-    def.expectedOrderStatus &&
-    actual.orderStatus &&
-    actual.orderStatus !== def.expectedOrderStatus
-  ) {
+  if (def.expectedOrderStatus && actual.orderStatus && actual.orderStatus !== def.expectedOrderStatus) {
     return {
       scenarioId,
       passed: false,
@@ -1569,11 +1513,7 @@ export function evaluatePaymentScenarioOutcome(
   }
 
   // Check error code if expected
-  if (
-    def.expectedErrorCode &&
-    actual.errorCode &&
-    !actual.errorCode.includes(def.expectedErrorCode)
-  ) {
+  if (def.expectedErrorCode && actual.errorCode && !actual.errorCode.includes(def.expectedErrorCode)) {
     return {
       scenarioId,
       passed: false,
@@ -1673,7 +1613,11 @@ const PROTO_POLLUTION_PATTERNS = [
   /\.prototype\b/i,
 ];
 
-const PATH_TRAVERSAL_PATTERNS = [/\.\.[/\\]/, /[/\\]\.\./, /%2e%2e[%2f%5c]/i];
+const PATH_TRAVERSAL_PATTERNS = [
+  /\.\.[/\\]/,
+  /[/\\]\.\./,
+  /%2e%2e[%2f%5c]/i,
+];
 
 /**
  * Recursively scans an object, string, or array for security injection vectors.
@@ -1681,7 +1625,7 @@ const PATH_TRAVERSAL_PATTERNS = [/\.\.[/\\]/, /[/\\]\.\./, /%2e%2e[%2f%5c]/i];
 export function detectInjectionPattern(
   input: unknown,
   currentPath = '',
-  depth = 0,
+  depth = 0
 ): InjectionDetectionResult {
   if (depth > 10 || input === null || input === undefined) {
     return { detected: false };
@@ -1819,7 +1763,7 @@ export function getUtf8ByteLength(str: string): number {
  */
 export function validatePayloadBounds(
   payload: unknown,
-  maxBytes: number = PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES,
+  maxBytes: number = PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES
 ): { valid: boolean; reason?: string; sizeBytes: number } {
   try {
     const serialized = typeof payload === 'string' ? payload : JSON.stringify(payload);
@@ -1931,8 +1875,7 @@ export function evaluateNegativeProbe(probe: NegativeProbeInput): NegativeProbeR
           vector: probe.vector,
           blocked: true,
           detectedCategory: PAYMENT_ABUSE_ERROR_CODES.ENV_MOCK_PROHIBITED,
-          reason:
-            'Mock payment simulation is strictly prohibited in production without server flag',
+          reason: 'Mock payment simulation is strictly prohibited in production without server flag',
           invariantsPreserved: invariants,
         };
       }
@@ -2028,10 +1971,7 @@ export function evaluateNegativeProbe(probe: NegativeProbeInput): NegativeProbeR
     }
 
     case 'OVERSIZED_PAYLOAD': {
-      const bounds = validatePayloadBounds(
-        probe.payload,
-        PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES,
-      );
+      const bounds = validatePayloadBounds(probe.payload, PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES);
       if (!bounds.valid) {
         return {
           vector: probe.vector,
@@ -2196,7 +2136,7 @@ export function evaluateReleaseSignoff(
     allowMockEnv?: boolean;
     mockSigningKeyMatchesProd?: boolean;
     unresolvedMockIntents?: number;
-  } = {},
+  } = {}
 ): ReleaseSignoffReport {
   const isProd = options.isProduction ?? false;
   const allowMock = options.allowMockEnv ?? false;
@@ -2207,60 +2147,49 @@ export function evaluateReleaseSignoff(
     {
       gateId: 'GATE_01_ENV_ISOLATION',
       name: 'Server-Side Environment Isolation',
-      description:
-        'Mock gateway fails closed in production without explicit ALLOW_MOCK_PAYMENT flag; query/header tampering blocked.',
+      description: 'Mock gateway fails closed in production without explicit ALLOW_MOCK_PAYMENT flag; query/header tampering blocked.',
       invariants: ['INV-04'],
       status: isProd && !allowMock ? 'FAILED' : 'PASSED',
-      evidence:
-        isProd && !allowMock
-          ? 'BLOCKED: Production environment active without ALLOW_MOCK_PAYMENT=true'
-          : 'VERIFIED: Environment guard enforces strict fail-closed boundary and rejects client query/header switches.',
+      evidence: isProd && !allowMock
+        ? 'BLOCKED: Production environment active without ALLOW_MOCK_PAYMENT=true'
+        : 'VERIFIED: Environment guard enforces strict fail-closed boundary and rejects client query/header switches.',
     },
     {
       gateId: 'GATE_02_CREDENTIAL_SAFETY',
       name: 'Real Credential Prohibition',
-      description:
-        'Zero collection, transmission, or persistence of real PAN (13-19 digits) or CVV (3-4 digits); synthetic tokens only.',
+      description: 'Zero collection, transmission, or persistence of real PAN (13-19 digits) or CVV (3-4 digits); synthetic tokens only.',
       invariants: ['INV-01'],
       status: 'PASSED',
-      evidence:
-        'VERIFIED: containsRealPaymentCredentials scan blocks real PAN/CVV; synthetic token allowlist strictly enforced.',
+      evidence: 'VERIFIED: containsRealPaymentCredentials scan blocks real PAN/CVV; synthetic token allowlist strictly enforced.',
     },
     {
       gateId: 'GATE_03_AUTHORITATIVE_TOTALS',
       name: 'Authoritative Order Totals & Minor-Unit Math',
-      description:
-        'Order totals derived strictly server-side; client amounts rejected; integer minor-unit arithmetic prevents float drift.',
+      description: 'Order totals derived strictly server-side; client amounts rejected; integer minor-unit arithmetic prevents float drift.',
       invariants: ['INV-02'],
       status: 'PASSED',
-      evidence:
-        'VERIFIED: assertAuthoritativeAmount & validateAuthoritativeAmountMatch enforce exact IDR integer parity.',
+      evidence: 'VERIFIED: assertAuthoritativeAmount & validateAuthoritativeAmountMatch enforce exact IDR integer parity.',
     },
     {
       gateId: 'GATE_04_TERMINAL_IMMUTABILITY',
       name: 'State Transition Integrity & Terminal Immutability',
-      description:
-        'Legal state transitions enforced; terminal states (PAID, EXPIRED, FAILED) cannot be overwritten or mutated.',
+      description: 'Legal state transitions enforced; terminal states (PAID, EXPIRED, FAILED) cannot be overwritten or mutated.',
       invariants: ['INV-03'],
       status: 'PASSED',
-      evidence:
-        'VERIFIED: assertLegalTransition and assertTerminalImmutability quarantine invalid transitions and out-of-order events.',
+      evidence: 'VERIFIED: assertLegalTransition and assertTerminalImmutability quarantine invalid transitions and out-of-order events.',
     },
     {
       gateId: 'GATE_05_SIGNATURE_AND_REPLAY',
       name: 'Constant-Time Signatures & Replay Protection',
-      description:
-        'Simulated webhooks use HMAC-SHA256 with constant-time comparison and 300s timestamp freshness window.',
+      description: 'Simulated webhooks use HMAC-SHA256 with constant-time comparison and 300s timestamp freshness window.',
       invariants: ['INV-03'],
       status: 'PASSED',
-      evidence:
-        'VERIFIED: constantTimeCompare prevents timing attacks; validateWebhookTimestampFreshness blocks stale replays.',
+      evidence: 'VERIFIED: constantTimeCompare prevents timing attacks; validateWebhookTimestampFreshness blocks stale replays.',
     },
     {
       gateId: 'GATE_06_KEY_ISOLATION',
       name: 'Signing Key Isolation',
-      description:
-        'Mock payment test signing secrets are strictly isolated and never identical to production provider credentials.',
+      description: 'Mock payment test signing secrets are strictly isolated and never identical to production provider credentials.',
       invariants: ['INV-04'],
       status: keyMatchesProd ? 'FAILED' : 'PASSED',
       evidence: keyMatchesProd
@@ -2270,44 +2199,36 @@ export function evaluateReleaseSignoff(
     {
       gateId: 'GATE_07_IMMUTABLE_AUDIT_TRAIL',
       name: 'Immutable Audit Trail & RBAC Overrides',
-      description:
-        'All status changes and operator overrides recorded with sanitized audit logs; critical audit failures alert loudly.',
+      description: 'All status changes and operator overrides recorded with sanitized audit logs; critical audit failures alert loudly.',
       invariants: ['INV-02', 'INV-03'],
       status: 'PASSED',
-      evidence:
-        'VERIFIED: recordAuditEventWithFallback logs state mutations without credentials; operator override requires RBAC and evidence.',
+      evidence: 'VERIFIED: recordAuditEventWithFallback logs state mutations without credentials; operator override requires RBAC and evidence.',
     },
     {
       gateId: 'GATE_08_SCENARIO_COVERAGE',
       name: 'Scenario Matrix Completeness',
-      description:
-        'Comprehensive 20-scenario operational test matrix covering success, decline, timeout, expiry, tampering, and refunds.',
+      description: 'Comprehensive 20-scenario operational test matrix covering success, decline, timeout, expiry, tampering, and refunds.',
       invariants: ['INV-01', 'INV-02', 'INV-03', 'INV-04'],
       status: 'PASSED',
-      evidence:
-        'VERIFIED: PAYMENT_SCENARIO_MATRIX contains 20 deterministic scenario definitions with invariant checking.',
+      evidence: 'VERIFIED: PAYMENT_SCENARIO_MATRIX contains 20 deterministic scenario definitions with invariant checking.',
     },
     {
       gateId: 'GATE_09_ABUSE_RESISTANCE',
       name: 'Injection & Resource Abuse Resistance',
-      description:
-        'Deep payload scanning blocks SQLi, XSS, prototype pollution, path traversal, oversized payloads, and rapid spam.',
+      description: 'Deep payload scanning blocks SQLi, XSS, prototype pollution, path traversal, oversized payloads, and rapid spam.',
       invariants: ['INV-01', 'INV-04'],
       status: 'PASSED',
-      evidence:
-        'VERIFIED: detectInjectionPattern, validatePayloadBounds (16KB/64KB), and sliding-window rate limits verified.',
+      evidence: 'VERIFIED: detectInjectionPattern, validatePayloadBounds (16KB/64KB), and sliding-window rate limits verified.',
     },
     {
       gateId: 'GATE_10_ROLLBACK_INTEGRITY',
       name: 'Rollback & Safe Degradation',
-      description:
-        'Mock routes and simulation can be disabled safely without altering historical order records or orphaning pending intents.',
+      description: 'Mock routes and simulation can be disabled safely without altering historical order records or orphaning pending intents.',
       invariants: ['INV-03', 'INV-04'],
       status: unresolvedIntents > 0 ? 'FAILED' : 'PASSED',
-      evidence:
-        unresolvedIntents > 0
-          ? `BLOCKED: ${unresolvedIntents} unresolved mock payment intents exist`
-          : 'VERIFIED: validateRollbackAction confirms zero unresolved intents and safe mock deactivation.',
+      evidence: unresolvedIntents > 0
+        ? `BLOCKED: ${unresolvedIntents} unresolved mock payment intents exist`
+        : 'VERIFIED: validateRollbackAction confirms zero unresolved intents and safe mock deactivation.',
     },
   ];
 
@@ -2326,9 +2247,14 @@ export function evaluateReleaseSignoff(
     gates,
     invariantsVerified: ['INV-01', 'INV-02', 'INV-03', 'INV-04'],
     rollbackVerified: unresolvedIntents === 0,
-    notes:
-      overallStatus === 'APPROVED'
-        ? 'All 10 mock payment release gates PASSED with zero blockers. Ready for operational sign-off.'
-        : `Mock payment release REJECTED: ${failedGates.length} gate(s) failed: ${failedGates.map((g) => g.gateId).join(', ')}.`,
+    notes: overallStatus === 'APPROVED'
+      ? 'All 10 mock payment release gates PASSED with zero blockers. Ready for operational sign-off.'
+      : `Mock payment release REJECTED: ${failedGates.length} gate(s) failed: ${failedGates.map((g) => g.gateId).join(', ')}.`,
   };
 }
+
+
+
+
+
+

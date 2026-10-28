@@ -52,8 +52,8 @@ describe('P18 — Interactive 3D and Progressive Enhancement', () => {
 
     it('WS18: Provides explicit screen-reader accessibility description and aria-label for orientation', () => {
       expect(heroSource).toContain('aria-label=');
-      expect(heroSource).toContain("t('orientationLabel')");
-      expect(heroSource).toContain("t('bearingPrefix')");
+      expect(heroSource).toContain('t(\'orientationLabel\')');
+      expect(heroSource).toContain('t(\'bearingPrefix\')');
       expect(heroSource).toContain('<span className="sr-only">');
     });
 

@@ -32,8 +32,8 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
         '/api/v1/orders/checkout',
         '', // missing key
         { amount: 150000 },
-        async () => ({ statusCode: 201, body: { orderId: 'ord_1' } }),
-      ),
+        async () => ({ statusCode: 201, body: { orderId: 'ord_1' } })
+      )
     ).rejects.toThrow(ValidationError);
   });
 
@@ -54,7 +54,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/orders/checkout',
       'idem_key_abc_123',
       { planId: 'esim-jp-7d' },
-      execute,
+      execute
     );
     expect(first.isReplay).toBe(false);
     expect(first.statusCode).toBe(201);
@@ -67,7 +67,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/orders/checkout',
       'idem_key_abc_123',
       { planId: 'esim-jp-7d' },
-      execute,
+      execute
     );
     expect(second.isReplay).toBe(true);
     expect(second.statusCode).toBe(201);
@@ -90,7 +90,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       async () => {
         await blockingPromise;
         return { statusCode: 200, body: { status: 'paid' } };
-      },
+      }
     );
 
     // While the first request is in-flight, a second request arrives
@@ -100,7 +100,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
         '/api/v1/payments/charge',
         'idem_key_concurrent_1',
         { amount: 500000 },
-        async () => ({ statusCode: 200, body: { status: 'paid' } }),
+        async () => ({ statusCode: 200, body: { status: 'paid' } })
       );
       expect.unreachable('Should have thrown ConflictError');
     } catch (err: any) {
@@ -119,7 +119,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/orders/checkout',
       'idem_key_payload_check',
       { quantity: 1, sku: 'wifi-pocket-5g' },
-      async () => ({ statusCode: 201, body: { id: 'ord_1' } }),
+      async () => ({ statusCode: 201, body: { id: 'ord_1' } })
     );
 
     // Reuse same key with different payload
@@ -129,8 +129,8 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
         '/api/v1/orders/checkout',
         'idem_key_payload_check',
         { quantity: 2, sku: 'wifi-pocket-5g' }, // Modified payload!
-        async () => ({ statusCode: 201, body: { id: 'ord_2' } }),
-      ),
+        async () => ({ statusCode: 201, body: { id: 'ord_2' } })
+      )
     ).rejects.toThrow(UnprocessableEntityError);
   });
 
@@ -143,7 +143,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/orders/checkout',
       key,
       { amount: 100 },
-      async () => ({ statusCode: 201, body: { owner: 'Alice' } }),
+      async () => ({ statusCode: 201, body: { owner: 'Alice' } })
     );
 
     // User B executes with same key on same route — must NOT collide or replay User A's data
@@ -152,7 +152,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/orders/checkout',
       key,
       { amount: 100 },
-      async () => ({ statusCode: 201, body: { owner: 'Bob' } }),
+      async () => ({ statusCode: 201, body: { owner: 'Bob' } })
     );
 
     // User A executes with same key on DIFFERENT route — must NOT collide
@@ -161,7 +161,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/reviews/create',
       key,
       { amount: 100 },
-      async () => ({ statusCode: 201, body: { owner: 'AliceReview' } }),
+      async () => ({ statusCode: 201, body: { owner: 'AliceReview' } })
     );
 
     expect(resA.body.owner).toBe('Alice');
@@ -189,7 +189,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/payments/verify',
       'idem_failover_key',
       { attempt: 1 },
-      failingExecution,
+      failingExecution
     );
     expect(first.statusCode).toBe(503);
     expect(first.isReplay).toBe(false);
@@ -200,7 +200,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/payments/verify',
       'idem_failover_key',
       { attempt: 1 },
-      failingExecution,
+      failingExecution
     );
     expect(second.statusCode).toBe(200);
     expect(second.body.status).toBe('success after retry');
@@ -221,7 +221,7 @@ describe('Backend and Workflows - P22: Idempotency & Advisory Locks', () => {
       '/api/v1/test',
       'key_will_expire',
       { test: true },
-      async () => ({ statusCode: 200, body: { ok: true } }),
+      async () => ({ statusCode: 200, body: { ok: true } })
     );
 
     expect(manager.size()).toBe(1);
@@ -244,7 +244,7 @@ describe('Backend and Workflows - P23: Testing Strategy & Isolation', () => {
 
     const result = await withIsolatedTransaction(async (tx) => {
       capturedTx = tx;
-      await tx.execute("INSERT INTO test_entities (name) VALUES ('isolated_run');");
+      await tx.execute('INSERT INTO test_entities (name) VALUES (\'isolated_run\');');
       expect(tx.queriesExecuted.length).toBe(1);
       expect(tx.isRolledBack).toBe(false);
       return { success: true };
@@ -255,7 +255,7 @@ describe('Backend and Workflows - P23: Testing Strategy & Isolation', () => {
     expect(capturedTx.isRolledBack).toBe(true);
     // Any further writes to rolled-back context must fail
     await expect(capturedTx.execute('INSERT INTO invalid VALUES (1)')).rejects.toThrow(
-      /Cannot execute query on rolled-back transaction/,
+      /Cannot execute query on rolled-back transaction/
     );
   });
 
@@ -275,11 +275,7 @@ describe('Backend and Workflows - P23: Testing Strategy & Isolation', () => {
 
     // Timeout failure emits descriptive error
     await expect(
-      waitUntil(() => false, {
-        timeoutMs: 50,
-        intervalMs: 10,
-        description: 'impossible condition',
-      }),
+      waitUntil(() => false, { timeoutMs: 50, intervalMs: 10, description: 'impossible condition' })
     ).rejects.toThrow(/waitUntil timed out after 50ms waiting for: impossible condition/);
   });
 
@@ -299,9 +295,7 @@ describe('Backend and Workflows - P23: Testing Strategy & Isolation', () => {
 
     // 2 retries in total -> exceeds threshold
     tracker.recordRun('test_flaky_2', 'retried');
-    expect(() => tracker.assertAcceptableFlakeRate(0.01)).toThrow(
-      /Flake rate .* exceeds maximum allowed threshold/,
-    );
+    expect(() => tracker.assertAcceptableFlakeRate(0.01)).toThrow(/Flake rate .* exceeds maximum allowed threshold/);
   });
 
   it('P23-4: Stryker mutation testing config defines critical modules and >= 70% threshold', () => {
@@ -312,7 +306,7 @@ describe('Backend and Workflows - P23: Testing Strategy & Isolation', () => {
         'apps/api/src/modules/fx/**/*.ts',
         'apps/api/src/modules/halal/**/*.ts',
         'apps/api/src/plugins/idempotency.ts',
-      ]),
+      ])
     );
 
     // Score >= 70 passes
@@ -322,7 +316,7 @@ describe('Backend and Workflows - P23: Testing Strategy & Isolation', () => {
 
     // Score < 70 fails
     expect(() => assertMutationScoreGate('idempotency', 68, 70)).toThrow(
-      /Mutation score gate failure for module "idempotency": score is 68%, required >= 70%/,
+      /Mutation score gate failure for module "idempotency": score is 68%, required >= 70%/
     );
   });
 
@@ -339,7 +333,7 @@ describe('Backend and Workflows - P23: Testing Strategy & Isolation', () => {
       _isMockFunction: true,
     };
     expect(() => assertNoDatabaseMocking(mockedDb)).toThrow(
-      /Database mocking prohibited in integration tests/,
+      /Database mocking prohibited in integration tests/
     );
   });
 

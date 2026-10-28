@@ -25,13 +25,16 @@ describe('P20 — WCAG 2.2 AA Accessibility Specification Verification', () => {
   it('WS02 & WS04: verifies Bypass Blocks skip-links in web and admin (WCAG 2.4.1)', () => {
     const navbarCode = fs.readFileSync(
       path.join(rootDir, 'apps/web/src/components/Navbar.tsx'),
-      'utf-8',
+      'utf-8'
     );
     const layoutCode = fs.readFileSync(
       path.join(rootDir, 'apps/web/src/app/[locale]/layout.tsx'),
-      'utf-8',
+      'utf-8'
     );
-    const adminAppCode = fs.readFileSync(path.join(rootDir, 'apps/admin/src/App.tsx'), 'utf-8');
+    const adminAppCode = fs.readFileSync(
+      path.join(rootDir, 'apps/admin/src/App.tsx'),
+      'utf-8'
+    );
 
     // Web skip link points to #main-content
     expect(navbarCode).toContain('href="#main-content"');
@@ -48,9 +51,12 @@ describe('P20 — WCAG 2.2 AA Accessibility Specification Verification', () => {
   it('WS02 & WS10: verifies semantic landmarks across web and admin layouts', () => {
     const navbarCode = fs.readFileSync(
       path.join(rootDir, 'apps/web/src/components/Navbar.tsx'),
-      'utf-8',
+      'utf-8'
     );
-    const adminAppCode = fs.readFileSync(path.join(rootDir, 'apps/admin/src/App.tsx'), 'utf-8');
+    const adminAppCode = fs.readFileSync(
+      path.join(rootDir, 'apps/admin/src/App.tsx'),
+      'utf-8'
+    );
 
     // Header has banner role and nav has accessible labels
     expect(navbarCode).toContain('role="banner"');
@@ -64,7 +70,10 @@ describe('P20 — WCAG 2.2 AA Accessibility Specification Verification', () => {
   });
 
   it('WS05 & WS06: verifies Focus Not Obscured and Focus Appearance in globals.css (WCAG 2.4.11, 2.4.12, 2.4.13)', () => {
-    const globalsCss = fs.readFileSync(path.join(rootDir, 'apps/web/src/app/globals.css'), 'utf-8');
+    const globalsCss = fs.readFileSync(
+      path.join(rootDir, 'apps/web/src/app/globals.css'),
+      'utf-8'
+    );
 
     // Scroll padding and margin prevent sticky header from obscuring focused element
     expect(globalsCss).toContain('scroll-padding-top: var(--nav-height, 64px)');
@@ -79,9 +88,12 @@ describe('P20 — WCAG 2.2 AA Accessibility Specification Verification', () => {
   it('WS07 & WS28: audits interactive controls for button types and minimum 48px touch targets', () => {
     const navbarCode = fs.readFileSync(
       path.join(rootDir, 'apps/web/src/components/Navbar.tsx'),
-      'utf-8',
+      'utf-8'
     );
-    const adminAppCode = fs.readFileSync(path.join(rootDir, 'apps/admin/src/App.tsx'), 'utf-8');
+    const adminAppCode = fs.readFileSync(
+      path.join(rootDir, 'apps/admin/src/App.tsx'),
+      'utf-8'
+    );
 
     // Buttons must have explicit type="button" to prevent accidental form submits
     expect(navbarCode).toContain('type="button"');

@@ -4,17 +4,11 @@ import { constantTimeCompare, generateHmacSha256 } from '@javamifi/shared';
 
 @Injectable()
 export class AutomationService {
-  private readonly webhookSecret =
-    process.env.WEBHOOK_SECRET || 'javamifi-n8n-hmac-secret-key-32chars';
+  private readonly webhookSecret = process.env.WEBHOOK_SECRET || 'javamifi-n8n-hmac-secret-key-32chars';
 
   constructor(private readonly prisma: PrismaService) {}
 
-  verifyCallbackSignature(
-    timestamp: string,
-    signature: string,
-    payload: any,
-    maxAgeMs = 300_000,
-  ): boolean {
+  verifyCallbackSignature(timestamp: string, signature: string, payload: any, maxAgeMs = 300_000): boolean {
     if (!timestamp || !signature) return false;
 
     // Replay attack prevention: verify timestamp is within allowed window
@@ -65,11 +59,7 @@ export class AutomationService {
     return updated;
   }
 
-  async handleUsageAlertCallback(payload: {
-    iccid: string;
-    usedPct: number;
-    orderNumber: string;
-  }): Promise<any> {
+  async handleUsageAlertCallback(payload: { iccid: string; usedPct: number; orderNumber: string }): Promise<any> {
     return this.prisma.automationRun.create({
       data: {
         workflowName: 'usage.alert.sent',

@@ -52,7 +52,10 @@ export interface SearchLogRecord {
 /**
  * Computes text matching score between search query and place name/city/aliases.
  */
-export function calculateTextMatchScore(query: string, place: PlaceSearchEntity): number {
+export function calculateTextMatchScore(
+  query: string,
+  place: PlaceSearchEntity
+): number {
   const q = query.trim().toLowerCase();
   if (!q) return 0.5;
 
@@ -82,7 +85,10 @@ export class SearchService {
   /**
    * Search execution with transparent ranking.
    */
-  search(places: PlaceSearchEntity[], params: SearchQueryParams): RankedPlaceResult[] {
+  search(
+    places: PlaceSearchEntity[],
+    params: SearchQueryParams
+  ): RankedPlaceResult[] {
     const cleanQuery = params.query.trim();
     const radius = Math.min(params.radiusMeters || 10000, 25000);
 

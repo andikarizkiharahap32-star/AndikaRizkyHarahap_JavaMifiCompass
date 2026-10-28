@@ -83,11 +83,7 @@ export class IdempotencyManager {
     route: string,
     idempotencyKey: string,
     requestBody: unknown,
-    executeHandler: () => Promise<{
-      statusCode: number;
-      headers?: Record<string, string>;
-      body: T;
-    }>,
+    executeHandler: () => Promise<{ statusCode: number; headers?: Record<string, string>; body: T }>
   ): Promise<{ statusCode: number; headers: Record<string, string>; body: T; isReplay: boolean }> {
     if (!idempotencyKey) {
       throw new ValidationError('Idempotency-Key header is required for this operation', [
@@ -105,14 +101,14 @@ export class IdempotencyManager {
       // 1. Same key + different payload -> 422 Unprocessable Entity
       if (existing.requestHash !== currentHash) {
         throw new UnprocessableEntityError(
-          'Idempotency-Key re-used with different request payload. Original payload hash does not match.',
+          'Idempotency-Key re-used with different request payload. Original payload hash does not match.'
         );
       }
 
       // 2. In-flight duplicate -> 409 Conflict with Retry-After
       if (existing.state === 'in_flight') {
         const conflictErr = new ConflictError(
-          'A request with this Idempotency-Key is currently being processed. Please retry shortly.',
+          'A request with this Idempotency-Key is currently being processed. Please retry shortly.'
         );
         (conflictErr as any).retryAfter = 1;
         throw conflictErr;

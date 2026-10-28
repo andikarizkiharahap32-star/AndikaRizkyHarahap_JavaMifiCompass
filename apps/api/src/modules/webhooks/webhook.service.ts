@@ -41,7 +41,7 @@ export interface WebhookEndpointRecord {
 export function signWebhookPayload(
   rawBody: string | Buffer,
   secret: string,
-  timestamp = Math.floor(Date.now() / 1000),
+  timestamp = Math.floor(Date.now() / 1000)
 ): { header: string; timestamp: number; signature: string } {
   const bodyStr = typeof rawBody === 'string' ? rawBody : rawBody.toString('utf-8');
   const payloadToSign = `${timestamp}.${bodyStr}`;
@@ -59,7 +59,7 @@ export function verifyWebhookSignature(
   rawBody: string | Buffer,
   signatureHeader?: string,
   secrets: SecretRotationConfig = { primarySecret: '' },
-  maxSkewSeconds = MAX_WEBHOOK_SKEW_SECONDS,
+  maxSkewSeconds = MAX_WEBHOOK_SKEW_SECONDS
 ): VerificationResult {
   if (!signatureHeader || typeof signatureHeader !== 'string') {
     return { valid: false, reason: 'Missing or empty X-Signature header' };
@@ -137,11 +137,7 @@ export class WebhookService {
   /**
    * Tracks delivery health; auto-disables endpoint after 5 consecutive failures.
    */
-  recordDeliveryAttempt(
-    endpointId: string,
-    success: boolean,
-    failureReason?: string,
-  ): WebhookEndpointRecord {
+  recordDeliveryAttempt(endpointId: string, success: boolean, failureReason?: string): WebhookEndpointRecord {
     const ep = this.endpoints.get(endpointId);
     if (!ep) {
       throw new ValidationError(`Endpoint ${endpointId} not found`, [
@@ -169,13 +165,9 @@ export class WebhookService {
    * Validates delivery options strictly prohibiting redirect following (anti-SSRF).
    */
   assertSafeDeliveryConfig(fetchOptions: { redirect?: string }): void {
-    if (
-      fetchOptions.redirect &&
-      fetchOptions.redirect !== 'manual' &&
-      fetchOptions.redirect !== 'error'
-    ) {
+    if (fetchOptions.redirect && fetchOptions.redirect !== 'manual' && fetchOptions.redirect !== 'error') {
       throw new Error(
-        'P21 Prohibition: Webhook delivery must not follow HTTP redirects (SSRF mitigation)',
+        'P21 Prohibition: Webhook delivery must not follow HTTP redirects (SSRF mitigation)'
       );
     }
   }

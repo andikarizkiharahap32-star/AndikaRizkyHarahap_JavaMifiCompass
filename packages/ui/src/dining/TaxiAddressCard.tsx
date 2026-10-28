@@ -36,7 +36,11 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
   const [copied, setCopied] = useState(false);
   const isId = locale.startsWith('id');
 
-  const textToCopy = [nameOriginal || name, addressLocalScript || address, postalCode]
+  const textToCopy = [
+    nameOriginal || name,
+    addressLocalScript || address,
+    postalCode,
+  ]
     .filter(Boolean)
     .join('\n');
 
@@ -89,7 +93,9 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
         <div className="text-xs uppercase font-bold text-outline tracking-wider">
           {isId ? 'Nama Tempat (Aksara Asli):' : 'Venue Name (Original Script):'}
         </div>
-        <p className="text-lg font-bold text-primary leading-snug m-0">{nameOriginal || name}</p>
+        <p className="text-lg font-bold text-primary leading-snug m-0">
+          {nameOriginal || name}
+        </p>
 
         <div className="pt-2 border-t border-paper-edge/60">
           <div className="text-xs uppercase font-bold text-outline tracking-wider">
@@ -132,8 +138,8 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
               ? 'Alamat Berhasil Disalin!'
               : 'Copied to Clipboard!'
             : isId
-              ? 'Salin Alamat Bahasa Asli'
-              : 'Copy Local Script Address'}
+            ? 'Salin Alamat Bahasa Asli'
+            : 'Copy Local Script Address'}
         </span>
       </button>
 

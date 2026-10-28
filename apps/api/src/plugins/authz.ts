@@ -10,10 +10,23 @@
 
 export type Role = 'user' | 'moderator' | 'admin';
 
-export type Action = 'read' | 'create' | 'update' | 'delete' | 'moderate' | 'verify' | 'administer';
+export type Action =
+  | 'read'
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'moderate'
+  | 'verify'
+  | 'administer';
 
 export type Resource =
-  'places' | 'reviews' | 'evidence' | 'users' | 'orders' | 'sessions' | 'system';
+  | 'places'
+  | 'reviews'
+  | 'evidence'
+  | 'users'
+  | 'orders'
+  | 'sessions'
+  | 'system';
 
 export interface Subject {
   id: string;

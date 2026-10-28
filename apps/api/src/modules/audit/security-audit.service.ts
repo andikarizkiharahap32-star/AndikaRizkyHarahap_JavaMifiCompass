@@ -53,9 +53,7 @@ export class SecurityAuditService {
    * Evaluates threat model compliance across all 29 abuse vectors and 8 surfaces.
    * Asserts INV-04 (critical findings remain release blockers).
    */
-  async evaluateCompliance(
-    customControls?: SecurityControl[],
-  ): Promise<ThreatModelEvaluationReport> {
+  async evaluateCompliance(customControls?: SecurityControl[]): Promise<ThreatModelEvaluationReport> {
     const report = evaluateThreatModelCompliance(customControls);
 
     if (report.criticalReleaseBlockers > 0) {

@@ -24,9 +24,7 @@ describe('P07 — Headings, Section Slicing, and Page Rhythm', () => {
     expect(homeH1Matches.length).toBe(0); // page.tsx itself has 0 h1s
     const heroH1Matches = heroSource.match(/<h1[\s>]/g) || [];
     expect(heroH1Matches.length).toBe(1); // exactly one unique h1 in Hero
-    expect(heroSource).toContain(
-      'font-display font-black text-primary tracking-tight leading-tight uppercase',
-    );
+    expect(heroSource).toContain('font-display font-black text-primary tracking-tight leading-tight uppercase');
 
     // FAQ page has exactly one unique H1 with display typography
     const faqH1Matches = faqSource.match(/<h1[\s>]/g) || [];
@@ -36,9 +34,7 @@ describe('P07 — Headings, Section Slicing, and Page Rhythm', () => {
     // Destinations page has exactly one unique H1 with display typography
     const destH1Matches = destinationsSource.match(/<h1[\s>]/g) || [];
     expect(destH1Matches.length).toBe(1);
-    expect(destinationsSource).toContain(
-      'font-display font-black text-primary uppercase tracking-tight',
-    );
+    expect(destinationsSource).toContain('font-display font-black text-primary uppercase tracking-tight');
   });
 
   it('P07-WS02 & WS04: Section H2 Rhythm & Eyebrow Badges', () => {
@@ -47,9 +43,7 @@ describe('P07 — Headings, Section Slicing, and Page Rhythm', () => {
     expect(homeSource).toContain("tHome('presets.title')");
     expect(homeSource).toContain("tHome('trust.badge')");
     expect(homeSource).toContain("tHome('trust.title')");
-    expect(homeSource).toContain(
-      'font-display font-black text-primary mt-1 uppercase tracking-tight',
-    );
+    expect(homeSource).toContain('font-display font-black text-primary mt-1 uppercase tracking-tight');
 
     // FAQ page has section H2 rhythm
     expect(faqSource).toContain("t('sectionTitle')");
@@ -57,31 +51,23 @@ describe('P07 — Headings, Section Slicing, and Page Rhythm', () => {
 
     // Destinations page has section H2 rhythm
     expect(destinationsSource).toContain("t('sectionTitle')");
-    expect(destinationsSource).toContain(
-      'font-display font-black text-primary uppercase tracking-tight',
-    );
+    expect(destinationsSource).toContain('font-display font-black text-primary uppercase tracking-tight');
   });
 
   it('P07-WS03: Semantic H3 Card Groups within sections', () => {
     // FAQ page questions and support callout use semantic H3
-    expect(faqSource).toContain(
-      '<h3 className="text-base font-bold text-primary leading-snug font-sans">',
-    );
+    expect(faqSource).toContain('<h3 className="text-base font-bold text-primary leading-snug font-sans">');
     expect(faqSource).toContain('<h3 className="text-base font-bold text-primary font-sans">');
 
     // Destinations page destination cards use semantic H3
-    expect(destinationsSource).toContain(
-      '<h3 className="text-xl font-bold text-primary group-hover:text-primary-hover transition-colors font-sans">',
-    );
+    expect(destinationsSource).toContain('<h3 className="text-xl font-bold text-primary group-hover:text-primary-hover transition-colors font-sans">');
   });
 
   it('P07-WS05: Intro Paragraphs beneath headings follow ergonomic line length and >=14px body', () => {
     // HomePage section intro paragraphs
     expect(homeSource).toContain("tHome('presets.intro')");
     expect(homeSource).toContain("tHome('trust.intro')");
-    expect(homeSource).toContain(
-      'text-sm text-secondary max-w-2xl leading-relaxed reading-prose break-words',
-    );
+    expect(homeSource).toContain('text-sm text-secondary max-w-2xl leading-relaxed reading-prose break-words');
 
     // FAQ page intro paragraphs
     expect(faqSource).toContain("t('subtitle')");

@@ -19,16 +19,16 @@ export interface RankingWeights {
 export const RANKING_WEIGHTS: RankingWeights = Object.freeze({
   halalStrength: 0.45,
   proximity: 0.25,
-  text: 0.2,
-  quality: 0.1,
+  text: 0.20,
+  quality: 0.10,
 });
 
 export type HalalStatus = 'verified' | 'self_declared' | 'unverified' | 'disputed';
 
 export const HALAL_STRENGTH_SCORES: Record<HalalStatus, number> = Object.freeze({
   verified: 1.0, // Accredited certificate or government authority listing
-  self_declared: 0.7, // Operator Muslim-owned declaration
-  unverified: 0.3, // Default state
+  self_declared: 0.70, // Operator Muslim-owned declaration
+  unverified: 0.30, // Default state
   disputed: 0.05, // Active contamination or false certification dispute
 });
 
@@ -60,7 +60,7 @@ export interface RankedPlaceResult extends PlaceRankingCandidate {
  */
 export function calculatePlaceRankScore(candidate: PlaceRankingCandidate): RankedPlaceResult {
   // 1. Halal Strength (0.0 to 1.0)
-  const halalScore = HALAL_STRENGTH_SCORES[candidate.halalStatus] ?? 0.3;
+  const halalScore = HALAL_STRENGTH_SCORES[candidate.halalStatus] ?? 0.30;
 
   // 2. Proximity (0.0 to 1.0, decaying linearly with distance up to search radius)
   const radius = Math.max(1, candidate.searchRadiusMeters);
@@ -100,7 +100,7 @@ export function assertNoSponsoredAttributes(obj: Record<string, any>): void {
   for (const key of forbiddenKeys) {
     if (key in obj) {
       throw new Error(
-        `P14 Prohibition: Forbidden sponsored/paid attribute '${key}' detected in ranking payload`,
+        `P14 Prohibition: Forbidden sponsored/paid attribute '${key}' detected in ranking payload`
       );
     }
   }

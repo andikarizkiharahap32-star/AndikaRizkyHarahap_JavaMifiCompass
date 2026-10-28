@@ -85,12 +85,8 @@ describe('PAY-P02 Audit: Request Schema & Synthetic Fixtures', () => {
     });
 
     it('throws when encountering an unauthorized or non-synthetic token', () => {
-      expect(() => resolveSyntheticOutcome('tok_live_real_card_123')).toThrow(
-        'Unrecognized synthetic token',
-      );
-      expect(() => resolveSyntheticOutcome('4532111122223333')).toThrow(
-        'Unrecognized synthetic token',
-      );
+      expect(() => resolveSyntheticOutcome('tok_live_real_card_123')).toThrow('Unrecognized synthetic token');
+      expect(() => resolveSyntheticOutcome('4532111122223333')).toThrow('Unrecognized synthetic token');
     });
   });
 
@@ -212,10 +208,7 @@ describe('PAY-P02 Audit: Request Schema & Synthetic Fixtures', () => {
       const orderNumber = 'JMF-SYNTH-001';
       const statusCode = '200';
       const grossAmount = '350000';
-      const signature = generateHmacSha256(
-        `${orderNumber}:${statusCode}:${grossAmount}`,
-        testSecret,
-      );
+      const signature = generateHmacSha256(`${orderNumber}:${statusCode}:${grossAmount}`, testSecret);
 
       // Tampered amount (price tampering attack)
       const tamperedPayload = `${orderNumber}:${statusCode}:1000`;

@@ -29,7 +29,11 @@ export class FavoritesService {
   /**
    * Adds a place to user favorites, enforcing the 500-item soft cap.
    */
-  async addFavorite(userId: string, placeId: string, notes?: string): Promise<FavoriteRecord> {
+  async addFavorite(
+    userId: string,
+    placeId: string,
+    notes?: string
+  ): Promise<FavoriteRecord> {
     const key = this.getCompositeKey(userId, placeId);
     const existing = this.favorites.get(key);
 
@@ -44,7 +48,7 @@ export class FavoritesService {
     if (currentCount >= MAX_FAVORITES_PER_USER) {
       throw new ValidationError(
         `Favorites soft cap of ${MAX_FAVORITES_PER_USER} places reached. Please remove items before adding more.`,
-        [{ name: 'placeId', reason: `Exceeded soft cap limit of ${MAX_FAVORITES_PER_USER}` }],
+        [{ name: 'placeId', reason: `Exceeded soft cap limit of ${MAX_FAVORITES_PER_USER}` }]
       );
     }
 

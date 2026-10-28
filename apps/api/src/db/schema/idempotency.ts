@@ -38,8 +38,8 @@ export const idempotencyKeys = pgTable(
     userRouteKeyIdx: uniqueIndex('idx_idempotency_user_route_key').on(
       table.userId,
       table.route,
-      table.key,
+      table.key
     ),
     expiresAtIdx: index('idx_idempotency_expires_at').on(table.expiresAt),
-  }),
+  })
 );

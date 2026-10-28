@@ -19,7 +19,8 @@ import {
 @Injectable()
 export class MockGatewayAdapter implements PaymentGatewayPort {
   readonly mode = 'mock';
-  private readonly secretKey = process.env.MOCK_PAYMENT_SECRET || MOCK_DEFAULT_SIGNING_SECRET;
+  private readonly secretKey =
+    process.env.MOCK_PAYMENT_SECRET || MOCK_DEFAULT_SIGNING_SECRET;
 
   async createPayment(params: CreatePaymentParams): Promise<PaymentInitiationResult> {
     const paymentId = `mock-pay-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
@@ -51,7 +52,7 @@ export class MockGatewayAdapter implements PaymentGatewayPort {
         grossAmount: notification.grossAmount,
         signatureKey: notification.signatureKey,
       },
-      this.secretKey,
+      this.secretKey
     );
   }
 
@@ -65,7 +66,7 @@ export class MockGatewayAdapter implements PaymentGatewayPort {
         statusCode,
         grossAmount,
       },
-      this.secretKey,
+      this.secretKey
     );
   }
 
@@ -116,3 +117,4 @@ export class MockGatewayAdapter implements PaymentGatewayPort {
     };
   }
 }
+

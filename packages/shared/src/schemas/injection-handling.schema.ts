@@ -59,8 +59,7 @@ export const INJECTION_DETECTION_RULES: readonly InjectionPatternRule[] = [
   // 1. SQL Injection: UNION, boolean tautologies, stacked queries, sleep functions
   {
     vector: 'SQL_INJECTION',
-    regex:
-      /\b(union\s+select|select\s+.*\s+from|insert\s+into|update\s+.*\s+set|delete\s+from|drop\s+table|alter\s+table)\b/i,
+    regex: /\b(union\s+select|select\s+.*\s+from|insert\s+into|update\s+.*\s+set|delete\s+from|drop\s+table|alter\s+table)\b/i,
     description: 'SQL DDL/DML statement injection attempt',
   },
   {
@@ -272,12 +271,7 @@ export function scanPayloadForInjections(
       }
 
       // Check key itself for injections
-      const keyRes = scanPayloadForInjections(
-        key,
-        `${currentPath}.<key:${key}>`,
-        depth + 1,
-        limits,
-      );
+      const keyRes = scanPayloadForInjections(key, `${currentPath}.<key:${key}>`, depth + 1, limits);
       if (keyRes.detected) return keyRes;
 
       // Check value
@@ -361,16 +355,10 @@ export function validatePaginationParams(
   limit?: unknown,
   maxLimit = 100,
 ): { page: number; limit: number; offset: number } {
-  const p = Math.max(
-    1,
-    typeof page === 'number' ? Math.floor(page) : parseInt(String(page || 1), 10) || 1,
-  );
+  const p = Math.max(1, typeof page === 'number' ? Math.floor(page) : parseInt(String(page || 1), 10) || 1);
   const l = Math.min(
     maxLimit,
-    Math.max(
-      1,
-      typeof limit === 'number' ? Math.floor(limit) : parseInt(String(limit || 20), 10) || 20,
-    ),
+    Math.max(1, typeof limit === 'number' ? Math.floor(limit) : parseInt(String(limit || 20), 10) || 20),
   );
   const offset = (p - 1) * l;
   return { page: p, limit: l, offset };
@@ -428,54 +416,42 @@ export function evaluateInjectionHandlingCompliance(
   if (config.enforceParameterizedQueries === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Database access must enforce parameterized query construction.',
-    );
+    blockers.push('RELEASE BLOCKER: Database access must enforce parameterized query construction.');
   }
 
   // Check 2: Contextual output encoding (Plain text / Entity escaping)
   if (config.enforceContextualOutputEncoding === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Contextual output encoding must be strictly enforced on user output.',
-    );
+    blockers.push('RELEASE BLOCKER: Contextual output encoding must be strictly enforced on user output.');
   }
 
   // Check 3: Path traversal protection
   if (config.enforcePathTraversalProtection === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Path traversal and canonical path resolution protection must be active.',
-    );
+    blockers.push('RELEASE BLOCKER: Path traversal and canonical path resolution protection must be active.');
   }
 
   // Check 4: Prototype pollution defense
   if (config.enforcePrototypePollutionProtection === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: JSON parsers must actively reject prototype pollution properties.',
-    );
+    blockers.push('RELEASE BLOCKER: JSON parsers must actively reject prototype pollution properties.');
   }
 
   // Check 5: Log CRLF injection sanitization (INV-03)
   if (config.enforceLogInjectionSanitization === true) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Security-sensitive logs must sanitize CRLF and control characters (INV-03).',
-    );
+    blockers.push('RELEASE BLOCKER: Security-sensitive logs must sanitize CRLF and control characters (INV-03).');
   }
 
   // Check 6: Bounded input parsing limits
   if (config.limits.maxBodySizeBytes <= 1048576 && config.limits.maxRecursionDepth <= 10) {
     passedChecks++;
   } else {
-    blockers.push(
-      'RELEASE BLOCKER: Request body bounds or recursion depth exceed safe DoS prevention thresholds.',
-    );
+    blockers.push('RELEASE BLOCKER: Request body bounds or recursion depth exceed safe DoS prevention thresholds.');
   }
 
   const score = Math.round((passedChecks / totalChecks) * 100);
@@ -487,8 +463,7 @@ export function evaluateInjectionHandlingCompliance(
     criticalReleaseBlockers: blockers.length,
     releaseBlockerReasons: blockers,
     invariants: {
-      INV_01_InputValidation:
-        config.enforceContextualOutputEncoding && config.enforcePathTraversalProtection,
+      INV_01_InputValidation: config.enforceContextualOutputEncoding && config.enforcePathTraversalProtection,
       INV_02_MutationBoundaryRecheck: config.enforceParameterizedQueries,
       INV_03_LogRedactionSanitization: config.enforceLogInjectionSanitization,
       INV_04_ReleaseBlockerIntegrity: blockers.length === 0,

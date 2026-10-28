@@ -28,8 +28,7 @@ export const defaultPlannerState: PlannerQueryState = {
  */
 export const plannerParsers = {
   dest: {
-    parse: (value: string | null): string =>
-      value ? value.toLowerCase().trim() : defaultPlannerState.dest,
+    parse: (value: string | null): string => (value ? value.toLowerCase().trim() : defaultPlannerState.dest),
     serialize: (value: string): string => value.toLowerCase().trim(),
   },
   pax: {
@@ -55,13 +54,11 @@ export const plannerParsers = {
     serialize: (value: number): string => String(Math.max(1, Math.min(20, value))),
   },
   startDate: {
-    parse: (value: string | null): string =>
-      value && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : defaultPlannerState.startDate,
+    parse: (value: string | null): string => (value && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : defaultPlannerState.startDate),
     serialize: (value: string): string => value,
   },
   endDate: {
-    parse: (value: string | null): string =>
-      value && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : defaultPlannerState.endDate,
+    parse: (value: string | null): string => (value && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : defaultPlannerState.endDate),
     serialize: (value: string): string => value,
   },
 };
@@ -89,8 +86,7 @@ export function serializePlannerQuery(state: Partial<PlannerQueryState>): string
   if (state.dest) params.set('dest', plannerParsers.dest.serialize(state.dest));
   if (state.pax) params.set('pax', plannerParsers.pax.serialize(state.pax));
   if (state.days !== undefined) params.set('days', plannerParsers.days.serialize(state.days));
-  if (state.devices !== undefined && state.devices > 1)
-    params.set('devices', plannerParsers.devices.serialize(state.devices));
+  if (state.devices !== undefined && state.devices > 1) params.set('devices', plannerParsers.devices.serialize(state.devices));
   if (state.startDate) params.set('start', plannerParsers.startDate.serialize(state.startDate));
   if (state.endDate) params.set('end', plannerParsers.endDate.serialize(state.endDate));
   return params.toString();
@@ -123,7 +119,7 @@ export function usePlannerQuery() {
         window.history.replaceState({ ...window.history.state }, '', newUrl);
       }
     },
-    [queryState],
+    [queryState]
   );
 
   return {

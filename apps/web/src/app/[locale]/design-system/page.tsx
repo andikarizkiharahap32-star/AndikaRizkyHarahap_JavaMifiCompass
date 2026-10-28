@@ -29,9 +29,7 @@ export default function DesignSystemShowcasePage({
 }: {
   params: { locale: string };
 }) {
-  const [activeTheme, setActiveTheme] = useState<'light' | 'night' | 'side-by-side'>(
-    'side-by-side',
-  );
+  const [activeTheme, setActiveTheme] = useState<'light' | 'night' | 'side-by-side'>('side-by-side');
   const [demoState, setDemoState] = useState<'SUCCESS' | 'FAILED' | 'EXPIRED' | null>(null);
 
   return (
@@ -122,11 +120,7 @@ export default function DesignSystemShowcasePage({
               Perbandingan Berdampingan: Spek Light vs Night
             </h1>
             <p className="text-sm text-night-ink-soft leading-relaxed">
-              Arsitektur visual wayfinding JavaMifi Compass mengadaptasi metafora tiket fisik dan
-              skematik peta transit kereta berkecepatan tinggi. Komponen mempertahankan struktur
-              geometri yang identik—perforasi berlubang samping, garis kumulatif titik impas,
-              barcode stub terminal—yang diuji untuk pencahayaan terminal siang hari yang terik
-              maupun kabin pesawat malam.
+              Arsitektur visual wayfinding JavaMifi Compass mengadaptasi metafora tiket fisik dan skematik peta transit kereta berkecepatan tinggi. Komponen mempertahankan struktur geometri yang identik—perforasi berlubang samping, garis kumulatif titik impas, barcode stub terminal—yang diuji untuk pencahayaan terminal siang hari yang terik maupun kabin pesawat malam.
             </p>
           </div>
 
@@ -284,9 +278,7 @@ export default function DesignSystemShowcasePage({
                     <span className="w-2.5 h-2.5 rounded-full bg-line-esim" />
                     <span>TEMA NIGHT (KABIN MALAM)</span>
                   </div>
-                  <span className="text-xs font-mono text-night-ink-soft">
-                    NIGHT RAISED #171F54
-                  </span>
+                  <span className="text-xs font-mono text-night-ink-soft">NIGHT RAISED #171F54</span>
                 </div>
 
                 <BreakEvenSchematicCard
@@ -475,9 +467,7 @@ export default function DesignSystemShowcasePage({
                 </div>
                 <div>
                   <span className="font-bold text-sm text-white block">Line 01 • Pocket WiFi</span>
-                  <span className="font-mono text-xs text-night-ink-soft">
-                    line-wifi // Stroke line-wifi-stroke
-                  </span>
+                  <span className="font-mono text-xs text-night-ink-soft">line-wifi // Stroke line-wifi-stroke</span>
                 </div>
               </div>
               <p className="text-xs text-night-ink-soft mt-1">
@@ -493,9 +483,7 @@ export default function DesignSystemShowcasePage({
                 </div>
                 <div>
                   <span className="font-bold text-sm text-white block">Line 02 • Digital eSIM</span>
-                  <span className="font-mono text-xs text-night-ink-soft">
-                    line-esim // Stroke line-esim-stroke
-                  </span>
+                  <span className="font-mono text-xs text-night-ink-soft">line-esim // Stroke line-esim-stroke</span>
                 </div>
               </div>
               <p className="text-xs text-night-ink-soft mt-1">
@@ -511,9 +499,7 @@ export default function DesignSystemShowcasePage({
                 </div>
                 <div>
                   <span className="font-bold text-sm text-white block">Line 03 • Travel SIM</span>
-                  <span className="font-mono text-xs text-night-ink-soft">
-                    line-sim // Stroke line-sim-stroke
-                  </span>
+                  <span className="font-mono text-xs text-night-ink-soft">line-sim // Stroke line-sim-stroke</span>
                 </div>
               </div>
               <p className="text-xs text-night-ink-soft mt-1">
@@ -529,9 +515,7 @@ export default function DesignSystemShowcasePage({
                 </div>
                 <div>
                   <span className="font-bold text-sm text-white block">Line 04 • Halal Dining</span>
-                  <span className="font-mono text-xs text-night-ink-soft">
-                    success // Emerald Tier
-                  </span>
+                  <span className="font-mono text-xs text-night-ink-soft">success // Emerald Tier</span>
                 </div>
               </div>
               <p className="text-xs text-night-ink-soft mt-1">

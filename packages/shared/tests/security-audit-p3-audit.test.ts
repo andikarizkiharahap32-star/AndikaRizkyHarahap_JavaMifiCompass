@@ -36,7 +36,11 @@ describe('SEC-P03: Authentication Assurance & Token Lifecycle Tests', () => {
   describe('1. Taxonomy & Assurance Enums', () => {
     it('defines NIST SP 800-63B aligned assurance levels', () => {
       const levels = AuthAssuranceLevelEnum.options;
-      expect(levels).toEqual(['AAL_1_SINGLE_FACTOR', 'AAL_2_TWO_FACTOR', 'AAL_3_HARDWARE_BACKED']);
+      expect(levels).toEqual([
+        'AAL_1_SINGLE_FACTOR',
+        'AAL_2_TWO_FACTOR',
+        'AAL_3_HARDWARE_BACKED',
+      ]);
     });
 
     it('defines structured audit event types for authentication lifecycle (INV-03)', () => {
@@ -64,7 +68,11 @@ describe('SEC-P03: Authentication Assurance & Token Lifecycle Tests', () => {
   // ── 2. Password Policy & Credential Security ─────────────────
   describe('2. Password Policy & Credential Hardening (INV-01 & FAIL-001)', () => {
     it('accepts compliant strong passwords meeting all complexity rules', () => {
-      const strongPasswords = ['K@rtuPerdana2026!', 'JavaMifi#Japan_5G$', 'UltraSecure99#P@ss'];
+      const strongPasswords = [
+        'K@rtuPerdana2026!',
+        'JavaMifi#Japan_5G$',
+        'UltraSecure99#P@ss',
+      ];
 
       for (const pwd of strongPasswords) {
         const result = validatePasswordStrength(pwd);
@@ -102,7 +110,12 @@ describe('SEC-P03: Authentication Assurance & Token Lifecycle Tests', () => {
     });
 
     it('rejects commonly guessable dictionary passwords (FAIL-012)', () => {
-      const commonPasswords = ['password123', 'admin123456', 'compass2026', 'letmein1234'];
+      const commonPasswords = [
+        'password123',
+        'admin123456',
+        'compass2026',
+        'letmein1234',
+      ];
 
       for (const bad of commonPasswords) {
         const result = validatePasswordStrength(bad);

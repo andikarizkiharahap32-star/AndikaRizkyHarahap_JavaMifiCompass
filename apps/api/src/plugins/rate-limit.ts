@@ -49,10 +49,7 @@ export const TRUSTED_PROXIES = Object.freeze([
 /**
  * Checks if an IP falls within trusted proxy ranges (exact match or simple private CIDR prefix).
  */
-export function isTrustedProxy(
-  ip: string,
-  trustedList: readonly string[] = TRUSTED_PROXIES,
-): boolean {
+export function isTrustedProxy(ip: string, trustedList: readonly string[] = TRUSTED_PROXIES): boolean {
   if (!ip) return false;
   const cleanIp = ip.trim();
 
@@ -78,7 +75,7 @@ export function isTrustedProxy(
 export function extractClientIp(
   socketRemoteAddress?: string,
   xForwardedForHeader?: string | string[],
-  trustedList: readonly string[] = TRUSTED_PROXIES,
+  trustedList: readonly string[] = TRUSTED_PROXIES
 ): string {
   const directIp = (socketRemoteAddress || '127.0.0.1').trim();
 
@@ -95,10 +92,7 @@ export function extractClientIp(
     ? xForwardedForHeader.join(',')
     : xForwardedForHeader;
 
-  const hops = rawHeader
-    .split(',')
-    .map((h) => h.trim())
-    .filter(Boolean);
+  const hops = rawHeader.split(',').map((h) => h.trim()).filter(Boolean);
 
   // Traverse right-to-left: first non-trusted IP is the client
   for (let i = hops.length - 1; i >= 0; i--) {
@@ -148,7 +142,7 @@ export class TokenBucketLimiter {
   async checkRateLimit(
     key: string,
     routeClass: RouteClass = 'public',
-    cost = 1,
+    cost = 1
   ): Promise<RateLimitResult> {
     const config = RATE_LIMIT_TIERS[routeClass];
     const maxCapacity = config.limit + config.burst;
@@ -196,14 +190,12 @@ export class TokenBucketLimiter {
           refillRatePerMs,
           cost,
           nowMs,
-          config.windowSeconds * 2,
+          config.windowSeconds * 2
         );
 
         const allowed = res[0] === 1;
         const remaining = res[1];
-        const retryAfterSeconds = allowed
-          ? 0
-          : Math.ceil(cost / (config.limit / config.windowSeconds));
+        const retryAfterSeconds = allowed ? 0 : Math.ceil(cost / (config.limit / config.windowSeconds));
 
         return {
           allowed,
@@ -221,7 +213,7 @@ export class TokenBucketLimiter {
       if (routeClass === 'assist') {
         throw new RateLimitError(
           60,
-          'AI Assist service rate limiter is temporarily unavailable. Fail-closed guard active.',
+          'AI Assist service rate limiter is temporarily unavailable. Fail-closed guard active.'
         );
       }
 
@@ -242,7 +234,7 @@ export class TokenBucketLimiter {
     cost: number,
     config: RateLimitConfig,
     maxCapacity: number,
-    refillRatePerMs: number,
+    refillRatePerMs: number
   ): RateLimitResult {
     const bucketKey = `${routeClass}:${key}`;
     const now = Date.now();
@@ -269,10 +261,7 @@ export class TokenBucketLimiter {
     }
 
     const deficit = cost - state.tokens;
-    const retryAfterSeconds = Math.max(
-      1,
-      Math.ceil(deficit / (config.limit / config.windowSeconds)),
-    );
+    const retryAfterSeconds = Math.max(1, Math.ceil(deficit / (config.limit / config.windowSeconds)));
 
     return {
       allowed: false,

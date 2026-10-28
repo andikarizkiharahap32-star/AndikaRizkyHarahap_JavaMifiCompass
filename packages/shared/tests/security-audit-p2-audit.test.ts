@@ -111,9 +111,7 @@ describe('SEC-P02: Attack Surface Mapping & Boundary Control Tests', () => {
 
     it('enforces that sensitive login/register routes use strict rate limiting', () => {
       const loginRoute = JAVAMIFI_ATTACK_SURFACES.find((s) => s.id === 'SURF_PUB_02_AUTH_LOGIN');
-      const registerRoute = JAVAMIFI_ATTACK_SURFACES.find(
-        (s) => s.id === 'SURF_PUB_03_AUTH_REGISTER',
-      );
+      const registerRoute = JAVAMIFI_ATTACK_SURFACES.find((s) => s.id === 'SURF_PUB_03_AUTH_REGISTER');
 
       expect(loginRoute).toBeDefined();
       expect(loginRoute?.rateLimitTier).toBe('PUBLIC_STRICT');

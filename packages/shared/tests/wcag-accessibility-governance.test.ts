@@ -3,11 +3,17 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('WCAG AA Accessibility & Anti-Pattern Governance', () => {
-  const homeDocPath = path.resolve(__dirname, '../../../design-system/pages/home.md');
-  const homePagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
+  const homeDocPath = path.resolve(
+    __dirname,
+    '../../../design-system/pages/home.md'
+  );
+  const homePagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
   const heroComponentPath = path.resolve(
     __dirname,
-    '../../../apps/web/src/components/DepartureBoardHero.tsx',
+    '../../../apps/web/src/components/DepartureBoardHero.tsx'
   );
 
   it('documents WCAG AA scroll-jacking, vestibular nausea, and keyboard access in home.md', () => {

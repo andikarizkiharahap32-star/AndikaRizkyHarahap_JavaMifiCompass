@@ -3,7 +3,10 @@ import {
   NotificationService,
   SendNotificationInput,
 } from '../../../apps/api/src/modules/notify/notify.service';
-import { processNotifyJob, NotifyJobData } from '../../../apps/worker/src/jobs/notify';
+import {
+  processNotifyJob,
+  NotifyJobData,
+} from '../../../apps/worker/src/jobs/notify';
 import {
   signWebhookPayload,
   verifyWebhookSignature,
@@ -29,7 +32,7 @@ describe('Backend and Workflows - P20: Notifications', () => {
 
     // 1. Without consent: rejected
     await expect(notifyService.sendNotification(marketingInput)).rejects.toThrow(
-      /Cannot send marketing notification without recorded explicit user consent/,
+      /Cannot send marketing notification without recorded explicit user consent/
     );
 
     // 2. With recorded consent: accepted
@@ -103,20 +106,16 @@ describe('Backend and Workflows - P20: Notifications', () => {
     const mockTransport = async () => ({ status: 'hard_bounce' as const });
 
     await expect(processNotifyJob(jobData, mockTransport, notifyService)).rejects.toThrow(
-      /Hard bounce encountered/,
+      /Hard bounce encountered/
     );
 
     // Recipient must now be in the suppression list
     expect(notifyService.isSuppressed('invalid-address-550@domain.xyz')).toBe(true);
 
     // Subsequent worker execution is immediately suppressed without calling transport
-    const suppressedResult = await processNotifyJob(
-      jobData,
-      async () => {
-        throw new Error('Transport should not be called');
-      },
-      notifyService,
-    );
+    const suppressedResult = await processNotifyJob(jobData, async () => {
+      throw new Error('Transport should not be called');
+    }, notifyService);
     expect(suppressedResult).toBe('suppressed');
   });
 });
@@ -131,11 +130,7 @@ describe('Backend and Workflows - P21: Webhooks (Inbound and Outbound)', () => {
   });
 
   it('P21-1: Verifies HMAC-SHA256 signature strictly over raw body and rejects tampered payloads', () => {
-    const rawBody = JSON.stringify({
-      event: 'order.completed',
-      orderId: 'ord_123',
-      totalIdr: 450000,
-    });
+    const rawBody = JSON.stringify({ event: 'order.completed', orderId: 'ord_123', totalIdr: 450000 });
     const { header } = signWebhookPayload(rawBody, primarySecret);
 
     // Valid signature over identical raw body
@@ -144,11 +139,7 @@ describe('Backend and Workflows - P21: Webhooks (Inbound and Outbound)', () => {
     expect(validResult.matchedSecret).toBe('primary');
 
     // Tampered body (even 1 character modified) fails verification
-    const tamperedBody = JSON.stringify({
-      event: 'order.completed',
-      orderId: 'ord_123',
-      totalIdr: 450001,
-    });
+    const tamperedBody = JSON.stringify({ event: 'order.completed', orderId: 'ord_123', totalIdr: 450001 });
     const invalidResult = verifyWebhookSignature(tamperedBody, header, { primarySecret });
     expect(invalidResult.valid).toBe(false);
     expect(invalidResult.reason).toContain('HMAC signature mismatch');
@@ -167,9 +158,7 @@ describe('Backend and Workflows - P21: Webhooks (Inbound and Outbound)', () => {
     const staleSign = signWebhookPayload(rawBody, primarySecret, nowSec - 360);
     const staleResult = verifyWebhookSignature(rawBody, staleSign.header, { primarySecret });
     expect(staleResult.valid).toBe(false);
-    expect(staleResult.reason).toContain(
-      'exceeds maximum tolerance of 300s (possible replay attack)',
-    );
+    expect(staleResult.reason).toContain('exceeds maximum tolerance of 300s (possible replay attack)');
   });
 
   it('P21-3: Secret rotation test with dual validity window (primary + previous secret overlap)', () => {
@@ -197,10 +186,7 @@ describe('Backend and Workflows - P21: Webhooks (Inbound and Outbound)', () => {
   });
 
   it('P21-4: Outbound endpoint health tracking automatically disables after 5 consecutive failures', () => {
-    const ep = webhookService.registerEndpoint(
-      'ep_partner_1',
-      'https://partner.example.com/webhook',
-    );
+    const ep = webhookService.registerEndpoint('ep_partner_1', 'https://partner.example.com/webhook');
     expect(ep.status).toBe('healthy');
 
     // 4 failures maintain healthy/degraded status
@@ -228,7 +214,7 @@ describe('Backend and Workflows - P21: Webhooks (Inbound and Outbound)', () => {
 
     // Following redirects is strictly forbidden (anti-SSRF)
     expect(() => webhookService.assertSafeDeliveryConfig({ redirect: 'follow' })).toThrow(
-      /P21 Prohibition: Webhook delivery must not follow HTTP redirects/,
+      /P21 Prohibition: Webhook delivery must not follow HTTP redirects/
     );
   });
 });

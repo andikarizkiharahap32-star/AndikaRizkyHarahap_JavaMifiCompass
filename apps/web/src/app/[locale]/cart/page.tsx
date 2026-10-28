@@ -2,20 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { unstable_setRequestLocale } from 'next-intl/server';
-import {
-  ShoppingCart,
-  ArrowRight,
-  ShieldCheck,
-  Tag,
-  Trash2,
-  Plus,
-  Minus,
-  ArrowLeft,
-  Wifi,
-  QrCode,
-  Calendar,
-  MapPin,
-} from 'lucide-react';
+import { ShoppingCart, ArrowRight, ShieldCheck, Tag, Trash2, Plus, Minus, ArrowLeft, Wifi, QrCode, Calendar, MapPin } from 'lucide-react';
 
 export async function generateMetadata({
   params: { locale },
@@ -41,9 +28,8 @@ export default function CartPage({
   unstable_setRequestLocale(locale);
   const isId = locale === 'id';
 
-  const productType = (typeof searchParams.type === 'string' ? searchParams.type : 'ESIM') as
-    'WIFI_RENTAL' | 'ESIM' | 'SIM_CARD';
-  const destCode = typeof searchParams.dest === 'string' ? searchParams.dest : 'JP';
+  const productType = (typeof searchParams.type === 'string' ? searchParams.type : 'ESIM') as 'WIFI_RENTAL' | 'ESIM' | 'SIM_CARD';
+  const destCode = (typeof searchParams.dest === 'string' ? searchParams.dest : 'JP');
   const durationDays = Number(searchParams.days) || 7;
   const travelers = Number(searchParams.travelers) || 1;
 
@@ -63,12 +49,8 @@ export default function CartPage({
 
   const destName = destinationNames[destCode] || destCode;
   const productName = isWifi
-    ? isId
-      ? 'Pocket WiFi Rental 4G Unlimited'
-      : 'Pocket WiFi Rental 4G Unlimited'
-    : isId
-      ? 'Digital Travel eSIM High-Speed'
-      : 'Digital Travel eSIM High-Speed';
+    ? (isId ? 'Pocket WiFi Rental 4G Unlimited' : 'Pocket WiFi Rental 4G Unlimited')
+    : (isId ? 'Digital Travel eSIM High-Speed' : 'Digital Travel eSIM High-Speed');
 
   const checkoutUrl = `/${locale}/checkout?type=${productType}&dest=${destCode}&days=${durationDays}&travelers=${travelers}`;
 
@@ -99,10 +81,7 @@ export default function CartPage({
           <div className="p-5 rounded border border-paper-edge bg-surface space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-paper-edge pb-3">
               <div className="flex items-start gap-3">
-                <div
-                  className="w-12 h-12 rounded bg-sunken border border-paper-edge flex items-center justify-center shrink-0 mt-0.5"
-                  aria-hidden="true"
-                >
+                <div className="w-12 h-12 rounded bg-sunken border border-paper-edge flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">
                   {isWifi ? (
                     <Wifi className="w-6 h-6 text-line-wifi" />
                   ) : (
@@ -123,18 +102,12 @@ export default function CartPage({
                   <p className="text-xs text-outline font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
                     <span>{destName}</span>
                     <span>•</span>
-                    <span className="tnum">
-                      {travelers} {isId ? 'Traveler' : 'Travelers'}
-                    </span>
+                    <span className="tnum">{travelers} {isId ? 'Traveler' : 'Travelers'}</span>
                     <span>•</span>
                     <span className="text-secondary font-bold">
                       {isWifi
-                        ? isId
-                          ? 'Ambil di Bandara CGK T3 / Kurir Bebas Ongkir'
-                          : 'CGK T3 Airport Pickup / Free Courier'
-                        : isId
-                          ? 'Pengiriman: 100% Digital via QR Code'
-                          : 'Fulfillment: 100% Digital via QR Code'}
+                        ? (isId ? 'Ambil di Bandara CGK T3 / Kurir Bebas Ongkir' : 'CGK T3 Airport Pickup / Free Courier')
+                        : (isId ? 'Pengiriman: 100% Digital via QR Code' : 'Fulfillment: 100% Digital via QR Code')}
                     </span>
                   </p>
                 </div>
@@ -144,52 +117,34 @@ export default function CartPage({
                   Rp {subtotalIdr.toLocaleString('id-ID')}
                 </span>
                 <p className="text-xs text-outline font-medium">
-                  {isWifi
-                    ? isId
-                      ? '1 modem (maks 5 alat)'
-                      : '1 device (up to 5 users)'
-                    : `${travelers}x eSIM`}
+                  {isWifi ? (isId ? '1 modem (maks 5 alat)' : '1 device (up to 5 users)') : `${travelers}x eSIM`}
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
               <div className="p-3 rounded border border-paper-edge bg-paper">
-                <span className="text-outline font-medium block">
-                  {isId ? 'Tarif per Hari' : 'Daily Rate'}
-                </span>
+                <span className="text-outline font-medium block">{isId ? 'Tarif per Hari' : 'Daily Rate'}</span>
                 <span className="font-mono font-bold text-primary tnum">
                   Rp {unitRateIdr.toLocaleString('id-ID')}
                 </span>
               </div>
               <div className="p-3 rounded border border-paper-edge bg-paper">
-                <span className="text-outline font-medium block">
-                  {isId ? 'Durasi Aktif' : 'Duration'}
-                </span>
+                <span className="text-outline font-medium block">{isId ? 'Durasi Aktif' : 'Duration'}</span>
                 <span className="font-mono font-bold text-primary tnum">
                   {durationDays} {isId ? 'Hari' : 'Days'}
                 </span>
               </div>
               <div className="p-3 rounded border border-paper-edge bg-paper col-span-2 sm:col-span-1">
                 <span className="text-outline font-medium block">
-                  {isWifi
-                    ? isId
-                      ? 'Deposit Modem'
-                      : 'Device Deposit'
-                    : isId
-                      ? 'Pengiriman'
-                      : 'Fulfillment'}
+                  {isWifi ? (isId ? 'Deposit Modem' : 'Device Deposit') : (isId ? 'Pengiriman' : 'Fulfillment')}
                 </span>
                 <span className="font-mono font-bold text-primary tnum">
                   {isWifi
                     ? depositIdr > 0
                       ? `Rp ${depositIdr.toLocaleString('id-ID')}`
-                      : isId
-                        ? 'Bebas Deposit'
-                        : 'No Deposit'
-                    : isId
-                      ? '100% Digital via QR'
-                      : '100% Digital via QR'}
+                      : (isId ? 'Bebas Deposit' : 'No Deposit')
+                    : (isId ? '100% Digital via QR' : '100% Digital via QR')}
                 </span>
               </div>
             </div>
@@ -198,9 +153,7 @@ export default function CartPage({
               <span className="text-outline font-medium flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
                 <span>
-                  {isId
-                    ? 'Garansi sinyal uang kembali (S&K berlaku)'
-                    : 'Signal money-back guarantee (T&Cs apply)'}
+                  {isId ? 'Garansi sinyal uang kembali (S&K berlaku)' : 'Signal money-back guarantee (T&Cs apply)'}
                 </span>
               </span>
               <Link
@@ -222,18 +175,14 @@ export default function CartPage({
 
             <div className="space-y-2 text-xs font-medium">
               <div className="flex justify-between">
-                <span className="text-outline">
-                  {isId ? 'Sewa / Paket Data' : 'Package Subtotal'}
-                </span>
+                <span className="text-outline">{isId ? 'Sewa / Paket Data' : 'Package Subtotal'}</span>
                 <span className="font-mono font-bold text-primary tnum">
                   Rp {subtotalIdr.toLocaleString('id-ID')}
                 </span>
               </div>
               {depositIdr > 0 && (
                 <div className="flex justify-between">
-                  <span className="text-outline">
-                    {isId ? 'Deposit Jaminan (Kembali)' : 'Refundable Deposit'}
-                  </span>
+                  <span className="text-outline">{isId ? 'Deposit Jaminan (Kembali)' : 'Refundable Deposit'}</span>
                   <span className="font-mono font-bold text-primary tnum">
                     Rp {depositIdr.toLocaleString('id-ID')}
                   </span>
@@ -241,7 +190,9 @@ export default function CartPage({
               )}
               <div className="border-t border-paper-edge pt-2 flex justify-between text-sm font-black text-primary">
                 <span>Total</span>
-                <span className="font-mono tnum">Rp {totalIdr.toLocaleString('id-ID')}</span>
+                <span className="font-mono tnum">
+                  Rp {totalIdr.toLocaleString('id-ID')}
+                </span>
               </div>
             </div>
 
@@ -253,20 +204,14 @@ export default function CartPage({
               </div>
               <div className="flex items-center gap-1.5 text-outline">
                 <Calendar className="w-3.5 h-3.5 shrink-0" />
-                <span className="tnum">
-                  26 Okt – 01 Nov 2026 ({durationDays} {isId ? 'Hari' : 'Days'})
-                </span>
+                <span className="tnum">26 Okt – 01 Nov 2026 ({durationDays} {isId ? 'Hari' : 'Days'})</span>
               </div>
               <div className="flex items-center gap-1.5 text-secondary font-medium">
                 <MapPin className="w-3.5 h-3.5 shrink-0" />
                 <span className="truncate">
                   {isWifi
-                    ? isId
-                      ? 'Pengambilan: Bandara CGK T3 / Kurir Bebas Ongkir'
-                      : 'Fulfillment: CGK T3 Airport / Free Courier'
-                    : isId
-                      ? 'Pengiriman: 100% Digital via QR Code'
-                      : 'Fulfillment: 100% Digital via QR Code'}
+                    ? (isId ? 'Pengambilan: Bandara CGK T3 / Kurir Bebas Ongkir' : 'Fulfillment: CGK T3 Airport / Free Courier')
+                    : (isId ? 'Pengiriman: 100% Digital via QR Code' : 'Fulfillment: 100% Digital via QR Code')}
                 </span>
               </div>
             </div>
@@ -281,9 +226,7 @@ export default function CartPage({
 
             <div className="pt-2 text-center">
               <span className="text-xs text-outline font-medium">
-                {isId
-                  ? 'Metode Pembayaran: QRIS, Virtual Account, GoPay & Kartu Kredit'
-                  : 'Payment Methods: QRIS, Virtual Account, E-Wallets & Credit Cards'}
+                {isId ? 'Metode Pembayaran: QRIS, Virtual Account, GoPay & Kartu Kredit' : 'Payment Methods: QRIS, Virtual Account, E-Wallets & Credit Cards'}
               </span>
             </div>
           </div>
@@ -293,9 +236,7 @@ export default function CartPage({
       {/* Mobile Sticky Bottom Cart Summary Bar (Part 1 §4.7 / P1-4) */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-paper border-t border-paper-edge p-3 flex items-center justify-between gap-3">
         <div className="flex flex-col min-w-0">
-          <span className="text-xs text-outline font-medium">
-            {isId ? 'Total Tagihan' : 'Total'}
-          </span>
+          <span className="text-xs text-outline font-medium">{isId ? 'Total Tagihan' : 'Total'}</span>
           <span className="font-mono text-base font-black text-primary tnum truncate">
             Rp {totalIdr.toLocaleString('id-ID')}
           </span>

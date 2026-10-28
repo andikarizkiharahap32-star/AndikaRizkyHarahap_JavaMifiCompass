@@ -6,7 +6,10 @@
       "name": "Sticky - Core Rule",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [-1180, -520],
+      "position": [
+        -1180,
+        -520
+      ],
       "parameters": {
         "content": "## Core rule (do not break this)\nThe LLM node below does ONE job: turn speech-derived text into structured intent + slots. It never decides what's true about halal status and never free-texts a confidence level. Every response template in this workflow is picked deterministically by the branch that executed (certified / OSM / unavailable / none), not by a second model call.",
         "height": 240,
@@ -18,7 +21,10 @@
       "name": "Sticky - Rate Limit",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [-1180, -40],
+      "position": [
+        -1180,
+        -40
+      ],
       "parameters": {
         "content": "Per-session rate limit, protecting the shared Google Places/Overpass call budget. Demo uses workflow static data - swap for Redis/Postgres so the counter is shared across workers in production.",
         "height": 160,
@@ -30,7 +36,10 @@
       "name": "Sticky - Language Lock",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [-820, -40],
+      "position": [
+        -820,
+        -40
+      ],
       "parameters": {
         "content": "Pick one language per session and hold it - ask/detect once, reuse for every template and the TTS voice for the rest of the session, including number/currency formatting.",
         "height": 160,
@@ -42,7 +51,10 @@
       "name": "Sticky - Circuit Breaker",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [260, 260],
+      "position": [
+        260,
+        260
+      ],
       "parameters": {
         "content": "Circuit breaker on the Overpass call: short timeout + onError=continueErrorOutput. On failure/timeout this branch says so plainly and stops - it never silently falls back to a guess or a stale cache.",
         "height": 180,
@@ -54,7 +66,10 @@
       "name": "Sticky - Age Gate + Hedge",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [580, 0],
+      "position": [
+        580,
+        0
+      ],
       "parameters": {
         "content": "OSM path only: tags past the staleness threshold are dropped; surviving tags get a mandatory, per-utterance hedge sentence with the last-edit date, never a yes/no halal verdict. Every OSM-sourced recommendation actually spoken is logged (place id, tag snapshot, timestamp).",
         "height": 200,
@@ -66,7 +81,10 @@
       "name": "Sticky - Two Trust Levels",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [260, 760],
+      "position": [
+        260,
+        760
+      ],
       "parameters": {
         "content": "Restaurant recommendation = public data, no login required. Account/data-balance lookup = identified caller required. These are two separate branches with two separate auth requirements, not one 'ask anything' intent.",
         "height": 180,
@@ -78,7 +96,10 @@
       "name": "Receive Confirmed Query",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-1180, 160],
+      "position": [
+        -1180,
+        160
+      ],
       "parameters": {
         "httpMethod": "POST",
         "path": "voice/query",
@@ -92,7 +113,10 @@
       "name": "Rate Limit Check",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-940, 160],
+      "position": [
+        -940,
+        160
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -104,7 +128,10 @@
       "name": "IF - Rate Limited",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [-700, 160],
+      "position": [
+        -700,
+        160
+      ],
       "parameters": {
         "conditions": {
           "options": {
@@ -132,7 +159,10 @@
       "name": "Build Rate Limit Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-700, 320],
+      "position": [
+        -700,
+        320
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -144,7 +174,10 @@
       "name": "Respond - Rate Limited",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [-460, 320],
+      "position": [
+        -460,
+        320
+      ],
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ $json }}",
@@ -158,7 +191,10 @@
       "name": "Resolve Session Language",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-460, 160],
+      "position": [
+        -460,
+        160
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -170,7 +206,10 @@
       "name": "LLM Intent Extraction",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-220, 160],
+      "position": [
+        -220,
+        160
+      ],
       "parameters": {
         "method": "POST",
         "url": "https://integrate.api.nvidia.com/v1/chat/completions",
@@ -200,7 +239,10 @@
       "name": "Parse LLM JSON",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [20, 160],
+      "position": [
+        20,
+        160
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -212,7 +254,10 @@
       "name": "Switch - Route By Intent",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3,
-      "position": [260, 160],
+      "position": [
+        260,
+        160
+      ],
       "parameters": {
         "mode": "rules",
         "rules": {
@@ -273,7 +318,10 @@
       "name": "Search Certified Dataset",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [520, -120],
+      "position": [
+        520,
+        -120
+      ],
       "parameters": {
         "method": "GET",
         "url": "http://localhost:3001/api/restaurants/search",
@@ -304,7 +352,10 @@
       "name": "IF - Certified Match Found",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [780, -120],
+      "position": [
+        780,
+        -120
+      ],
       "parameters": {
         "conditions": {
           "options": {
@@ -332,7 +383,10 @@
       "name": "Build Certified Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1040, -220],
+      "position": [
+        1040,
+        -220
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -344,7 +398,10 @@
       "name": "Query Overpass OSM",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1040, 0],
+      "position": [
+        1040,
+        0
+      ],
       "parameters": {
         "method": "GET",
         "url": "https://overpass-api.de/api/interpreter",
@@ -374,7 +431,10 @@
       "name": "Build Service Unavailable Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1300, -40],
+      "position": [
+        1300,
+        -40
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -386,7 +446,10 @@
       "name": "Age-Gate OSM Tags",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1300, 60],
+      "position": [
+        1300,
+        60
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -398,7 +461,10 @@
       "name": "IF - Any Valid OSM Result",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1560, 60],
+      "position": [
+        1560,
+        60
+      ],
       "parameters": {
         "conditions": {
           "options": {
@@ -426,7 +492,10 @@
       "name": "Build No Result Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1820, -40],
+      "position": [
+        1820,
+        -40
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -438,7 +507,10 @@
       "name": "Build OSM Hedge Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1820, 100],
+      "position": [
+        1820,
+        100
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -450,7 +522,10 @@
       "name": "Log OSM Recommendation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2080, 100],
+      "position": [
+        2080,
+        100
+      ],
       "parameters": {
         "method": "POST",
         "url": "http://localhost:3001/api/audit/osm-recommendation",
@@ -467,7 +542,10 @@
       "name": "IF - Is Authenticated",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [520, 520],
+      "position": [
+        520,
+        520
+      ],
       "parameters": {
         "conditions": {
           "options": {
@@ -495,7 +573,10 @@
       "name": "Build Auth Required Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [780, 620],
+      "position": [
+        780,
+        620
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -507,7 +588,10 @@
       "name": "Fetch Account Data",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [780, 440],
+      "position": [
+        780,
+        440
+      ],
       "parameters": {
         "method": "GET",
         "url": "http://localhost:3001/api/account/data-balance",
@@ -530,7 +614,10 @@
       "name": "Build Account Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1040, 440],
+      "position": [
+        1040,
+        440
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -542,7 +629,10 @@
       "name": "Build Fallback Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [520, 820],
+      "position": [
+        520,
+        820
+      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
@@ -554,7 +644,10 @@
       "name": "Text-to-Speech",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2340, 260],
+      "position": [
+        2340,
+        260
+      ],
       "parameters": {
         "method": "POST",
         "url": "https://api.openai.com/v1/audio/speech",
@@ -590,7 +683,10 @@
       "name": "Build Final Payload",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2600, 260],
+      "position": [
+        2600,
+        260
+      ],
       "parameters": {
         "mode": "runOnceForAllItems",
         "language": "javaScript",
@@ -602,7 +698,10 @@
       "name": "Respond - Send Voice Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [2860, 260],
+      "position": [
+        2860,
+        260
+      ],
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ $json }}",

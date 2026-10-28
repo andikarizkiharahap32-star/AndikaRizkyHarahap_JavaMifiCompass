@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { OrdersService } from '../orders/orders.service';
 import { AuditService } from '../audit/audit.service';
@@ -67,9 +72,7 @@ export class PaymentsService {
     if (!order) throw new NotFoundException(`Order ${orderId} not found`);
 
     if (order.status !== 'PENDING_PAYMENT') {
-      throw new BadRequestException(
-        `Order status is ${order.status}, not eligible for payment initiation`,
-      );
+      throw new BadRequestException(`Order status is ${order.status}, not eligible for payment initiation`);
     }
 
     // P4: Authoritative server-side amount check (PAY-P04-CTRL-0004)
@@ -90,7 +93,7 @@ export class PaymentsService {
         );
 
         this.logger.log(
-          `Idempotent replay for key ${options.idempotencyKey}, returning existing payment ${existingKeyPayment.id}`,
+          `Idempotent replay for key ${options.idempotencyKey}, returning existing payment ${existingKeyPayment.id}`
         );
         return {
           paymentId: existingKeyPayment.id,
@@ -100,8 +103,7 @@ export class PaymentsService {
           currency: 'IDR' as const,
           redirectUrl: existingKeyPayment.snapRedirectUrl || '',
           token: existingKeyPayment.snapToken || '',
-          syntheticToken:
-            options?.syntheticToken || existingKeyPayment.snapToken || 'tok_mock_visa_success',
+          syntheticToken: options?.syntheticToken || existingKeyPayment.snapToken || 'tok_mock_visa_success',
           gatewayMode: existingKeyPayment.gatewayMode,
           idempotencyKey: options.idempotencyKey,
           expiresAt: existingKeyPayment.expiresAt
@@ -117,13 +119,15 @@ export class PaymentsService {
 
     // P3 & P4: Parallel Intent Protection (PAY-P03-CTRL-0007 / PAY-P04-CTRL-0007)
     // Reuse existing active PENDING payment intent if not expired, avoiding duplicate concurrent intents
-    const existingPendingPayment = order.payments?.find((p) => p.status === 'PENDING');
+    const existingPendingPayment = order.payments?.find(
+      (p) => p.status === 'PENDING'
+    );
 
     if (existingPendingPayment) {
       const isExpired = isPaymentIntentExpired(existingPendingPayment.expiresAt);
       if (!isExpired) {
         this.logger.log(
-          `Reusing existing active pending payment intent ${existingPendingPayment.id} for order ${order.orderNumber}`,
+          `Reusing existing active pending payment intent ${existingPendingPayment.id} for order ${order.orderNumber}`
         );
         return {
           paymentId: existingPendingPayment.id,
@@ -133,8 +137,7 @@ export class PaymentsService {
           currency: 'IDR' as const,
           redirectUrl: existingPendingPayment.snapRedirectUrl || '',
           token: existingPendingPayment.snapToken || '',
-          syntheticToken:
-            options?.syntheticToken || existingPendingPayment.snapToken || 'tok_mock_visa_success',
+          syntheticToken: options?.syntheticToken || existingPendingPayment.snapToken || 'tok_mock_visa_success',
           gatewayMode: existingPendingPayment.gatewayMode,
           idempotencyKey: existingPendingPayment.idempotencyKey,
           expiresAt: existingPendingPayment.expiresAt
@@ -157,18 +160,11 @@ export class PaymentsService {
     // S2 Protection: In production, payment gateway mode is strictly governed by server env; client override is rejected
     const isProd = process.env.NODE_ENV === 'production';
     if (isProd && requestedMode && requestedMode !== process.env.PAYMENT_GATEWAY_MODE) {
-      this.logger.warn(
-        `Rejected client attempt to override gatewayMode in production: requested=${requestedMode}`,
-      );
+      this.logger.warn(`Rejected client attempt to override gatewayMode in production: requested=${requestedMode}`);
     }
-    const mode =
-      (isProd
-        ? process.env.PAYMENT_GATEWAY_MODE
-        : requestedMode || process.env.PAYMENT_GATEWAY_MODE) || 'mock';
+    const mode = (isProd ? process.env.PAYMENT_GATEWAY_MODE : (requestedMode || process.env.PAYMENT_GATEWAY_MODE)) || 'mock';
     if (isProd && mode === 'mock') {
-      throw new BadRequestException(
-        'Mock payment gateway is strictly disabled in production environments',
-      );
+      throw new BadRequestException('Mock payment gateway is strictly disabled in production environments');
     }
     if (mode === 'mock') {
       mockEnvironmentGuard.assertMockAllowed();
@@ -209,16 +205,14 @@ export class PaymentsService {
     } catch (err: unknown) {
       // P5: Concurrency collision handling (PAY-P05-CTRL-0006 / CTRL-0007 / CTRL-0035)
       if (isUniqueConstraintViolation(err)) {
-        this.logger.warn(
-          `Concurrent race detected for idempotencyKey ${idempotencyKey}; recovering existing payment`,
-        );
+        this.logger.warn(`Concurrent race detected for idempotencyKey ${idempotencyKey}; recovering existing payment`);
         const existing = await this.prisma.payment.findUnique({
           where: { idempotencyKey },
         });
         if (existing) {
           mockEnvironmentGuard.assertIntentIdempotencyMatch(
             { orderId: existing.orderId, amountIdr: existing.amountIdr },
-            { orderId: order.id, amountIdr: order.totalIdr },
+            { orderId: order.id, amountIdr: order.totalIdr }
           );
           return {
             paymentId: existing.id,
@@ -228,8 +222,7 @@ export class PaymentsService {
             currency: 'IDR' as const,
             redirectUrl: existing.snapRedirectUrl || '',
             token: existing.snapToken || '',
-            syntheticToken:
-              options?.syntheticToken || existing.snapToken || 'tok_mock_visa_success',
+            syntheticToken: options?.syntheticToken || existing.snapToken || 'tok_mock_visa_success',
             gatewayMode: existing.gatewayMode,
             idempotencyKey,
             expiresAt: existing.expiresAt
@@ -264,9 +257,7 @@ export class PaymentsService {
   /**
    * P4: Create deterministic mock payment simulation intent (PAY-P04-CTRL-0001 - CTRL-0008).
    */
-  async createMockPaymentIntent(
-    input: MockPaymentIntentInput,
-  ): Promise<MockPaymentSessionResponse> {
+  async createMockPaymentIntent(input: MockPaymentIntentInput): Promise<MockPaymentSessionResponse> {
     mockEnvironmentGuard.assertAbuseShield(input, {
       maxBytes: PAYMENT_ABUSE_LIMITS.MAX_INTENT_PAYLOAD_BYTES,
       rateLimitKey: input.orderNumber || input.orderId,
@@ -293,7 +284,7 @@ export class PaymentsService {
 
     if (order.status !== 'PENDING_PAYMENT') {
       throw new BadRequestException(
-        `Order ${order.orderNumber} is in status ${order.status}, not eligible for payment intent`,
+        `Order ${order.orderNumber} is in status ${order.status}, not eligible for payment intent`
       );
     }
 
@@ -326,7 +317,7 @@ export class PaymentsService {
     };
 
     this.logger.log(
-      `Created mock payment intent: ${JSON.stringify(mockEnvironmentGuard.sanitizePaymentIntentForLogging(response))}`,
+      `Created mock payment intent: ${JSON.stringify(mockEnvironmentGuard.sanitizePaymentIntentForLogging(response))}`
     );
 
     return response;
@@ -339,9 +330,7 @@ export class PaymentsService {
   }> {
     const isMock = notification.rawPayload?.isMock === true;
     if (process.env.NODE_ENV === 'production' && isMock) {
-      throw new BadRequestException(
-        'Mock webhook notifications are strictly disabled in production environments',
-      );
+      throw new BadRequestException('Mock webhook notifications are strictly disabled in production environments');
     }
     if (isMock) {
       mockEnvironmentGuard.assertMockAllowed();
@@ -351,7 +340,7 @@ export class PaymentsService {
     if (notification.rawPayload) {
       mockEnvironmentGuard.assertPayloadBounds(
         notification.rawPayload,
-        PAYMENT_ABUSE_LIMITS.MAX_WEBHOOK_PAYLOAD_BYTES,
+        PAYMENT_ABUSE_LIMITS.MAX_WEBHOOK_PAYLOAD_BYTES
       );
       mockEnvironmentGuard.assertNoInjection(notification.rawPayload);
     }
@@ -363,7 +352,7 @@ export class PaymentsService {
     if (!isValid) {
       mockEnvironmentGuard.recordInvalidSignatureSecurityEvent(
         notification.orderNumber,
-        notification.signatureKey,
+        notification.signatureKey
       );
       throw new BadRequestException('Invalid webhook signature');
     }
@@ -432,9 +421,7 @@ export class PaymentsService {
       });
     } catch (err: unknown) {
       if (isUniqueConstraintViolation(err)) {
-        this.logger.log(
-          `Concurrent duplicate webhook event detected for eventId ${eventId}; ignoring safely`,
-        );
+        this.logger.log(`Concurrent duplicate webhook event detected for eventId ${eventId}; ignoring safely`);
         return { status: 'ignored_duplicate', eventId, orderNumber: order.orderNumber };
       }
       throw err;
@@ -450,22 +437,22 @@ export class PaymentsService {
       if (order.status !== 'PENDING_PAYMENT') {
         if (order.status === 'PAID') {
           this.logger.log(
-            `Order ${order.orderNumber} is already PAID; treating duplicate webhook notification as idempotent ignored_duplicate`,
+            `Order ${order.orderNumber} is already PAID; treating duplicate webhook notification as idempotent ignored_duplicate`
           );
           return { status: 'ignored_duplicate', eventId, orderNumber: order.orderNumber };
         }
         this.logger.warn(
-          `Illegal state transition rejected: Order ${order.orderNumber} is in status ${order.status}; cannot transition to PAID`,
+          `Illegal state transition rejected: Order ${order.orderNumber} is in status ${order.status}; cannot transition to PAID`
         );
         throw new BadRequestException(
-          `Order ${order.orderNumber} is in status ${order.status}; cannot transition to PAID`,
+          `Order ${order.orderNumber} is in status ${order.status}; cannot transition to PAID`
         );
       }
 
       // P3: Expired Intent Rejection & Safe Terminal Outcome (PAY-P03-CTRL-0008 / CTRL-0036)
       if (isPaymentIntentExpired(payment.expiresAt)) {
         this.logger.warn(
-          `Payment intent for order ${order.orderNumber} expired at ${payment.expiresAt}; settlement rejected`,
+          `Payment intent for order ${order.orderNumber} expired at ${payment.expiresAt}; settlement rejected`
         );
         await this.prisma.payment.update({
           where: { id: payment.id },
@@ -520,10 +507,10 @@ export class PaymentsService {
     } else if (notification.transactionStatus === 'expire') {
       if (order.status !== 'PENDING_PAYMENT') {
         this.logger.warn(
-          `Illegal state transition rejected: Order ${order.orderNumber} is in status ${order.status}; cannot transition to EXPIRED`,
+          `Illegal state transition rejected: Order ${order.orderNumber} is in status ${order.status}; cannot transition to EXPIRED`
         );
         throw new BadRequestException(
-          `Order ${order.orderNumber} is in status ${order.status}; cannot transition to EXPIRED`,
+          `Order ${order.orderNumber} is in status ${order.status}; cannot transition to EXPIRED`
         );
       }
       mockEnvironmentGuard.assertLegalTransition(order.status, 'EXPIRED', 'order');
@@ -569,9 +556,7 @@ export class PaymentsService {
    * P7: Reconciles simulated event history against authoritative local state (PAY-P07-CTRL-0001 - CTRL-0084).
    * Safe, idempotent reconciliation that identifies discrepancies without synthesizing unauthorized records.
    */
-  async reconcileSimulatedHistory(filter?: {
-    orderNumber?: string;
-  }): Promise<ReconciliationReport> {
+  async reconcileSimulatedHistory(filter?: { orderNumber?: string }): Promise<ReconciliationReport> {
     const isProd = process.env.NODE_ENV === 'production';
     if (isProd) {
       mockEnvironmentGuard.assertMockAllowed();
@@ -810,7 +795,7 @@ export class PaymentsService {
    */
   async executeScenarioSimulation(
     scenarioId: PaymentScenarioId,
-    orderNumber: string,
+    orderNumber: string
   ): Promise<{
     scenarioId: PaymentScenarioId;
     scenarioName: string;
@@ -867,7 +852,7 @@ export class PaymentsService {
             signatureKey: this.mockAdapter.generateMockSignature(
               order.orderNumber,
               '200',
-              order.totalIdr.toString(),
+              order.totalIdr.toString()
             ),
             transactionStatus: 'settlement',
             transactionId: `mock-tx-stale-${Date.now()}`,
@@ -882,7 +867,7 @@ export class PaymentsService {
             signatureKey: this.mockAdapter.generateMockSignature(
               order.orderNumber,
               '200',
-              tamperedAmount.toString(),
+              tamperedAmount.toString()
             ),
             transactionStatus: 'settlement',
             transactionId: `mock-tx-tampered-${Date.now()}`,
@@ -896,7 +881,7 @@ export class PaymentsService {
             signatureKey: this.mockAdapter.generateMockSignature(
               order.orderNumber,
               '200',
-              order.totalIdr.toString(),
+              order.totalIdr.toString()
             ),
             transactionStatus: 'settlement',
             transactionId: `mock-tx-curr-${Date.now()}`,

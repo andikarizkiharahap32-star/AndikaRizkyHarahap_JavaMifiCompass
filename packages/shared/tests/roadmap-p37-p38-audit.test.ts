@@ -8,20 +8,11 @@ describe('Roadmap P37–P38 Diagnostic & Verification Audit', () => {
   // Paths under audit
   const boardingPassPath = path.join(rootDir, 'packages/ui/src/wayfinding/TripBoardingPass.tsx');
   const breakEvenPath = path.join(rootDir, 'packages/ui/src/wayfinding/BreakEvenSchematicCard.tsx');
-  const receiptChitPath = path.join(
-    rootDir,
-    'packages/ui/src/wayfinding/PerforatedReceiptChit.tsx',
-  );
+  const receiptChitPath = path.join(rootDir, 'packages/ui/src/wayfinding/PerforatedReceiptChit.tsx');
   const restaurantCardPath = path.join(rootDir, 'packages/ui/src/dining/RestaurantCard.tsx');
   const buttonPrimitivePath = path.join(rootDir, 'packages/ui/src/primitives/Button.tsx');
-  const integrationsHealthPath = path.join(
-    rootDir,
-    'apps/admin/src/screens/IntegrationsHealthScreen.tsx',
-  );
-  const mockGatewayPath = path.join(
-    rootDir,
-    'apps/api/src/modules/payments/adapters/mock-gateway.adapter.ts',
-  );
+  const integrationsHealthPath = path.join(rootDir, 'apps/admin/src/screens/IntegrationsHealthScreen.tsx');
+  const mockGatewayPath = path.join(rootDir, 'apps/api/src/modules/payments/adapters/mock-gateway.adapter.ts');
   const fxServicePath = path.join(rootDir, 'apps/api/src/modules/dining/fx.service.ts');
   const globalsCssPath = path.join(rootDir, 'apps/web/src/app/globals.css');
   const tokensCssPath = path.join(rootDir, 'packages/ui/src/styles/tokens.css');
@@ -96,12 +87,8 @@ describe('Roadmap P37–P38 Diagnostic & Verification Audit', () => {
     });
 
     it('verifies high-severity defect closure across error and content surfaces (TASK-05)', () => {
-      const enMessages = JSON.parse(
-        fs.readFileSync(path.join(rootDir, 'apps/web/messages/en.json'), 'utf8'),
-      );
-      const idMessages = JSON.parse(
-        fs.readFileSync(path.join(rootDir, 'apps/web/messages/id.json'), 'utf8'),
-      );
+      const enMessages = JSON.parse(fs.readFileSync(path.join(rootDir, 'apps/web/messages/en.json'), 'utf8'));
+      const idMessages = JSON.parse(fs.readFileSync(path.join(rootDir, 'apps/web/messages/id.json'), 'utf8'));
 
       // 100% dictionary key parity
       expect(Object.keys(enMessages.support)).toEqual(Object.keys(idMessages.support));
@@ -115,9 +102,7 @@ describe('Roadmap P37–P38 Diagnostic & Verification Audit', () => {
 
   describe('P38: Staged Rollout and Feature Controls (UI-P38-TASK-01 to TASK-05)', () => {
     it('verifies segmented reviewable package architecture (TASK-01)', () => {
-      const rootPackageJson = JSON.parse(
-        fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'),
-      );
+      const rootPackageJson = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'));
       const pnpmWorkspace = fs.readFileSync(path.join(rootDir, 'pnpm-workspace.yaml'), 'utf8');
 
       expect(rootPackageJson.name).toBe('javamifi-compass');
@@ -129,9 +114,9 @@ describe('Roadmap P37–P38 Diagnostic & Verification Audit', () => {
       const healthCode = fs.readFileSync(integrationsHealthPath, 'utf8');
 
       // Controlled runtime adapter switching between mock and sandbox
-      expect(healthCode).toContain('handleSwitchPayment');
-      expect(healthCode).toContain('handleSwitchEsim');
-      expect(healthCode).toContain('apiClient.admin.switchAdapter');
+      expect(healthCode).toContain("handleSwitchPayment");
+      expect(healthCode).toContain("handleSwitchEsim");
+      expect(healthCode).toContain("apiClient.admin.switchAdapter");
     });
 
     it('verifies absence of hidden permanent dead branches via clean adapter ports (TASK-03)', () => {

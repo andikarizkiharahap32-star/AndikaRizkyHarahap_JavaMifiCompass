@@ -140,69 +140,55 @@ export function useCulinaryQuery(params: CulinaryQueryParams): UseCulinaryQueryR
 
   const queryKey = getCulinaryQueryKey(params);
 
-  const executeFetch = useCallback(
-    async (isManualRefetch = false) => {
-      setIsFetching(true);
-      if (isManualRefetch) setIsError(false);
+  const executeFetch = useCallback(async (isManualRefetch = false) => {
+    setIsFetching(true);
+    if (isManualRefetch) setIsError(false);
 
-      try {
-        const res = await apiClient.dining.getPlaces({
-          country: params.country,
-          city: params.city,
-          filter: params.filter,
-          search: params.search?.trim() || undefined,
-          radiusKm: params.radiusKm,
-          includeUnverified: params.includeUnverified,
-          sortBy: params.sortBy,
-        });
+    try {
+      const res = await apiClient.dining.getPlaces({
+        country: params.country,
+        city: params.city,
+        filter: params.filter,
+        search: params.search?.trim() || undefined,
+        radiusKm: params.radiusKm,
+        includeUnverified: params.includeUnverified,
+        sortBy: params.sortBy,
+      });
 
-        const placesData = Array.isArray(res)
-          ? res
-          : (res as any)?.items || (res as any)?.data || [];
+      const placesData = Array.isArray(res) ? res : (res as any)?.items || (res as any)?.data || [];
+      startTransition(() => {
+        setData(placesData);
+        setIsLoading(false);
+        setIsFetching(false);
+        setIsOfflineFallback(false);
+        setIsError(false);
+      });
+
+      // Persist successful response to IndexedDB for offline access
+      await persistCulinaryToIndexedDB(queryKey, placesData);
+      setCachedTimestamp(Date.now());
+    } catch (err) {
+      console.warn('[CulinaryQuery] API network failure, inspecting offline cache', err);
+      // Attempt recovery from IndexedDB offline storage
+      const cached = await getCulinaryFromIndexedDB(queryKey);
+      if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
         startTransition(() => {
-          setData(placesData);
+          setData(cached.data);
+          setIsOfflineFallback(true);
+          setIsError(false);
           setIsLoading(false);
           setIsFetching(false);
-          setIsOfflineFallback(false);
-          setIsError(false);
+          setCachedTimestamp(cached.timestamp);
         });
-
-        // Persist successful response to IndexedDB for offline access
-        await persistCulinaryToIndexedDB(queryKey, placesData);
-        setCachedTimestamp(Date.now());
-      } catch (err) {
-        console.warn('[CulinaryQuery] API network failure, inspecting offline cache', err);
-        // Attempt recovery from IndexedDB offline storage
-        const cached = await getCulinaryFromIndexedDB(queryKey);
-        if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
-          startTransition(() => {
-            setData(cached.data);
-            setIsOfflineFallback(true);
-            setIsError(false);
-            setIsLoading(false);
-            setIsFetching(false);
-            setCachedTimestamp(cached.timestamp);
-          });
-        } else {
-          startTransition(() => {
-            setIsError(true);
-            setIsLoading(false);
-            setIsFetching(false);
-          });
-        }
+      } else {
+        startTransition(() => {
+          setIsError(true);
+          setIsLoading(false);
+          setIsFetching(false);
+        });
       }
-    },
-    [
-      params.country,
-      params.city,
-      params.filter,
-      params.search,
-      params.radiusKm,
-      params.includeUnverified,
-      params.sortBy,
-      queryKey,
-    ],
-  );
+    }
+  }, [params.country, params.city, params.filter, params.search, params.radiusKm, params.includeUnverified, params.sortBy, queryKey]);
 
   useEffect(() => {
     let isMounted = true;

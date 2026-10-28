@@ -23,8 +23,8 @@ describe('Roadmap P15–P16 Diagnostic & Verification Audit', () => {
       // Right-aligned numerical amounts with tnum
       expect(receiptCode).toContain('tnum');
       expect(receiptCode).toContain('font-mono');
-      expect(receiptCode).toContain("subtotalIdr.toLocaleString('id-ID')");
-      expect(receiptCode).toContain("totalIdr.toLocaleString('id-ID')");
+      expect(receiptCode).toContain('subtotalIdr.toLocaleString(\'id-ID\')');
+      expect(receiptCode).toContain('totalIdr.toLocaleString(\'id-ID\')');
 
       // Transit metadata ribbon columns
       expect(receiptCode).toContain('grid grid-cols-3');

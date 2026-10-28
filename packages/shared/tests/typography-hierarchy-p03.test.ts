@@ -79,8 +79,6 @@ describe('Typography and Editorial Hierarchy (P03)', () => {
     const pageContent = fs.readFileSync(pagePath, 'utf8');
 
     // Section H2 headers must use font-display and uppercase
-    expect(pageContent).toContain(
-      'font-display font-black text-primary mt-1 uppercase tracking-tight',
-    );
+    expect(pageContent).toContain('font-display font-black text-primary mt-1 uppercase tracking-tight');
   });
 });

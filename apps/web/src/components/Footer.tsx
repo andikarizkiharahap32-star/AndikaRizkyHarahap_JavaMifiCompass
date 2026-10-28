@@ -42,7 +42,9 @@ export const Footer: React.FC<FooterProps> = ({ currentLocale }) => {
               </span>
             </div>
 
-            <p className="text-xs text-secondary leading-relaxed reading-prose">{t('brandDesc')}</p>
+            <p className="text-xs text-secondary leading-relaxed reading-prose">
+              {t('brandDesc')}
+            </p>
 
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <span className="inline-flex items-center px-2.5 py-1 rounded bg-primary-container text-on-primary text-xs font-mono font-bold uppercase tracking-wider">
@@ -184,7 +186,9 @@ export const Footer: React.FC<FooterProps> = ({ currentLocale }) => {
 
         {/* Bottom Bar: Legal sign-off, Policies & Help Routes (WS02, WS04, WS11, WS14) */}
         <div className="border-t border-paper-edge pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-secondary gap-4">
-          <p className="text-xs text-secondary font-mono">{t('copyright')}</p>
+          <p className="text-xs text-secondary font-mono">
+            {t('copyright')}
+          </p>
 
           <div className="flex flex-wrap items-center gap-4">
             <Link
@@ -195,9 +199,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLocale }) => {
               <span>{t('helpAndTickets')}</span>
             </Link>
 
-            <span className="text-paper-edge" aria-hidden="true">
-              •
-            </span>
+            <span className="text-paper-edge" aria-hidden="true">•</span>
 
             <Link
               href={`/${currentLocale}/support#privacy`}
@@ -207,9 +209,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLocale }) => {
               <span>{t('privacyPolicy')}</span>
             </Link>
 
-            <span className="text-paper-edge" aria-hidden="true">
-              •
-            </span>
+            <span className="text-paper-edge" aria-hidden="true">•</span>
 
             <Link
               href={`/${currentLocale}/support#terms`}
@@ -219,9 +219,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLocale }) => {
               <span>{t('termsOfService')}</span>
             </Link>
 
-            <span className="text-paper-edge" aria-hidden="true">
-              •
-            </span>
+            <span className="text-paper-edge" aria-hidden="true">•</span>
 
             <span className="tnum font-mono text-xs text-secondary px-2 py-1 rounded bg-paper border border-paper-edge">
               {t('version')}

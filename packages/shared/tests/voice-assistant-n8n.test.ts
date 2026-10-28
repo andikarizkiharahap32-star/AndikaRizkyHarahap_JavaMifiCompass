@@ -6,11 +6,11 @@ describe('Voice Assistant n8n Guarded Workflows (Audit §6 Implementation)', () 
   const rootDir = path.resolve(__dirname, '../../..');
   const transcribeWfPath = path.join(
     rootDir,
-    'automation/n8n/voice-assistant/voice-transcribe-confirm.json',
+    'automation/n8n/voice-assistant/voice-transcribe-confirm.json'
   );
   const processorWfPath = path.join(
     rootDir,
-    'automation/n8n/voice-assistant/voice-query-processor.json',
+    'automation/n8n/voice-assistant/voice-query-processor.json'
   );
 
   it('verifies voice-transcribe-confirm.json exists, parses cleanly, and enforces push-to-talk confirmation', () => {

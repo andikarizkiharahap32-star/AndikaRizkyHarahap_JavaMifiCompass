@@ -10,24 +10,35 @@ import { z } from 'zod';
 /**
  * Advisory severity levels aligned with CVSS v3.1 and GitHub Security Advisories.
  */
-export const AdvisorySeverityEnum = z.enum(['CRITICAL', 'HIGH', 'MODERATE', 'LOW', 'INFO']);
+export const AdvisorySeverityEnum = z.enum([
+  'CRITICAL',
+  'HIGH',
+  'MODERATE',
+  'LOW',
+  'INFO',
+]);
 export type AdvisorySeverity = z.infer<typeof AdvisorySeverityEnum>;
 
 /**
  * Dependency consumption scope.
  */
-export const DependencyScopeEnum = z.enum(['PRODUCTION', 'DEVELOPMENT', 'PEER', 'TRANSITIVE']);
+export const DependencyScopeEnum = z.enum([
+  'PRODUCTION',
+  'DEVELOPMENT',
+  'PEER',
+  'TRANSITIVE',
+]);
 export type DependencyScope = z.infer<typeof DependencyScopeEnum>;
 
 /**
  * Triage and remediation disposition for supply chain advisories.
  */
 export const AdvisoryDispositionEnum = z.enum([
-  'UNREVIEWED', // Newly discovered advisory, pending review (release blocker if CRITICAL/HIGH per INV-04)
-  'REMEDIATED', // Dependency updated to patched version
-  'RISK_ACCEPTED', // Formally accepted by risk owner with documented business justification
-  'FALSE_POSITIVE', // Verified non-applicable to current runtime / platform architecture
-  'MITIGATED_BY_SECURITY_BOUNDARY', // Mitigated by upstream WAF, strict schema validation, or proxy bounds
+  'UNREVIEWED',                      // Newly discovered advisory, pending review (release blocker if CRITICAL/HIGH per INV-04)
+  'REMEDIATED',                      // Dependency updated to patched version
+  'RISK_ACCEPTED',                   // Formally accepted by risk owner with documented business justification
+  'FALSE_POSITIVE',                  // Verified non-applicable to current runtime / platform architecture
+  'MITIGATED_BY_SECURITY_BOUNDARY',  // Mitigated by upstream WAF, strict schema validation, or proxy bounds
 ]);
 export type AdvisoryDisposition = z.infer<typeof AdvisoryDispositionEnum>;
 
@@ -35,9 +46,9 @@ export type AdvisoryDisposition = z.infer<typeof AdvisoryDispositionEnum>;
  * Package version specification style.
  */
 export const VersionPinningStyleEnum = z.enum([
-  'EXACT_PINNED', // e.g. "1.2.3"
-  'CARET_BOUNDED', // e.g. "^1.2.3"
-  'TILDE_BOUNDED', // e.g. "~1.2.3"
+  'EXACT_PINNED',    // e.g. "1.2.3"
+  'CARET_BOUNDED',   // e.g. "^1.2.3"
+  'TILDE_BOUNDED',   // e.g. "~1.2.3"
   'WILDCARD_UNSAFE', // e.g. "*", "latest", ">=0.0.0" (strictly forbidden in production per INV-04)
 ]);
 export type VersionPinningStyle = z.infer<typeof VersionPinningStyleEnum>;
@@ -337,7 +348,8 @@ export function evaluateSupplyChainCompliance(options?: {
   const inv03Passed = true;
   // INV-04: Critical/High findings remain release blockers until retested or formally accepted/mitigated
   const inv04Passed =
-    unpinnedProdCount === 0 && (options?.allowUnreviewedCritical ? true : unreviewedCount === 0);
+    unpinnedProdCount === 0 &&
+    (options?.allowUnreviewedCritical ? true : unreviewedCount === 0);
 
   const isCompliant = inv01Passed && inv02Passed && inv03Passed && inv04Passed;
 
@@ -348,28 +360,22 @@ export function evaluateSupplyChainCompliance(options?: {
     invariants: {
       'INV-01': {
         passed: inv01Passed,
-        description:
-          'Untrusted input never crosses a trust boundary without validation and contextual handling',
-        detail:
-          'Lockfile definitions and package schemas strictly validated before build orchestration.',
+        description: 'Untrusted input never crosses a trust boundary without validation and contextual handling',
+        detail: 'Lockfile definitions and package schemas strictly validated before build orchestration.',
       },
       'INV-02': {
         passed: inv02Passed,
-        description:
-          'Authorization is rechecked at the mutation boundary and object ownership is not inferred from identifiers',
-        detail:
-          'Triage decisions and risk acceptance require authenticated SecOps risk owner authorization.',
+        description: 'Authorization is rechecked at the mutation boundary and object ownership is not inferred from identifiers',
+        detail: 'Triage decisions and risk acceptance require authenticated SecOps risk owner authorization.',
       },
       'INV-03': {
         passed: inv03Passed,
-        description:
-          'Security-sensitive logs contain enough evidence for investigation without secrets or unnecessary personal data',
+        description: 'Security-sensitive logs contain enough evidence for investigation without secrets or unnecessary personal data',
         detail: `Immutable audit events recorded for advisory triage, remediation, and SBOM generation.`,
       },
       'INV-04': {
         passed: inv04Passed,
-        description:
-          'Critical findings remain release blockers until retested or formally accepted by an authorized risk owner',
+        description: 'Critical findings remain release blockers until retested or formally accepted by an authorized risk owner',
         detail: `Unreviewed critical/high advisories: ${unreviewedCount}. Unpinned production packages: ${unpinnedProdCount}. Status: ${
           isCompliant ? 'PASS' : 'FAIL'
         }.`,
@@ -378,23 +384,19 @@ export function evaluateSupplyChainCompliance(options?: {
     controls: {
       'SEC-P09-CTRL-0001': {
         verified: true,
-        description:
-          'Deny anonymous requests to supply chain audit and advisory management surfaces.',
+        description: 'Deny anonymous requests to supply chain audit and advisory management surfaces.',
       },
       'SEC-P09-CTRL-0002': {
         verified: true,
-        description:
-          'Enforce minimum administrative roles (SUPER_ADMIN, ADMIN) for supply chain actions.',
+        description: 'Enforce minimum administrative roles (SUPER_ADMIN, ADMIN) for supply chain actions.',
       },
       'SEC-P09-CTRL-0019': {
         verified: unpinnedProdCount === 0,
-        description:
-          'Pin and verify resolved dependencies and record formal remediation decisions for known advisories.',
+        description: 'Pin and verify resolved dependencies and record formal remediation decisions for known advisories.',
       },
       'SEC-P09-CTRL-0020': {
         verified: true,
-        description:
-          'Ensure development-only dependencies and convenience modes cannot be activated in production.',
+        description: 'Ensure development-only dependencies and convenience modes cannot be activated in production.',
       },
     },
     metrics: {

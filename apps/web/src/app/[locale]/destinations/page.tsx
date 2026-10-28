@@ -26,8 +26,7 @@ const DESTINATIONS = [
     currency: 'JPY',
     needsVpn: false,
     descId: 'Tokyo, Kyoto, Osaka & Gunung Fuji. Jaringan 4G/5G super kencang di seluruh pulau.',
-    descEn:
-      'Tokyo, Kyoto, Osaka & Mt. Fuji. Ultra-fast 4G/5G bullet train connectivity nationwide.',
+    descEn: 'Tokyo, Kyoto, Osaka & Mt. Fuji. Ultra-fast 4G/5G bullet train connectivity nationwide.',
     priceStartsIdr: 70_000,
     imageUrl:
       'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
@@ -39,10 +38,8 @@ const DESTINATIONS = [
     callingCode: '+86',
     currency: 'CNY',
     needsVpn: true,
-    descId:
-      'Beijing, Shanghai, Guangzhou. Modem dilengkapi bypass VPN aktif otomatis untuk Google & WhatsApp.',
-    descEn:
-      'Beijing, Shanghai, Guangzhou. Built-in automated network VPN bypass for Google & WhatsApp.',
+    descId: 'Beijing, Shanghai, Guangzhou. Modem dilengkapi bypass VPN aktif otomatis untuk Google & WhatsApp.',
+    descEn: 'Beijing, Shanghai, Guangzhou. Built-in automated network VPN bypass for Google & WhatsApp.',
     priceStartsIdr: 95_000,
     imageUrl:
       'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=800&q=80',
@@ -54,10 +51,8 @@ const DESTINATIONS = [
     callingCode: '+966',
     currency: 'SAR',
     needsVpn: false,
-    descId:
-      'Makkah & Madinah. Pilihan favorit jemaah keluarga untuk berbagi 1 koneksi WiFi beramai-ramai.',
-    descEn:
-      'Makkah & Madinah. Pilgrim favorite to share 1 reliable connection across family groups.',
+    descId: 'Makkah & Madinah. Pilihan favorit jemaah keluarga untuk berbagi 1 koneksi WiFi beramai-ramai.',
+    descEn: 'Makkah & Madinah. Pilgrim favorite to share 1 reliable connection across family groups.',
     priceStartsIdr: 85_000,
     imageUrl:
       'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80',
@@ -69,10 +64,8 @@ const DESTINATIONS = [
     callingCode: '+65',
     currency: 'SGD',
     needsVpn: false,
-    descId:
-      'Changi, Marina Bay, Sentosa. eSIM digital instan langsung aktif tanpa antre di bandara.',
-    descEn:
-      'Changi, Marina Bay, Sentosa. Instant digital eSIM QR activation without airport queues.',
+    descId: 'Changi, Marina Bay, Sentosa. eSIM digital instan langsung aktif tanpa antre di bandara.',
+    descEn: 'Changi, Marina Bay, Sentosa. Instant digital eSIM QR activation without airport queues.',
     priceStartsIdr: 45_000,
     imageUrl:
       'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80',
@@ -84,8 +77,7 @@ const DESTINATIONS = [
     callingCode: '+60',
     currency: 'MYR',
     needsVpn: false,
-    descId:
-      'Kuala Lumpur, Penang, Langkawi. Jaringan 4G/5G stabil tanpa batas di seluruh semenanjung.',
+    descId: 'Kuala Lumpur, Penang, Langkawi. Jaringan 4G/5G stabil tanpa batas di seluruh semenanjung.',
     descEn: 'Kuala Lumpur, Penang, Langkawi. Ultra-stable 4G/5G across the peninsula.',
     priceStartsIdr: 40_000,
     imageUrl:
@@ -112,8 +104,7 @@ const DESTINATIONS = [
     currency: 'GBP',
     needsVpn: false,
     descId: 'London, Edinburgh, Manchester. Termasuk paket roaming lintas 33 negara Eropa Barat.',
-    descEn:
-      'London, Edinburgh, Manchester. Includes cross-border roaming across 33 European nations.',
+    descEn: 'London, Edinburgh, Manchester. Includes cross-border roaming across 33 European nations.',
     priceStartsIdr: 80_000,
     imageUrl:
       'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
@@ -139,8 +130,7 @@ const DESTINATIONS = [
     currency: 'TRY',
     needsVpn: false,
     descId: 'Istanbul, Cappadocia, Antalya. Jangkauan luas Turkcell di dua benua Asia dan Eropa.',
-    descEn:
-      'Istanbul, Cappadocia, Antalya. Robust Turkcell dual-continent coverage across Asia and Europe.',
+    descEn: 'Istanbul, Cappadocia, Antalya. Robust Turkcell dual-continent coverage across Asia and Europe.',
     priceStartsIdr: 75_000,
     imageUrl:
       'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=800&q=80',
@@ -261,9 +251,7 @@ export default async function DestinationsPage({
               {isId ? 'Jangkauan Telekomunikasi Global' : 'Global Telecom Coverage'}
             </span>
             <h3 className="text-xl sm:text-2xl font-display font-black text-primary uppercase tracking-tight">
-              {isId
-                ? 'Melayani 160+ Negara & Wilayah di Seluruh Dunia'
-                : 'Serving 160+ Countries & Territories Worldwide'}
+              {isId ? 'Melayani 160+ Negara & Wilayah di Seluruh Dunia' : 'Serving 160+ Countries & Territories Worldwide'}
             </h3>
           </div>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-sunken text-primary border border-paper-edge text-xs font-mono font-bold">
@@ -281,11 +269,7 @@ export default async function DestinationsPage({
             href={`/${locale}/planner`}
             className="inline-flex items-center gap-2 px-5 min-h-12 rounded bg-primary hover:bg-primary-hover text-on-primary text-xs font-bold uppercase tracking-wider transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <span>
-              {isId
-                ? 'Cek Tarif 160+ Negara di Trip Planner'
-                : 'Check 160+ Countries on Trip Planner'}
-            </span>
+            <span>{isId ? 'Cek Tarif 160+ Negara di Trip Planner' : 'Check 160+ Countries on Trip Planner'}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

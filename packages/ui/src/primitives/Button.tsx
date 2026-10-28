@@ -24,12 +24,14 @@ export const Button: React.FC<ButtonProps> = ({
   const variants = {
     primary:
       'bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary border border-primary',
-    secondary: 'bg-surface hover:bg-paper active:bg-surface text-primary border border-paper-edge',
+    secondary:
+      'bg-surface hover:bg-paper active:bg-surface text-primary border border-paper-edge',
     outline:
       'bg-transparent hover:bg-paper active:bg-surface text-primary border border-paper-edge',
     ghost:
       'bg-transparent hover:bg-paper active:bg-surface text-secondary hover:text-primary border border-transparent',
-    danger: 'bg-danger hover:bg-danger text-on-error active:bg-danger border border-danger',
+    danger:
+      'bg-danger hover:bg-danger text-on-error active:bg-danger border border-danger',
   };
 
   // Touch target sizing (P16-WS12, WS31 - minimum 48px house touch target across all sizes)

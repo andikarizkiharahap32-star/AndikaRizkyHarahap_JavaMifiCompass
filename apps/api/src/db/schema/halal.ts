@@ -43,7 +43,7 @@ export const halalEvidence = pgTable(
   (table) => ({
     placeIdIdx: index('idx_halal_evidence_place_id').on(table.placeId),
     evidenceTypeIdx: index('idx_halal_evidence_type').on(table.evidenceType),
-  }),
+  })
 );
 
 export const halalStatusAuditLogs = pgTable(
@@ -63,5 +63,5 @@ export const halalStatusAuditLogs = pgTable(
   (table) => ({
     placeIdIdx: index('idx_halal_audit_place_id').on(table.placeId),
     createdAtIdx: index('idx_halal_audit_created_at').on(table.createdAt),
-  }),
+  })
 );

@@ -62,8 +62,7 @@ export class AttackSurfaceService {
         webhooksWithSignature: report.coverageMetrics.webhooksWithSignatureCoverage,
         fileUploadsStrictValidation: report.coverageMetrics.fileUploadsStrictValidationCoverage,
         workersWithErrorIsolation: report.coverageMetrics.workersWithErrorIsolationCoverage,
-        integrationsWithSsrfProtection:
-          report.coverageMetrics.integrationsWithSsrfProtectionCoverage,
+        integrationsWithSsrfProtection: report.coverageMetrics.integrationsWithSsrfProtectionCoverage,
         criticalReleaseBlockers: report.criticalReleaseBlockers,
       },
     });
@@ -95,7 +94,10 @@ export class AttackSurfaceService {
   /**
    * Validates an outbound HTTP destination URL against SSRF rules (INV-01).
    */
-  validateSsrf(targetUrl: string, policy?: SsrfBoundaryPolicy): { safe: boolean; reason?: string } {
+  validateSsrf(
+    targetUrl: string,
+    policy?: SsrfBoundaryPolicy,
+  ): { safe: boolean; reason?: string } {
     const result = validateSsrfTargetDestination(targetUrl, policy || DEFAULT_SSRF_POLICY);
     if (!result.safe) {
       this.logger.warn(

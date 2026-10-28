@@ -34,16 +34,8 @@ export const TactileRobotIcon: React.FC<{ className?: string; size?: number }> =
   >
     {/* Antenna and Transmitter Node */}
     <circle cx="12" cy="2.5" r="1.5" className="fill-current" />
-    <line
-      x1="12"
-      y1="4"
-      x2="12"
-      y2="7"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
-
+    <line x1="12" y1="4" x2="12" y2="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    
     {/* Head Chassis */}
     <rect
       x="4"
@@ -55,34 +47,18 @@ export const TactileRobotIcon: React.FC<{ className?: string; size?: number }> =
       strokeWidth="2"
       className="fill-surface"
     />
-
+    
     {/* Audio Sensor Ears / Side Nodes */}
     <rect x="2" y="11" width="2" height="6" rx="0.5" className="fill-current" />
     <rect x="20" y="11" width="2" height="6" rx="0.5" className="fill-current" />
-
+    
     {/* Dual Optical Sensors (High-Contrast Eyes) */}
     <rect x="7" y="10.5" width="3" height="3" rx="0.5" className="fill-current" />
     <rect x="14" y="10.5" width="3" height="3" rx="0.5" className="fill-current" />
-
+    
     {/* Intercom Terminal Mouth Grill (3-slit tactile perforation) */}
-    <line
-      x1="8"
-      y1="16.5"
-      x2="16"
-      y2="16.5"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-    <line
-      x1="9"
-      y1="18.5"
-      x2="15"
-      y2="18.5"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
+    <line x1="8" y1="16.5" x2="16" y2="16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <line x1="9" y1="18.5" x2="15" y2="18.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
 
@@ -172,14 +148,18 @@ export const TactileRobotAssistant: React.FC<TactileRobotAssistantProps> = ({
       onClick={onClick}
       aria-expanded={isOpen}
       className={`min-h-12 px-3.5 py-1.5 rounded border border-paper-edge font-sans transition-colors inline-flex items-center gap-2.5 ${
-        isOpen ? 'bg-primary text-on-primary' : 'bg-paper hover:bg-surface text-primary'
+        isOpen
+          ? 'bg-primary text-on-primary'
+          : 'bg-paper hover:bg-surface text-primary'
       }`}
     >
       <div className="flex flex-col items-center">
         {/* Expanded Top Head Badge */}
         <span
           className={`text-xs font-mono font-bold uppercase tracking-widest px-1.5 py-0.2 rounded leading-tight ${
-            isOpen ? 'bg-surface text-primary' : 'bg-surface text-primary border border-paper-edge'
+            isOpen
+              ? 'bg-surface text-primary'
+              : 'bg-surface text-primary border border-paper-edge'
           }`}
         >
           {effectiveLabel}
@@ -193,13 +173,7 @@ export const TactileRobotAssistant: React.FC<TactileRobotAssistantProps> = ({
           {isId ? 'Konsultasi Kuliner' : 'Dining Concierge'}
         </span>
         <span className="block text-xs text-outline font-mono">
-          {isOpen
-            ? isId
-              ? 'Tutup Dialog'
-              : 'Close Dialog'
-            : isId
-              ? 'Buka Obrolan'
-              : 'Open Assistant'}
+          {isOpen ? (isId ? 'Tutup Dialog' : 'Close Dialog') : (isId ? 'Buka Obrolan' : 'Open Assistant')}
         </span>
       </div>
     </button>

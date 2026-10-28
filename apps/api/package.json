@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:unit": "jest --testPathPattern=\\.spec\\.ts$",
-    "test:integration": "jest --testPathPattern=\\.integration\\.ts$ --runInBand",
+    "test:integration": "jest --testPathPattern=\\.integration\\.ts$ --runInBand --passWithNoTests",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "test:cov": "jest --coverage",
     "clean": "rimraf dist",

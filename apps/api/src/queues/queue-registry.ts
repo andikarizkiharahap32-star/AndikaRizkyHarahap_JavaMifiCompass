@@ -10,7 +10,12 @@
  * 6. Prohibition: Do not retry non-retryable errors.
  */
 
-export type StandardQueueName = 'ingest' | 'halal-verify' | 'fx-refresh' | 'notify' | 'webhook-out';
+export type StandardQueueName =
+  | 'ingest'
+  | 'halal-verify'
+  | 'fx-refresh'
+  | 'notify'
+  | 'webhook-out';
 
 export const STANDARD_QUEUES: readonly StandardQueueName[] = Object.freeze([
   'ingest',
@@ -39,7 +44,7 @@ export function assertNoPiiInPayload(payload: unknown): void {
   for (const pattern of SENSITIVE_PII_PATTERNS) {
     if (pattern.test(jsonStr)) {
       throw new Error(
-        `Security Violation (P11): Prohibited PII/credential detected in job payload matching ${pattern}. Only IDs and references are permitted.`,
+        `Security Violation (P11): Prohibited PII/credential detected in job payload matching ${pattern}. Only IDs and references are permitted.`
       );
     }
   }
@@ -52,13 +57,9 @@ export function generateDeterministicJobId(
   queue: StandardQueueName,
   entityId: string,
   action = 'process',
-  discriminator?: string,
+  discriminator?: string
 ): string {
-  const clean = (s: string) =>
-    s
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9_-]/g, '_');
+  const clean = (s: string) => s.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_');
   const base = `${queue}:${clean(entityId)}:${clean(action)}`;
   return discriminator ? `${base}:${clean(discriminator)}` : base;
 }
@@ -69,7 +70,7 @@ export function generateDeterministicJobId(
 export function calculateExponentialBackoffWithJitter(
   attempt: number,
   baseDelayMs = 1000,
-  maxDelayMs = 30000,
+  maxDelayMs = 30000
 ): number {
   const expFactor = 2 ** Math.max(0, attempt - 1);
   const nominalDelay = Math.min(maxDelayMs, baseDelayMs * expFactor);
@@ -134,20 +135,14 @@ export class QueueRegistry {
   async enqueue<T>(
     queue: StandardQueueName,
     data: T,
-    options: JobOptions = {},
+    options: JobOptions = {}
   ): Promise<{ job: JobRecord<T>; isDuplicate: boolean }> {
     assertNoPiiInPayload(data);
 
-    const jobId =
-      options.jobId || `${queue}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const jobId = options.jobId || `${queue}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const existing = this.jobs.get(jobId);
 
-    if (
-      existing &&
-      (existing.status === 'waiting' ||
-        existing.status === 'active' ||
-        existing.status === 'completed')
-    ) {
+    if (existing && (existing.status === 'waiting' || existing.status === 'active' || existing.status === 'completed')) {
       return { job: existing as JobRecord<T>, isDuplicate: true };
     }
 
@@ -170,7 +165,7 @@ export class QueueRegistry {
    */
   async processJob<T>(
     jobId: string,
-    handler: (data: T) => Promise<void>,
+    handler: (data: T) => Promise<void>
   ): Promise<'completed' | 'retrying' | 'dlq'> {
     const job = this.jobs.get(jobId);
     if (!job) throw new Error(`Job ${jobId} not found`);

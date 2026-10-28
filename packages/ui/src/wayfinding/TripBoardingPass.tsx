@@ -130,7 +130,12 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
                 {isWifi ? 'W' : isEsim ? 'E' : 'S'}
               </span>
               <span className="font-mono text-xs font-bold text-primary">
-                {productLabel || (isWifi ? 'Pocket WiFi' : isEsim ? 'Digital eSIM' : 'Travel SIM')}
+                {productLabel ||
+                  (isWifi
+                    ? 'Pocket WiFi'
+                    : isEsim
+                      ? 'Digital eSIM'
+                      : 'Travel SIM')}
               </span>
             </div>
           </div>
@@ -145,7 +150,9 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
               <span className="text-3xl font-extrabold text-primary leading-none tracking-tight font-display-md tnum">
                 {originCode}
               </span>
-              <span className="text-xs text-secondary font-medium">{originCity}</span>
+              <span className="text-xs text-secondary font-medium">
+                {originCity}
+              </span>
             </div>
 
             {/* Schematic Transit Path */}
@@ -172,7 +179,9 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
               <span className="text-3xl font-extrabold text-primary leading-none tracking-tight font-display-md truncate max-w-36 tnum">
                 {destText}
               </span>
-              <span className="text-xs text-secondary font-medium">{destinationCity}</span>
+              <span className="text-xs text-secondary font-medium">
+                {destinationCity}
+              </span>
             </div>
           </div>
 
@@ -182,14 +191,20 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
               <span className="text-xs text-secondary font-medium uppercase block">
                 {holderLabel}
               </span>
-              <span className="font-bold text-primary block truncate tnum">{travelerName}</span>
-              <span className="text-xs text-secondary font-medium tnum">{partySizeText}</span>
+              <span className="font-bold text-primary block truncate tnum">
+                {travelerName}
+              </span>
+              <span className="text-xs text-secondary font-medium tnum">
+                {partySizeText}
+              </span>
             </div>
             <div className="text-right">
               <span className="text-xs text-secondary font-medium uppercase block">
                 {scheduleLabel}
               </span>
-              <span className="font-bold text-primary block tnum">{startDate}</span>
+              <span className="font-bold text-primary block tnum">
+                {startDate}
+              </span>
               <span className="text-xs text-secondary font-medium tnum">
                 {scheduleRangePrefix} {endDate}
               </span>
@@ -208,12 +223,18 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
         <div className="w-full md:w-56 bg-surface p-6 flex flex-col items-center justify-center text-center border-t md:border-t-0 md:border-l border-paper-edge">
           {qrCodeUrl ? (
             <div className="p-2 bg-paper rounded-xl border border-paper-edge mb-2">
-              <img src={qrCodeUrl} alt="Ticket QR Code" className="w-28 h-28 object-contain" />
+              <img
+                src={qrCodeUrl}
+                alt="Ticket QR Code"
+                className="w-28 h-28 object-contain"
+              />
             </div>
           ) : (
             <div className="w-28 h-28 rounded-xl border-2 border-dashed border-paper-edge bg-paper flex flex-col items-center justify-center mb-2">
               <QrCode className="w-8 h-8 text-secondary" />
-              <span className="font-mono text-xs text-secondary font-medium mt-1">Ready</span>
+              <span className="font-mono text-xs text-secondary font-medium mt-1">
+                Ready
+              </span>
             </div>
           )}
 

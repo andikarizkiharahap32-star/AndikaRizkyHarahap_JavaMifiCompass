@@ -240,4 +240,4 @@ Workflow 14: rate limiting → NVIDIA NIM MiniMax intent extraction → intent s
 
 ## License
 
-Private & Confidential © JavaMifi. All rights reserved.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.

@@ -26,7 +26,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function FaqPage({ params: { locale } }: { params: { locale: string } }) {
+export default async function FaqPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   unstable_setRequestLocale(locale);
   const t = await getTranslations('faqPage');
   const isId = locale === 'id';
@@ -114,10 +118,15 @@ export default async function FaqPage({ params: { locale } }: { params: { locale
       </section>
 
       {/* Section 2: Support Helpdesk Callout & Terms Reassurance (WS03, WS06, WS16, WS30 48px touch target) */}
-      <section id="faq-support" className="p-6 rounded border border-paper-edge bg-paper space-y-4">
+      <section
+        id="faq-support"
+        className="p-6 rounded border border-paper-edge bg-paper space-y-4"
+      >
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <h3 className="text-base font-bold text-primary font-sans">{t('supportTitle')}</h3>
+            <h3 className="text-base font-bold text-primary font-sans">
+              {t('supportTitle')}
+            </h3>
             <p className="text-sm text-secondary leading-relaxed reading-prose break-words">
               {t('supportSubtitle')}
             </p>

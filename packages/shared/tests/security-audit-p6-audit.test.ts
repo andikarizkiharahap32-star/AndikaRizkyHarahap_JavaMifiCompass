@@ -15,20 +15,14 @@ import {
 describe('SEC-P06: Browser Boundaries & Client Security Verification', () => {
   describe('1. Cookie Security Policies & Prefix Enforcement (INV-01, INV-02)', () => {
     it('validates pre-configured default session and CSRF cookies', () => {
-      const userSessionResult = validateCookieSecurity(
-        DEFAULT_COOKIE_POLICIES.USER_SESSION,
-        'production',
-      );
+      const userSessionResult = validateCookieSecurity(DEFAULT_COOKIE_POLICIES.USER_SESSION, 'production');
       expect(userSessionResult.valid).toBe(true);
       expect(userSessionResult.violations).toHaveLength(0);
       expect(userSessionResult.prefixCompliance).toBe(true);
       expect(userSessionResult.invariantsSatisfied).toContain('INV-01');
       expect(userSessionResult.invariantsSatisfied).toContain('INV-02');
 
-      const adminSessionResult = validateCookieSecurity(
-        DEFAULT_COOKIE_POLICIES.ADMIN_SESSION,
-        'production',
-      );
+      const adminSessionResult = validateCookieSecurity(DEFAULT_COOKIE_POLICIES.ADMIN_SESSION, 'production');
       expect(adminSessionResult.valid).toBe(true);
       expect(adminSessionResult.prefixCompliance).toBe(true);
       expect(DEFAULT_COOKIE_POLICIES.ADMIN_SESSION.sameSite).toBe('Strict');
@@ -297,16 +291,13 @@ describe('SEC-P06: Browser Boundaries & Client Security Verification', () => {
 
   describe('4. Clickjacking & Security Headers Defense (INV-01, INV-04, SEC-P06-CTRL-0015)', () => {
     it('approves complete default security headers configuration', () => {
-      const res = evaluateSecurityHeaders(
-        {
-          'content-security-policy': DEFAULT_SECURITY_HEADERS.contentSecurityPolicy,
-          'x-frame-options': DEFAULT_SECURITY_HEADERS.xFrameOptions,
-          'x-content-type-options': DEFAULT_SECURITY_HEADERS.xContentTypeOptions,
-          'strict-transport-security': DEFAULT_SECURITY_HEADERS.strictTransportSecurity,
-          'referrer-policy': DEFAULT_SECURITY_HEADERS.referrerPolicy,
-        },
-        'production',
-      );
+      const res = evaluateSecurityHeaders({
+        'content-security-policy': DEFAULT_SECURITY_HEADERS.contentSecurityPolicy,
+        'x-frame-options': DEFAULT_SECURITY_HEADERS.xFrameOptions,
+        'x-content-type-options': DEFAULT_SECURITY_HEADERS.xContentTypeOptions,
+        'strict-transport-security': DEFAULT_SECURITY_HEADERS.strictTransportSecurity,
+        'referrer-policy': DEFAULT_SECURITY_HEADERS.referrerPolicy,
+      }, 'production');
 
       expect(res.compliant).toBe(true);
       expect(res.framingProtected).toBe(true);
@@ -317,14 +308,11 @@ describe('SEC-P06: Browser Boundaries & Client Security Verification', () => {
     });
 
     it('detects clickjacking vulnerability when frame-ancestors and X-Frame-Options are absent', () => {
-      const res = evaluateSecurityHeaders(
-        {
-          'x-content-type-options': 'nosniff',
-          'strict-transport-security': 'max-age=63072000',
-          'referrer-policy': 'strict-origin-when-cross-origin',
-        },
-        'production',
-      );
+      const res = evaluateSecurityHeaders({
+        'x-content-type-options': 'nosniff',
+        'strict-transport-security': 'max-age=63072000',
+        'referrer-policy': 'strict-origin-when-cross-origin',
+      }, 'production');
 
       expect(res.compliant).toBe(false);
       expect(res.framingProtected).toBe(false);
@@ -332,14 +320,11 @@ describe('SEC-P06: Browser Boundaries & Client Security Verification', () => {
     });
 
     it('detects missing X-Content-Type-Options: nosniff header', () => {
-      const res = evaluateSecurityHeaders(
-        {
-          'content-security-policy': "frame-ancestors 'none'",
-          'strict-transport-security': 'max-age=63072000',
-          'referrer-policy': 'strict-origin-when-cross-origin',
-        },
-        'production',
-      );
+      const res = evaluateSecurityHeaders({
+        'content-security-policy': "frame-ancestors 'none'",
+        'strict-transport-security': 'max-age=63072000',
+        'referrer-policy': 'strict-origin-when-cross-origin',
+      }, 'production');
 
       expect(res.compliant).toBe(false);
       expect(res.sniffingProtected).toBe(false);
@@ -347,15 +332,12 @@ describe('SEC-P06: Browser Boundaries & Client Security Verification', () => {
     });
 
     it('enforces HSTS in production environment (must have max-age > 0)', () => {
-      const resZeroHsts = evaluateSecurityHeaders(
-        {
-          'content-security-policy': "frame-ancestors 'none'",
-          'x-content-type-options': 'nosniff',
-          'strict-transport-security': 'max-age=0',
-          'referrer-policy': 'strict-origin-when-cross-origin',
-        },
-        'production',
-      );
+      const resZeroHsts = evaluateSecurityHeaders({
+        'content-security-policy': "frame-ancestors 'none'",
+        'x-content-type-options': 'nosniff',
+        'strict-transport-security': 'max-age=0',
+        'referrer-policy': 'strict-origin-when-cross-origin',
+      }, 'production');
 
       expect(resZeroHsts.compliant).toBe(false);
       expect(resZeroHsts.hstsEnforced).toBe(false);
@@ -375,7 +357,7 @@ describe('SEC-P06: Browser Boundaries & Client Security Verification', () => {
       expect(report.complianceRate).toBe(100);
 
       // Verify invariant coverage
-      const invariants = new Set(report.checks.map((c) => c.invariant));
+      const invariants = new Set(report.checks.map(c => c.invariant));
       expect(invariants.has('INV-01')).toBe(true);
       expect(invariants.has('INV-02')).toBe(true);
       expect(invariants.has('INV-04')).toBe(true);
@@ -395,7 +377,7 @@ describe('SEC-P06: Browser Boundaries & Client Security Verification', () => {
 
       expect(report.status).toBe('FAIL');
       expect(report.failedChecks).toBeGreaterThanOrEqual(1);
-      const chk1 = report.checks.find((c) => c.id === 'SEC-P06-CHK-01');
+      const chk1 = report.checks.find(c => c.id === 'SEC-P06-CHK-01');
       expect(chk1?.status).toBe('FAIL');
       expect(chk1?.invariant).toBe('INV-04');
     });
@@ -421,7 +403,7 @@ describe('SEC-P06: Browser Boundaries & Client Security Verification', () => {
       });
 
       expect(report.status).toBe('FAIL');
-      const chk3 = report.checks.find((c) => c.id === 'SEC-P06-CHK-03');
+      const chk3 = report.checks.find(c => c.id === 'SEC-P06-CHK-03');
       expect(chk3?.status).toBe('FAIL');
     });
   });

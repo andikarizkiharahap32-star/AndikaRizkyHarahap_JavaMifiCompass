@@ -118,11 +118,7 @@ describe('SEC-P04: Authorization and Multi-Tenancy Isolation Audit', () => {
         tenantId: 'tenant_alpha',
       };
 
-      const decision = evaluateObjectAccess(
-        actorTenantAlpha,
-        resourceInTenantBeta,
-        'orders:read_all',
-      );
+      const decision = evaluateObjectAccess(actorTenantAlpha, resourceInTenantBeta, 'orders:read_all');
       expect(decision.allowed).toBe(false);
       expect(decision.decisionCode).toBe('DENY_TENANT_ISOLATION_BREACH');
       expect(decision.auditEventType).toBe('AUTHZ_TENANT_BREACH_ATTEMPT');
@@ -242,11 +238,7 @@ describe('SEC-P04: Authorization and Multi-Tenancy Isolation Audit', () => {
         isStepUpConfirmed: true,
       };
 
-      const decision = evaluateObjectAccess(
-        financeActorConfirmed,
-        refundableOrder,
-        'orders:refund',
-      );
+      const decision = evaluateObjectAccess(financeActorConfirmed, refundableOrder, 'orders:refund');
       expect(decision.allowed).toBe(true);
       expect(decision.decisionCode).toBe('ALLOW');
     });

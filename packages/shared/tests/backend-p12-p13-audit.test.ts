@@ -89,11 +89,11 @@ describe('Backend and Workflows - P12: Places Ingestion and Provider Adapters', 
 
     // 2. Prohibited field storage
     expect(() =>
-      validateProviderStorageFields('google_places', ['name', 'address', 'latitude']),
+      validateProviderStorageFields('google_places', ['name', 'address', 'latitude'])
     ).not.toThrow();
 
     expect(() =>
-      validateProviderStorageFields('google_places', ['name', 'raw_photo_binary']),
+      validateProviderStorageFields('google_places', ['name', 'raw_photo_binary'])
     ).toThrow(/License Violation/);
   });
 });
@@ -191,10 +191,12 @@ describe('Backend and Workflows - P13: Halal Verification Data Model', () => {
     };
 
     // 1. Run expiry evaluation for a place currently marked 'verified'
-    const expiryResult = evaluateCertificateExpiry('plc_tokyo_03', 'verified', [expiredCert], {
-      asOf: testAsOf,
-      gracePeriodDays: 30,
-    });
+    const expiryResult = evaluateCertificateExpiry(
+      'plc_tokyo_03',
+      'verified',
+      [expiredCert],
+      { asOf: testAsOf, gracePeriodDays: 30 }
+    );
 
     // Status changed from verified to unverified
     expect(expiryResult.statusChanged).toBe(true);
@@ -217,7 +219,7 @@ describe('Backend and Workflows - P13: Halal Verification Data Model', () => {
       'verified',
       'Moderator approved certificate submission',
       'moderator:usr_admin_01',
-      testAsOf,
+      testAsOf
     );
 
     expect(log.placeId).toBe('plc_tokyo_04');

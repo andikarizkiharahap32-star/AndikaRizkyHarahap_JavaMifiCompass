@@ -107,7 +107,9 @@ describe('VoiceAssistantController', () => {
 
   describe('GET /api/account/balance', () => {
     it('throws UnauthorizedException when no authorization header is provided', async () => {
-      await expect(controller.getAccountBalance(undefined)).rejects.toThrow(UnauthorizedException);
+      await expect(controller.getAccountBalance(undefined)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('throws UnauthorizedException when token format is invalid', async () => {

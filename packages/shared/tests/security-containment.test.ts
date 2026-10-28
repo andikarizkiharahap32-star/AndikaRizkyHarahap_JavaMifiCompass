@@ -55,7 +55,10 @@ describe('Security & Infrastructure Containment Audit', () => {
   });
 
   it('strictly fails closed on mock payment mode and mock webhooks in production', () => {
-    const servicePath = path.join(rootDir, 'apps/api/src/modules/payments/payments.service.ts');
+    const servicePath = path.join(
+      rootDir,
+      'apps/api/src/modules/payments/payments.service.ts',
+    );
     expect(fs.existsSync(servicePath)).toBe(true);
 
     const serviceContent = fs.readFileSync(servicePath, 'utf8');
@@ -66,7 +69,9 @@ describe('Security & Infrastructure Containment Audit', () => {
     );
 
     // Ensure production guard throws BadRequestException for mock webhook notification
-    expect(serviceContent).toContain("process.env.NODE_ENV === 'production' && isMock");
+    expect(serviceContent).toContain(
+      "process.env.NODE_ENV === 'production' && isMock",
+    );
     expect(serviceContent).toContain(
       'Mock webhook notifications are strictly disabled in production environments',
     );

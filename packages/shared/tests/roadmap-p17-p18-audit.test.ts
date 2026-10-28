@@ -10,10 +10,7 @@ describe('Roadmap P17–P18 Diagnostic & Verification Audit', () => {
   const tokensCssPath = path.join(rootDir, 'packages/ui/src/styles/tokens.css');
   const spacingTsPath = path.join(rootDir, 'packages/ui/src/tokens/spacing.ts');
   const homePagePath = path.join(rootDir, 'apps/web/src/app/[locale]/page.tsx');
-  const destinationsPagePath = path.join(
-    rootDir,
-    'apps/web/src/app/[locale]/destinations/page.tsx',
-  );
+  const destinationsPagePath = path.join(rootDir, 'apps/web/src/app/[locale]/destinations/page.tsx');
 
   // P18 paths
   const webPkgPath = path.join(rootDir, 'apps/web/package.json');
@@ -35,12 +32,8 @@ describe('Roadmap P17–P18 Diagnostic & Verification Audit', () => {
       expect(destinationsSource).toContain('<Image');
 
       // Responsive sizes attribute to avoid layout thrashing and overfetching
-      expect(homeSource).toContain(
-        'sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"',
-      );
-      expect(destinationsSource).toContain(
-        'sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"',
-      );
+      expect(homeSource).toContain('sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"');
+      expect(destinationsSource).toContain('sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"');
 
       // Safe crop object-cover
       expect(homeSource).toContain('object-cover');

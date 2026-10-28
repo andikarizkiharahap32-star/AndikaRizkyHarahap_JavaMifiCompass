@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Activity,
-  Server,
-  Database,
-  Radio,
-  Globe,
-  Shield,
-  ToggleLeft,
-  ToggleRight,
-  RefreshCw,
-} from 'lucide-react';
+import { Activity, Server, Database, Radio, Globe, Shield, ToggleLeft, ToggleRight, RefreshCw } from 'lucide-react';
 import { apiClient, API_BASE_URL } from '../lib/api';
 
 export const IntegrationsHealthScreen = () => {
@@ -69,12 +59,9 @@ export const IntegrationsHealthScreen = () => {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-            Status Integrasi & Kesehatan Sistem
-          </h1>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Status Integrasi & Kesehatan Sistem</h1>
           <p className="text-xs text-slate-500 mt-1">
-            Sakelar konfigurasi adapter eksternal (Mock vs Live Sandbox) dan probe kesehatan
-            liveness & readiness
+            Sakelar konfigurasi adapter eksternal (Mock vs Live Sandbox) dan probe kesehatan liveness & readiness
           </p>
         </div>
         <button
@@ -94,18 +81,12 @@ export const IntegrationsHealthScreen = () => {
             <Database className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-              PostgreSQL
-            </span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">PostgreSQL</span>
             <span className="text-sm font-extrabold text-emerald-600 flex items-center gap-1.5 mt-0.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-              {healthData?.components?.database === 'healthy'
-                ? 'Terhubung & Sehat'
-                : 'Terhubung & Sehat'}
+              {healthData?.components?.database === 'healthy' ? 'Terhubung & Sehat' : 'Terhubung & Sehat'}
             </span>
-            <span className="text-[10px] text-slate-400">
-              Response time: {healthData ? '1ms' : '4ms'}
-            </span>
+            <span className="text-[10px] text-slate-400">Response time: {healthData ? '1ms' : '4ms'}</span>
           </div>
         </div>
 
@@ -114,9 +95,7 @@ export const IntegrationsHealthScreen = () => {
             <Radio className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-              Redis & BullMQ
-            </span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Redis & BullMQ</span>
             <span className="text-sm font-extrabold text-sky-600 flex items-center gap-1.5 mt-0.5">
               <span className="w-2 h-2 rounded-full bg-sky-500" /> Siap Menjalankan Antrean
             </span>
@@ -129,9 +108,7 @@ export const IntegrationsHealthScreen = () => {
             <Activity className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-              n8n Engine
-            </span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">n8n Engine</span>
             <span className="text-sm font-extrabold text-orange-600 flex items-center gap-1.5 mt-0.5">
               <span className="w-2 h-2 rounded-full bg-orange-500" /> Webhooks Listening
             </span>
@@ -150,9 +127,7 @@ export const IntegrationsHealthScreen = () => {
           {/* Payment Gateway Switch */}
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
             <div>
-              <span className="font-bold text-sm text-slate-900 block">
-                Payment Gateway Adapter
-              </span>
+              <span className="font-bold text-sm text-slate-900 block">Payment Gateway Adapter</span>
               <p className="text-xs text-slate-500 mt-1 max-w-xs">
                 {paymentMode === 'mock'
                   ? 'Mode MOCK aktif: Pembayaran disimulasikan dengan notifikasi tertanda internal tanpa perlu API key Midtrans.'
@@ -164,13 +139,9 @@ export const IntegrationsHealthScreen = () => {
               className="text-sky-600 hover:text-sky-700 transition-colors p-2"
             >
               {paymentMode === 'mock' ? (
-                <span className="px-3 py-1.5 rounded-xl bg-sky-100 text-sky-700 font-bold text-xs">
-                  MOCK DEFAULT
-                </span>
+                <span className="px-3 py-1.5 rounded-xl bg-sky-100 text-sky-700 font-bold text-xs">MOCK DEFAULT</span>
               ) : (
-                <span className="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-700 font-bold text-xs">
-                  MIDTRANS SANDBOX
-                </span>
+                <span className="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-700 font-bold text-xs">MIDTRANS SANDBOX</span>
               )}
             </button>
           </div>
@@ -190,13 +161,9 @@ export const IntegrationsHealthScreen = () => {
               className="text-sky-600 hover:text-sky-700 transition-colors p-2"
             >
               {esimMode === 'mock' ? (
-                <span className="px-3 py-1.5 rounded-xl bg-sky-100 text-sky-700 font-bold text-xs">
-                  MOCK DEFAULT
-                </span>
+                <span className="px-3 py-1.5 rounded-xl bg-sky-100 text-sky-700 font-bold text-xs">MOCK DEFAULT</span>
               ) : (
-                <span className="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-700 font-bold text-xs">
-                  AIRALO SANDBOX
-                </span>
+                <span className="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-700 font-bold text-xs">AIRALO SANDBOX</span>
               )}
             </button>
           </div>

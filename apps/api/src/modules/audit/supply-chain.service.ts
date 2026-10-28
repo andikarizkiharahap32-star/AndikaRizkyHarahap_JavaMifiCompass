@@ -39,9 +39,9 @@ export class SupplyChainService {
       approvedLicenses: ['MIT', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC'],
       advisorySlaHours: {
         CRITICAL: 24, // 24 hours to patch or mitigate
-        HIGH: 168, // 7 days
+        HIGH: 168,    // 7 days
         MODERATE: 720, // 30 days
-        LOW: 2160, // 90 days
+        LOW: 2160,    // 90 days
       },
     };
   }

@@ -4,19 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import {
-  Wifi,
-  Compass,
-  Sun,
-  Moon,
-  ShoppingCart,
-  User,
-  Menu,
-  X,
-  Globe,
-  Utensils,
-  HelpCircle,
-} from 'lucide-react';
+import { Wifi, Compass, Sun, Moon, ShoppingCart, User, Menu, X, Globe, Utensils, HelpCircle } from 'lucide-react';
 
 export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
   const t = useTranslations('nav');
@@ -57,14 +45,9 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
 
   useEffect(() => {
     // Check initial theme from cookie first, then localStorage, then prefers-color-scheme
-    const cookieMatch =
-      typeof document !== 'undefined'
-        ? document.cookie.match(/(?:^|; )javamifi-theme=([^;]*)/)
-        : null;
+    const cookieMatch = typeof document !== 'undefined' ? document.cookie.match(/(?:^|; )javamifi-theme=([^;]*)/) : null;
     const cookieTheme = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
-    const saved =
-      cookieTheme ||
-      (typeof localStorage !== 'undefined' ? localStorage.getItem('javamifi-theme') : null);
+    const saved = cookieTheme || (typeof localStorage !== 'undefined' ? localStorage.getItem('javamifi-theme') : null);
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initial = saved === 'night' || (!saved && prefersDark) ? 'night' : 'light';
     setTheme(initial);
@@ -186,7 +169,9 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
               {t('topbar.terminalNotice')}
             </span>
             <span className="hidden sm:inline text-outline">•</span>
-            <span className="hidden sm:inline truncate">{t('topbar.connectivityMode')}</span>
+            <span className="hidden sm:inline truncate">
+              {t('topbar.connectivityMode')}
+            </span>
           </div>
 
           {/* Right Context: Currency & Dining Mode */}
@@ -234,11 +219,7 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
         </Link>
 
         {/* Desktop Nav Links (Wayfinding order & Active Route Marker - 1024px lg breakpoint required to fit 7 items + CTA) */}
-        <nav
-          aria-label="Navigasi Utama"
-          role="navigation"
-          className="hidden lg:flex items-center gap-2 lg:gap-4 text-xs font-bold uppercase tracking-wider text-secondary h-full"
-        >
+        <nav aria-label="Navigasi Utama" role="navigation" className="hidden lg:flex items-center gap-2 lg:gap-4 text-xs font-bold uppercase tracking-wider text-secondary h-full">
           {navLinks.map((link) => {
             const active = pathname === link.href || pathname.startsWith(link.href + '/');
             return (
@@ -357,11 +338,7 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
             aria-label={mobileMenuOpen ? t('closeMenu') : t('openMenu')}
             aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? (
-              <X className="w-6 h-6 text-primary" strokeWidth={1.75} />
-            ) : (
-              <Menu className="w-6 h-6 text-primary" strokeWidth={1.75} />
-            )}
+            {mobileMenuOpen ? <X className="w-6 h-6 text-primary" strokeWidth={1.75} /> : <Menu className="w-6 h-6 text-primary" strokeWidth={1.75} />}
           </button>
         </div>
       </div>
@@ -392,9 +369,7 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
                   >
                     <div className="flex items-center gap-2">
                       {link.icon && <link.icon className="w-4 h-4 text-outline" />}
-                      {link.isDining && (
-                        <span className="w-2 h-2 rounded-full bg-line-dining shrink-0" />
-                      )}
+                      {link.isDining && <span className="w-2 h-2 rounded-full bg-line-dining shrink-0" />}
                       <span>{link.label}</span>
                     </div>
                     {link.badge && (
@@ -495,9 +470,7 @@ export const Navbar = ({ currentLocale }: { currentLocale: string }) => {
             { href: `/${currentLocale}/dining`, label: t('dining'), icon: Utensils },
             { href: `/${currentLocale}/support`, label: t('support'), icon: HelpCircle },
           ].map((item) => {
-            const active =
-              pathname === item.href ||
-              (item.href !== `/${currentLocale}` && pathname.startsWith(item.href));
+            const active = pathname === item.href || (item.href !== `/${currentLocale}` && pathname.startsWith(item.href));
             const IconComponent = item.icon;
             return (
               <Link

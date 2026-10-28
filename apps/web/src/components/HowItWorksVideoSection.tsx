@@ -92,7 +92,9 @@ export const HowItWorksVideoSection: React.FC<HowItWorksVideoSectionProps> = ({
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-paper-edge pb-4">
         <div className="space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-secondary">{badge}</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+            {badge}
+          </span>
           <h2
             id="how-it-works-title"
             className="text-2xl sm:text-3xl font-display font-black text-primary mt-1 uppercase tracking-tight"
@@ -203,9 +205,7 @@ export const HowItWorksVideoSection: React.FC<HowItWorksVideoSectionProps> = ({
           {/* Under-Player Caption Bar */}
           <div className="p-4 bg-surface border-t border-paper-edge flex items-center justify-between gap-3 text-xs text-outline font-sans">
             <span className="truncate">{videoNotice}</span>
-            <span className="font-mono font-bold text-primary tnum shrink-0">
-              1280×720 • 783 KB
-            </span>
+            <span className="font-mono font-bold text-primary tnum shrink-0">1280×720 • 783 KB</span>
           </div>
         </div>
 
@@ -217,9 +217,13 @@ export const HowItWorksVideoSection: React.FC<HowItWorksVideoSectionProps> = ({
               <span className="w-7 h-7 rounded bg-primary text-on-primary font-mono font-bold text-xs flex items-center justify-center shrink-0">
                 01
               </span>
-              <h3 className="font-bold text-sm text-primary leading-tight">{step1Title}</h3>
+              <h3 className="font-bold text-sm text-primary leading-tight">
+                {step1Title}
+              </h3>
             </div>
-            <p className="text-xs text-secondary leading-relaxed pl-9">{step1Desc}</p>
+            <p className="text-xs text-secondary leading-relaxed pl-9">
+              {step1Desc}
+            </p>
           </div>
 
           {/* Step 2 */}
@@ -228,9 +232,13 @@ export const HowItWorksVideoSection: React.FC<HowItWorksVideoSectionProps> = ({
               <span className="w-7 h-7 rounded bg-secondary text-on-primary font-mono font-bold text-xs flex items-center justify-center shrink-0">
                 02
               </span>
-              <h3 className="font-bold text-sm text-primary leading-tight">{step2Title}</h3>
+              <h3 className="font-bold text-sm text-primary leading-tight">
+                {step2Title}
+              </h3>
             </div>
-            <p className="text-xs text-secondary leading-relaxed pl-9">{step2Desc}</p>
+            <p className="text-xs text-secondary leading-relaxed pl-9">
+              {step2Desc}
+            </p>
           </div>
 
           {/* Step 3 */}
@@ -239,9 +247,13 @@ export const HowItWorksVideoSection: React.FC<HowItWorksVideoSectionProps> = ({
               <span className="w-7 h-7 rounded bg-line-dining text-on-primary font-mono font-bold text-xs flex items-center justify-center shrink-0">
                 03
               </span>
-              <h3 className="font-bold text-sm text-primary leading-tight">{step3Title}</h3>
+              <h3 className="font-bold text-sm text-primary leading-tight">
+                {step3Title}
+              </h3>
             </div>
-            <p className="text-xs text-secondary leading-relaxed pl-9">{step3Desc}</p>
+            <p className="text-xs text-secondary leading-relaxed pl-9">
+              {step3Desc}
+            </p>
           </div>
         </div>
       </div>

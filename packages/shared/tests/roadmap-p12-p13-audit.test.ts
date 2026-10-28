@@ -85,12 +85,8 @@ describe('Roadmap P12–P13 Diagnostic & Verification Audit', () => {
       const cardCode = fs.readFileSync(cardPath, 'utf8');
 
       // Tactile lower lip borders
-      expect(cardCode).toContain(
-        "card: 'bg-paper border border-paper-edge border-b-2 text-primary'",
-      );
-      expect(cardCode).toContain(
-        "raised: 'bg-paper border border-paper-edge border-b-4 text-primary'",
-      );
+      expect(cardCode).toContain("card: 'bg-paper border border-paper-edge border-b-2 text-primary'");
+      expect(cardCode).toContain("raised: 'bg-paper border border-paper-edge border-b-4 text-primary'");
       expect(cardCode).toContain("flat: 'bg-paper border border-paper-edge text-primary'");
       expect(cardCode).toContain("sunken: 'bg-sunken border border-paper-edge text-primary'");
 

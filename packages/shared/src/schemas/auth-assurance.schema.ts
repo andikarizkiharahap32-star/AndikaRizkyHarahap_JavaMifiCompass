@@ -17,9 +17,9 @@ import { hashSha512, generateRandomToken } from '../helpers/crypto';
  * Authentication Factor Levels (NIST SP 800-63B Alignment)
  */
 export const AuthAssuranceLevelEnum = z.enum([
-  'AAL_1_SINGLE_FACTOR', // Password only (acceptable for low-risk traveler browsing)
-  'AAL_2_TWO_FACTOR', // Password + TOTP or Passkey (mandatory for backoffice/admin)
-  'AAL_3_HARDWARE_BACKED', // Hardware FIDO2 token with cryptographic proof
+  'AAL_1_SINGLE_FACTOR',      // Password only (acceptable for low-risk traveler browsing)
+  'AAL_2_TWO_FACTOR',         // Password + TOTP or Passkey (mandatory for backoffice/admin)
+  'AAL_3_HARDWARE_BACKED',    // Hardware FIDO2 token with cryptographic proof
 ]);
 export type AuthAssuranceLevel = z.infer<typeof AuthAssuranceLevelEnum>;
 
@@ -237,10 +237,7 @@ export function validatePasswordStrength(
   if (policy.requireSpecial && !/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
     errors.push('Password must contain at least one special character');
   }
-  if (
-    policy.prohibitCommonPasswords &&
-    BANNED_COMMON_PASSWORDS.has(password.toLowerCase().trim())
-  ) {
+  if (policy.prohibitCommonPasswords && BANNED_COMMON_PASSWORDS.has(password.toLowerCase().trim())) {
     errors.push('Password is too common or easily guessable; please choose a stronger password');
   }
 
@@ -315,8 +312,7 @@ export function generateBackupCodes(count = 8): { codes: string[]; hashes: strin
   const hashes: string[] = [];
 
   for (let i = 0; i < count; i++) {
-    const rawCode =
-      `${generateRandomToken(4).slice(0, 4)}-${generateRandomToken(4).slice(0, 4)}`.toUpperCase();
+    const rawCode = `${generateRandomToken(4).slice(0, 4)}-${generateRandomToken(4).slice(0, 4)}`.toUpperCase();
     codes.push(rawCode);
     hashes.push(hashSha512(rawCode));
   }
@@ -357,7 +353,9 @@ export const AuthAssuranceEvaluationReportSchema = z.object({
     }),
   ),
 });
-export type AuthAssuranceEvaluationReport = z.infer<typeof AuthAssuranceEvaluationReportSchema>;
+export type AuthAssuranceEvaluationReport = z.infer<
+  typeof AuthAssuranceEvaluationReportSchema
+>;
 
 /**
  * Runtime Evaluator for SEC-P03 Authentication Assurance Compliance
@@ -445,8 +443,7 @@ export function evaluateAuthAssuranceCompliance(config?: {
       severity: 'HIGH',
       area: 'LOCKOUT_DEFENSE',
       description: 'Login error message distinguishes user existence, allowing enumeration oracle',
-      remediation:
-        "Return generic 'Invalid email or password' on both user-not-found and bad password",
+      remediation: "Return generic 'Invalid email or password' on both user-not-found and bad password",
     });
   }
 
@@ -494,8 +491,7 @@ export function evaluateAuthAssuranceCompliance(config?: {
       severity: 'CRITICAL',
       area: 'MFA_ENFORCEMENT',
       description: `Mandatory MFA missing for administrative roles: ${missingAdminMfa.join(', ')}`,
-      remediation:
-        'Require 2FA TOTP or Passkey for all administrative roles before granting backoffice access',
+      remediation: 'Require 2FA TOTP or Passkey for all administrative roles before granting backoffice access',
     });
   }
   if (mfaPolicy.totpDriftToleranceSteps > 2) {
@@ -518,8 +514,7 @@ export function evaluateAuthAssuranceCompliance(config?: {
       severity: 'HIGH',
       area: 'REAUTHENTICATION_GATES',
       description: `Step-up re-authentication window (${reauthPolicy.maxReauthAgeSeconds}s) exceeds 5 minutes (300s)`,
-      remediation:
-        'Require password or MFA re-verification within 300 seconds for sensitive mutations',
+      remediation: 'Require password or MFA re-verification within 300 seconds for sensitive mutations',
     });
   }
   const requiredOps: SensitiveOperation[] = [
@@ -536,8 +531,7 @@ export function evaluateAuthAssuranceCompliance(config?: {
       severity: 'CRITICAL',
       area: 'REAUTHENTICATION_GATES',
       description: `Re-authentication gate missing on critical operations: ${missingOps.join(', ')}`,
-      remediation:
-        'Bind reauth guard to password changes, email modifications, and role assignments',
+      remediation: 'Bind reauth guard to password changes, email modifications, and role assignments',
     });
   }
 
@@ -552,8 +546,7 @@ export function evaluateAuthAssuranceCompliance(config?: {
       lockoutDefenseEnforcement +
       tokenLifecycleEnforcement +
       mfaAdminRoleEnforcement +
-      reauthGateCoverage) /
-      5,
+      reauthGateCoverage) / 5,
   );
 
   const criticalReleaseBlockers = findings.filter((f) => f.severity === 'CRITICAL').length;
@@ -567,7 +560,9 @@ export function evaluateAuthAssuranceCompliance(config?: {
   const inv04CriticalFindingsBlockRelease = criticalReleaseBlockers === 0;
 
   const status =
-    criticalReleaseBlockers === 0 && inv01InputValidated && inv02AuthRecheckedAtMutation
+    criticalReleaseBlockers === 0 &&
+    inv01InputValidated &&
+    inv02AuthRecheckedAtMutation
       ? 'COMPLIANT'
       : 'NON_COMPLIANT';
 

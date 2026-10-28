@@ -18,7 +18,10 @@ import {
   NonRetryableJobError,
   DlqEntry,
 } from '../../../apps/api/src/queues/queue-registry';
-import { WorkerManager, QUEUE_CONCURRENCY_LIMITS } from '../../../apps/worker/src/worker';
+import {
+  WorkerManager,
+  QUEUE_CONCURRENCY_LIMITS,
+} from '../../../apps/worker/src/worker';
 
 describe('Backend and Workflows - P10: Rate Limiting and Abuse Control', () => {
   let limiter: TokenBucketLimiter;
@@ -79,7 +82,7 @@ describe('Backend and Workflows - P10: Rate Limiting and Abuse Control', () => {
 
     // Assist route MUST FAIL CLOSED on outage (protect expensive LLM/STT upstreams)
     await expect(faultyLimiter.checkRateLimit('client_ip_1', 'assist')).rejects.toThrow(
-      /Fail-closed guard active/,
+      /Fail-closed guard active/
     );
 
     // Public route gracefully fails open to maintain service availability
@@ -106,7 +109,7 @@ describe('Backend and Workflows - P10: Rate Limiting and Abuse Control', () => {
 
     // assertWithinCostBudget throws 429 RateLimitError
     expect(() => budgetService.assertWithinCostBudget(userId, 1.0)).toThrow(
-      /Daily AI assist cost budget exceeded/,
+      /Daily AI assist cost budget exceeded/
     );
   });
 });
@@ -121,29 +124,16 @@ describe('Backend and Workflows - P11: Queues and Background Jobs', () => {
   });
 
   it('P11-1: Duplicate enqueue with deterministic jobId creates exactly one job', async () => {
-    const jobId = generateDeterministicJobId(
-      'halal-verify',
-      'plc_tokyo_shinjuku_01',
-      'audit',
-      '2026-10-28',
-    );
+    const jobId = generateDeterministicJobId('halal-verify', 'plc_tokyo_shinjuku_01', 'audit', '2026-10-28');
     expect(jobId).toBe('halal-verify:plc_tokyo_shinjuku_01:audit:2026-10-28');
 
     // First enqueue
-    const res1 = await queue.enqueue(
-      'halal-verify',
-      { placeId: 'plc_tokyo_shinjuku_01' },
-      { jobId },
-    );
+    const res1 = await queue.enqueue('halal-verify', { placeId: 'plc_tokyo_shinjuku_01' }, { jobId });
     expect(res1.isDuplicate).toBe(false);
     expect(res1.job.id).toBe(jobId);
 
     // Duplicate enqueue with exact same jobId
-    const res2 = await queue.enqueue(
-      'halal-verify',
-      { placeId: 'plc_tokyo_shinjuku_01' },
-      { jobId },
-    );
+    const res2 = await queue.enqueue('halal-verify', { placeId: 'plc_tokyo_shinjuku_01' }, { jobId });
     expect(res2.isDuplicate).toBe(true);
     expect(res2.job.id).toBe(jobId);
   });
@@ -219,7 +209,7 @@ describe('Backend and Workflows - P11: Queues and Background Jobs', () => {
 
     const unsafeData = { placeId: 'plc_tokyo_01', cardNumber: '4111222233334444' };
     await expect(queue.enqueue('halal-verify', unsafeData)).rejects.toThrow(
-      /Security Violation \(P11\)/,
+      /Security Violation \(P11\)/
     );
   });
 
@@ -251,7 +241,7 @@ describe('Backend and Workflows - P11: Queues and Background Jobs', () => {
 
     // 3rd concurrent job on fx-refresh must be rejected due to limit
     await expect(worker.executeJob('fx-refresh', { currency: 'USD' })).rejects.toThrow(
-      /exceeded concurrency limit of 2/,
+      /exceeded concurrency limit of 2/
     );
 
     // Release held jobs

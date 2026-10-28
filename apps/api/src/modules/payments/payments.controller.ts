@@ -91,9 +91,7 @@ export class PaymentsController {
       throw new NotFoundException(`Order ${resolvedOrderNumber} not found`);
     }
     if (order.status !== 'PENDING_PAYMENT') {
-      throw new BadRequestException(
-        `Order ${resolvedOrderNumber} is in status ${order.status}, not eligible for payment`,
-      );
+      throw new BadRequestException(`Order ${resolvedOrderNumber} is in status ${order.status}, not eligible for payment`);
     }
 
     // 3. Amount verification: prevent arbitrary amount manipulation
@@ -123,9 +121,7 @@ export class PaymentsController {
   }
 
   @Post('webhook/stripe')
-  @ApiOperation({
-    summary: 'Stripe Mock Webhook: handles checkout.session.completed and payment_intent.succeeded',
-  })
+  @ApiOperation({ summary: 'Stripe Mock Webhook: handles checkout.session.completed and payment_intent.succeeded' })
   async handleStripeWebhook(
     @Body() body: any,
     @Headers('authorization') authHeader?: string,
@@ -152,12 +148,7 @@ export class PaymentsController {
 
     // If order is already paid, return idempotent response
     if (order.status === 'PAID' || order.status === 'FULFILLED' || order.status === 'IN_USE') {
-      return {
-        received: true,
-        idempotent: true,
-        orderNumber: resolvedOrderNumber,
-        status: order.status,
-      };
+      return { received: true, idempotent: true, orderNumber: resolvedOrderNumber, status: order.status };
     }
 
     const eventType = body.type || 'payment_intent.succeeded';
@@ -212,9 +203,7 @@ export class PaymentsController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN', 'FINANCE', 'OPS')
-  @ApiOperation({
-    summary: 'Reconcile simulated event history against authoritative state (PAY-P07)',
-  })
+  @ApiOperation({ summary: 'Reconcile simulated event history against authoritative state (PAY-P07)' })
   reconcileSimulatedHistory(@Body() body?: { orderNumber?: string }) {
     return this.paymentsService.reconcileSimulatedHistory(body);
   }
@@ -223,9 +212,7 @@ export class PaymentsController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN', 'FINANCE')
-  @ApiOperation({
-    summary: 'Authorized operator payment status override with audit logging (PAY-P07)',
-  })
+  @ApiOperation({ summary: 'Authorized operator payment status override with audit logging (PAY-P07)' })
   applyOperatorOverride(@Body() body: any) {
     return this.paymentsService.applyOperatorOverride(body);
   }
@@ -264,9 +251,7 @@ export class PaymentsController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN', 'FINANCE')
-  @ApiOperation({
-    summary: 'Get automated mock payment release sign-off and gate verification report (PAY-P10)',
-  })
+  @ApiOperation({ summary: 'Get automated mock payment release sign-off and gate verification report (PAY-P10)' })
   getReleaseSignoff() {
     return this.paymentsService.getReleaseSignoffReport();
   }

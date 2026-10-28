@@ -6,20 +6,14 @@ describe('Roadmap P23–P24 Diagnostic & Verification Audit', () => {
   const rootDir = path.resolve(__dirname, '../../..');
 
   // P23 & P24 Public Web Paths
-  const faqAccordionPath = path.join(
-    rootDir,
-    'apps/web/src/components/FaqInteractiveAccordion.tsx',
-  );
+  const faqAccordionPath = path.join(rootDir, 'apps/web/src/components/FaqInteractiveAccordion.tsx');
   const footerPath = path.join(rootDir, 'apps/web/src/components/Footer.tsx');
   const supportPath = path.join(rootDir, 'apps/web/src/app/[locale]/support/page.tsx');
 
   // P23 & P24 Admin CMS Paths
   const ordersScreenPath = path.join(rootDir, 'apps/admin/src/screens/OrdersScreen.tsx');
   const auditLogScreenPath = path.join(rootDir, 'apps/admin/src/screens/AuditLogScreen.tsx');
-  const diningQueueScreenPath = path.join(
-    rootDir,
-    'apps/admin/src/screens/DiningReviewQueueScreen.tsx',
-  );
+  const diningQueueScreenPath = path.join(rootDir, 'apps/admin/src/screens/DiningReviewQueueScreen.tsx');
   const dashboardScreenPath = path.join(rootDir, 'apps/admin/src/screens/DashboardScreen.tsx');
 
   describe('P23: FAQ and Help Content (Primary Roadmap)', () => {

@@ -45,7 +45,7 @@ describe('P12 — Restaurant Details and Evidence Drawer', () => {
 
   it('P12-WS11: Phone Action with Standard tel: URI and 48px Target', () => {
     // Accessible phone dial action with tel: URI
-    expect(detailModalSource).toContain("href={`tel:${place.phone.replace(/\\s+/g, '')}`}");
+    expect(detailModalSource).toContain('href={`tel:${place.phone.replace(/\\s+/g, \'\')}`}');
     expect(detailModalSource).toContain('min-h-12 h-12');
     expect(detailModalSource).toContain('font-mono tnum');
   });

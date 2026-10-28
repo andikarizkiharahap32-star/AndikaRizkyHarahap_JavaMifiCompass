@@ -50,7 +50,9 @@ describe('SEC-P01: Asset and Data Inventory Defensive Security Audit', () => {
       expect(restrictedPassport?.permittedConsumers).not.toContain('AUTHENTICATED_TRAVELER');
       expect(restrictedPassport?.permittedConsumers).toContain('SUPPORT_AGENT');
 
-      const publicCatalog = JAVAMIFI_DATA_INVENTORY.find((d) => d.id === 'DATA_07_CATALOG_PUBLIC');
+      const publicCatalog = JAVAMIFI_DATA_INVENTORY.find(
+        (d) => d.id === 'DATA_07_CATALOG_PUBLIC',
+      );
       expect(publicCatalog?.classification).toBe('PUBLIC');
       expect(publicCatalog?.permittedConsumers).toContain('ANONYMOUS_VISITOR');
     });
@@ -63,7 +65,10 @@ describe('SEC-P01: Asset and Data Inventory Defensive Security Audit', () => {
         amountIdr: 350000,
         status: 'PENDING',
       };
-      const cleanCheck = validateDataFlowBoundary('DFP_01_CHECKOUT_TRANSACTION', validPayload);
+      const cleanCheck = validateDataFlowBoundary(
+        'DFP_01_CHECKOUT_TRANSACTION',
+        validPayload,
+      );
       expect(cleanCheck.allowed).toBe(true);
 
       // Scenario B: Flow strictly detects and blocks raw unmasked credit card PAN
@@ -72,7 +77,10 @@ describe('SEC-P01: Asset and Data Inventory Defensive Security Audit', () => {
         cardNumber: '4111 1111 1111 1234', // Unmasked 16-digit card
         amountIdr: 350000,
       };
-      const cardCheck = validateDataFlowBoundary('DFP_01_CHECKOUT_TRANSACTION', rawCardPayload);
+      const cardCheck = validateDataFlowBoundary(
+        'DFP_01_CHECKOUT_TRANSACTION',
+        rawCardPayload,
+      );
       expect(cardCheck.allowed).toBe(false);
       expect(cardCheck.reason).toBe('RAW_UNMASKED_PAN_DETECTED');
       expect(cardCheck.violationField).toBe('cardNumber');
@@ -83,7 +91,10 @@ describe('SEC-P01: Asset and Data Inventory Defensive Security Audit', () => {
         cvv: '987',
         paymentToken: 'tok_clean',
       };
-      const cvvCheck = validateDataFlowBoundary('DFP_01_CHECKOUT_TRANSACTION', rawCvvPayload);
+      const cvvCheck = validateDataFlowBoundary(
+        'DFP_01_CHECKOUT_TRANSACTION',
+        rawCvvPayload,
+      );
       expect(cvvCheck.allowed).toBe(false);
       expect(cvvCheck.reason).toBe('RAW_UNENCRYPTED_CVV_DETECTED');
       expect(cvvCheck.violationField).toBe('cvv');
@@ -189,7 +200,9 @@ describe('SEC-P01: Asset and Data Inventory Defensive Security Audit', () => {
   describe('4. Critical Services & Data Flow Paths', () => {
     it('verifies 6 critical services with fail-closed policies for Tier 1 services', () => {
       expect(JAVAMIFI_CRITICAL_SERVICES.length).toBe(6);
-      const tier1Services = JAVAMIFI_CRITICAL_SERVICES.filter((s) => s.tier === 'TIER_1_CRITICAL');
+      const tier1Services = JAVAMIFI_CRITICAL_SERVICES.filter(
+        (s) => s.tier === 'TIER_1_CRITICAL',
+      );
       expect(tier1Services.length).toBe(3); // Auth, Orders, Payments
       for (const s of tier1Services) {
         expect(s.failClosedPolicy).toBe(true);

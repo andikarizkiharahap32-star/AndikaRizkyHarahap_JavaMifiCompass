@@ -21,12 +21,12 @@ describe('Roadmap P6–P7 Diagnostic & Verification Audit', () => {
     it('enforces 8px base rhythm scale, max content widths, and 48px touch targets', () => {
       // 8px base rhythm spacing tokens
       expect(spacingTokens.spaceXs).toBe('0.25rem'); // 4px
-      expect(spacingTokens.spaceSm).toBe('0.5rem'); // 8px
-      expect(spacingTokens.spaceMd).toBe('1rem'); // 16px
-      expect(spacingTokens.spaceLg).toBe('1.5rem'); // 24px
-      expect(spacingTokens.spaceXl).toBe('2.5rem'); // 40px
-      expect(spacingTokens.space2xl).toBe('4rem'); // 64px
-      expect(spacingTokens.space3xl).toBe('6rem'); // 96px
+      expect(spacingTokens.spaceSm).toBe('0.5rem');  // 8px
+      expect(spacingTokens.spaceMd).toBe('1rem');    // 16px
+      expect(spacingTokens.spaceLg).toBe('1.5rem');  // 24px
+      expect(spacingTokens.spaceXl).toBe('2.5rem');  // 40px
+      expect(spacingTokens.space2xl).toBe('4rem');   // 64px
+      expect(spacingTokens.space3xl).toBe('6rem');   // 96px
 
       // Core dimensional bounds
       expect(spacingTokens.minTouchTarget).toBe('48px');
@@ -119,13 +119,9 @@ describe('Roadmap P6–P7 Diagnostic & Verification Audit', () => {
       expect(destH1s).toBe(1);
 
       // Section rhythm: H2 with display font and uppercase tracking
-      expect(homeCode).toContain(
-        'font-display font-black text-primary mt-1 uppercase tracking-tight',
-      );
+      expect(homeCode).toContain('font-display font-black text-primary mt-1 uppercase tracking-tight');
       expect(faqCode).toContain('font-display font-bold text-primary uppercase tracking-tight');
-      expect(destinationsCode).toContain(
-        'font-display font-black text-primary uppercase tracking-tight',
-      );
+      expect(destinationsCode).toContain('font-display font-black text-primary uppercase tracking-tight');
     });
 
     it('verifies section anchor navigation for accessible direct wayfinding', () => {

@@ -11,10 +11,10 @@ import { z } from 'zod';
  * PII sensitivity classification categories.
  */
 export const PiiCategoryEnum = z.enum([
-  'DIRECT_IDENTIFIER', // Directly identifies a natural person: name, email, phone, passport/KTP, address
-  'INDIRECT_IDENTIFIER', // Quasi-identifiers: IP address, device fingerprint, User-Agent, coarse location
-  'PAYMENT_METADATA', // Truncated payment data: masked card ending in 4 digits (PAN/CVV strictly prohibited)
-  'INTERNAL_METADATA', // System identifiers: internal user UUID, tenant ID, timestamps
+  'DIRECT_IDENTIFIER',     // Directly identifies a natural person: name, email, phone, passport/KTP, address
+  'INDIRECT_IDENTIFIER',   // Quasi-identifiers: IP address, device fingerprint, User-Agent, coarse location
+  'PAYMENT_METADATA',      // Truncated payment data: masked card ending in 4 digits (PAN/CVV strictly prohibited)
+  'INTERNAL_METADATA',     // System identifiers: internal user UUID, tenant ID, timestamps
 ]);
 export type PiiCategory = z.infer<typeof PiiCategoryEnum>;
 
@@ -23,10 +23,10 @@ export type PiiCategory = z.infer<typeof PiiCategoryEnum>;
  */
 export const RetentionPolicyCategoryEnum = z.enum([
   'EPHEMERAL_CHECKOUT_SESSION', // 24-48 hours (temporary cart/checkout state)
-  'SHIPPING_LOGISTICS_PII', // 90 days (physical delivery recipient info per SEC-P01)
-  'FINANCIAL_LEDGER', // 7 years (statutory tax & bookkeeping compliance)
-  'USER_ACCOUNT_PROFILE', // Retained while account active; subject to right to erasure
-  'SECURITY_AUDIT_LOGS', // 1 year operational / 7 years regulatory
+  'SHIPPING_LOGISTICS_PII',    // 90 days (physical delivery recipient info per SEC-P01)
+  'FINANCIAL_LEDGER',          // 7 years (statutory tax & bookkeeping compliance)
+  'USER_ACCOUNT_PROFILE',      // Retained while account active; subject to right to erasure
+  'SECURITY_AUDIT_LOGS',       // 1 year operational / 7 years regulatory
 ]);
 export type RetentionPolicyCategory = z.infer<typeof RetentionPolicyCategoryEnum>;
 
@@ -102,10 +102,7 @@ export function maskAddress(address: string): string {
 
   // Replace house/unit numbers, RT/RW, and specific apartment markers with [REDACTED]
   const masked = trimmed
-    .replace(
-      /\b(no\.|nomor|kav\.|unit|apt\.|rt\b[\s\d./]+rw\b[\s\d./]+|\d+[\w/-]*)\b/gi,
-      '[REDACTED]',
-    )
+    .replace(/\b(no\.|nomor|kav\.|unit|apt\.|rt\b[\s\d./]+rw\b[\s\d./]+|\d+[\w/-]*)\b/gi, '[REDACTED]')
     .replace(/\s+/g, ' ');
 
   return masked;
@@ -118,7 +115,9 @@ export function maskAddress(address: string): string {
 export function maskFullName(name: string): string {
   if (!name || typeof name !== 'string') return '***';
   const words = name.trim().split(/\s+/);
-  return words.map((w) => (w.length <= 1 ? '*' : `${w[0]}***`)).join(' ');
+  return words
+    .map((w) => (w.length <= 1 ? '*' : `${w[0]}***`))
+    .join(' ');
 }
 
 /**
@@ -378,7 +377,7 @@ export function buildDataSubjectExport(
     },
     redactedCredentialsCount,
     invariantsSatisfied: {
-      noPasswordLeak: !('passwordHash' in ((input as any) && {})),
+      noPasswordLeak: !('passwordHash' in (input as any && {})),
       noMfaSecretLeak: true,
       noPaymentGatewayTokenLeak: true,
     },
@@ -400,7 +399,9 @@ export interface AnonymizedUserDataResult {
   preservedFinancialLedgerCount: number;
 }
 
-export function anonymizeUserData(input: UserDataSubjectInput): AnonymizedUserDataResult {
+export function anonymizeUserData(
+  input: UserDataSubjectInput,
+): AnonymizedUserDataResult {
   const shortId = input.userId.replace(/[^a-zA-Z0-9]/g, '').slice(-8);
   const domain = input.email.includes('@') ? input.email.split('@')[1] : 'deleted.javamifi.local';
 
@@ -531,27 +532,22 @@ export function evaluatePrivacyMinimizationCompliance(options?: {
     invariants: {
       'INV-01': {
         passed: inv01Passed,
-        description:
-          'Untrusted input never crosses a trust boundary without validation and contextual handling',
-        detail:
-          'Schema validation strips unmapped or excessive personal fields at ingress boundaries.',
+        description: 'Untrusted input never crosses a trust boundary without validation and contextual handling',
+        detail: 'Schema validation strips unmapped or excessive personal fields at ingress boundaries.',
       },
       'INV-02': {
         passed: inv02Passed,
-        description:
-          'Authorization is rechecked at the mutation boundary and object ownership is not inferred from identifiers',
+        description: 'Authorization is rechecked at the mutation boundary and object ownership is not inferred from identifiers',
         detail: 'Data export and erasure boundaries enforce authenticated subject ownership.',
       },
       'INV-03': {
         passed: inv03Passed,
-        description:
-          'Security-sensitive logs contain enough evidence for investigation without secrets or unnecessary personal data',
+        description: 'Security-sensitive logs contain enough evidence for investigation without secrets or unnecessary personal data',
         detail: `PII fields masked (Email, Phone, National ID, Address). Unmasked PII leaks in telemetry: ${unmaskedPiiCount}.`,
       },
       'INV-04': {
         passed: inv04Passed,
-        description:
-          'Critical findings remain release blockers until retested or formally accepted by an authorized risk owner',
+        description: 'Critical findings remain release blockers until retested or formally accepted by an authorized risk owner',
         detail: `Retention SLAs: Shipping <= 90d (${shippingDays}d), Financial >= 7y (${financialYears}y). Status: ${isCompliant ? 'PASS' : 'FAIL'}.`,
       },
     },
@@ -566,13 +562,11 @@ export function evaluatePrivacyMinimizationCompliance(options?: {
       },
       'SEC-P08-CTRL-0024': {
         verified: true,
-        description:
-          'Enforce authorization, bounded scope, auditability, and safe file delivery on data export.',
+        description: 'Enforce authorization, bounded scope, auditability, and safe file delivery on data export.',
       },
       'SEC-P08-CTRL-0028': {
         verified: shippingDays <= 90,
-        description:
-          'Restrict PII log retention and purge shipping logistics records after 90 days.',
+        description: 'Restrict PII log retention and purge shipping logistics records after 90 days.',
       },
     },
     metrics: {

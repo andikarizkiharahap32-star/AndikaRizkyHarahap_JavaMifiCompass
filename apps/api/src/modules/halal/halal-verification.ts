@@ -13,7 +13,10 @@
 export type HalalStatus = 'verified' | 'self_declared' | 'unverified' | 'disputed';
 
 export type EvidenceType =
-  'certificate' | 'authority_listing' | 'owner_declaration' | 'community_report';
+  | 'certificate'
+  | 'authority_listing'
+  | 'owner_declaration'
+  | 'community_report';
 
 export interface HalalEvidenceInput {
   id: string;
@@ -61,7 +64,7 @@ export const DEFAULT_GRACE_PERIOD_DAYS = 30;
  */
 export function computeHalalStatus(
   evidenceList: HalalEvidenceInput[],
-  options: { asOf?: Date; gracePeriodDays?: number } = {},
+  options: { asOf?: Date; gracePeriodDays?: number } = {}
 ): ComputedHalalStatus {
   const asOfDate = options.asOf || new Date();
   const asOf = asOfDate.toISOString();
@@ -174,7 +177,7 @@ export function createStatusAuditLog(
   newStatus: HalalStatus,
   reason: string,
   changedBy: string,
-  asOf = new Date(),
+  asOf = new Date()
 ): StatusAuditLogEntry {
   return {
     placeId,
@@ -202,13 +205,10 @@ export function evaluateCertificateExpiry(
   placeId: string,
   currentStatus: HalalStatus,
   evidenceList: HalalEvidenceInput[],
-  options: { asOf?: Date; gracePeriodDays?: number } = {},
+  options: { asOf?: Date; gracePeriodDays?: number } = {}
 ): ExpiryJobResult {
   const asOf = options.asOf || new Date();
-  const computed = computeHalalStatus(evidenceList, {
-    asOf,
-    gracePeriodDays: options.gracePeriodDays,
-  });
+  const computed = computeHalalStatus(evidenceList, { asOf, gracePeriodDays: options.gracePeriodDays });
 
   if (computed.status !== currentStatus) {
     const auditLog = createStatusAuditLog(
@@ -217,7 +217,7 @@ export function evaluateCertificateExpiry(
       computed.status,
       `Certificate expired past grace period: ${computed.reason}`,
       'system:cron_expiry',
-      asOf,
+      asOf
     );
 
     return {

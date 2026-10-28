@@ -7,9 +7,12 @@ describe('OctilinearTicketTunnel Contract & Semantics Tests', () => {
   const idMessagesPath = path.resolve(__dirname, '../../../apps/web/messages/id.json');
   const componentPath = path.resolve(
     __dirname,
-    '../../../apps/web/src/components/OctilinearTicketTunnel.tsx',
+    '../../../apps/web/src/components/OctilinearTicketTunnel.tsx'
   );
-  const homeOverrideDocPath = path.resolve(__dirname, '../../../design-system/pages/home.md');
+  const homeOverrideDocPath = path.resolve(
+    __dirname,
+    '../../../design-system/pages/home.md'
+  );
 
   it('contains complete i18n ticketTunnel keys in both en.json and id.json', () => {
     const en = JSON.parse(fs.readFileSync(enMessagesPath, 'utf8'));

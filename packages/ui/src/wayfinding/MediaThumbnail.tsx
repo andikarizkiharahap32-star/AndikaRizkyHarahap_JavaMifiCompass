@@ -33,8 +33,8 @@ export const MediaThumbnail: React.FC<MediaThumbnailProps> = ({
     aspectRatio === 'video'
       ? 'aspect-video w-full'
       : aspectRatio === 'banner'
-        ? 'h-40 w-full'
-        : 'h-36 w-full';
+      ? 'h-40 w-full'
+      : 'h-36 w-full';
 
   const renderIcon = () => {
     switch (variant) {
@@ -53,8 +53,8 @@ export const MediaThumbnail: React.FC<MediaThumbnailProps> = ({
     variant === 'dining'
       ? 'Dokumentasi Visual Lokasi'
       : variant === 'destination'
-        ? 'Visual Hub Regional'
-        : 'Visual Rute Transit';
+      ? 'Visual Hub Regional'
+      : 'Visual Rute Transit';
 
   const hasValidImage = Boolean(src && !loadFailed);
 

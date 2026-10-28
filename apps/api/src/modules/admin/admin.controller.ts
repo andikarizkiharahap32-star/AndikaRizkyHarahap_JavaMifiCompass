@@ -51,9 +51,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
-  @ApiOperation({
-    summary: 'Admin Dashboard metrics (sales, devices out, overdue, failed payments)',
-  })
+  @ApiOperation({ summary: 'Admin Dashboard metrics (sales, devices out, overdue, failed payments)' })
   getDashboardMetrics() {
     return this.adminService.getDashboardMetrics();
   }
@@ -92,7 +90,10 @@ export class AdminController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN', 'OPS')
   @ApiOperation({ summary: 'Update device inventory status' })
-  updateDeviceStatus(@Param('id') id: string, @Body() body: { status: string; notes?: string }) {
+  updateDeviceStatus(
+    @Param('id') id: string,
+    @Body() body: { status: string; notes?: string },
+  ) {
     return this.adminService.updateDeviceStatus(id, body.status, body.notes);
   }
 
@@ -203,9 +204,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary: 'Retrieve SEC-P01 data assets, trust anchors, critical services, and data flows',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P01 data assets, trust anchors, critical services, and data flows' })
   getAssetInventory() {
     return this.assetInventoryService.getInventory();
   }
@@ -214,10 +213,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P01 data asset inventory, trust anchor entropy, and data flow compliance',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P01 data asset inventory, trust anchor entropy, and data flow compliance' })
   evaluateAssetInventory() {
     return this.assetInventoryService.evaluateCompliance();
   }
@@ -235,10 +231,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P02 attack surface mapping, route protections, and release-blocking invariants',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P02 attack surface mapping, route protections, and release-blocking invariants' })
   evaluateAttackSurface() {
     return this.attackSurfaceService.evaluateCompliance();
   }
@@ -247,9 +240,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary: 'Retrieve SEC-P03 authentication assurance policies and lifecycle rules',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P03 authentication assurance policies and lifecycle rules' })
   getAuthAssurance() {
     return this.authAssuranceService.getPolicies();
   }
@@ -258,10 +249,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P03 authentication assurance, token lifecycle, MFA, and release invariants',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P03 authentication assurance, token lifecycle, MFA, and release invariants' })
   evaluateAuthAssurance() {
     return this.authAssuranceService.evaluateCompliance();
   }
@@ -270,10 +258,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Retrieve SEC-P04 authorization, object ownership rules, role grant matrix, and multi-tenant isolation policies',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P04 authorization, object ownership rules, role grant matrix, and multi-tenant isolation policies' })
   getAuthorizationIsolation() {
     return this.authorizationIsolationService.getPolicies();
   }
@@ -282,10 +267,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P04 object-level authorization, tenant segregation, default-denial behavior, and release-blocking invariants',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P04 object-level authorization, tenant segregation, default-denial behavior, and release-blocking invariants' })
   evaluateAuthorizationIsolation() {
     return this.authorizationIsolationService.evaluateCompliance();
   }
@@ -294,10 +276,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Retrieve SEC-P05 parsing bounds, injection detection vectors, and output encoding policies',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P05 parsing bounds, injection detection vectors, and output encoding policies' })
   getInjectionHandling() {
     return this.inputSanitizationService.getLimits();
   }
@@ -306,10 +285,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P05 injection defenses, parameterized queries, prototype pollution, and release invariants',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P05 injection defenses, parameterized queries, prototype pollution, and release invariants' })
   evaluateInjectionHandling() {
     return this.inputSanitizationService.evaluateCompliance();
   }
@@ -318,10 +294,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Retrieve SEC-P06 cookie settings, CORS allowlist, CSRF parameters, and security headers',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P06 cookie settings, CORS allowlist, CSRF parameters, and security headers' })
   getBrowserBoundaries() {
     return this.browserBoundariesService.getConfig();
   }
@@ -330,10 +303,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P06 browser boundary defenses, wildcard CORS checks, CSRF safeguards, and clickjacking protection',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P06 browser boundary defenses, wildcard CORS checks, CSRF safeguards, and clickjacking protection' })
   evaluateBrowserBoundaries() {
     return this.browserBoundariesService.evaluateCompliance();
   }
@@ -342,10 +312,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Retrieve SEC-P07 approved cipher suites, deprecation rules, and secret storage requirements',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P07 approved cipher suites, deprecation rules, and secret storage requirements' })
   getSecretsCrypto() {
     return this.secretsCryptoService.getConfig();
   }
@@ -354,10 +321,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P07 cryptographic algorithms, diagnostic secret redaction, key rotation, and environment secret hygiene',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P07 cryptographic algorithms, diagnostic secret redaction, key rotation, and environment secret hygiene' })
   evaluateSecretsCrypto() {
     return this.secretsCryptoService.evaluateCompliance();
   }
@@ -366,9 +330,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary: 'Retrieve SEC-P08 PII categories, masking strategies, and retention schedules',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P08 PII categories, masking strategies, and retention schedules' })
   getPrivacyMinimization() {
     return this.privacyMinimizationService.getConfig();
   }
@@ -377,10 +339,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P08 privacy minimization, PII masking, retention enforcement, and release invariants',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P08 privacy minimization, PII masking, retention enforcement, and release invariants' })
   evaluatePrivacyMinimization() {
     return this.privacyMinimizationService.evaluateCompliance();
   }
@@ -389,10 +348,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Retrieve SEC-P09 software supply chain configuration, SBOM catalog, and advisory triage records',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P09 software supply chain configuration, SBOM catalog, and advisory triage records' })
   getSupplyChain() {
     return {
       config: this.supplyChainService.getConfig(),
@@ -404,10 +360,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P09 dependency risk, version pinning, lockfile integrity, and supply chain release invariants',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P09 dependency risk, version pinning, lockfile integrity, and supply chain release invariants' })
   evaluateSupplyChain() {
     return this.supplyChainService.evaluateCompliance();
   }
@@ -416,10 +369,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Retrieve SEC-P10 rate limit tiers, payload bounds, query limits, and anti-enumeration templates',
-  })
+  @ApiOperation({ summary: 'Retrieve SEC-P10 rate limit tiers, payload bounds, query limits, and anti-enumeration templates' })
   getApiAbuseDefenses() {
     return this.apiAbuseDefenseService.getConfig();
   }
@@ -428,10 +378,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary:
-      'Evaluate SEC-P10 rate abuse controls, oversized payload bounds, query pagination limits, and release invariants',
-  })
+  @ApiOperation({ summary: 'Evaluate SEC-P10 rate abuse controls, oversized payload bounds, query pagination limits, and release invariants' })
   evaluateApiAbuseDefenses(
     @Body()
     body?: {
@@ -449,9 +396,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary: 'Simulate or test token bucket rate limiting on specified client and tier',
-  })
+  @ApiOperation({ summary: 'Simulate or test token bucket rate limiting on specified client and tier' })
   checkRateLimit(
     @Body()
     body: {
@@ -471,9 +416,7 @@ export class AdminController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('SUPER_ADMIN', 'ADMIN')
-  @ApiOperation({
-    summary: 'Validate request payload for byte length, max depth, and array item bounds',
-  })
+  @ApiOperation({ summary: 'Validate request payload for byte length, max depth, and array item bounds' })
   validatePayloadResource(@Body() body: { payload: unknown }) {
     return this.apiAbuseDefenseService.validatePayload(body.payload);
   }

@@ -152,8 +152,8 @@ export const typeScale = {
 export const typographyRules = {
   // Editorial & Ergonomic Constraints per GEMINI.md & P03-WS05/06/12
   minBodySize: '0.875rem', // 14px minimum body text (body-sm)
-  minLabelSize: '0.75rem', // 12px minimum label (label-sm)
-  maxReadingWidth: '65ch', // Line length constraint (P03-WS12)
+  minLabelSize: '0.75rem',  // 12px minimum label (label-sm)
+  maxReadingWidth: '65ch',  // Line length constraint (P03-WS12)
   tabularFeature: '"tnum" 1',
   overflowWrap: 'break-word',
 } as const;

@@ -26,7 +26,9 @@ export const DestinationReadinessCard = ({
             <span>{countryInfo.countryCode}</span>
           </div>
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-primary">{countryInfo.name}</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-primary">
+              {countryInfo.name}
+            </h3>
             <span className="text-xs text-secondary font-medium">{countryInfo.officialName}</span>
           </div>
         </div>
@@ -92,9 +94,7 @@ export const DestinationReadinessCard = ({
             <span className="font-bold text-primary block mt-0.5">
               {tips.plugType || 'Type C / G'}
             </span>
-            <span className="text-xs text-secondary font-mono tnum">
-              Kode Telp: {countryInfo.callingCode}
-            </span>
+            <span className="text-xs text-secondary font-mono tnum">Kode Telp: {countryInfo.callingCode}</span>
           </div>
         </div>
       </div>

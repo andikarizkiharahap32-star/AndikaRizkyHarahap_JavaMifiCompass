@@ -18,7 +18,11 @@ import {
 import { Button } from '@javamifi/ui';
 import { apiClient } from '../../../lib/api';
 
-export default function LoginPage({ params: { locale } }: { params: { locale: string } }) {
+export default function LoginPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   const router = useRouter();
   const t = useTranslations('loginPage');
 
@@ -271,7 +275,9 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
               className="w-full"
             >
               <span className="flex items-center justify-center gap-2">
-                <span>{mode === 'LOGIN' ? t('submitSignIn') : t('submitRegister')}</span>
+                <span>
+                  {mode === 'LOGIN' ? t('submitSignIn') : t('submitRegister')}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </span>
             </Button>
@@ -299,11 +305,15 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
           </span>
           <p className="text-secondary">
             {t('demoEmail')}:{' '}
-            <code className="font-mono font-bold text-primary tnum">traveler@example.com</code>
+            <code className="font-mono font-bold text-primary tnum">
+              traveler@example.com
+            </code>
           </p>
           <p className="text-secondary">
             {t('demoPassword')}:{' '}
-            <code className="font-mono font-bold text-primary tnum">Traveler12345!</code>
+            <code className="font-mono font-bold text-primary tnum">
+              Traveler12345!
+            </code>
           </p>
         </div>
       </div>

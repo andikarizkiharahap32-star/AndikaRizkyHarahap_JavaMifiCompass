@@ -78,8 +78,6 @@ describe('Premium Brand Direction Without a Rebrand (P01)', () => {
 
     const content = fs.readFileSync(p01Path, 'utf8');
     expect(content).toContain('**Status:** Completed');
-    expect(content).toContain(
-      '[x] Written decision record for Premium brand direction without a rebrand',
-    );
+    expect(content).toContain('[x] Written decision record for Premium brand direction without a rebrand');
   });
 });

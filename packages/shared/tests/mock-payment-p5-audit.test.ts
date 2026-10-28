@@ -56,9 +56,7 @@ describe('PAY-P05 — Idempotency and Concurrency Safety Audit Suite', () => {
       });
 
       expect(tamperedResult.match).toBe(false);
-      expect(tamperedResult.reason).toContain(
-        'Idempotency key parameter mismatch: original amount 450000 IDR',
-      );
+      expect(tamperedResult.reason).toContain('Idempotency key parameter mismatch: original amount 450000 IDR');
       expect(tamperedResult.reason).toContain('differs from requested amount 1000 IDR');
     });
 
@@ -69,9 +67,7 @@ describe('PAY-P05 — Idempotency and Concurrency Safety Audit Suite', () => {
       });
 
       expect(crossOrderResult.match).toBe(false);
-      expect(crossOrderResult.reason).toContain(
-        'Idempotency key parameter mismatch: key was originally bound to order order_jm_998877',
-      );
+      expect(crossOrderResult.reason).toContain('Idempotency key parameter mismatch: key was originally bound to order order_jm_998877');
     });
 
     it('guard asserts intent idempotency match and throws BadRequestException on mismatch', () => {
@@ -79,14 +75,14 @@ describe('PAY-P05 — Idempotency and Concurrency Safety Audit Suite', () => {
         guard.assertIntentIdempotencyMatch(existingPayment, {
           orderId: 'order_jm_998877',
           amountIdr: 450000,
-        }),
+        })
       ).not.toThrow();
 
       expect(() =>
         guard.assertIntentIdempotencyMatch(existingPayment, {
           orderId: 'order_jm_998877',
           amountIdr: 200000,
-        }),
+        })
       ).toThrow(/Idempotency key parameter mismatch/);
     });
   });

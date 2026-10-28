@@ -3,16 +3,19 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 describe('Home Page Wayfinding Architecture: TripBoardingPass & PerforatedReceiptChit Governance', () => {
-  const pagePath = path.resolve(__dirname, '../../../apps/web/src/app/[locale]/page.tsx');
+  const pagePath = path.resolve(
+    __dirname,
+    '../../../apps/web/src/app/[locale]/page.tsx'
+  );
   const enPath = path.resolve(__dirname, '../../../apps/web/messages/en.json');
   const idPath = path.resolve(__dirname, '../../../apps/web/messages/id.json');
   const boardingPassComponentPath = path.resolve(
     __dirname,
-    '../../../packages/ui/src/wayfinding/TripBoardingPass.tsx',
+    '../../../packages/ui/src/wayfinding/TripBoardingPass.tsx'
   );
   const receiptChitComponentPath = path.resolve(
     __dirname,
-    '../../../packages/ui/src/wayfinding/PerforatedReceiptChit.tsx',
+    '../../../packages/ui/src/wayfinding/PerforatedReceiptChit.tsx'
   );
 
   it('replaces generic presets and trust sections with TripBoardingPass and PerforatedReceiptChit', () => {
