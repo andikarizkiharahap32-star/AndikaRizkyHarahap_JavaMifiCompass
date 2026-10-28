@@ -29,11 +29,13 @@ pnpm-debug.log*
 .vercel/
 
 # User exclusions & Roadmaps
-01-ui-ux/
+01-ui-ux/*
+!01-ui-ux/P01.md
 01 UI/UX/
 fullstack-agent-roadmaps/
 full-stack-agents-roadmap/
-.gstack/
+.gstack/*
+!.gstack/qa-reports/
 
 # System & Editor
 uploads/
