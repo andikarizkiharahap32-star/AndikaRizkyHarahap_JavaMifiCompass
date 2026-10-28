@@ -7,3 +7,4 @@ export * from './HalalCustomsStamp';
 export * from './MenuTicketChit';
 export * from './RestaurantCard';
 export * from './RestaurantDetailModal';
+export * from './TactileRobotAssistant';

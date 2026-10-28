@@ -1,0 +1,259 @@
+{
+  "name": "Voice Assistant - 1. Transcribe & Confirm",
+  "nodes": [
+    {
+      "id": "sticky___purpose",
+      "name": "Sticky - Purpose",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-400, -120],
+      "parameters": {
+        "content": "## Voice - Transcribe & Confirm\nPush-to-talk endpoint. Client taps to record, uploads one short clip, and gets the raw transcript back to **display, let the user edit or re-say, before anything is acted on** (ASR fails hardest on proper nouns - station names, romanized dish names, certifying-body initials like 'JHF'). Only after the client confirms does it call the `/voice/query` workflow.",
+        "height": 260,
+        "width": 380
+      }
+    },
+    {
+      "id": "receive_audio",
+      "name": "Receive Audio",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-400, 160],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice/transcribe",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "voice-transcribe"
+    },
+    {
+      "id": "validate_audio_input",
+      "name": "Validate Audio Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-160, 160],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Push-to-talk means the client already enforces 'tap to start, stop after a short silence window'.\n// This is just a sanity check on what arrived, not a substitute for that client-side behaviour.\nconst MAX_DURATION_SECONDS = 30;\nconst sessionId = $json.sessionId;\nconst hasBinary = $binary && Object.keys($binary).length > 0;\n\nconst errors = [];\nif (!sessionId) errors.push('missing sessionId');\nif (!hasBinary) errors.push('missing audio data');\nif ($json.durationSeconds && $json.durationSeconds > MAX_DURATION_SECONDS) {\n  errors.push('audio exceeds max duration');\n}\n\nreturn { ...$json, valid: errors.length === 0, errors };"
+      }
+    },
+    {
+      "id": "if___valid_input",
+      "name": "IF - Valid Input",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [80, 160],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{$json.valid}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "speech_to_text",
+      "name": "Speech-to-Text",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [320, 60],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/audio/transcriptions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.OPENAI_API_KEY || $credentials.sttApi?.apiKey || ''}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "parameterType": "formData",
+              "name": "model",
+              "value": "whisper-1"
+            },
+            {
+              "parameterType": "formData",
+              "name": "language",
+              "value": "={{$json.language || ''}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 8000
+        }
+      },
+      "notesInFlow": true
+    },
+    {
+      "id": "format_transcript_response",
+      "name": "Format Transcript Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [560, 60],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Always show what the system heard before acting on it.\n// Client responsibility: render this transcript, let the user edit/re-say it, THEN call POST /voice/query with the confirmed text.\nreturn {\n  sessionId: $json.sessionId,\n  transcript: $json.text || $json.transcript || '',\n  requiresConfirmation: true,\n};"
+      }
+    },
+    {
+      "id": "respond___return_transcript",
+      "name": "Respond - Return Transcript",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [800, 60],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "build_invalid_input_response",
+      "name": "Build Invalid Input Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [320, 260],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "error",
+              "type": "string",
+              "value": "=Permintaan tidak valid: {{$json.errors.join(', ')}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "respond___invalid_input",
+      "name": "Respond - Invalid Input",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [560, 260],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 400
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Receive Audio": {
+      "main": [
+        [
+          {
+            "node": "Validate Audio Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Audio Input": {
+      "main": [
+        [
+          {
+            "node": "IF - Valid Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Valid Input": {
+      "main": [
+        [
+          {
+            "node": "Speech-to-Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Invalid Input Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Speech-to-Text": {
+      "main": [
+        [
+          {
+            "node": "Format Transcript Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Transcript Response": {
+      "main": [
+        [
+          {
+            "node": "Respond - Return Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Invalid Input Response": {
+      "main": [
+        [
+          {
+            "node": "Respond - Invalid Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "description": "Push-to-talk STT endpoint. Returns the raw transcript for client-side display/edit before the confirmed text is sent to the 'Voice Assistant - 2. Process Confirmed Query' workflow."
+  }
+}

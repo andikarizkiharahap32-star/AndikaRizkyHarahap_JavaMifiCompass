@@ -1,15 +1,25 @@
 import React from 'react';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import { DiningDiscovery } from '../../../../../components/DiningDiscovery';
 import { SLUG_TO_COUNTRY } from '../../../../../lib/destinations';
 
-export const metadata: Metadata = {
-  title: 'Compass Rasa — Kuliner Halal & Menu Multibahasa | JavaMifi Compass',
-  description:
-    'Eksplorasi restoran halal terverifikasi, menu makanan dalam Rupiah & mata uang lokal, dan sertifikasi resmi destinasi.',
-};
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string; slug: string };
+}): Promise<Metadata> {
+  const isId = locale === 'id';
+  return {
+    title: isId
+      ? 'Compass Rasa — Kuliner Halal & Menu Multibahasa | JavaMifi Compass'
+      : 'Compass Rasa — Halal Dining Discovery & Bilingual Menus | JavaMifi Compass',
+    description: isId
+      ? 'Eksplorasi restoran halal terverifikasi, menu makanan dalam Rupiah & mata uang lokal, dan sertifikasi resmi destinasi.'
+      : 'Explore verified halal dining places, bilingual menus in IDR & local currency, and official certification for destination travelers.',
+  };
+}
 
 export default function DestinationEatPage({
   params: { locale, slug },
@@ -26,11 +36,7 @@ export default function DestinationEatPage({
 
   return (
     <main className="w-full bg-surface min-h-screen">
-      <DiningDiscovery
-        initialCountry={countryCode}
-        cityName={searchParams?.city}
-        locale={locale}
-      />
+      <DiningDiscovery initialCountry={countryCode} cityName={searchParams?.city} locale={locale} />
     </main>
   );
 }

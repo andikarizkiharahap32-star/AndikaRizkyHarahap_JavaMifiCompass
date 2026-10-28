@@ -56,14 +56,25 @@ export const DualPrice: React.FC<DualPriceProps> = ({
   // If range prop is provided, render range with per-person estimate
   if (range) {
     const hasValidIdrRange =
-      range.minIdr !== null &&
-      range.minIdr !== undefined &&
-      Boolean(range.formattedIdrRange);
+      range.minIdr !== null && range.minIdr !== undefined && Boolean(range.formattedIdrRange);
 
     return (
       <div
         className={`inline-flex flex-col gap-0.5 font-numeric-md tnum select-text ${className}`}
         dir="ltr"
+        aria-label={
+          isIdLocale
+            ? `Rentang harga lokal ${range.formattedLocalRange}${
+                hasValidIdrRange
+                  ? `, perkiraan sekitar Rp ${range.formattedIdrRange.replace(/^Rp\s*/, '')}`
+                  : `, ${unavailableText}`
+              }`
+            : `Local price range ${range.formattedLocalRange}${
+                hasValidIdrRange
+                  ? `, approximately Rp ${range.formattedIdrRange.replace(/^Rp\s*/, '')}`
+                  : `, ${unavailableText}`
+              }`
+        }
       >
         <div className="inline-flex items-baseline flex-wrap gap-1.5">
           {/* Local Range */}
@@ -82,10 +93,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
               </span>
             </span>
           ) : (
-            <span
-              className="text-xs font-sans text-outline italic"
-              title={unavailableText}
-            >
+            <span className="text-xs font-sans text-outline italic" title={unavailableText}>
               ({unavailableText})
             </span>
           )}
@@ -99,17 +107,31 @@ export const DualPrice: React.FC<DualPriceProps> = ({
             </span>
           )}
           {showInlineRateDate && (
-            <span className={hasValidIdrRange && range.formattedPerPersonIdr ? 'border-l border-paper-edge pl-2' : ''}>
+            <span
+              className={
+                hasValidIdrRange && range.formattedPerPersonIdr
+                  ? 'border-l border-paper-edge pl-2'
+                  : ''
+              }
+            >
               ({snapshotDateLabel} {range.rateSnapshotDate})
             </span>
           )}
           {range.isStale && (
             <span
               role="status"
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-sans font-bold uppercase tracking-wider"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-warning-surface text-primary border border-warning text-xs font-mono font-bold uppercase tracking-wider"
               title={range.staleNotice}
+              aria-label={
+                range.staleNotice ||
+                (isIdLocale
+                  ? 'Peringatan: Kurs berumur lebih dari 3 hari'
+                  : 'Warning: Rate older than 3 days')
+              }
             >
-              <span aria-hidden="true">▲</span>
+              <span aria-hidden="true" className="text-warning">
+                ▲
+              </span>
               <span>{isIdLocale ? 'Kurs >3 hari' : 'Stale rate (>3d)'}</span>
             </span>
           )}
@@ -118,14 +140,25 @@ export const DualPrice: React.FC<DualPriceProps> = ({
     );
   }
 
-  const formattedLocal = local
-    ? formatLocalAmount(local.amount_minor, local.currency, locale)
-    : '';
+  const formattedLocal = local ? formatLocalAmount(local.amount_minor, local.currency, locale) : '';
 
   return (
     <div
       className={`inline-flex items-center flex-wrap gap-1.5 font-numeric-md tnum select-text ${className}`}
       dir="ltr"
+      aria-label={
+        isIdLocale
+          ? `Tarif lokal ${formattedLocal}${
+              idr && idr.amount !== null && idr.amount !== undefined
+                ? `, perkiraan sekitar Rp ${formatIdrInteger(idr.amount)}`
+                : `, ${unavailableText}`
+            }`
+          : `Local price ${formattedLocal}${
+              idr && idr.amount !== null && idr.amount !== undefined
+                ? `, approximately Rp ${formatIdrInteger(idr.amount)}`
+                : `, ${unavailableText}`
+            }`
+      }
     >
       {/* 1. Primary Local Currency Price */}
       <span className="font-semibold text-primary">{formattedLocal}</span>
@@ -149,10 +182,18 @@ export const DualPrice: React.FC<DualPriceProps> = ({
           {idr.isStale && (
             <span
               role="status"
-              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-sans font-bold uppercase tracking-wider ml-1"
+              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-warning-surface text-primary border border-warning text-xs font-mono font-bold uppercase tracking-wider ml-1"
               title={idr.staleNotice}
+              aria-label={
+                idr.staleNotice ||
+                (isIdLocale
+                  ? 'Peringatan: Kurs berumur lebih dari 3 hari'
+                  : 'Warning: Rate older than 3 days')
+              }
             >
-              <span aria-hidden="true">▲</span>
+              <span aria-hidden="true" className="text-warning">
+                ▲
+              </span>
               <span>{isIdLocale ? 'Kurs >3 hari' : 'Stale rate (>3d)'}</span>
             </span>
           )}
@@ -169,7 +210,7 @@ export const DualPrice: React.FC<DualPriceProps> = ({
               onMouseLeave={() => setTooltipOpen(false)}
               onFocus={() => setTooltipOpen(true)}
               onBlur={() => setTooltipOpen(false)}
-              className="relative p-3.5 -m-3.5 min-w-[48px] min-h-[48px] inline-flex items-center justify-center focus:outline-none"
+              className="relative w-12 h-12 min-w-12 min-h-12 inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <span className="w-4 h-4 rounded-full bg-sunken text-outline hover:text-primary hover:bg-paper-edge flex items-center justify-center text-xs font-mono leading-none transition-colors cursor-help">
                 ℹ

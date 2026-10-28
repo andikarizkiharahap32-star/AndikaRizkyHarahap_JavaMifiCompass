@@ -25,7 +25,9 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
   // eSIM: typically ~Rp 45,000 / day per device, or 10GB/30days ~Rp 250,000
   // For multiple travelers without sharing, each person needs their own eSIM
   const esimDailyRatePerPerson = 45_000;
-  const esimTotal = input.esimCompatible ? esimDailyRatePerPerson * tripDays * travelers : 999_999_999;
+  const esimTotal = input.esimCompatible
+    ? esimDailyRatePerPerson * tripDays * travelers
+    : 999_999_999;
   const esimPerPersonPerDay = input.esimCompatible
     ? Math.round(esimTotal / (travelers * tripDays))
     : 0;
@@ -50,7 +52,9 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
   // Group size factor
   if (travelers >= 3 || devices > travelers) {
     wifiScore += 30;
-    wifiReasons.push(`Cost-effective for groups (${travelers} travelers): 1 device shares high-speed data for all.`);
+    wifiReasons.push(
+      `Cost-effective for groups (${travelers} travelers): 1 device shares high-speed data for all.`,
+    );
     esimScore -= 15;
     esimCaveats.push(`Every traveler needs their own individual eSIM purchase.`);
     simScore -= 15;
@@ -58,7 +62,9 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
     esimScore += 25;
     esimReasons.push(`Zero physical handling: instant digital QR delivery for solo traveler.`);
     wifiScore -= 15;
-    wifiCaveats.push(`Requires carrying an extra device, daily recharging, and returning after the trip.`);
+    wifiCaveats.push(
+      `Requires carrying an extra device, daily recharging, and returning after the trip.`,
+    );
   } else {
     // 2 travelers
     wifiReasons.push(`Easy hotspot sharing between 2 travelers.`);
@@ -74,7 +80,9 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
   // eSIM compatibility
   if (!input.esimCompatible) {
     esimScore = 0;
-    esimCaveats.push(`Your device does not support digital eSIM. Physical SIM or Pocket WiFi required.`);
+    esimCaveats.push(
+      `Your device does not support digital eSIM. Physical SIM or Pocket WiFi required.`,
+    );
     simScore += 25;
     simReasons.push(`Physical SIM works with any unlocked smartphone.`);
   } else {
@@ -85,7 +93,9 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
   // Destination specific: China VPN restriction
   if (isChina) {
     wifiScore += 20;
-    wifiReasons.push(`JavaMifi China Pocket WiFi comes with built-in unrestricted VPN to access Google, WhatsApp & Instagram.`);
+    wifiReasons.push(
+      `JavaMifi China Pocket WiFi comes with built-in unrestricted VPN to access Google, WhatsApp & Instagram.`,
+    );
     if (needsVpn) {
       esimReasons.push(`Verify eSIM APN bypasses China firewall restrictions.`);
     }
@@ -94,7 +104,9 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
   // Usage profile factor
   if (input.usageProfile === 'HEAVY' || input.usageProfile === 'WORK') {
     wifiScore += 15;
-    wifiReasons.push(`True unlimited high-speed data without throttling or battery drain on your phone.`);
+    wifiReasons.push(
+      `True unlimited high-speed data without throttling or battery drain on your phone.`,
+    );
   } else if (input.usageProfile === 'LIGHT') {
     esimScore += 15;
     esimReasons.push(`Light usage on eSIM is the most economical choice without device deposit.`);
@@ -102,7 +114,9 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
 
   // Trip duration factor
   if (tripDays > 14) {
-    wifiCaveats.push(`Longer rentals accrue higher daily rates; monitor battery and return schedule.`);
+    wifiCaveats.push(
+      `Longer rentals accrue higher daily rates; monitor battery and return schedule.`,
+    );
   } else if (tripDays <= 5 && travelers <= 2 && input.esimCompatible) {
     esimScore += 10;
     esimReasons.push(`Short trip convenience: activate upon arrival with no airport pickup queue.`);
@@ -189,10 +203,13 @@ export function calculatePlannerRecommendation(input: PlannerInput): PlannerResu
   let crossOverGroupSize = 2;
 
   if (recommended.type === 'WIFI_RENTAL') {
-    breakEvenDescription = `WiFi rental is your #1 choice because for a group of ${travelers} traveler(s) and ${devices} device(s), sharing one connection drops your cost to Rp ${wifiPerPersonPerDay.toLocaleString('id-ID')} / person / day. If you were traveling alone, a digital eSIM would be more affordable.`;
+    const travelerText = travelers === 1 ? '1 traveler' : `group of ${travelers} travelers`;
+    const deviceText = devices === 1 ? '1 device' : `${devices} devices`;
+    breakEvenDescription = `WiFi rental is your #1 choice because for a ${travelerText} and ${deviceText}, sharing one connection drops your cost to Rp ${wifiPerPersonPerDay.toLocaleString('id-ID')} / person / day. If you were traveling alone, a digital eSIM would be more affordable.`;
     crossOverGroupSize = 2;
   } else if (recommended.type === 'ESIM') {
-    breakEvenDescription = `Digital eSIM is your #1 choice because for ${travelers} traveler(s) on a ${tripDays}-day journey, it offers instant activation with zero physical return logistics. At 3 or more travelers, Pocket WiFi becomes more cost-effective.`;
+    const travelerText = travelers === 1 ? '1 traveler' : `${travelers} travelers`;
+    breakEvenDescription = `Digital eSIM is your #1 choice because for ${travelerText} on a ${tripDays}-day journey, it offers instant activation with zero physical return logistics. At 3 or more travelers, Pocket WiFi becomes more cost-effective.`;
     crossOverGroupSize = 3;
   } else {
     breakEvenDescription = `Physical SIM card is recommended because your phone does not support digital eSIM, offering zero extra device baggage.`;

@@ -43,9 +43,20 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
     badges.includes('ALCOHOL_SERVED');
   const isAlcoholNotMentioned = !isAlcoholCertifiedFree && !isAlcoholServed;
 
+  // Evidence level calculation: Never relies on color alone
+  const isCertified = tier === 'CERTIFIED';
+  const evidenceLevelLabel = isCertified
+    ? isId
+      ? 'Sertifikat resmi'
+      : 'Official Certificate'
+    : isId
+      ? 'Dalam audit'
+      : 'Under Audit';
+  const evidenceLevelIcon = isCertified ? '✓' : '▲';
+
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
-      {/* 1. Main Tier Badge (Single clean line, distinct non-color icon + label) */}
+      {/* 1. Main Tier Badge & Evidence Level Badge (Never relies on color alone) */}
       <div className="flex flex-wrap items-center gap-2">
         <span
           role="status"
@@ -58,9 +69,26 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
           <span>{label}</span>
         </span>
 
+        {/* Evidence Level Badge: Explicit textual proof tier + non-color icon */}
+        <span
+          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-xs font-sans font-bold select-none ${
+            isCertified
+              ? 'bg-success-surface text-success border-success'
+              : 'bg-warning-surface text-warning border-warning'
+          }`}
+          aria-label={
+            isId ? `Tingkat bukti: ${evidenceLevelLabel}` : `Evidence level: ${evidenceLevelLabel}`
+          }
+        >
+          <span className="text-xs font-black" aria-hidden="true">
+            {evidenceLevelIcon}
+          </span>
+          <span>{evidenceLevelLabel}</span>
+        </span>
+
         {/* 2. Orthogonal Dietary Chips */}
         {isAlcoholCertifiedFree && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-success-surface text-success border border-success/30 text-xs font-sans font-medium">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-success-surface text-success border border-success text-xs font-sans font-medium">
             <span aria-hidden="true">✓</span>
             <span>{isId ? 'Bebas Alkohol' : 'Alcohol-Free'}</span>
           </span>
@@ -72,8 +100,8 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
           </span>
         )}
         {isAlcoholNotMentioned && tier !== 'NOT_HALAL' && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-outline border border-paper-edge text-xs font-sans">
-            <span aria-hidden="true">▲</span>
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-secondary border border-paper-edge text-xs font-sans">
+            <span aria-hidden="true">•</span>
             <span>{isId ? 'Alkohol: Tidak Disebut' : 'Alcohol: Not Mentioned'}</span>
           </span>
         )}
@@ -97,17 +125,19 @@ export const HalalBadge: React.FC<HalalBadgeProps> = ({
         <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-sans text-outline leading-tight pt-0.5">
           {certifier && (
             <span className="font-semibold text-primary">
-              Badan Sertifikasi: <strong>{certifier}</strong>
+              {isId ? 'Badan Sertifikasi' : 'Certifier'}: <strong>{certifier}</strong>
             </span>
           )}
           {validUntil && (
             <span className="tnum">
-              • {isId ? 'Berlaku s/d' : 'Valid until'}: <strong className="text-primary font-mono">{validUntil}</strong>
+              • {isId ? 'Berlaku s/d' : 'Valid until'}:{' '}
+              <strong className="text-primary font-mono">{validUntil}</strong>
             </span>
           )}
           {lastVerified && (
             <span className="text-outline tnum">
-              • {isId ? 'Diverifikasi' : 'Verified'}: <strong className="text-primary font-mono">{lastVerified}</strong>
+              • {isId ? 'Diverifikasi' : 'Verified'}:{' '}
+              <strong className="text-primary font-mono">{lastVerified}</strong>
             </span>
           )}
         </div>

@@ -3,20 +3,239 @@
     "home": "Home",
     "planner": "Trip Planner",
     "destinations": "Destinations",
+    "dining": "Halal Dining",
     "products": "Products",
     "presets": "Journey Presets",
     "tripHub": "Trip Hub",
     "support": "Support",
+    "faq": "FAQ",
     "login": "Login",
-    "account": "My Account"
+    "account": "My Account",
+    "cart": "Shopping Cart",
+    "newBadge": "NEW",
+    "themeLight": "Switch to Day Mode",
+    "themeNight": "Switch to Night Mode",
+    "openMenu": "Open Navigation Menu",
+    "closeMenu": "Close Navigation Menu",
+    "skipToContent": "Skip to main content",
+    "mainNav": "Main Navigation",
+    "mobileNav": "Mobile Navigation",
+    "quickAccess": "Quick Access & Settings",
+    "languageId": "Indonesian",
+    "languageEn": "English",
+    "brandHomeAria": "JavaMifi Compass Home",
+    "tagline": "#AntiSusahSinyal",
+    "topbar": {
+      "telemetryLabel": "Wayfinding & Telemetry Context",
+      "terminalNotice": "Transit Telemetry Active",
+      "connectivityMode": "4G Pocket WiFi & Travel eSIM",
+      "currencyContext": "Currency: IDR (ECB Ref)",
+      "diningMode": "Compass Rasa: 48 Verified Dining Venues",
+      "dismiss": "Dismiss Context Bar"
+    }
+  },
+  "home": {
+    "presets": {
+      "badge": "Ready-to-Use Journey Inspiration",
+      "title": "Curated Journey Presets",
+      "intro": "Pre-configured transit connections with optimal hardware, duration, and transparent cost estimates tailored to top travel routes.",
+      "viewAll": "Explore All 160+ Destinations",
+      "planNow": "Plan Now",
+      "umrah": {
+        "title": "Barokah Umrah Package",
+        "dest": "SA • Saudi Arabia",
+        "days": "9 - 12 Days",
+        "desc": "Share 1 WiFi router across pilgrim family members in Mecca & Medina.",
+        "tag": "Family & Groups"
+      },
+      "japan": {
+        "title": "Japan Autumn & Bullet Train",
+        "dest": "JP • Japan",
+        "days": "7 Days",
+        "desc": "Ultra-fast 4G/5G connection across Tokyo, Kyoto, Osaka & bullet trains.",
+        "tag": "Popular"
+      },
+      "china": {
+        "title": "China VPN-Ready Explorer",
+        "dest": "CN • China",
+        "days": "8 Days",
+        "desc": "Automated built-in VPN bypass. Keep using WhatsApp, Google & IG smoothly.",
+        "tag": "VPN Included"
+      },
+      "europe": {
+        "title": "EuroTrip Multi-Country",
+        "dest": "EU • France, Germany, Italy",
+        "days": "14 Days",
+        "desc": "1 eSIM or Pocket WiFi active across 33 European countries without swapping SIMs.",
+        "tag": "Multi-Country"
+      }
+    },
+    "howItWorks": {
+      "badge": "Wayfinding Flow & How It Works",
+      "title": "3 Easy Steps to Explore the World Seamlessly",
+      "intro": "Watch our 25-second motion demo showing how JavaMifi Compass calculates your most cost-effective connectivity and guides you to verified halal dining.",
+      "videoBadge": "Motion Demo • 25 Seconds",
+      "playVideo": "Play Exploration Video (25s)",
+      "pauseVideo": "Pause Video",
+      "videoNotice": "Silent visual wayfinding demo video. Click to explore the complete workflow.",
+      "step1": {
+        "title": "1. Set Route & Group Size",
+        "desc": "Our break-even algorithm calculates whether Pocket WiFi or eSIM is mathematically cheaper for your group."
+      },
+      "step2": {
+        "title": "2. Airport Pickup at CGK or Instant QR Scan",
+        "desc": "Collect your pocket WiFi device at Jakarta Airport T2/T3 booths or receive your digital eSIM profile via email instantly."
+      },
+      "step3": {
+        "title": "3. Seamless Connectivity & Verified Halal Dining",
+        "desc": "Enjoy guaranteed #AntiSusahSinyal connectivity across 160+ nations with verifiable evidence-based halal dining."
+      }
+    },
+    "trust": {
+      "badge": "Service Transparency & Audit Trail",
+      "title": "Verifiable Service Guarantees",
+      "intro": "Every rental and eSIM package is backed by deterministic price calculations, live network telemetry, and automated escrow deposit refunds.",
+      "auditTimestamp": "Live Ledger Audit",
+      "card1": {
+        "title": "Plan First, Shop Second",
+        "desc": "The wizard analyzes group size, duration, gadgets, and specific needs to mathematically recommend the most cost-effective connection."
+      },
+      "card2": {
+        "title": "Destination Readiness Card",
+        "desc": "Live real-time weather (Open-Meteo), ECB foreign exchange rates vs IDR, and plug socket standards before pack-in."
+      },
+      "card3": {
+        "title": "Post-Purchase Trip Hub",
+        "desc": "A unified itinerary hub: QR activation guide, 80% usage threshold meter, hardware shipping tracking, and auto-refund escrow."
+      },
+      "chits": {
+        "chit1": {
+          "productName": "Mathematical Recommendation Audit",
+          "lineItem": "Optimized Package Allocation",
+          "guaranteeTitle": "Zero-Overpay Guarantee:",
+          "guaranteeText": "If your group size is mathematically cheaper with eSIM, our engine warns you instantly before payment.",
+          "actionLabel": "Run Optimizer in Planner"
+        },
+        "chit2": {
+          "productName": "Weather, Sockets & FX Readiness",
+          "lineItem": "Live Telemetry & Multi-Carrier",
+          "guaranteeTitle": "99.9% Network SLA:",
+          "guaranteeText": "Multi-carrier local tier 1 roaming in 160+ countries guarantees failover connection everywhere #AntiSusahSinyal.",
+          "actionLabel": "Explore Destinations"
+        },
+        "chit3": {
+          "productName": "Hardware Escrow & Automated Refund",
+          "lineItem": "Security Deposit & Device Escrow",
+          "guaranteeTitle": "Automated Escrow Refund:",
+          "guaranteeText": "Your deposit is automatically returned to your original payment method within 24 hours of device return.",
+          "actionLabel": "View Trip Hub Architecture"
+        }
+      }
+    },
+    "boardingPasses": {
+      "activeStatus": "TICKET READY FOR ACTIVATION",
+      "offlineReady": "● Offline Mode Ready",
+      "ticketCodeLabel": "JOURNEY PRESET CODE",
+      "originLabel": "ORIGIN",
+      "destLabel": "DESTINATION",
+      "holderLabel": "TRAVEL PROFILE",
+      "scheduleLabel": "ESTIMATED DURATION",
+      "rangePrefix": "to",
+      "terminalNotice": "Pick up at airport booth or activate digital eSIM instantly"
+    },
+    "receiptChits": {
+      "durationLabel": "Duration",
+      "rangeLabel": "Schedule",
+      "travelerLabel": "Travelers",
+      "daysUnit": "Days",
+      "travelerUnit": "Pax",
+      "tokenIdLabel": "LEDGER-ID",
+      "promoDiscountLabel": "Promo Discount / Voucher",
+      "depositLabel": "Refundable Device Deposit",
+      "depositBadgeLabel": "100% Refundable",
+      "totalPaymentLabel": "Total Breakdown",
+      "taxIncludedLabel": "Incl. VAT & Escrow"
+    },
+    "meta": {
+      "title": "JavaMifi Compass — Plan Your Connection Before You Pack #AntiSusahSinyal",
+      "description": "Rent unlimited 4G Pocket WiFi and international travel eSIM in 160+ countries. Transparent cost comparisons and explainable recommendations before you pack."
+    }
   },
   "hero": {
     "badge": "Trip-Centric Connectivity Platform",
+    "terminalBadge": "Transit Connectivity Terminal • #AntiSusahSinyal",
     "title": "Plan Your Connection Before You Pack",
-    "subtitle": "Reliable connectivity across 160+ countries. Transparently compare costs between Pocket WiFi, eSIM, and SIM cards before you pack.",
-    "ctaPlanner": "Launch Trip Planner",
-    "ctaDestinations": "Explore Destinations",
-    "tag": "#AntiSusahSinyal"
+    "subtitle": "Public transit wayfinding for global connectivity. Objectively compare Pocket WiFi vs. travel eSIM across 160+ countries without overpaying.",
+    "ctaPlanner": "Plan my trip",
+    "ctaDestinations": "All 160+ Destinations",
+    "tag": "#AntiSusahSinyal",
+    "stationsLabel": "1. Select Destination Station",
+    "stationsSub": "160+ Global Hubs • Real-Time Route Active",
+    "paxLabel": "2. Number of Travelers",
+    "durationLabel": "3. Estimated Trip Duration",
+    "speedLabel": "Speed",
+    "socketLabel": "Socket",
+    "currencyLabel": "Currency",
+    "netDailyRate": "Net Daily Rate",
+    "splitDailyRate": "Split Rate Per Person",
+    "perDay": "/ day",
+    "soloBadge": "SOLO FAST-PASS • ESIM INSTANT QR",
+    "groupBadge": "GROUP FAVORITE • POCKET WIFI 4G UNLIMITED",
+    "standardTransit": "Standard Transit",
+    "trackNotice": "Octilinear Wayfinding Track • Terminal Gate 01",
+    "pax": {
+      "solo": {
+        "label": "1 Solo",
+        "sub": "1 Device"
+      },
+      "family": {
+        "label": "2-4 Family",
+        "sub": "Up to 5 Devices"
+      },
+      "group": {
+        "label": "5+ Group",
+        "sub": "Shared Router"
+      }
+    },
+    "duration": {
+      "d7": "7 Days",
+      "d12": "12 Days",
+      "d30": "30 Days"
+    },
+    "hubs": {
+      "JP": {
+        "name": "Japan",
+        "status": "SHINKANSEN FAST-TRACK",
+        "speed": "4G/5G LTE",
+        "socket": "Type A/B (100V)"
+      },
+      "SA": {
+        "name": "Saudi Arabia",
+        "status": "PILGRIM SPECIAL • UMRAH",
+        "speed": "4G Unlimited",
+        "socket": "Type G (220V)"
+      },
+      "GB": {
+        "name": "UK & Europe",
+        "status": "MULTI-COUNTRY PASS",
+        "speed": "4G/5G Roam",
+        "socket": "Type G (230V)"
+      },
+      "SG": {
+        "name": "Singapore",
+        "status": "EXPRESS TERMINAL",
+        "speed": "5G Ultra Speed",
+        "socket": "Type G (230V)"
+      },
+      "CN": {
+        "name": "China",
+        "status": "BUILT-IN VPN UNLOCKED",
+        "speed": "4G Firewall-Bypass",
+        "socket": "Type A/I (220V)"
+      }
+    },
+    "bearingPrefix": "Transit Heading:",
+    "orientationLabel": "CGK Route Orientation Compass"
   },
   "planner": {
     "title": "Trip Planner Wizard",
@@ -80,6 +299,7 @@
   },
   "checkout": {
     "title": "Cart & Checkout",
+    "eyebrow": "Final Step to Departure",
     "cartSummary": "Cart Summary",
     "subtotal": "Subtotal",
     "discount": "Promo Discount",
@@ -92,9 +312,57 @@
     "email": "Active Email (for eSIM QR delivery)",
     "phone": "WhatsApp / Mobile Number",
     "shippingAddress": "Shipping Address (physical devices only)",
-    "payWithMock": "Pay with Sandbox Simulator (Mock Payment)",
+    "shippingHelp": "Free home courier dispatch or pickup at Soekarno-Hatta Airport T2 & T3.",
+    "payWithMock": "Pay with Payment Simulation (Demo Mode)",
     "payWithMidtrans": "Pay with Midtrans Snap Sandbox",
-    "securePaymentNotice": "Bank-grade security. Server-side priced. Credit card details are never stored on our servers."
+    "gatewayMockTitle": "Mock Gateway Sandbox (Default)",
+    "gatewayMockDesc": "Ideal for testing without live payment credentials. Simulates QRIS / VA.",
+    "gatewayMidtransTitle": "Midtrans Snap Sandbox",
+    "gatewayMidtransDesc": "Official Midtrans Indonesia sandbox with SHA-512 signature validation.",
+    "securePaymentNotice": "Bank-grade security. Server-side priced. Credit card details are never stored on our servers.",
+    "submitOrder": "Proceed to Payment",
+    "processingOrder": "Processing Order...",
+    "errorSummaryTitle": "Please fix the following order errors:",
+    "promoActive": "Promo code applied!",
+    "promoInvalid": "Promo code is invalid or has expired",
+    "subtitle": "Review your order details before proceeding to payment",
+    "contactInfo": "Contact & Traveler Information",
+    "emailHelp": "eSIM voucher or rental confirmation will be sent to this email",
+    "phoneHelp": "For activation or courier delivery coordination",
+    "deliveryAddress": "Delivery Address (Pocket WiFi)",
+    "deliveryAddressPlaceholder": "Street, Number, Building, District, City, Postal Code",
+    "promoCode": "Promo Code",
+    "paymentMethod": "Payment Method"
+  },
+  "loginPage": {
+    "titleSignIn": "Sign in to JavaMifi",
+    "titleRegister": "Create JavaMifi Account",
+    "subtitle": "Manage your booking history and track all your trips in one place",
+    "tabSignIn": "Sign In",
+    "tabRegister": "Register",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "phone": "WhatsApp / Phone Number",
+    "phonePlaceholder": "+6281234567890",
+    "email": "Email Address",
+    "emailPlaceholder": "traveler@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "submitSignIn": "Sign In Now",
+    "submitRegister": "Create Account",
+    "processing": "Processing...",
+    "clearSession": "Reset Form Session",
+    "demoTitle": "Demo Test Credentials:",
+    "demoEmail": "Email",
+    "demoPassword": "Password",
+    "errorToken": "Failed to receive authentication token.",
+    "errorGeneral": "Authentication failed. Please verify your email and password.",
+    "successRegister": "Registration successful! Redirecting to your account...",
+    "successCreated": "Account created. Please sign in.",
+    "errorSummaryTitle": "Please correct the following errors:",
+    "demoCredentialsTitle": "Tester Demo Credentials:",
+    "resetButton": "Reset Session Form",
+    "invalidCredentials": "Authentication failed. Please check your email and password."
   },
   "tripHub": {
     "title": "Your Trip Hub",
@@ -113,15 +381,39 @@
     "support": "24/7 Traveler Helpdesk"
   },
   "support": {
-    "title": "Support & Helpdesk Center",
-    "subtitle": "Always here to keep you connected worldwide #AntiSusahSinyal",
+    "title": "Help Center & Traveler Support",
+    "subtitle": "Dedicated 24/7 on-call assistance to guarantee uninterrupted connectivity #AntiSusahSinyal",
+    "badge": "Traveler Care 24/7",
     "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
     "email": "Email Address",
+    "emailPlaceholder": "name@email.com",
     "orderNumber": "Order Number (optional)",
+    "orderPlaceholder": "JMF-XXXXXXXX",
     "subject": "Inquiry Subject / Issue",
+    "subjectPlaceholder": "e.g., eSIM activation issue at Narita Airport",
     "message": "Detailed Message",
+    "messagePlaceholder": "Provide details regarding your issue, device model, or inquiry...",
     "submit": "Submit Support Ticket",
-    "success": "Ticket submitted successfully! Our on-call support team will follow up shortly."
+    "submitting": "Submitting Ticket...",
+    "success": "Ticket submitted successfully! Our on-call support team will follow up shortly.",
+    "successTitle": "Support Ticket Submitted Successfully!",
+    "successDesc": "Our automated triage engine has routed your inquiry to our on-call engineering desk. You will receive an email response shortly.",
+    "newTicket": "Submit Another Ticket",
+    "backHome": "Back to Home",
+    "channelsTitle": "Fast-Track Support Channels",
+    "whatsappTitle": "24/7 Emergency WhatsApp",
+    "whatsappDesc": "Instant priority response for active connectivity issues overseas.",
+    "whatsappAction": "Open WhatsApp Care",
+    "tripHubTitle": "Self-Service Trip Hub",
+    "tripHubDesc": "Track modem delivery, eSIM QR codes, and security deposit escrow refunds.",
+    "tripHubAction": "Open Trip Hub",
+    "faqTitle": "Knowledge Base & FAQ",
+    "faqDesc": "Find instant answers regarding device compatibility, deposits, and returns.",
+    "faqAction": "Browse FAQ",
+    "privacyTitle": "Security & Data Privacy Assurance",
+    "privacyDesc": "JavaMifi complies with Personal Data Protection Law No. 27/2022 (UU PDP). Your information is strictly used for technical assistance resolution.",
+    "slaBadge": "First Response SLA < 1 Hour"
   },
   "common": {
     "loading": "Loading data...",
@@ -135,11 +427,21 @@
   },
   "dining": {
     "tabTitle": "Eat & Dining",
+    "title": "Compass Rasa — Halal Dining Discovery",
+    "subtitle": "Certified recommendations, bilingual menus, and daily exchange rates vs Rupiah for international travelers.",
+    "placesSectionTitle": "Verified Dining Waypoints",
+    "placesSectionSubtitle": "Inspected establishments matching selected region and halal criteria",
+    "placesCount": "places found",
+    "searchPlaceholder": "Search ramen, wagyu, or 'halal tokyo < 2000'...",
+    "searchButton": "Search",
     "topBar": {
-      "filterHalal": "Halal Only (Certified & Claimed)",
+      "filterHalal": "Certified",
+      "filterHalalTooltip": "Halal Only (3 Evidence Tiers: Certified, Verified, & Muslim-Friendly)",
       "filterAll": "All Restaurants",
       "countryLabel": "Destination Country",
-      "radiusLabel": "Search Radius",
+      "cityLabel": "City / District",
+      "cityPlaceholder": "Select city (All)",
+      "radiusLabel": "Radius",
       "includeUnverified": "Include unverified"
     },
     "status": {
@@ -152,7 +454,12 @@
       "trustBanner": "Halal status based on evidence you can check directly.",
       "trustBannerAction": "Open Evidence Panel",
       "dailyRateBadge": "Daily Rate",
-      "simulatedNotice": "Simulated Data (System Test)"
+      "simulatedNotice": "Simulated Data (System Test)",
+      "errorTitle": "Failed to Load Dining Data",
+      "errorDesc": "An issue occurred while reaching the verification server. Please check your connection or retry.",
+      "retryButton": "Retry",
+      "offlineFallbackNotice": "Network disrupted. Displaying last cached data while offline.",
+      "offlineMirinCardCta": "Open Offline Mirin & Pork Dietary Card"
     },
     "taxiCard": {
       "title": "Taxi Driver Address Card",
@@ -162,9 +469,9 @@
       "postalCode": "Postal Code"
     },
     "phraseCard": {
-      "title": "Mirin, Sake & Pork Dietary Card",
+      "title": "Mirin & Pork Dietary Card",
       "subtitle": "Show this screen directly to restaurant staff or chefs",
-      "action": "Show Dietary Phrase Card",
+      "action": "Show Mirin & Pork Dietary Card",
       "notice": "Human-reviewed standardized phrasing to clarify broths containing mirin or cooking sake."
     },
     "budgetCard": {
@@ -209,5 +516,156 @@
     "rateUnavailable": "IDR rate unavailable",
     "disclaimer": "Indicative; card and ATM rates differ.",
     "snapshotDate": "Snapshot rate date:"
+  },
+  "ticketTunnel": {
+    "badge": "Tactile Wayfinding Pipeline",
+    "title": "Your Journey Credentials, Issued Along the Route",
+    "subtitle": "Scroll to follow your physical and digital travel passes as each clears its checkpoint along the octilinear transit line.",
+    "scrollHint": "Scroll down to advance route clearance",
+    "accessibleNotice": "Static Waypoint Overview (Accessible / Touch Display)",
+    "activeStation": "Active Waypoint",
+    "terminalClearance": "Terminal Route Clearance",
+    "ticket1": {
+      "stage": "01 / DESTINATION ROUTE",
+      "title": "Flight & Destination Waypoint",
+      "desc": "CGK Departure to Tokyo & Osaka multi-city transit network",
+      "status": "ROUTE CONFIRMED",
+      "actionLabel": "Explore Japan Network",
+      "tag": "Origin / Destination Leg",
+      "dates": "CGK ➔ TYO"
+    },
+    "ticket2": {
+      "stage": "02 / DIGITAL ESIM",
+      "title": "Instant Over-The-Air Activation",
+      "desc": "QR provisioning ready for eSIM-capable smartphones",
+      "status": "ACTIVE QR CODE",
+      "actionLabel": "View Activation Guide",
+      "tag": "Digital eSIM QR Matrix",
+      "dates": "eSIM OTA"
+    },
+    "ticket3": {
+      "stage": "03 / HARDWARE DISPATCH",
+      "title": "Pocket WiFi 4G/5G Rental",
+      "desc": "Tested battery, unlimited hotspot ready for airport booth pickup",
+      "status": "BOOTH READY",
+      "actionLabel": "Booth Pickup Locations",
+      "tag": "Pocket WiFi Hardware",
+      "dates": "Booth Pickup"
+    },
+    "ticket4": {
+      "stage": "04 / DEPOSIT ESCROW",
+      "title": "Zero-Risk Hardware Deposit",
+      "desc": "Escrow guarantee automatically released upon airport return drop-off",
+      "status": "ESCROW PROTECTED",
+      "actionLabel": "Refund Policy",
+      "tag": "Escrow Guarantee Pass",
+      "dates": "Escrow Refund"
+    }
+  },
+  "lab": {
+    "title": "Wayfinding Design System Lab",
+    "subtitle": "Experimental 3D perspective corridor showcasing animated transit tickets. Isolated experimental environment outside production user flows.",
+    "backToSystem": "Return to Design System",
+    "badge": "Experimental Lab Showcase"
+  },
+  "destinationsPage": {
+    "meta": {
+      "title": "Popular Destinations & Readiness Cards — JavaMifi Compass",
+      "description": "Network coverage, live exchange rates, weather, and Pocket WiFi & eSIM solutions for Japan, China, Saudi Arabia, Singapore, and 160+ destinations."
+    },
+    "eyebrow": "Global Coverage Across 160+ Countries",
+    "title": "Popular Travel Destinations",
+    "subtitle": "Select your destination to view live readiness telemetry, local currency, plug standards, and failover network coverage.",
+    "sectionTitle": "Explore Regional Hubs & Telemetry Readiness",
+    "sectionSubtitle": "Real-time network validation and transparent day rates across top international travel corridors.",
+    "vpnBadge": "VPN Included",
+    "startingFrom": "Starting from",
+    "perDay": "/ day (per device)",
+    "perDayDevice": "/ day (per device)",
+    "perPersonPerDay": "/ day per person",
+    "viewDestination": "View Destination"
+  },
+  "faqPage": {
+    "meta": {
+      "title": "Help Center & Frequently Asked Questions (FAQ) — JavaMifi Compass",
+      "description": "Find verified answers regarding Pocket WiFi rental, instant eSIM activation, airport pickup, escrow deposit refunds, and halal dining verification."
+    },
+    "eyebrow": "Knowledge Base & Traveler Support",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Clear, verifiable answers regarding Pocket WiFi rental, instant eSIM activation, airport pickup, and #AntiSusahSinyal guarantees.",
+    "sectionTitle": "Common Questions & Verification Guides",
+    "sectionSubtitle": "Everything you need to know about international connectivity, billing transparency, and halal dining verification.",
+    "searchPlaceholder": "Search questions, topics (WiFi, eSIM, Refund, Halal, FX)...",
+    "searchAriaLabel": "Search help topics or FAQ questions",
+    "clearSearch": "Clear search",
+    "categoriesLabel": "Question Categories",
+    "allCategories": "All",
+    "categoryShipping": "Connectivity & Shipping",
+    "categoryEsim": "eSIM Digital",
+    "categoryRefund": "Refunds & Escrow",
+    "categoryDining": "Halal Trust & Dining",
+    "categoryCurrency": "Currencies & Pricing",
+    "categoryPayment": "Mock Payment & Sandbox",
+    "expandAll": "Expand All",
+    "collapseAll": "Collapse All",
+    "resultsCount": "questions found",
+    "noResultsTitle": "No matching questions found",
+    "noResultsSubtitle": "Try using different keywords or switch to another category.",
+    "clearFilter": "Reset Filter & Search",
+    "copyLink": "Copy question link",
+    "linkCopied": "Link copied!",
+    "directLinkAria": "Direct link to question",
+    "supportTitle": "Have a question not listed here?",
+    "supportSubtitle": "Our 24/7 on-call traveler support team is ready to assist your journey anytime.",
+    "contactSupport": "Contact Support"
+  },
+  "footer": {
+    "brandDesc": "Pioneer of Indonesian Pocket WiFi rental and Travel eSIM since 2014. Connecting travelers across 160+ countries worldwide.",
+    "tagline": "#AntiSusahSinyal",
+    "telemetryStatus": "Live Transit & Multi-Operator Telemetry Active",
+    "solutionsTitle": "Solutions & Navigation",
+    "tripPlanner": "Trip Planner Wizard",
+    "pocketWifi": "Pocket WiFi Unlimited 4G/5G",
+    "travelEsim": "Digital Travel eSIM Instant",
+    "tripHub": "Post-Purchase Trip Hub",
+    "faq": "Help Center & FAQ",
+    "destinationsTitle": "Popular Destinations",
+    "allDestinations": "All 160+ Destinations",
+    "destJapan": "Japan (Tokyo & Shinkansen)",
+    "destChina": "China (Built-in VPN Bypass)",
+    "destSaudi": "Saudi Arabia (Umrah Package)",
+    "destSingapore": "Singapore (Ultra Speed)",
+    "trustTitle": "Trust & Policies",
+    "escrowNotice": "Escrow Deposit Refund in 1-3 Days",
+    "halalNotice": "Compass Rasa 5-Tier Halal Verification",
+    "pdpNotice": "Compliance with PDP Law No. 27/2022",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "copyright": "© 2026 JavaMifi Compass. All rights reserved.",
+    "helpAndTickets": "Help Center & Support Desk",
+    "version": "v0.1.0-monorepo"
+  },
+  "countries": {
+    "JP": "Japan",
+    "CN": "China",
+    "SA": "Saudi Arabia",
+    "SG": "Singapore",
+    "MY": "Malaysia",
+    "TH": "Thailand",
+    "KR": "South Korea",
+    "GB": "United Kingdom",
+    "FR": "France",
+    "DE": "Germany",
+    "US": "United States",
+    "TR": "Turkey",
+    "AE": "United Arab Emirates"
+  },
+  "validation": {
+    "required": "This field is required",
+    "emailInvalid": "Please enter a valid email address",
+    "phoneInvalid": "Phone number must include country code (+62)",
+    "passwordMin": "Password must be at least 8 characters",
+    "dateRangeInvalid": "End date must be after start date",
+    "destinationRequired": "Please select your travel destination"
   }
 }

@@ -33,42 +33,45 @@ export const HalalCustomsStamp: React.FC<HalalCustomsStampProps> = ({
   const isId = locale.startsWith('id');
   const def = TIER_DEFINITIONS[tier] || TIER_DEFINITIONS.UNKNOWN;
 
-  // Stamp appearance per tier
-  const stampStyles: Record<HalalTierType, { borderColor: string; textColor: string; sealText: string; sealSub: string; bgTone: string }> = {
+  // Stamp appearance per tier using design system tokens
+  const stampStyles: Record<
+    HalalTierType,
+    { borderColor: string; textColor: string; sealText: string; sealSub: string; bgTone: string }
+  > = {
     CERTIFIED: {
-      borderColor: 'border-emerald-600',
-      textColor: 'text-emerald-800',
+      borderColor: 'border-success',
+      textColor: 'text-success',
       sealText: isId ? 'TERVERIFIKASI RESMI' : 'OFFICIALLY VERIFIED',
       sealSub: isId ? 'DOKUMEN VALID' : 'CERTIFIED ENTRY',
-      bgTone: 'bg-emerald-50/70',
+      bgTone: 'bg-success-surface',
     },
     CLAIMED: {
-      borderColor: 'border-sky-600',
-      textColor: 'text-sky-800',
+      borderColor: 'border-primary',
+      textColor: 'text-primary',
       sealText: isId ? 'KLAIM PEMILIK' : 'OWNER DECLARED',
       sealSub: isId ? 'TANPA SERTIFIKAT' : 'UNCERTIFIED',
-      bgTone: 'bg-sky-50/70',
+      bgTone: 'bg-surface',
     },
     OPTIONS: {
-      borderColor: 'border-amber-600',
-      textColor: 'text-amber-800',
+      borderColor: 'border-warning',
+      textColor: 'text-warning',
       sealText: isId ? 'PILIHAN MENU HALAL' : 'HALAL OPTIONS ONLY',
       sealSub: isId ? 'DAPUR BERSAMA' : 'SHARED KITCHEN',
-      bgTone: 'bg-amber-50/70',
+      bgTone: 'bg-warning-surface',
     },
     NOT_HALAL: {
-      borderColor: 'border-rose-600',
-      textColor: 'text-rose-800',
+      borderColor: 'border-danger',
+      textColor: 'text-danger',
       sealText: isId ? 'NON-HALAL' : 'NON-HALAL VENUE',
       sealSub: isId ? 'MENGANDUNG BABI/ALKOHOL' : 'ENTRY RESTRICTED',
-      bgTone: 'bg-rose-50/70',
+      bgTone: 'bg-danger-surface',
     },
     UNKNOWN: {
-      borderColor: 'border-slate-500',
-      textColor: 'text-slate-700',
+      borderColor: 'border-paper-edge',
+      textColor: 'text-outline',
       sealText: isId ? 'BELUM TERVERIFIKASI' : 'UNVERIFIED STATUS',
       sealSub: isId ? 'FAIL-CLOSED // CEK KE STAF' : 'FAIL-CLOSED POLICY',
-      bgTone: 'bg-slate-100',
+      bgTone: 'bg-sunken',
     },
   };
 
@@ -97,16 +100,16 @@ export const HalalCustomsStamp: React.FC<HalalCustomsStampProps> = ({
         {/* Header Ribbon: Customs Stamp Authority */}
         <div className="flex items-center justify-between border-b border-paper-edge pb-3">
           <div className="flex flex-col">
-            <span className="font-mono text-[10px] tracking-widest text-outline uppercase font-extrabold">
+            <span className="font-mono text-xs tracking-widest text-outline uppercase font-extrabold">
               {isId ? 'PASPOR KULINER // BUKTI STATUS' : 'CULINARY PASSPORT // EVIDENCE'}
             </span>
-            <span className="font-sans font-bold text-sm text-primary truncate max-w-[260px]">
+            <span className="font-sans font-bold text-sm text-primary truncate max-w-xs">
               {venueName}
             </span>
           </div>
 
           <div className="flex flex-col items-end text-right font-mono">
-            <span className="text-[10px] text-outline uppercase tracking-wider">AUDIT-SEAL</span>
+            <span className="text-xs text-outline uppercase tracking-wider">AUDIT-SEAL</span>
             <span className="text-xs font-bold text-primary tnum">
               #{certNumber ? certNumber.slice(-8) : 'IMM-2610'}
             </span>
@@ -125,28 +128,30 @@ export const HalalCustomsStamp: React.FC<HalalCustomsStampProps> = ({
               <span>{def.icon}</span>
             </div>
             <div className="flex flex-col">
-              <span className={`font-mono text-xs uppercase tracking-wider font-extrabold ${style.textColor}`}>
+              <span
+                className={`font-mono text-xs uppercase tracking-wider font-extrabold ${style.textColor}`}
+              >
                 {style.sealText}
               </span>
               <span className="font-sans font-black text-sm text-primary tracking-tight">
                 {isId ? def.labelId : def.labelEn}
               </span>
-              <span className="font-mono text-[10px] text-secondary tracking-widest uppercase">
+              <span className="font-mono text-xs text-secondary tracking-widest uppercase">
                 {style.sealSub}
               </span>
             </div>
           </div>
 
           {/* Stamp Date & Authority Stamp Block */}
-          <div className="flex flex-col items-end font-mono text-[11px] text-secondary text-right shrink-0">
-            <span className="text-outline uppercase text-[9px] tracking-wider">
+          <div className="flex flex-col items-end font-mono text-xs text-secondary text-right shrink-0">
+            <span className="text-outline uppercase text-xs tracking-wider">
               {isId ? 'LEMBAGA SERTIFIKASI' : 'AUTHORITY'}
             </span>
-            <span className="font-bold text-primary truncate max-w-[160px]">
+            <span className="font-bold text-primary truncate max-w-40">
               {certifierName || (tier === 'CERTIFIED' ? 'Halal Authority' : 'Self-Declared')}
             </span>
             {certExpiresAt && (
-              <span className="text-[10px] text-outline tnum">
+              <span className="text-xs text-outline tnum">
                 {isId ? 'Hingga: ' : 'Exp: '}
                 {certExpiresAt}
               </span>
@@ -165,42 +170,44 @@ export const HalalCustomsStamp: React.FC<HalalCustomsStampProps> = ({
         <div className="flex flex-wrap items-center gap-2 pt-1 font-sans text-xs">
           {/* Alcohol transparency badge */}
           {isAlcoholCertifiedFree && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-medium">
-              <span>✓</span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-success-surface text-success border border-success font-medium text-xs">
+              <span aria-hidden="true">✓</span>
               <span>{isId ? 'Bebas Alkohol' : 'Alcohol-Free'}</span>
             </span>
           )}
           {isAlcoholServed && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-medium">
-              <span>▲</span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-warning-surface text-warning border border-warning font-medium text-xs">
+              <span aria-hidden="true">▲</span>
               <span>{isId ? 'Menyajikan Alkohol' : 'Serves Alcohol'}</span>
             </span>
           )}
           {isAlcoholNotMentioned && tier !== 'NOT_HALAL' && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300">
-              <span>▲</span>
-              <span>{isId ? 'Alkohol: Tidak Disebut (Cek ke Staf)' : 'Alcohol: Not Mentioned'}</span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-outline border border-paper-edge text-xs">
+              <span aria-hidden="true">▲</span>
+              <span>
+                {isId ? 'Alkohol: Tidak Disebut (Cek ke Staf)' : 'Alcohol: Not Mentioned'}
+              </span>
             </span>
           )}
 
           {/* Community tagged badge */}
           {isCommunityTagged && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300 font-medium font-mono text-[11px]">
-              <span>#</span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-primary border border-paper-edge font-medium font-mono text-xs">
+              <span aria-hidden="true">#</span>
               <span>{isId ? 'Tag Komunitas' : 'Community Tagged'}</span>
             </span>
           )}
 
           {/* Conflicting evidence alert */}
           {hasConflictingEvidence && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300 font-medium font-mono text-[11px]">
-              <span>!</span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-danger-surface text-danger border border-danger font-medium font-mono text-xs">
+              <span aria-hidden="true">!</span>
               <span>{isId ? 'Ada Laporan Kontradiktif' : 'Conflicting Evidence'}</span>
             </span>
           )}
 
           {lastVerifiedDate && (
-            <span className="ml-auto font-mono text-[10px] text-outline tnum">
+            <span className="ml-auto font-mono text-xs text-outline tnum">
               {isId ? 'Diverifikasi: ' : 'Verified: '}
               {lastVerifiedDate}
             </span>

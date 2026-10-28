@@ -3,20 +3,239 @@
     "home": "Beranda",
     "planner": "Trip Planner",
     "destinations": "Destinasi",
+    "dining": "Kuliner Halal",
     "products": "Produk",
     "presets": "Paket Perjalanan",
     "tripHub": "Trip Hub",
     "support": "Bantuan",
+    "faq": "FAQ",
     "login": "Masuk",
-    "account": "Akun Saya"
+    "account": "Akun Saya",
+    "cart": "Keranjang Belanja",
+    "newBadge": "BARU",
+    "themeLight": "Ganti ke Terminal Siang",
+    "themeNight": "Ganti ke Kabin Malam",
+    "openMenu": "Buka Menu Navigasi",
+    "closeMenu": "Tutup Menu Navigasi",
+    "skipToContent": "Lewati ke konten utama",
+    "mainNav": "Navigasi Utama",
+    "mobileNav": "Navigasi Seluler",
+    "quickAccess": "Akses Cepat & Pengaturan",
+    "languageId": "Bahasa Indonesia",
+    "languageEn": "English",
+    "brandHomeAria": "JavaMifi Compass Beranda",
+    "tagline": "#AntiSusahSinyal",
+    "topbar": {
+      "telemetryLabel": "Konteks Navigasi & Telemetri",
+      "terminalNotice": "Telemetri Transit Aktif",
+      "connectivityMode": "4G Pocket WiFi & Travel eSIM",
+      "currencyContext": "Mata Uang: IDR (Ref ECB)",
+      "diningMode": "Compass Rasa: 48 Tempat Kuliner Terverifikasi",
+      "dismiss": "Tutup Bilah Konteks"
+    }
+  },
+  "home": {
+    "presets": {
+      "badge": "Inspirasi Perjalanan Siap Pakai",
+      "title": "Journey Presets Pilihan",
+      "intro": "Koneksi transit terkonfigurasi dengan pilihan perangkat, durasi, dan estimasi biaya transparan untuk rute perjalanan favorit.",
+      "viewAll": "Lihat Semua 160+ Destinasi",
+      "planNow": "Rencanakan Sekarang",
+      "umrah": {
+        "title": "Paket Umrah Barokah",
+        "dest": "SA • Arab Saudi",
+        "days": "9 - 12 Hari",
+        "desc": "1 modem Pocket WiFi menghubungkan keluarga jamaah selama di Makkah & Madinah.",
+        "tag": "Keluarga & Rombongan"
+      },
+      "japan": {
+        "title": "Jepang Autumn & Shinkansen",
+        "dest": "JP • Jepang",
+        "days": "7 Hari",
+        "desc": "Koneksi ultra-cepat 4G/5G di Tokyo, Kyoto, Osaka & kereta Shinkansen.",
+        "tag": "Populer"
+      },
+      "china": {
+        "title": "China VPN-Ready Explorer",
+        "dest": "CN • China",
+        "days": "8 Hari",
+        "desc": "Bypass firewall otomatis. Tetap lancar buka WhatsApp, Google & Instagram.",
+        "tag": "Termasuk VPN"
+      },
+      "europe": {
+        "title": "EuroTrip Multi-Negara",
+        "dest": "EU • Prancis, Jerman, Italia",
+        "days": "14 Hari",
+        "desc": "1 eSIM atau Pocket WiFi aktif di 33 negara Eropa tanpa gonta-ganti kartu.",
+        "tag": "Multi-Country"
+      }
+    },
+    "howItWorks": {
+      "badge": "Alur Navigasi & Cara Kerja",
+      "title": "3 Langkah Mudah Menjelajah Dunia Tanpa Hambatan",
+      "intro": "Tonton motion demo 25 detik tentang bagaimana JavaMifi Compass menghitung paket koneksi paling hemat dan mengawal perjalanan Anda hingga ke titik kuliner halal.",
+      "videoBadge": "Demo Motion • 25 Detik",
+      "playVideo": "Putar Video Eksplorasi (25s)",
+      "pauseVideo": "Jeda Video",
+      "videoNotice": "Video hening demonstrasi visual navigasi transit. Putar untuk melihat alur kerja lengkap.",
+      "step1": {
+        "title": "1. Masukkan Rute & Jumlah Rombongan",
+        "desc": "Algoritma break-even menganalisis apakah Pocket WiFi atau eSIM yang paling hemat untuk pola perjalanan Anda."
+      },
+      "step2": {
+        "title": "2. Ambil di Bandara CGK atau Scan QR Instan",
+        "desc": "Ambil perangkat WiFi di Booth Bandara Soetta T2/T3 tanpa antre, atau terima profil eSIM langsung di email."
+      },
+      "step3": {
+        "title": "3. Internetan Lancar & Kuliner Halal Terverifikasi",
+        "desc": "Garansi sinyal #AntiSusahSinyal di 160+ negara plus kurasi tempat makan halal terakreditasi berbasis bukti nyata."
+      }
+    },
+    "trust": {
+      "badge": "Transparansi Layanan & Audit Chit",
+      "title": "Bukti Nyata Jaminan JavaMifi",
+      "intro": "Setiap paket sewa dan eSIM didukung perhitungan harga deterministik, telemetri jaringan langsung, dan garansi refund deposit escrow otomatis.",
+      "auditTimestamp": "Audit Chit Live",
+      "card1": {
+        "title": "Plan First, Shop Second",
+        "desc": "Wizard menganalisis jumlah orang, hari, gadget, dan kebutuhan khusus untuk merekomendasikan opsi paling hemat secara matematis."
+      },
+      "card2": {
+        "title": "Destination Readiness Card",
+        "desc": "Informasi langsung kondisi cuaca real-time (Open-Meteo), kurs mata uang ECB vs Rupiah, dan info colokan sebelum berangkat."
+      },
+      "card3": {
+        "title": "Post-Purchase Trip Hub",
+        "desc": "Satu halaman terpadu: panduan aktivasi QR, meter penggunaan kuota 80%, lini masa pengiriman, hingga pengembalian deposit."
+      },
+      "chits": {
+        "chit1": {
+          "productName": "Audit Rekomendasi Matematis",
+          "lineItem": "Alokasi Paket Optimal",
+          "guaranteeTitle": "Garansi Bebas Biaya Siluman:",
+          "guaranteeText": "Jika grup Anda lebih hemat menggunakan eSIM dibanding sewa modem, wizard akan otomatis menginformasikan sebelum bayar.",
+          "actionLabel": "Jalankan Optimizer di Planner"
+        },
+        "chit2": {
+          "productName": "Sinkronisasi Cuaca & Kesiapan Negara",
+          "lineItem": "Telemetri Live & Multi-Operator",
+          "guaranteeTitle": "SLA Jaringan 99.9%:",
+          "guaranteeText": "Didukung multi-operator tier 1 lokal di 160+ negara untuk koneksi lancar tanpa putus #AntiSusahSinyal.",
+          "actionLabel": "Jelajahi Direktori Destinasi"
+        },
+        "chit3": {
+          "productName": "Escrow Perangkat & Auto-Refund",
+          "lineItem": "Jaminan Deposit Perangkat",
+          "guaranteeTitle": "Jaminan Pengembalian Dana 1×24 Jam:",
+          "guaranteeText": "Deposit Rp 500.000 otomatis ditransfer kembali ke rekening/e-wallet maksimal 1×24 jam setelah modem lolos inspeksi fisik.",
+          "actionLabel": "Buka Desain Trip Hub"
+        }
+      }
+    },
+    "boardingPasses": {
+      "activeStatus": "TIKET SIAP AKTIVASI",
+      "offlineReady": "● Mode Offline Aktif",
+      "ticketCodeLabel": "KODE PRESET PERJALANAN",
+      "originLabel": "ASAL",
+      "destLabel": "DESTINASI",
+      "holderLabel": "PROFIL PERJALANAN",
+      "scheduleLabel": "DURASI ESTIMASI",
+      "rangePrefix": "s/d",
+      "terminalNotice": "Ambil di booth bandara atau scan aktivasi eSIM digital"
+    },
+    "receiptChits": {
+      "durationLabel": "Durasi",
+      "rangeLabel": "Rentang",
+      "travelerLabel": "Peserta",
+      "daysUnit": "Hari",
+      "travelerUnit": "Traveler",
+      "tokenIdLabel": "TOKEN-ID",
+      "promoDiscountLabel": "Potongan Promo / Voucher",
+      "depositLabel": "Deposit Jaminan Perangkat",
+      "depositBadgeLabel": "100% Refundable",
+      "totalPaymentLabel": "Total Pembayaran",
+      "taxIncludedLabel": "Termasuk PPN & Jaminan"
+    },
+    "meta": {
+      "title": "JavaMifi Compass — Rencanakan Koneksi Sebelum Berangkat #AntiSusahSinyal",
+      "description": "Sewa Pocket WiFi 4G unlimited dan eSIM wisata internasional di 160+ negara. Bandingkan biaya transparan dan rekomendasi objektif sebelum Anda berkemas."
+    }
   },
   "hero": {
     "badge": "Platform Konektivitas Wisata Terpadu",
+    "terminalBadge": "Terminal Konektivitas Wisata • #AntiSusahSinyal",
     "title": "Rencanakan Koneksi Sebelum Berangkat",
-    "subtitle": "Koneksi stabil di 160+ negara. Bandingkan biaya Pocket WiFi, eSIM, dan SIM Card secara transparan sebelum Anda berkemas.",
-    "ctaPlanner": "Mulai Trip Planner",
-    "ctaDestinations": "Jelajahi Destinasi",
-    "tag": "#AntiSusahSinyal"
+    "subtitle": "Wayfinding telekomunikasi perjalanan internasional. Bandingkan matematis Pocket WiFi vs. eSIM wisata di 160+ negara tanpa overpaying kuota.",
+    "ctaPlanner": "Rencanakan Perjalanan Saya",
+    "ctaDestinations": "Semua 160+ Destinasi",
+    "tag": "#AntiSusahSinyal",
+    "stationsLabel": "1. Pilih Stasiun Destinasi",
+    "stationsSub": "160+ Hub Global • Rute Aktif Real-Time",
+    "paxLabel": "2. Jumlah Traveler (Rombongan)",
+    "durationLabel": "3. Estimasi Durasi Perjalanan",
+    "speedLabel": "Koneksi",
+    "socketLabel": "Colokan",
+    "currencyLabel": "Valuta Lokal",
+    "netDailyRate": "Tarif Bersih Per Hari",
+    "splitDailyRate": "Mulai Patungan Per Orang",
+    "perDay": "/ hari",
+    "soloBadge": "SOLO FAST-PASS • ESIM INSTAN",
+    "groupBadge": "PILIHAN GRUP • POCKET WIFI 4G UNLIMITED",
+    "standardTransit": "Transit Standar",
+    "trackNotice": "Jalur Wayfinding Oktilinear • Gerbang Terminal 01",
+    "pax": {
+      "solo": {
+        "label": "1 Solo",
+        "sub": "1 Perangkat"
+      },
+      "family": {
+        "label": "2-4 Keluarga",
+        "sub": "Hingga 5 Perangkat"
+      },
+      "group": {
+        "label": "5+ Grup",
+        "sub": "Modem Rombongan"
+      }
+    },
+    "duration": {
+      "d7": "7 Hari",
+      "d12": "12 Hari",
+      "d30": "30 Hari"
+    },
+    "hubs": {
+      "JP": {
+        "name": "Jepang",
+        "status": "SHINKANSEN FAST-TRACK",
+        "speed": "4G/5G LTE",
+        "socket": "Tipe A/B (100V)"
+      },
+      "SA": {
+        "name": "Arab Saudi",
+        "status": "PILGRIM SPECIAL • UMRAH",
+        "speed": "4G Unlimited",
+        "socket": "Tipe G (220V)"
+      },
+      "GB": {
+        "name": "Inggris & Eropa",
+        "status": "MULTI-COUNTRY PASS",
+        "speed": "4G/5G Roam",
+        "socket": "Tipe G (230V)"
+      },
+      "SG": {
+        "name": "Singapura",
+        "status": "EXPRESS TERMINAL",
+        "speed": "5G Ultra Speed",
+        "socket": "Tipe G (230V)"
+      },
+      "CN": {
+        "name": "China",
+        "status": "BUILT-IN VPN UNLOCKED",
+        "speed": "4G Firewall-Bypass",
+        "socket": "Tipe A/I (220V)"
+      }
+    },
+    "bearingPrefix": "Arah Transit:",
+    "orientationLabel": "Kompas Orientasi Rute CGK"
   },
   "planner": {
     "title": "Trip Planner Wizard",
@@ -80,6 +299,7 @@
   },
   "checkout": {
     "title": "Checkout & Pembayaran",
+    "eyebrow": "Langkah Terakhir Menuju Keberangkatan",
     "cartSummary": "Ringkasan Keranjang",
     "subtotal": "Subtotal",
     "discount": "Potongan Diskon",
@@ -92,9 +312,57 @@
     "email": "Email Aktif (untuk kirim QR/eSIM)",
     "phone": "Nomor WhatsApp",
     "shippingAddress": "Alamat Pengiriman (khusus modem fisik)",
-    "payWithMock": "Bayar via Simulator Sandbox (Mock Payment)",
+    "shippingHelp": "Kurir gratis antar ke rumah atau pick-up di Booth Bandara Soekarno-Hatta T2 & T3.",
+    "payWithMock": "Bayar via Simulasi Pembayaran (Demo Mode)",
     "payWithMidtrans": "Bayar via Midtrans Snap Sandbox",
-    "securePaymentNotice": "Transaksi aman. Harga dihitung langsung oleh server. Kartu kredit tidak disimpan di server kami."
+    "gatewayMockTitle": "Simulasi Gateway Mock (Bawaan)",
+    "gatewayMockDesc": "Ideal untuk reviewer & pengujian tanpa kredensial Midtrans. Mensimulasikan QRIS / VA.",
+    "gatewayMidtransTitle": "Midtrans Snap Sandbox",
+    "gatewayMidtransDesc": "Popup Snap resmi Midtrans Indonesia dengan verifikasi tanda tangan SHA-512.",
+    "securePaymentNotice": "Transaksi aman. Harga dihitung langsung oleh server. Kartu kredit tidak disimpan di server kami.",
+    "submitOrder": "Lanjut ke Pembayaran",
+    "processingOrder": "Memproses Pesanan...",
+    "errorSummaryTitle": "Terdapat kesalahan pada input pemesanan:",
+    "promoActive": "Kode promo aktif!",
+    "promoInvalid": "Kode promo tidak valid atau telah kedaluwarsa",
+    "subtitle": "Periksa rincian pemesanan Anda sebelum melanjutkan ke pembayaran",
+    "contactInfo": "Informasi Kontak & Traveler",
+    "emailHelp": "Voucher eSIM atau konfirmasi rental akan dikirim ke email ini",
+    "phoneHelp": "Untuk koordinasi aktivasi atau pengiriman",
+    "deliveryAddress": "Alamat Pengiriman (Pocket WiFi)",
+    "deliveryAddressPlaceholder": "Jalan, Nomor, RT/RW, Kecamatan, Kota, Kode Pos",
+    "promoCode": "Kode Promo",
+    "paymentMethod": "Metode Pembayaran"
+  },
+  "loginPage": {
+    "titleSignIn": "Masuk ke Akun JavaMifi",
+    "titleRegister": "Daftar Akun JavaMifi",
+    "subtitle": "Kelola riwayat pemesanan dan pantau seluruh trip Anda dalam satu tempat",
+    "tabSignIn": "Masuk",
+    "tabRegister": "Daftar Baru",
+    "fullName": "Nama Lengkap",
+    "fullNamePlaceholder": "Masukkan nama lengkap Anda",
+    "phone": "Nomor WhatsApp / HP",
+    "phonePlaceholder": "+6281234567890",
+    "email": "Alamat Email",
+    "emailPlaceholder": "traveler@example.com",
+    "password": "Kata Sandi",
+    "passwordPlaceholder": "••••••••",
+    "submitSignIn": "Masuk Sekarang",
+    "submitRegister": "Daftar Akun",
+    "processing": "Memproses...",
+    "clearSession": "Reset Sesi Form",
+    "demoTitle": "Kredensial Demo Penguji:",
+    "demoEmail": "Email",
+    "demoPassword": "Sandi",
+    "errorToken": "Gagal menerima token otentikasi.",
+    "errorGeneral": "Otentikasi gagal. Periksa kembali email dan kata sandi Anda.",
+    "successRegister": "Pendaftaran berhasil! Mengalihkan ke akun Anda...",
+    "successCreated": "Akun berhasil dibuat. Silakan masuk.",
+    "errorSummaryTitle": "Terdapat kesalahan pada input Anda:",
+    "demoCredentialsTitle": "Kredensial Demo Penguji:",
+    "resetButton": "Reset Sesi Form",
+    "invalidCredentials": "Otentikasi gagal. Periksa kembali email dan kata sandi Anda."
   },
   "tripHub": {
     "title": "Trip Hub Perjalanan Anda",
@@ -115,13 +383,37 @@
   "support": {
     "title": "Pusat Bantuan & Layanan Pelanggan",
     "subtitle": "Kami siap membantu memastikan koneksi Anda lancar selama di luar negeri #AntiSusahSinyal",
+    "badge": "Traveler Care 24/7",
     "name": "Nama Lengkap",
+    "namePlaceholder": "Masukkan nama lengkap Anda",
     "email": "Alamat Email",
+    "emailPlaceholder": "nama@email.com",
     "orderNumber": "Nomor Pesanan (opsional)",
+    "orderPlaceholder": "JMF-XXXXXXXX",
     "subject": "Judul Kendala / Pertanyaan",
+    "subjectPlaceholder": "Contoh: Kendala aktivasi eSIM di Bandara Narita",
     "message": "Detail Kendala",
+    "messagePlaceholder": "Jelaskan detail kendala, model perangkat, atau pertanyaan Anda...",
     "submit": "Kirim Tiket Bantuan",
-    "success": "Tiket bantuan berhasil dikirim! Tim on-call kami akan segera menghubungi Anda."
+    "submitting": "Mengirimkan Tiket...",
+    "success": "Tiket bantuan berhasil dikirim! Tim on-call kami akan segera menghubungi Anda.",
+    "successTitle": "Tiket Dukungan Berhasil Dikirim!",
+    "successDesc": "Sistem otomasi n8n kami telah menganalisis urgensi tiket Anda dan mengirimkannya ke tim on-call. Anda akan menerima balasan via email dalam waktu singkat.",
+    "newTicket": "Kirim Tiket Lain",
+    "backHome": "Kembali ke Beranda",
+    "channelsTitle": "Pilihan Jalur Bantuan Cepat",
+    "whatsappTitle": "WhatsApp Darurat 24/7",
+    "whatsappDesc": "Respon instan untuk kendala sinyal aktif di bandara atau luar negeri.",
+    "whatsappAction": "Buka WhatsApp Care",
+    "tripHubTitle": "Self-Service Trip Hub",
+    "tripHubDesc": "Lacak pengiriman router, kode QR eSIM, dan status pengembalian deposit.",
+    "tripHubAction": "Buka Trip Hub",
+    "faqTitle": "Direktori Tanya Jawab",
+    "faqDesc": "Temukan jawaban instan seputar kompatibilitas, deposit, dan tata cara retur.",
+    "faqAction": "Jelajahi FAQ",
+    "privacyTitle": "Jaminan Keamanan & Privasi Data",
+    "privacyDesc": "JavaMifi tunduk pada UU No. 27/2022 tentang Pelindungan Data Pribadi (UU PDP). Informasi yang Anda kirimkan hanya digunakan untuk keperluan resolusi bantuan teknis.",
+    "slaBadge": "SLA Respon Pertama < 1 Jam"
   },
   "common": {
     "loading": "Memuat data...",
@@ -135,11 +427,21 @@
   },
   "dining": {
     "tabTitle": "Kuliner Halal",
+    "title": "Compass Rasa — Wayfinding Kuliner Halal Global",
+    "subtitle": "Rekomendasi bersertifikat, daftar menu dwibahasa, dan konversi kurs harian vs Rupiah untuk penjelajah global.",
+    "placesSectionTitle": "Titik Singgah Kuliner Terverifikasi",
+    "placesSectionSubtitle": "Restoran terinspeksi sesuai wilayah dan kriteria halal terpilih",
+    "placesCount": "tempat ditemukan",
+    "searchPlaceholder": "Cari ramen, wagyu, atau 'halal tokyo < 2000'...",
+    "searchButton": "Cari",
     "topBar": {
-      "filterHalal": "Hanya Halal (Tersertifikasi & Terverifikasi)",
+      "filterHalal": "Bersertifikat",
+      "filterHalalTooltip": "Hanya Halal (3 Tingkat Bukti: Tersertifikasi, Terverifikasi, & Ramah Muslim)",
       "filterAll": "Semua Restoran",
       "countryLabel": "Negara Tujuan",
-      "radiusLabel": "Radius Pencarian",
+      "cityLabel": "Kota / Distrik",
+      "cityPlaceholder": "Pilih kota (Semua)",
+      "radiusLabel": "Radius",
       "includeUnverified": "Sertakan yang belum terverifikasi"
     },
     "status": {
@@ -152,7 +454,12 @@
       "trustBanner": "Status halal berdasarkan bukti terverifikasi yang dapat Anda periksa langsung.",
       "trustBannerAction": "Buka Panel Bukti",
       "dailyRateBadge": "Kurs Harian",
-      "simulatedNotice": "Data Simulasi (Pengujian Sistem)"
+      "simulatedNotice": "Data Simulasi (Pengujian Sistem)",
+      "errorTitle": "Gagal Memuat Data Kuliner",
+      "errorDesc": "Terjadi kendala saat menghubungi server verifikasi. Silakan periksa koneksi atau coba lagi.",
+      "retryButton": "Coba Lagi",
+      "offlineFallbackNotice": "Koneksi terganggu. Menampilkan data tersimpan terakhir saat offline.",
+      "offlineMirinCardCta": "Buka Kartu Komunikasi Offline Mirin & Babi"
     },
     "taxiCard": {
       "title": "Kartu Alamat untuk Supir Taksi",
@@ -162,9 +469,9 @@
       "postalCode": "Kode Pos"
     },
     "phraseCard": {
-      "title": "Kartu Tanya Mirin, Sake & Babi",
+      "title": "Kartu Tanya Mirin & Babi",
       "subtitle": "Tunjukkan layar ini langsung kepada pelayan atau staf restoran",
-      "action": "Tunjukkan Kartu Pertanyaan",
+      "action": "Tunjukkan Kartu Tanya Mirin & Babi",
       "notice": "Terjemahan baku dan terverifikasi untuk membedakan kaldu olahan beralkohol."
     },
     "budgetCard": {
@@ -209,5 +516,156 @@
     "rateUnavailable": "Kurs IDR tidak tersedia",
     "disclaimer": "Perkiraan indikatif; kurs kartu dan ATM bank mungkin berbeda.",
     "snapshotDate": "Kurs per tanggal:"
+  },
+  "ticketTunnel": {
+    "badge": "Alur Wayfinding Terpadu",
+    "title": "Dokumen Perjalanan Anda, Diterbitkan Sepanjang Rute",
+    "subtitle": "Gulir halaman untuk mengikuti tiket fisik dan digital Anda melewati setiap pos pemeriksaan rute transit octilinear.",
+    "scrollHint": "Gulir ke bawah untuk memajukan rute tiket",
+    "accessibleNotice": "Ringkasan Titik Transit (Tampilan Aksesibel / Perangkat Sentuh)",
+    "activeStation": "Titik Aktif",
+    "terminalClearance": "Penyelesaian Rute Terminal",
+    "ticket1": {
+      "stage": "01 / RUTE DESTINASI",
+      "title": "Titik Singgah & Rute Perjalanan",
+      "desc": "Keberangkatan CGK menuju jaringan multi-kota Tokyo & Osaka",
+      "status": "RUTE TERKONFIRMASI",
+      "actionLabel": "Jelajahi Rute Jepang",
+      "tag": "Rute Awal & Destinasi",
+      "dates": "CGK ➔ TYO"
+    },
+    "ticket2": {
+      "stage": "02 / ESIM DIGITAL",
+      "title": "Aktivasi Over-The-Air Instan",
+      "desc": "QR provisi siap pakai untuk smartphone berkemampuan eSIM",
+      "status": "KODE QR AKTIF",
+      "actionLabel": "Panduan Aktivasi",
+      "tag": "Matriks QR eSIM Digital",
+      "dates": "eSIM OTA"
+    },
+    "ticket3": {
+      "stage": "03 / DISPATCH PERANGKAT",
+      "title": "Sewa Modem Pocket WiFi 4G/5G",
+      "desc": "Baterai teruji, hotspot tanpa batas siap ambil di booth bandara",
+      "status": "SIAP DI BOOTH",
+      "actionLabel": "Lokasi Booth Bandara",
+      "tag": "Perangkat Modem WiFi",
+      "dates": "Booth Bandara"
+    },
+    "ticket4": {
+      "stage": "04 / JAMINAN DEPOSIT",
+      "title": "Jaminan Deposit Perangkat Aman",
+      "desc": "Escrow jaminan otomatis dikembalikan saat pengembalian unit di booth",
+      "status": "DEPOSIT DILINDUNGI",
+      "actionLabel": "Kebijakan Pengembalian",
+      "tag": "Tiket Jaminan Escrow",
+      "dates": "Refund Otomatis"
+    }
+  },
+  "lab": {
+    "title": "Laboratorium Desain Sistem Wayfinding",
+    "subtitle": "Koridor perspektif 3D eksperimental yang menampilkan tiket transit beranimasi. Ruang uji terisolasi di luar alur utama produksi.",
+    "backToSystem": "Kembali ke Design System",
+    "badge": "Ruang Eksperimen Lab"
+  },
+  "destinationsPage": {
+    "meta": {
+      "title": "Destinasi Populer & Kartu Kesiapan — JavaMifi Compass",
+      "description": "Informasi jaringan, kurs harian, cuaca langsung, dan opsi koneksi Pocket WiFi serta eSIM di Jepang, China, Arab Saudi, Singapura, dan 160+ negara."
+    },
+    "eyebrow": "Cakupan Global 160+ Negara",
+    "title": "Destinasi Perjalanan Populer",
+    "subtitle": "Pilih negara tujuan Anda untuk melihat telemetri kesiapan langsung, kurs mata uang, standar colokan, dan cadangan jaringan.",
+    "sectionTitle": "Jelajahi Hub Regional & Kesiapan Telemetri",
+    "sectionSubtitle": "Validasi jaringan real-time dan transparansi tarif harian di seluruh koridor perjalanan internasional.",
+    "vpnBadge": "Termasuk VPN",
+    "startingFrom": "Mulai dari",
+    "perDay": "/ hari (per perangkat)",
+    "perDayDevice": "/ hari (per perangkat)",
+    "perPersonPerDay": "/ hari per orang",
+    "viewDestination": "Lihat Destinasi"
+  },
+  "faqPage": {
+    "meta": {
+      "title": "Pusat Bantuan & Tanya Jawab (FAQ) — JavaMifi Compass",
+      "description": "Temukan jawaban lengkap seputar sewa Pocket WiFi, aktivasi eSIM digital, pengambilan di bandara, kebijakan deposit refund, dan kurasi kuliner halal."
+    },
+    "eyebrow": "Pusat Informasi & Bantuan",
+    "title": "Pertanyaan yang Sering Diajukan",
+    "subtitle": "Jawaban terverifikasi seputar sewa Pocket WiFi, aktivasi eSIM digital, pengambilan bandara, dan jaminan #AntiSusahSinyal.",
+    "sectionTitle": "Panduan & Jawaban Kendala Perjalanan",
+    "sectionSubtitle": "Segala hal yang perlu Anda ketahui mengenai konektivitas luar negeri, transparansi deposit, dan verifikasi halal.",
+    "searchPlaceholder": "Cari pertanyaan, topik (WiFi, eSIM, Refund, Halal, Kurs)...",
+    "searchAriaLabel": "Cari topik bantuan atau pertanyaan FAQ",
+    "clearSearch": "Hapus pencarian",
+    "categoriesLabel": "Kategori Pertanyaan",
+    "allCategories": "Semua",
+    "categoryShipping": "Konektivitas & Pengiriman",
+    "categoryEsim": "eSIM Digital",
+    "categoryRefund": "Pengembalian & Escrow",
+    "categoryDining": "Halal Trust & Kuliner",
+    "categoryCurrency": "Kurs & Transparansi Harga",
+    "categoryPayment": "Mock Payment & Sandbox",
+    "expandAll": "Buka Semua",
+    "collapseAll": "Tutup Semua",
+    "resultsCount": "pertanyaan ditemukan",
+    "noResultsTitle": "Tidak ada pertanyaan yang sesuai",
+    "noResultsSubtitle": "Coba gunakan kata kunci pencarian lain atau pilih kategori yang berbeda.",
+    "clearFilter": "Reset Filter & Pencarian",
+    "copyLink": "Salin tautan pertanyaan",
+    "linkCopied": "Tautan disalin!",
+    "directLinkAria": "Tautan langsung ke pertanyaan",
+    "supportTitle": "Punya pertanyaan lain yang belum terjawab?",
+    "supportSubtitle": "Tim traveler helpdesk 24/7 kami siap membantu seluruh kendala perjalanan Anda.",
+    "contactSupport": "Hubungi Bantuan"
+  },
+  "footer": {
+    "brandDesc": "Pelopor sewa Pocket WiFi dan Travel eSIM wisata Indonesia sejak 2014. Menghubungkan traveler di 160+ negara di seluruh dunia.",
+    "tagline": "#AntiSusahSinyal",
+    "telemetryStatus": "Telemetri Transit & Multi-Operator Aktif",
+    "solutionsTitle": "Solusi & Navigasi",
+    "tripPlanner": "Trip Planner Wizard",
+    "pocketWifi": "Pocket WiFi Unlimited 4G/5G",
+    "travelEsim": "Digital Travel eSIM Instan",
+    "tripHub": "Trip Hub Traveler",
+    "faq": "Pusat Bantuan & FAQ",
+    "destinationsTitle": "Destinasi Populer",
+    "allDestinations": "Semua 160+ Destinasi",
+    "destJapan": "Jepang (Tokyo & Shinkansen)",
+    "destChina": "China (Bypass VPN Aktif)",
+    "destSaudi": "Arab Saudi (Paket Umrah)",
+    "destSingapore": "Singapura (Ultra Speed)",
+    "trustTitle": "Keamanan & Kebijakan",
+    "escrowNotice": "Jaminan Deposit Escrow 1-3 Hari",
+    "halalNotice": "Compass Rasa 5-Tier Terverifikasi",
+    "pdpNotice": "Kepatuhan UU PDP No. 27/2022",
+    "privacyPolicy": "Kebijakan Privasi",
+    "termsOfService": "Syarat & Ketentuan Layanan",
+    "copyright": "© 2026 JavaMifi Compass. Hak cipta dilindungi undang-undang.",
+    "helpAndTickets": "Pusat Bantuan & Tiket",
+    "version": "v0.1.0-monorepo"
+  },
+  "countries": {
+    "JP": "Jepang",
+    "CN": "China",
+    "SA": "Arab Saudi",
+    "SG": "Singapura",
+    "MY": "Malaysia",
+    "TH": "Thailand",
+    "KR": "Korea Selatan",
+    "GB": "Inggris",
+    "FR": "Prancis",
+    "DE": "Jerman",
+    "US": "Amerika Serikat",
+    "TR": "Turki",
+    "AE": "Uni Emirat Arab"
+  },
+  "validation": {
+    "required": "Bidang ini wajib diisi",
+    "emailInvalid": "Format email tidak valid",
+    "phoneInvalid": "Nomor telepon harus diawali kode negara (+62)",
+    "passwordMin": "Kata sandi minimal 8 karakter",
+    "dateRangeInvalid": "Tanggal akhir harus setelah tanggal mulai",
+    "destinationRequired": "Pilih destinasi perjalanan Anda"
   }
 }

@@ -1,0 +1,1656 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "HealthController_checkHealth",
+        "summary": "System health, liveness and readiness probe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["health"]
+      }
+    },
+    "/health/live": {
+      "get": {
+        "operationId": "HealthController_live",
+        "summary": "Liveness probe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["health"]
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "HealthController_ready",
+        "summary": "Readiness probe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["health"]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "summary": "Register a new customer account",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "Login with email and password",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "summary": "Rotate refresh token and issue new access token",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "operationId": "AuthController_getProfile",
+        "summary": "Get current authenticated user profile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["auth"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/catalog/destinations": {
+      "get": {
+        "operationId": "CatalogController_getDestinations",
+        "summary": "List active travel destinations",
+        "parameters": [
+          {
+            "name": "locale",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["catalog"]
+      }
+    },
+    "/catalog/destinations/{slug}": {
+      "get": {
+        "operationId": "CatalogController_getDestinationBySlug",
+        "summary": "Get destination details by slug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["catalog"]
+      }
+    },
+    "/catalog/products": {
+      "get": {
+        "operationId": "CatalogController_getProducts",
+        "summary": "List products (WiFi, eSIM, SIM, PRO)",
+        "parameters": [
+          {
+            "name": "locale",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["catalog"]
+      }
+    },
+    "/catalog/presets": {
+      "get": {
+        "operationId": "CatalogController_getPresets",
+        "summary": "List curated journey presets (Umrah, Japan, China VPN, Europe)",
+        "parameters": [
+          {
+            "name": "locale",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["catalog"]
+      }
+    },
+    "/catalog/promos/validate": {
+      "post": {
+        "operationId": "CatalogController_validatePromo",
+        "summary": "Validate promo code against order subtotal",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["catalog"]
+      }
+    },
+    "/planner/recommend": {
+      "post": {
+        "operationId": "PlannerController_getRecommendation",
+        "summary": "Calculate rule-based travel connectivity recommendation",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ranked options with explainable reasons"
+          }
+        },
+        "tags": ["planner"]
+      }
+    },
+    "/orders": {
+      "post": {
+        "operationId": "OrdersController_createOrder",
+        "summary": "Checkout: create a new order with server-side priced items",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["orders"]
+      },
+      "get": {
+        "operationId": "OrdersController_listOrders",
+        "summary": "List orders with pagination and status filter (Admin & Ops only)",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["orders"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/orders/pending-recovery-candidates": {
+      "get": {
+        "operationId": "OrdersController_getPendingRecoveryCandidates",
+        "summary": "Get unpaid orders pending recovery or expiration for n8n cron",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["orders"]
+      }
+    },
+    "/orders/{orderNumber}": {
+      "get": {
+        "operationId": "OrdersController_getOrder",
+        "summary": "Get order details by order number",
+        "parameters": [
+          {
+            "name": "orderNumber",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["orders"]
+      }
+    },
+    "/orders/{orderNumber}/refund": {
+      "post": {
+        "operationId": "OrdersController_refundOrder",
+        "summary": "Process refund for order and write to financial ledger (Finance/Admin only)",
+        "parameters": [
+          {
+            "name": "orderNumber",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["orders"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/orders/{orderNumber}/trip-hub": {
+      "get": {
+        "operationId": "OrdersController_getTripHub",
+        "summary": "Get Trip Hub dashboard data for active/completed order",
+        "parameters": [
+          {
+            "name": "orderNumber",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["orders"]
+      }
+    },
+    "/orders/{id}/status": {
+      "patch": {
+        "operationId": "OrdersController_updateStatus",
+        "summary": "Transition order status via state machine (Authorized staff only)",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["orders"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/payments/create": {
+      "post": {
+        "operationId": "PaymentsController_createPayment",
+        "summary": "Initiate payment session (Mock or Midtrans Snap)",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["payments"]
+      }
+    },
+    "/payments/webhook/midtrans": {
+      "post": {
+        "operationId": "PaymentsController_handleMidtransWebhook",
+        "summary": "Midtrans server-side payment notification webhook",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["payments"]
+      }
+    },
+    "/payments/mock/callback": {
+      "post": {
+        "operationId": "PaymentsController_handleMockCallback",
+        "summary": "Mock payment simulation callback",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["payments"]
+      }
+    },
+    "/payments/webhook/stripe": {
+      "post": {
+        "operationId": "PaymentsController_handleStripeWebhook",
+        "summary": "Stripe Mock Webhook: handles checkout.session.completed and payment_intent.succeeded",
+        "parameters": [
+          {
+            "name": "authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stripe-signature",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["payments"]
+      }
+    },
+    "/payments/ledger/{orderId}": {
+      "get": {
+        "operationId": "PaymentsController_getLedger",
+        "summary": "Get append-only payment ledger entries for an order",
+        "parameters": [
+          {
+            "name": "orderId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["payments"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/fulfillment/esim/provision": {
+      "post": {
+        "operationId": "FulfillmentController_provisionEsim",
+        "summary": "Provision digital eSIM for a paid order (called by n8n or API)",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["fulfillment"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/fulfillment/device/queue-shipment": {
+      "post": {
+        "operationId": "FulfillmentController_queueShipment",
+        "summary": "Queue physical Pocket WiFi shipment",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["fulfillment"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/fulfillment/device/rentals/{id}/inspect": {
+      "patch": {
+        "operationId": "FulfillmentController_inspectRental",
+        "summary": "Inspect returned device and trigger deposit refund",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["fulfillment"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/fulfillment/device/rentals/active": {
+      "get": {
+        "operationId": "FulfillmentController_getActiveRentals",
+        "summary": "Get active rentals for lifecycle return management",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["fulfillment"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/fulfillment/esim/active-usage-checks": {
+      "get": {
+        "operationId": "FulfillmentController_getActiveUsage",
+        "summary": "Poll eSIM active usage quotas for 80% usage threshold alerts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["fulfillment"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/integrations/readiness/{countryCode}": {
+      "get": {
+        "operationId": "IntegrationsController_getReadinessCard",
+        "summary": "Get Destination Readiness Card with live weather, ECB currency rate, country facts and tips",
+        "parameters": [
+          {
+            "name": "countryCode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Destination Readiness Card data"
+          }
+        },
+        "tags": ["integrations"]
+      }
+    },
+    "/automation/callbacks/order-expired": {
+      "post": {
+        "operationId": "AutomationController_orderExpiredCallback",
+        "summary": "Authenticated callback from n8n to expire unpaid order",
+        "parameters": [
+          {
+            "name": "X-Javamifi-Timestamp",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Javamifi-Signature",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["automation"]
+      }
+    },
+    "/automation/callbacks/usage-alert": {
+      "post": {
+        "operationId": "AutomationController_usageAlertCallback",
+        "summary": "Callback from n8n to record usage alert delivery",
+        "parameters": [
+          {
+            "name": "X-Javamifi-Timestamp",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Javamifi-Signature",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["automation"]
+      }
+    },
+    "/automation/runs": {
+      "get": {
+        "operationId": "AutomationController_getRuns",
+        "summary": "Get automation runs log for CMS console",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["automation"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/automation/events": {
+      "get": {
+        "operationId": "AutomationController_getEvents",
+        "summary": "Get outbox events log with status filter",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["automation"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/automation/events/{id}/retry": {
+      "post": {
+        "operationId": "AutomationController_retryEvent",
+        "summary": "Manual retry for dead-letter or failed outbox event from CMS",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["automation"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/content/pages/{slug}": {
+      "get": {
+        "operationId": "ContentController_getPage",
+        "summary": "Get block-based page by slug with bilingual content",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["content"]
+      }
+    },
+    "/content/faqs": {
+      "get": {
+        "operationId": "ContentController_getFaqs",
+        "summary": "Get FAQ items by category",
+        "parameters": [
+          {
+            "name": "locale",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["content"]
+      }
+    },
+    "/content/banners": {
+      "get": {
+        "operationId": "ContentController_getBanners",
+        "summary": "Get active marketing banners",
+        "parameters": [
+          {
+            "name": "position",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["content"]
+      }
+    },
+    "/content/pages/{id}/publish": {
+      "post": {
+        "operationId": "ContentController_publishPage",
+        "summary": "Publish page and trigger n8n distribution workflow",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["content"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/support/tickets": {
+      "post": {
+        "operationId": "SupportController_createTicket",
+        "summary": "Submit support inquiry or ticket (Public for travelers)",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["support"]
+      },
+      "get": {
+        "operationId": "SupportController_getTickets",
+        "summary": "List tickets for support staff (Authorized staff only)",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["support"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/support/tickets/{id}/priority": {
+      "patch": {
+        "operationId": "SupportController_updatePriority",
+        "summary": "Update ticket priority (Authorized staff & n8n webhook only)",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["support"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/dashboard": {
+      "get": {
+        "operationId": "AdminController_getDashboardMetrics",
+        "summary": "Admin Dashboard metrics (sales, devices out, overdue, failed payments)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/dashboard/digest": {
+      "get": {
+        "operationId": "AdminController_getOpsDigest",
+        "summary": "Daily ops digest metrics for n8n workflow",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/admin/automation/runs/record-error": {
+      "post": {
+        "operationId": "AdminController_recordAutomationError",
+        "summary": "Record n8n global workflow execution failure in dead-letter log",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/admin/devices": {
+      "get": {
+        "operationId": "AdminController_getDevices",
+        "summary": "List physical Pocket WiFi inventory and statuses",
+        "parameters": [
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/devices/{id}/status": {
+      "patch": {
+        "operationId": "AdminController_updateDeviceStatus",
+        "summary": "Update device inventory status",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/audit-logs": {
+      "get": {
+        "operationId": "AdminController_getAuditLogs",
+        "summary": "Get append-only audit trail",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "resource",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/customers": {
+      "get": {
+        "operationId": "AdminController_getCustomers",
+        "summary": "List customer profiles aggregated from orders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/catalog/products": {
+      "get": {
+        "operationId": "AdminController_getCatalogProducts",
+        "summary": "List all catalog products and plan tiers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "AdminController_createCatalogProduct",
+        "summary": "Create new connectivity product in catalog",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/catalog/products/{id}": {
+      "patch": {
+        "operationId": "AdminController_updateCatalogProduct",
+        "summary": "Update catalog product status or properties",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/media": {
+      "get": {
+        "operationId": "AdminController_getMediaList",
+        "summary": "List uploaded media assets",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/media/upload": {
+      "post": {
+        "operationId": "AdminController_uploadMedia",
+        "summary": "Upload file asset into media library (Multer)",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/integrations/switch": {
+      "post": {
+        "operationId": "AdminController_switchIntegrationAdapter",
+        "summary": "Runtime switch for external integration adapters (Mock vs Sandbox)",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["admin"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/dining/countries": {
+      "get": {
+        "operationId": "DiningController_getCountries",
+        "summary": "List supported countries with dining venue counts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Countries with currency and venue counts"
+          }
+        },
+        "tags": ["Dining (Compass Rasa Public Discovery)"]
+      }
+    },
+    "/v1/dining/rates": {
+      "get": {
+        "operationId": "DiningController_getRates",
+        "summary": "List latest FX rate snapshots vs IDR",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "FX conversion rates"
+          }
+        },
+        "tags": ["Dining (Compass Rasa Public Discovery)"]
+      }
+    },
+    "/v1/dining/places": {
+      "get": {
+        "operationId": "DiningController_searchPlaces",
+        "summary": "Search dining venues with Halal filtering and dual currency pricing",
+        "parameters": [
+          {
+            "name": "country",
+            "required": false,
+            "in": "query",
+            "description": "ISO 2-letter country code (e.g. JP, SA, SG)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city",
+            "required": false,
+            "in": "query",
+            "description": "City name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "required": false,
+            "in": "query",
+            "description": "HALAL, NON_HALAL, or ALL",
+            "schema": {
+              "enum": ["HALAL", "NON_HALAL", "ALL"],
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search term for venue or dish",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "radiusKm",
+            "required": false,
+            "in": "query",
+            "description": "Radius in km (default 5)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "includeUnverified",
+            "required": false,
+            "in": "query",
+            "description": "Include UNKNOWN tiers",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Sort criteria",
+            "schema": {
+              "enum": ["relevance", "rating", "distance"],
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "description": "Sort direction",
+            "schema": {
+              "enum": ["asc", "desc"],
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining (Compass Rasa Public Discovery)"]
+      }
+    },
+    "/v1/dining/places/{id}": {
+      "get": {
+        "operationId": "DiningController_getPlaceDetail",
+        "summary": "Get full venue detail with categorized menu and Halal evidence",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Venue detail with dual-price menu"
+          },
+          "404": {
+            "description": "Venue not found"
+          }
+        },
+        "tags": ["Dining (Compass Rasa Public Discovery)"]
+      }
+    },
+    "/v1/dining/parse-intent": {
+      "post": {
+        "operationId": "DiningController_parseSearchIntent",
+        "summary": "Threat-model safe query parser: turns traveler prompt into structured search params",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining (Compass Rasa Public Discovery)"]
+      }
+    },
+    "/v1/dining/reports": {
+      "post": {
+        "operationId": "DiningController_submitReport",
+        "summary": "Submit user dispute or incorrect data report",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Report accepted into review queue"
+          }
+        },
+        "tags": ["Dining (Compass Rasa Public Discovery)"]
+      }
+    },
+    "/v1/dining/orchestration/expiring-venues": {
+      "get": {
+        "operationId": "DiningAutomationController_getExpiringVenues",
+        "summary": "n8n Scheduled Trigger: Fetch venues requiring audit or expiring soon",
+        "parameters": [
+          {
+            "name": "daysAhead",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining Automation & n8n"]
+      }
+    },
+    "/v1/dining/orchestration/chat-webhook": {
+      "post": {
+        "operationId": "DiningAutomationController_handleChatbotWebhook",
+        "summary": "n8n Chatbot Webhook: Parses query and returns structured fail-closed restaurant results",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining Automation & n8n"]
+      }
+    },
+    "/v1/dining/admin/review-queue": {
+      "get": {
+        "operationId": "DiningAdminController_getReviewQueue",
+        "summary": "Get flagged enrichment jobs and user dispute tickets",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of review items"
+          }
+        },
+        "tags": ["Dining Admin & Moderation"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/dining/admin/review-queue/{id}/resolve": {
+      "post": {
+        "operationId": "DiningAdminController_resolveReviewItem",
+        "summary": "Resolve or dismiss a review item",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining Admin & Moderation"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/dining/admin/safety-status": {
+      "get": {
+        "operationId": "DiningAdminController_getSafetyStatus",
+        "summary": "Get AI discovery token budget and kill-switch status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining Admin & Moderation"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/dining/admin/safety-toggle": {
+      "post": {
+        "operationId": "DiningAdminController_toggleKillSwitch",
+        "summary": "Toggle kill-switch for AI discovery enrichment",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining Admin & Moderation"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/dining/admin/evaluation/run": {
+      "post": {
+        "operationId": "DiningAdminController_runEvaluation",
+        "summary": "Run Phase P2 Golden-Set benchmark evaluation across 100 labeled venues",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Evaluation report summary with quality gate metrics"
+          }
+        },
+        "tags": ["Dining Admin & Moderation"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/dining/callbacks/enrichment": {
+      "post": {
+        "operationId": "DiningAutomationController_handleEnrichmentCallback",
+        "summary": "HMAC-SHA256 signed callback for background n8n enrichment",
+        "parameters": [
+          {
+            "name": "x-javamifi-signature",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-javamifi-timestamp",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining Automation & n8n"]
+      }
+    },
+    "/v1/dining/enrich/simulate": {
+      "post": {
+        "operationId": "DiningAutomationController_simulateEnrichment",
+        "summary": "Simulate end-to-end Gemini extraction & 6-stage validation pipeline",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Dining Automation & n8n"]
+      }
+    }
+  },
+  "info": {
+    "title": "JavaMifi Compass API",
+    "description": "Trip-centric connectivity platform API: Planner, Hybrid Orders, Payments, Logistics & n8n Automation",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "planner",
+      "description": "Explainable rule-based recommendation engine"
+    },
+    {
+      "name": "catalog",
+      "description": "Destinations, products, plans, promos & journey presets"
+    },
+    {
+      "name": "orders",
+      "description": "Order state machine & cart checkout"
+    },
+    {
+      "name": "payments",
+      "description": "Payment gateway (Mock & Midtrans Snap sandbox) & ledger"
+    },
+    {
+      "name": "fulfillment",
+      "description": "Digital eSIM provisioning & physical Pocket WiFi logistics"
+    },
+    {
+      "name": "integrations",
+      "description": "Open-Meteo, Frankfurter, REST Countries & eSIM adapter"
+    },
+    {
+      "name": "automation",
+      "description": "n8n webhooks & transactional outbox callbacks"
+    },
+    {
+      "name": "admin",
+      "description": "CMS data screens & device inventory board"
+    },
+    {
+      "name": "health",
+      "description": "Liveness & readiness health checks"
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {}
+  }
+}

@@ -8,16 +8,25 @@ export * from './typography';
 export * from './halal-tiers';
 export * from './spacing';
 
-import { transitLineTokens, surfaceTokens, inkTokens, statusTokens } from './semantics';
+import {
+  transitLineTokens,
+  surfaceTokens,
+  inkTokens,
+  statusTokens,
+  borderTokens,
+} from './semantics';
 import { fontFamilies } from './typography';
 import { halalTierTokens } from './halal-tiers';
+import { spacingTokens, radiiTokens, motionTokens, zIndexTokens, elevationTokens } from './spacing';
 
 export const tokens = {
   colors: {
     // JavaMifi brand cyan / blue / orange / nila
     brand: {
-      primary: '#0284C7', // Sky 600 - Connectivity Blue
-      primaryHover: '#0369A1',
+      primary: '#18215A', // Stitch Wayfinding Deep Nila Indigo per docs/DESIGN.md (WCAG AAA 14.9:1)
+      connectivitySky: '#0284C7', // Connectivity Blue accent
+      primaryHover: '#2B3A8C',
+      primaryPressed: '#0E1440',
       secondary: '#0F172A', // Slate 900 - Dark travel neutral
       accent: '#F97316', // Orange 500 - #AntiSusahSinyal energy
       accentHover: '#EA580C',
@@ -85,6 +94,12 @@ export const tokens = {
     default: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     smooth: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
   },
+  borders: borderTokens,
+  elevation: elevationTokens,
+  motion: motionTokens,
+  zIndex: zIndexTokens,
+  spacing: spacingTokens,
+  radii: radiiTokens,
 } as const;
 
 export type ThemeTokens = typeof tokens;

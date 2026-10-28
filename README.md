@@ -3,230 +3,228 @@
 > **"Plan your connection before you pack."**  
 > *#AntiSusahSinyal*
 
+JavaMifi Compass is a unified travel connectivity and halal wayfinding platform that transforms traditional Pocket WiFi and eSIM shopping into a comprehensive trip-centric experience. Travelers plan journeys first, compare connectivity costs with mathematical break-even guarantees, discover 5-tier fail-closed halal culinary venues, and manage active trips via an airport-style digital Trip Hub.
+
+The platform is built as a production-grade monorepo featuring a Next.js public web application, a dense React Vite Admin CMS, a modular NestJS API, PostgreSQL, Redis with BullMQ, and 12 self-hosted n8n automation workflows.
+
 ---
 
-## What It Is (In Three Sentences)
-**JavaMifi Compass** transforms a traditional rental-WiFi and eSIM shop into a trip-centric connectivity platform where travelers plan first, buy second, and manage their whole journey in one place. It delivers a modern public Next.js website, a high-density React admin CMS, a modular NestJS API, PostgreSQL, Redis, and 10 self-hosted n8n automation workflows starting with a single `docker compose up`. The platform unifies digital eSIM provisioning and physical Pocket WiFi logistics into one verified order state machine that runs safe-by-default on mocks with zero required secrets.
+## Features
 
----
+### 🌐 Public Traveler Web App (`apps/web`)
+- **Trip Planner Wizard (`/id/planner`):** Deterministic recommendation engine comparing Pocket WiFi vs. eSIM vs. Physical SIM with transparent cost-per-person-per-day, group split breakdown, and device count break-even analysis.
+- **Compass Rasa Halal Dining Discovery (`/id/dining`, `/id/destinations/[slug]/eat`):** Curated culinary discovery across 20 international destinations backed by a 5-tier fail-closed trust engine (`CERTIFIED`, `CLAIMED`, `OPTIONS`, `NOT_HALAL`, `UNKNOWN`), verbatim quote audit drawer, official certifier registration stamp (`HalalCustomsStamp`), and dual-currency display with ECB exchange rates and stale-rate indicators (`▲ Kurs >3 hari`).
+- **Destination Readiness Telemetry (`/id/destinations`):** Live weather telemetries (Open-Meteo), real-time reference currency exchange vs IDR (Frankfurter), and country travel advisories (e.g., China VPN firewall guidelines).
+- **Post-Purchase Trip Hub (`/id/trips/[id]`):** Boarding-pass trip chit, digital eSIM QR activation instructions, logistics timeline with courier tracking, active data usage meter (with 80% threshold alerts), and Shibuya drop-off return guide.
+- **eSIM Compatibility Checker:** Searchable smartphone compatibility catalog by brand and model.
+- **Cart & Sandbox Checkout (`/id/cart`, `/id/checkout`):** Server-side priced cart with promo codes (`ANTISUSAHSINYAL`, `HEMAT50K`), mock QRIS / credit card settlement simulator, and Midtrans Snap integration mode.
+- **Bilingual & Transit Wayfinding Design System:** Full Indonesian and English catalogs (`id.json`, `en.json`) with strict wayfinding design tokens, tabular numerals (`tnum`), and WCAG AA 48px touch targets.
 
-## Key Features
+### ⚙️ Executive Admin CMS (`apps/admin`)
+- **Executive Operations Dashboard:** Real-time KPI summary tracking active rentals, device return deadlines, dead-letter automation logs, and a 0.00% false-halal dining verification gate.
+- **Dining Moderation & Dispute Queue:** Persistent audit dispute review with HMAC-SHA256 outbox dispatch to n8n workflows and append-only audit trail logging.
+- **Order Management & Payment Ledger:** End-to-end order inspection, financial ledger tracking, and state machine transition controls.
+- **Armada Modem WiFi (Fleet Management):** Pocket WiFi hardware tracking (serial numbers `JMF-WIFI-001` through `010`), battery health diagnostics, physical inspection logs, and deposit release triggers.
+- **Dynamic Adapter Switches:** Live runtime toggling between Mock and Sandbox adapters (Midtrans Snap & Airalo).
 
-### 🌐 Public Website (`apps/web`)
-- **Trip Planner Wizard (W3, W11):** Deterministic, unit-tested recommendation engine comparing Pocket WiFi vs. eSIM vs. Physical SIM with transparent cost-per-person-per-day, break-even analysis, and group split cost calculator.
-- **Compass Rasa Halal Dining (W12):** 20-destination halal dining explorer with a 5-tier fail-closed trust engine (`CERTIFIED`, `CLAIMED`, `OPTIONS`, `NOT_HALAL`, `UNKNOWN`), verbatim quote audit drawer, official certifier customs stamp (`HalalCustomsStamp`), dual currency prices with stale rate detection (`▲ Kurs >3 hari`), and combined connectivity + dining food budget.
-- **Destination Readiness Card (W2):** Server-rendered pages featuring real-time weather (Open-Meteo), ECB currency exchange rate vs IDR (Frankfurter), and country facts (REST Countries v3.1) with curated tips (China VPN bypass notes).
-- **Post-Purchase Trip Hub (W7):** One page per trip containing the boarding-pass style Trip Card, eSIM QR activation code, iOS/Android installation guides, 80% usage consumption meter, logistics return timeline, and top-up options.
-- **eSIM Smartphone Checker (W4):** Searchable database of eSIM-compatible smartphone brands and models.
-- **Cart & Sandbox Checkout (W5):** Server-side priced cart with promo codes (`ANTISUSAHSINYAL`, `HEMAT50K`) and interactive sandbox payment simulator.
-- **Bilingual & Accessible (W9):** Indonesian and English message catalogs (`id.json`, `en.json`) with zero hardcoded user-facing strings.
-
-### ⚙️ Admin CMS (`apps/admin`)
-- **Executive Operations Dashboard (C12, C13):** Live KPI cards tracking gross revenue, devices in use, return deadlines, dead-letter automation events, false-halal rates (0.00%), and dining moderation queues.
-- **Dining Moderation & Dispute Queue (C13):** Persistent dispute review with HMAC-SHA256 outbox dispatch to n8n and append-only audit trail logging.
-- **Order Management & Payment Ledger (C7):** End-to-end order inspection with append-only financial ledger movements and order state machine transitions.
-- **Device Fleet Management (C6):** Serial number tracking (JMF-WIFI-001 to 010), battery health indicators, physical inspection workflows, and deposit refund triggers.
-- **Bilingual Content Editor (C2, C4):** Block-based editorial workflow with status transitions (`DRAFT` → `IN_REVIEW` → `PUBLISHED`) and version history.
-- **Automation Console (C9):** Real-time execution logs for n8n workflows, webhook outbox monitoring, and one-click manual retry for failed runs.
-- **Adapter Switches & Health (C10):** Dynamic runtime toggles between Mock and Live Sandbox adapters (Midtrans Snap & Airalo).
-- **Immutable Audit Log (C11):** Append-only audit trail recording every state change and sensitive action.
-
-### 🤖 Automation with n8n (`automation/n8n/`)
-- Ten version-controlled workflows orchestrated via a **Transactional Outbox Pattern**:
-  1. `01-order-fulfilment.json`: Provisions eSIM, emails Trip Hub QR, and dispatches chat alerts upon `order.paid`.
+### 🤖 Automation Engine with n8n (`automation/n8n/`)
+- 12 production-grade n8n workflow JSON exports and voice assistants orchestrated via a **Transactional Outbox Pattern**:
+  1. `01-order-fulfilment.json`: Provisions eSIM, generates QR codes, and dispatches customer notification emails upon `order.paid`.
   2. `02-checkout-recovery.json`: 30-minute cart reminders and automated 24-hour expiration releasing reserved stock.
-  3. `03-device-lifecycle.json`: Return reminders 2 days before due date and deposit refund processing.
+  3. `03-device-lifecycle.json`: Return reminders 2 days prior to deadline and deposit refund pipeline.
   4. `04-usage-and-expiry-alerts.json`: Proactive alerts when data consumption reaches 80%.
-  5. `05-ops-digest.json`: Daily 08:00 WIB operational digest to Slack, Telegram, or Mailpit.
-  6. `06-content-publish.json`: Newsletter and marketing draft generation upon `article.published`.
-  7. `07-support-intake.json`: Urgency keyword triage (`darurat`, `no signal`, `airport`) and contaminant safety escalation (`pork`, `babi`, `mirin`, `expired`) upgrading tickets to `CRITICAL_SAFETY`.
-  8. `08-error-handler.json`: Captures workflow failures into the dead-letter log.
-  9. `09-dining-enrichment.json`: Webhook-driven LLM extraction of verbatim halal certificates and menu evidence with signed HMAC verification.
-  10. `10-dining-concierge-chat.json`: Natural language dietary request parser that converts traveler chat into structured API query parameters with zero free-text claims.
+  5. `05-ops-digest.json`: Daily operational digest dispatch to Slack, Telegram, or Mailpit.
+  6. `06-content-publish.json`: Marketing draft and newsletter dispatch triggers.
+  7. `07-support-intake.json`: Urgent keyword triage (`darurat`, `no signal`) and dietary contaminant escalation (`pork`, `mirin`).
+  8. `08-error-handler.json`: Captures failed workflow runs into the dead-letter log.
+  9. `09-dining-enrichment.json`: Verbatim halal evidence extraction and certificate OCR verification.
+  10. `10-dining-concierge-chat.json`: Dietary natural language parser converting traveler queries into structured API parameters.
+  11. `11-voice-halal-osm-google-scraper.json`: Voice-to-output scraper querying OpenStreetMap (Overpass API) and Google Places.
+  12. `12-mock-payment-gateway-relay.json`: Webhook relay simulator for payment settlement confirmations.
+  13. `voice-transcribe-confirm.json`: Voice assistant audio intake and transcription confirmation.
+  14. `voice-query-processor.json`: Real-time voice query processor powered by NVIDIA NIM MiniMax (`minimaxai/minimax-m3.1-flash`) with intent classification and deterministic API routing.
 
 ---
 
-## System Architecture
+## Tech Stack
 
-```mermaid
-graph TD
-    subgraph Clients["Frontend Layer"]
-        Web["Next.js Public Website<br/>(:3000)"]
-        Admin["React Admin CMS<br/>(:3002)"]
-    end
-
-    subgraph Core["NestJS Modular Monolith (:3001)"]
-        API["13 Core Modules<br/>Planner Engine • State Machine • Outbox"]
-    end
-
-    subgraph Adapters["Ports & Adapters"]
-        Mocks["Mock Gateway & Mock eSIM<br/>(Zero Secrets Required)"]
-        LiveSandbox["Midtrans Snap & Airalo Sandbox"]
-        PublicAPIs["Open-Meteo • Frankfurter • REST Countries"]
-    end
-
-    subgraph Stores["Persistence"]
-        Postgres[("PostgreSQL 16")]
-        Redis[("Redis 7 & BullMQ")]
-    end
-
-    subgraph Automation["Workflow Engine"]
-        N8N["n8n Self-Hosted (:5678)"]
-        Mailpit["Mailpit Test SMTP (:8025)"]
-    end
-
-    Web -->|OpenAPI / REST| API
-    Admin -->|OpenAPI / REST| API
-    API --> Postgres
-    API --> Redis
-    API --> Adapters
-    API -->|Signed HMAC Webhook| N8N
-    N8N -->|Callback| API
-    N8N --> Mailpit
-```
-
-### Architectural Principles
-1. **Modular Monolith:** 13 bounded modules communicating through exported services and domain events.
-2. **Ports and Adapters:** Mock implementations for payments, eSIM, email, and chat ensure the platform starts and tests without any external accounts.
-3. **Single Source of Truth:** n8n orchestrates and alerts but **never touches the database directly**.
-4. **Server-Side Pricing:** Clients send product IDs and quantities, preventing client-side price tampering.
+- **Monorepo Architecture:** [Turborepo](https://turbo.build/) 2.1, [pnpm](https://pnpm.io/) Workspaces (`node >= 20.0.0`, `pnpm >= 9.0.0`)
+- **Frontend (`apps/web`):** [Next.js](https://nextjs.org/) 14.2 (App Router), [React](https://react.dev/) 18.3, [Tailwind CSS](https://tailwindcss.com/) 3.4, [Framer Motion](https://www.framer.com/motion/) 14.7, [next-intl](https://next-intl-docs.vercel.app/) 3.20, [Lucide React](https://lucide.dev/)
+- **Admin CMS (`apps/admin`):** [Vite](https://vitejs.dev/) 5.4, React 18.3, Tailwind CSS 3.4, Lucide React
+- **Backend API (`apps/api`):** [NestJS](https://nestjs.com/) 10.4, [Prisma](https://www.prisma.io/) 5.20, [Drizzle ORM](https://orm.drizzle.team/), [PostgreSQL](https://www.postgresql.org/) 16, [Redis](https://redis.io/) 7 & [BullMQ](https://bullmq.io/) 5.12, Argon2, Passport JWT, SimpleWebAuthn, Helmet, Swagger OpenAPI
+- **Shared Packages:**
+  - `@javamifi/shared`: Zod validation schemas, business logic, money/FX helpers, crypto signatures
+  - `@javamifi/ui`: Transit-inspired design system tokens, wayfinding primitives, and shared Tailwind presets
+  - `@javamifi/api-client`: Type-safe REST client wrapper
+  - `@javamifi/config`: Shared ESLint, Prettier, and TypeScript configurations
+- **Workflow Automation:** [n8n](https://n8n.io/) self-hosted automation server
+- **Local Mail Server:** [Mailpit](https://github.com/axllent/mailpit) (SMTP & Web UI)
+- **Quality Assurance & Testing:** [Vitest](https://vitest.dev/) 2.1 (119 unit/integration test suites, 1,110 tests), Jest, ESLint, Prettier, Husky, Commitlint
 
 ---
 
-## Quick Start (One Command)
-
-### Prerequisites
-- [Docker](https://www.docker.com/) & Docker Compose
-- [Node.js](https://nodejs.org/) v20+ & [pnpm](https://pnpm.io/) v9+ (for local development)
-
-### 1. Clone & Setup Environment
-```bash
-git clone https://github.com/javamifi/compass.git
-cd compass
-cp .env.example .env
-```
-
-### 2. Start All Services
-```bash
-docker compose up -d
-```
-
-### 3. Seed Database
-```bash
-pnpm db:seed
-# or inside docker:
-docker compose exec api npm run db:seed
-```
-
-### 4. Access URLs
-| Application | URL | Credentials / Notes |
-|---|---|---|
-| **Public Website** | [http://localhost:3000](http://localhost:3000) | Traveler store, planner wizard & Trip Hub |
-| **Admin CMS** | [http://localhost:3002](http://localhost:3002) | `admin@javamifi.com` / `Admin12345!` |
-| **NestJS API & Swagger** | [http://localhost:3001/api/docs](http://localhost:3001/api/docs) | Complete OpenAPI interactive documentation |
-| **n8n Automation Studio**| [http://localhost:5678](http://localhost:5678) | User: `admin` / Pass: `admin` |
-| **Mailpit Email Inbox** | [http://localhost:8025](http://localhost:8025) | View sent QR codes and alerts |
-
----
-
-## Demo Accounts
-
-| Role | Email | Password | Permissions |
-|---|---|---|---|
-| **Super Admin** | `admin@javamifi.com` | `Admin12345!` | Full platform access, settings & audit log |
-| **Logistics Lead**| `ops@javamifi.com` | `Ops12345!` | Device inventory, shipment queue & returns |
-| **Traveler (Demo)**| `traveler@example.com`| `Traveler12345!` | Customer account with sample trip history |
-
----
-
-## Configuration & Adapter Switches
-
-Configure the platform in `.env`:
-
-| Environment Variable | Allowed Values | Default | Purpose |
-|---|---|---|---|
-| `PAYMENT_GATEWAY_MODE` | `mock`, `midtrans_sandbox` | `mock` | Switch payment processing between simulated QRIS and Midtrans Snap |
-| `ESIM_PROVIDER_MODE` | `mock`, `airalo_sandbox` | `mock` | Switch eSIM fulfillment between mock generator and Airalo API |
-| `NOTIFICATION_MODE` | `mock`, `slack`, `telegram`| `mock` | Route notifications to Mailpit or external channels |
-| `WEBHOOK_SECRET` | string (min 32 chars) | — | HMAC-SHA256 secret shared between API and n8n |
-
----
-
-## Five-Minute Demo Script
-
-1. **Trip Planning:** Navigate to [http://localhost:3000/id/planner](http://localhost:3000/id/planner). Select *Jepang*, 7 days, 4 travelers, 6 devices. Review the rule-based recommendation showing why Pocket WiFi wins over eSIM for groups, including break-even analysis and group split cost.
-2. **Destination Readiness:** Open [http://localhost:3000/id/destinations/china](http://localhost:3000/id/destinations/china). Observe live weather from Open-Meteo, ECB Yuan exchange rate vs Rupiah, and the China VPN firewall advisory.
-3. **Cart & Mock Payment:** Select a plan and proceed to checkout. Apply promo code `ANTISUSAHSINYAL` for a 15% discount. Click *Lanjut ke Pembayaran*. On the simulator, click **"Simulasi Bayar Berhasil (Settlement)"**.
-4. **Automation & Trip Hub:** Check [Mailpit](http://localhost:8025) to view the automated email with the QR code and Trip Hub link. Open the Trip Hub to view the boarding-pass card, active data meter, logistics return timeline, and 400m Shibuya drop-off context.
-5. **Admin Operations:** Log into [http://localhost:3002](http://localhost:3002). View the paid order, inspect the returned device in *Armada Modem WiFi* to trigger the deposit refund, check the 0.00% False-Halal moderation queue in Dashboard, and view the immutable record in *Audit Log*.
-6. **Compass Rasa Halal Dining:** Navigate to [http://localhost:3000/id/destinations/japan/eat](http://localhost:3000/id/destinations/japan/eat). Test the fail-closed halal filter (CERTIFIED, CLAIMED, OPTIONS, NOT_HALAL, UNKNOWN). Inspect the perforated customs stamp with official certifier registration, verify Yen to IDR dual-pricing with stale rate detection, and review the combined connectivity + dining food budget schematic.
-
----
-
-## Testing & Verification
-
-For a complete runnable checklist, refer to the **[Verification & Reproducibility Playbook](docs/VERIFICATION.md)**.
-
-Run unit, integration, and state machine tests:
-```bash
-# Run all tests across the monorepo
-pnpm test
-
-# Run pure planner recommendation engine tests
-pnpm --filter @javamifi/api test:unit -- src/modules/planner/planner.engine.spec.ts
-
-# Run hybrid order state machine tests
-pnpm --filter @javamifi/api test:unit -- src/modules/orders/order.state-machine.spec.ts
-
-# Run payment signature verification and route guard tests
-pnpm --filter @javamifi/api test:unit -- src/modules/payments/payments.spec.ts src/modules/payments/payments-guard.spec.ts
-
-# Run adversarial probes for Halal validation (word boundaries, negative claims, fail-closed)
-pnpm --filter @javamifi/api test:unit -- src/modules/dining/adversarial-probes.spec.ts
-
-# Run retention cleanup and transactional outbox daemon tests
-pnpm --filter @javamifi/api test:unit -- src/modules/admin/retention.service.spec.ts src/modules/automation/outbox.service.spec.ts
-
-# Run dining pipeline & deterministic tier engine tests
-pnpm --filter @javamifi/api test:unit -- src/modules/dining/dining-pipeline.spec.ts
-
-# Run 100-venue validator benchmark (deterministic extraction fixtures & 0.00% false-halal gates)
-# Note: In CI/offline environments without GEMINI_API_KEY, the test harness evaluates the deterministic
-# 6-stage validation pipeline and quote verifier against 100 labeled fixtures (including prompt injection tests).
-# Live LLM inference against Google Gemini Flash requires setting GEMINI_API_KEY in .env.
-pnpm --filter @javamifi/api test:unit -- src/modules/dining/evaluation/golden-set.spec.ts
-```
-
----
-
-## Repository Structure
+## Architecture Overview
 
 ```
 javamifi-compass/
 ├── apps/
-│   ├── web/                     # Next.js App Router public website (bilingual, Tailwind)
-│   ├── admin/                   # React + Vite dense data CMS (TanStack, Tailwind)
-│   └── api/                     # NestJS modular monolith API (13 modules)
-│       └── prisma/              # ~30 core PostgreSQL tables & comprehensive seeder
+│   ├── web/               # Next.js 14 App Router public client (:3000)
+│   ├── admin/             # Vite + React Operations CMS (:3002)
+│   └── api/               # NestJS modular monolith API (:3001)
 ├── packages/
-│   ├── shared/                  # Zod validation schemas, enums, money/date/crypto helpers
-│   ├── ui/                      # Design tokens, signal motif, route lines & boarding pass card
-│   ├── api-client/              # Typed API client wrapper
-│   └── config/                  # Shared ESLint, i18n rules, and TypeScript configs
+│   ├── shared/            # Shared Zod schemas, domain models & helpers
+│   ├── ui/                # Wayfinding tokens, Tailwind preset & components
+│   ├── api-client/        # Type-safe API client
+│   └── config/            # Workspace ESLint and TypeScript configs
 ├── automation/
-│   └── n8n/                     # 10 production-grade n8n workflow JSON exports
-├── infra/
-│   └── nginx/                   # Reverse proxy configuration
-├── docs/                        # Architecture, PRD, Security, Automation & ADRs
-├── docker-compose.yml           # PostgreSQL, Redis, Mailpit, n8n, API, Web, Admin
-├── .env.example                 # Zero-secret environment template
-└── README.md                    # Project documentation & demo guide
+│   └── n8n/               # 14 self-hosted n8n workflow JSON definitions
+├── infra/                 # Docker Compose & service definitions
+└── docs/                  # Architecture, PRD, Security & Verification docs
+```
+
+JavaMifi Compass adopts a **modular monolith** backend coupled with independent frontend applications. The public Next.js web application (`apps/web`) and the React admin application (`apps/admin`) communicate with the NestJS backend (`apps/api`) through contract-first REST endpoints validated with shared Zod schemas (`@javamifi/shared`). Server-side pricing calculations enforce zero client-side price tampering.
+
+The backend acts as the single source of truth for all business logic, order state transitions, and fail-closed halal classification algorithms. High-volume asynchronous operations—such as payment callbacks, device lifecycle reminders, and usage alerts—are enqueued into Redis queues powered by BullMQ. Critical events are recorded into an append-only outbox table, dispatched via signed HMAC-SHA256 HTTP webhooks to an isolated self-hosted n8n instance.
+
+The self-hosted n8n workflow engine coordinates external communication, AI voice intent extraction via NVIDIA NIM MiniMax, and scraping pipelines. Workflows communicate back to the backend through authenticated webhook endpoints; n8n never queries or writes to the database directly.
+
+---
+
+## Prerequisites
+
+- **Node.js**: `>= 20.0.0`
+- **Package Manager**: `pnpm >= 9.0.0`
+- **Docker**: Docker Engine & Docker Compose v2 (for PostgreSQL, Redis, Mailpit, n8n)
+- **Git**
+
+---
+
+## Installation Steps
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/<username>/<repo-name>.git
+   cd <repo-name>
+   ```
+
+2. **Install monorepo dependencies:**
+   ```bash
+   pnpm install
+   ```
+
+3. **Configure environment variables:**
+   ```bash
+   cp .env.example .env
+   ```
+   *(Optional: Adjust values in `.env` if using custom ports or third-party sandbox credentials.)*
+
+4. **Start infrastructure containers:**
+   ```bash
+   docker compose up -d
+   ```
+   This spins up PostgreSQL 16 (`:5432`), Redis 7 (`:6379`), Mailpit (`:8025`), and n8n (`:5678`).
+
+5. **Generate database client and seed sample data:**
+   ```bash
+   pnpm --filter @javamifi/api db:generate
+   pnpm --filter @javamifi/api db:seed
+   ```
+
+---
+
+## How to Run
+
+### Development Mode
+
+Start all applications (Web, Admin, and API) concurrently via Turborepo:
+```bash
+pnpm dev
+```
+
+Or run individual applications:
+```bash
+# Public Web client on http://localhost:3000
+pnpm --filter @javamifi/web dev
+
+# Admin CMS on http://localhost:3002
+pnpm --filter @javamifi/admin dev
+
+# NestJS API backend on http://localhost:3001
+pnpm --filter @javamifi/api dev
+```
+
+### Production Build
+
+```bash
+pnpm build
+```
+
+### Running Tests & Linting
+
+```bash
+# Run all unit and integration tests across the monorepo (119 suites, 1,110 tests)
+pnpm test
+
+# Run TypeScript type check across all 9 workspaces
+pnpm typecheck
+
+# Run ESLint across all packages
+pnpm lint
+```
+
+### Access URLs & Default Credentials
+
+| Service | URL | Credentials / Notes |
+|---|---|---|
+| **Public Traveler Web** | [http://localhost:3000](http://localhost:3000) | Traveler store, planner wizard, halal dining & Trip Hub |
+| **Admin CMS** | [http://localhost:3002](http://localhost:3002) | `admin@javamifi.com` / `Admin12345!` |
+| **NestJS API & Swagger** | [http://localhost:3001/api/docs](http://localhost:3001/api/docs) | Complete interactive OpenAPI documentation |
+| **n8n Automation Studio** | [http://localhost:5678](http://localhost:5678) | User: `admin` / Pass: `admin` |
+| **Mailpit Inbox** | [http://localhost:8025](http://localhost:8025) | Local SMTP inspector for sent QR codes and alerts |
+
+### Environment Variables Template
+
+Refer to [`.env.example`](.env.example) for all variables. Crucial values include:
+
+```env
+# Application URLs
+APP_URL=http://localhost:3000
+API_URL=http://localhost:3001
+ADMIN_URL=http://localhost:3002
+
+# Database & Cache
+DATABASE_URL=postgresql://javamifi:javamifi_dev@localhost:5432/javamifi_compass
+REDIS_URL=redis://localhost:6379
+
+# Security & Secrets (use random strings for production)
+JWT_SECRET=change-me-in-production-use-64-chars-minimum-random-string-here
+WEBHOOK_SECRET=change-me-webhook-hmac-secret-minimum-32-chars
+
+# Operational Modes
+PAYMENT_GATEWAY_MODE=mock
+ESIM_PROVIDER_MODE=mock
+NOTIFICATION_MODE=mock
+
+# AI / Automation (Optional)
+GEMINI_API_KEY=your_gemini_api_key_here
+NVIDIA_API_KEY=your_nvidia_api_key_here
 ```
 
 ---
 
-## License & Provider Terms
-- **Open-Meteo:** Free for non-commercial use under CC BY 4.0. Commercial production deployment requires an enterprise license or swap to another weather adapter.
-- **Frankfurter:** Free European Central Bank reference exchange rate API.
-- **REST Countries:** Public open data API (v3.1).
-- **Brand Assets:** JavaMifi brand styling and #AntiSusahSinyal motif are approximate properties inspired by public company profiles.
+## Screenshots
+
+| View | Screenshot |
+|---|---|
+| **Public Home & Wayfinding** | *(Add screenshot: `docs/screenshots/home.png`)* |
+| **Trip Planner Wizard** | *(Add screenshot: `docs/screenshots/planner.png`)* |
+| **Compass Rasa Halal Dining** | *(Add screenshot: `docs/screenshots/halal-dining.png`)* |
+| **Trip Hub Boarding Pass** | *(Add screenshot: `docs/screenshots/trip-hub.png`)* |
+| **Admin Operations Dashboard** | *(Add screenshot: `docs/screenshots/admin-dashboard.png`)* |
+| **n8n Voice Automation Workflow** | *(Add screenshot: `docs/screenshots/n8n-workflow.png`)* |
+
+---
+
+## License
+
+Private & Confidential © JavaMifi. All rights reserved.

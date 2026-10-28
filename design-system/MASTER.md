@@ -88,11 +88,12 @@
 
 ---
 
-## 5. Motion (3/10 Subtle)
+## 5. Motion & 3D Intentional Gating (3/10 Subtle)
 
 - Smooth mechanical transitions only: `duration-150` to `duration-200` with ease-out curves.
 - Zero bouncing, zero looping animations (except micro pulse on live status indicator).
 - Modal entries: clean opacity fade + 4px upward translation.
+- **3D Intentional Gating Policy:** 3D is intentionally gated. Only add a scene when it helps users understand spatial orientation, product choice, or journey progress. Keep a static, semantic fallback; do not add a 3D runtime to checkout, FAQ, or admin tables merely to make the interface look expensive. Isolated exclusively to `/design-system/lab`.
 
 ---
 
@@ -102,3 +103,4 @@ Before modifying or implementing any page:
 1. Look for `design-system/pages/[page-name].md`.
 2. Apply the page-specific layout, component selection, and metric integrations.
 3. If no page-specific override file exists, follow this `MASTER.md` file unconditionally.
+4. Cross-reference the empirical baseline in `docs/UI_BASELINE_P00.md` for component geometry, responsive viewports, and touch-target standards.

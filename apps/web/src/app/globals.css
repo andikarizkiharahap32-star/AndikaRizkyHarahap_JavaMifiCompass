@@ -7,9 +7,33 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --nav-height: 104px;
+  }
+
+  html {
+    scroll-padding-top: var(--nav-height, 64px);
+  }
+
+  :target {
+    scroll-margin-top: var(--nav-height, 64px);
+  }
+
+  /* Fluid Scaling Rules (Type: h1, h2, body fixed at 1rem / 16px min to prevent iOS input zoom) */
+  h1 {
+    font-size: clamp(2rem, 1.4rem + 3vw, 4rem);
+    line-height: 1.1;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+    line-height: 1.2;
+  }
+
   body {
+    font-size: 1rem; /* Minimum 16px to prevent iOS auto-zoom on input focus */
     @apply bg-surface font-title text-primary min-h-screen flex flex-col antialiased selection:bg-selection;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   /* Force tabular figures on all machine, numeric, and currency codes */
@@ -18,22 +42,297 @@
   .font-code-md,
   .font-mono,
   .tnum {
-    font-feature-settings: "tnum" 1;
+    font-feature-settings: 'tnum' 1;
     font-variant-numeric: tabular-nums;
   }
 
-  /* Interactive minimum targets */
+  /* Editorial Hierarchy & Readability (P03-WS01/02/03/10/11/12) */
+  .reading-prose {
+    max-width: 65ch;
+    line-height: 1.625;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .editorial-display {
+    font-family: var(--font-display, 'Barlow Condensed', sans-serif);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  /* Interactive minimum targets and focus appearance (WCAG 2.4.13 & 2.5.8) */
   button,
   a,
   input,
-  select {
+  select,
+  textarea {
     min-height: 48px;
     touch-action: manipulation;
+  }
+
+  /* Cross-browser form controls & WebKit tap normalization (P36-TASK-02 & TASK-03) */
+  input,
+  select,
+  textarea {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand, var(--color-primary, #0b1033));
+    outline-offset: 2px;
+  }
+
+  .dark :focus-visible,
+  [data-theme='night'] :focus-visible {
+    outline-color: var(--brand, #8fa8ff);
   }
 
   /* Compact chips and tags exempt from 48px height */
   .tag-chip,
   .badge-chip {
     min-height: 28px;
+  }
+
+  /* Global WCAG 2.3.3 & Section 4 Reduced Motion Override (collapses all transitions to opacity-only at 0–80ms) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+      transition: opacity 80ms ease !important;
+      transform: none !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Motion System & Tactile Kinematics (P17-WS01 to WS17) */
+  .motion-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .motion-lift-transit {
+    transition: transform var(--duration-transit) var(--ease-transit);
+    will-change: transform;
+  }
+
+  .motion-lift-mechanical {
+    transition: transform var(--duration-mechanical) var(--ease-mechanical);
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .motion-lift-transit:hover {
+      transform: translateY(-4px);
+    }
+    .motion-lift-transit:active {
+      transform: translateY(1px);
+    }
+    .motion-lift-mechanical:hover {
+      transform: translateY(-2px);
+    }
+    .motion-lift-mechanical:active {
+      transform: translateY(1px);
+    }
+  }
+
+  /* Safe-area insets for notched mobile & home-bar devices (P19-WS10) */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pl-safe {
+    padding-left: env(safe-area-inset-left, 0px);
+  }
+  .pr-safe {
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Responsive viewport and touch containment (P19-WS01 to WS06) */
+  .viewport-contained {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Tap target spacing clearance >= 8px (P19-WS12) */
+  .touch-target-gap {
+    gap: var(--space-sm, 0.5rem);
+  }
+
+  /* Fluid Spacing: Section padding clamp(2rem, 1rem + 4vw, 5rem) */
+  .section-fluid-py {
+    padding-top: clamp(2rem, 1rem + 4vw, 5rem);
+    padding-bottom: clamp(2rem, 1rem + 4vw, 5rem);
+  }
+
+  /* Stable viewport height rules (100svh for stable hero, 100dvh for drawers/sheets, never 100vh) */
+  .hero-svh {
+    min-height: 100svh;
+  }
+
+  .drawer-dvh {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  /* Safe Area Bottom Bar inset */
+  .pb-safe-bottom-bar {
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  }
+
+  /* Container queries for responsive cards */
+  .card-container {
+    container-type: inline-size;
+  }
+
+  /* Horizontal scroll-snap for segmented controls with 3+ options on <480px */
+  @media (max-width: 479px) {
+    .segmented-control-snap {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .segmented-control-snap::-webkit-scrollbar {
+      display: none;
+    }
+    .segmented-control-snap > * {
+      scroll-snap-align: start;
+      flex-shrink: 0;
+    }
+  }
+
+  /* Hover gating: gate hover-only states behind @media (hover: hover) */
+  @media (hover: hover) {
+    .hover-lift:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Section 4 Micro-interactions */
+  /* Selecting a chip: 120ms background and border transition */
+  .chip-transition {
+    transition:
+      background-color 120ms cubic-bezier(0.2, 0, 0, 1),
+      border-color 120ms cubic-bezier(0.2, 0, 0, 1),
+      color 120ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Price change: number cross-fade (200ms) */
+  .price-crossfade {
+    transition:
+      opacity 200ms cubic-bezier(0.2, 0, 0, 1),
+      transform 200ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Add to cart: cart badge scales 1→1.15→1 over 200ms */
+  @keyframes cartBadgeScale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.15);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .animate-cart-bounce {
+    animation: cartBadgeScale 200ms cubic-bezier(0.2, 0, 0, 1) forwards;
+  }
+
+  /* Skeletons: matching final dimensions, delay display by 150ms to avoid flicker */
+  @keyframes skeletonDelayedFade {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .skeleton-delayed {
+    animation: skeletonDelayedFade 300ms ease forwards;
+    animation-delay: 150ms;
+  }
+
+  /* Section 4 & Performance Plan Optimizations */
+  /* CSS: content-visibility: auto with contain-intrinsic-size on below-fold sections */
+  .below-fold-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 600px;
+  }
+
+  /* contain: layout paint on cards */
+  .card-contained {
+    contain: layout paint;
+  }
+
+  /* will-change: transform only during active animations */
+  .will-change-transform-active:active {
+    will-change: transform;
+  }
+
+  /* Section 6 Anti-Patterns & Pitfalls: Zero Layout Shift Font Fallbacks */
+  @font-face {
+    font-family: 'Inter-Fallback';
+    src: local('Arial');
+    ascent-override: 90%;
+    descent-override: 22%;
+    line-gap-override: 0%;
+    size-adjust: 107%;
+  }
+
+  @font-face {
+    font-family: 'JetBrains-Mono-Fallback';
+    src: local('Courier New');
+    ascent-override: 85%;
+    descent-override: 20%;
+    line-gap-override: 0%;
+    size-adjust: 102%;
+  }
+
+  /* Fixed aspect-ratio containers for zero layout shift on late-loading maps & images */
+  .fixed-aspect-map {
+    aspect-ratio: 16 / 9;
+  }
+
+  .fixed-aspect-card {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Segmented control horizontal scrolling instead of wrapping on narrow viewports */
+  .segmented-control-scroll {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .segmented-control-scroll::-webkit-scrollbar {
+    display: none;
   }
 }

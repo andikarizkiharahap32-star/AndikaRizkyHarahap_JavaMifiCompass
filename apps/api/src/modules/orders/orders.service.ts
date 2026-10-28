@@ -44,14 +44,17 @@ export class OrdersService {
       throw new BadRequestException('Order must contain at least one item');
     }
 
-    // 1. Fetch plans from DB for SERVER-SIDE PRICING
-    const planIds = dto.items.map((i) => i.planId);
+    // 1. Fetch plans from DB for SERVER-SIDE PRICING (support both UUID id and human-readable slug)
+    const planIdentifiers = dto.items.map((i) => i.planId);
     const plans = await this.prisma.plan.findMany({
-      where: { id: { in: planIds }, isActive: true },
+      where: {
+        OR: [{ id: { in: planIdentifiers } }, { slug: { in: planIdentifiers } }],
+        isActive: true,
+      },
       include: { product: true },
     });
 
-    if (plans.length !== planIds.length) {
+    if (plans.length !== planIdentifiers.length) {
       throw new BadRequestException('One or more selected plans are invalid or unavailable');
     }
 
@@ -61,7 +64,10 @@ export class OrdersService {
     const productTypes: any[] = [];
 
     for (const item of dto.items) {
-      const plan = plans.find((p) => p.id === item.planId)!;
+      const plan = plans.find((p) => p.id === item.planId || p.slug === item.planId);
+      if (!plan) {
+        throw new BadRequestException(`Plan ${item.planId} is invalid or unavailable`);
+      }
       productTypes.push({ productType: plan.product.type });
 
       let unitPrice = plan.priceIdr;
@@ -302,7 +308,10 @@ export class OrdersService {
         status: targetStatus,
         paidAt: targetStatus === 'PAID' ? new Date() : order.paidAt,
         completedAt: targetStatus === 'COMPLETED' ? new Date() : order.completedAt,
-        cancelledAt: targetStatus === 'CANCELLED' || targetStatus === 'EXPIRED' ? new Date() : order.cancelledAt,
+        cancelledAt:
+          targetStatus === 'CANCELLED' || targetStatus === 'EXPIRED'
+            ? new Date()
+            : order.cancelledAt,
         statusHistory: {
           create: {
             fromStatus: order.status,
@@ -346,7 +355,9 @@ export class OrdersService {
       (r) => r === 'SUPER_ADMIN' || r === 'ADMIN' || r === 'FINANCE',
     );
     if (!hasAdminPrivileges) {
-      throw new ForbiddenException('Refunds can only be processed by authorized Finance or Admin staff.');
+      throw new ForbiddenException(
+        'Refunds can only be processed by authorized Finance or Admin staff.',
+      );
     }
 
     const order = await this.prisma.order.findUnique({
@@ -357,7 +368,9 @@ export class OrdersService {
     if (!order) throw new NotFoundException(`Order ${orderNumber} not found`);
 
     if (order.status !== 'PAID' && order.status !== 'CANCELLED') {
-      throw new BadRequestException(`Order ${orderNumber} in status ${order.status} is not eligible for refund`);
+      throw new BadRequestException(
+        `Order ${orderNumber} in status ${order.status} is not eligible for refund`,
+      );
     }
 
     // 1. Create immutable refund ledger entry if payment exists

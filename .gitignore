@@ -1,12 +1,41 @@
+# Dependencies
 node_modules/
+.pnpm-store/
+
+# Production builds & caches
 dist/
 .next/
 .turbo/
+.cache/
 coverage/
+*.tsbuildinfo
+
+# Logs & Debug
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment Variables & Secrets
 .env
+.env.*
 .env.local
 .env.*.local
+!.env.example
+!.env.*.example
+
+# Hosting & Vercel
+.vercel/
+
+# User exclusions & Roadmaps
+01-ui-ux/
+01 UI/UX/
+fullstack-agent-roadmaps/
+full-stack-agents-roadmap/
+.gstack/
+
+# System & Editor
 uploads/
 !uploads/.gitkeep
 .DS_Store
@@ -15,4 +44,3 @@ Thumbs.db
 *.swo
 .idea/
 .vscode/
-*.tsbuildinfo

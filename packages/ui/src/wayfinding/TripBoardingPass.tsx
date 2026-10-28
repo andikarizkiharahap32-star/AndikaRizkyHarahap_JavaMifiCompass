@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { QrCode } from 'lucide-react';
 
@@ -14,7 +16,25 @@ export interface TripBoardingPassProps {
   className?: string;
   onActionClick?: () => void;
   actionLabel?: string;
+  actionHref?: string;
   theme?: 'light' | 'night';
+  // Optional customization & i18n labels
+  headerMedia?: React.ReactNode;
+  originCode?: string;
+  originCity?: string;
+  destinationCity?: string;
+  routeNumber?: string;
+  partySizeText?: string;
+  statusLabel?: string;
+  offlineReadyText?: string;
+  orderCodeLabel?: string;
+  originLabel?: string;
+  destinationLabel?: string;
+  holderLabel?: string;
+  scheduleLabel?: string;
+  scheduleRangePrefix?: string;
+  airportNoticeText?: string;
+  productLabel?: string;
 }
 
 export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
@@ -26,11 +46,28 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
   productType,
   status,
   qrCodeUrl,
-  trackingCode,
+  trackingCode: _trackingCode,
   className = '',
   onActionClick,
   actionLabel = 'View Trip Hub',
+  actionHref,
   theme = 'light',
+  headerMedia,
+  originCode = 'CGK',
+  originCity = 'Jakarta (T3)',
+  destinationCity = 'Jepang Multi-City',
+  routeNumber = 'GA874 • HND / KIX',
+  partySizeText = '4 Wisatawan • 4 Perangkat',
+  statusLabel,
+  offlineReadyText = '● Offline Mode Ready',
+  orderCodeLabel = 'KODE TIKET PESANAN',
+  originLabel = 'ORIGIN',
+  destinationLabel = 'DESTINASI',
+  holderLabel = 'PEMEGANG UNIT',
+  scheduleLabel = 'JADWAL AMBIL UNIT',
+  scheduleRangePrefix = 's/d',
+  airportNoticeText = 'Tunjukkan di Booth Bandara',
+  productLabel,
 }) => {
   const isWifi = productType === 'WIFI_RENTAL';
   const isEsim = productType === 'ESIM';
@@ -41,8 +78,11 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
   return (
     <div
       data-theme={isNight ? 'night' : undefined}
-      className={`relative bg-paper text-primary rounded-2xl border border-paper-edge border-b-2 overflow-hidden ${className}`}
+      className={`relative bg-paper text-primary rounded-2xl border border-paper-edge border-b-2 overflow-hidden flex flex-col ${className}`}
     >
+      {/* Optional Top Media/Photo */}
+      {headerMedia}
+
       {/* Top Wayfinding Context Ribbon */}
       <div className="bg-surface px-6 py-3 border-b border-paper-edge flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -54,24 +94,24 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
             <span className="w-1 h-3 rounded-sm bg-success inline-block" />
           </div>
           <span className="font-mono text-xs font-bold text-success uppercase tracking-wide tnum">
-            TIKET AKTIF / TERKONFIRMASI ({status})
+            {statusLabel || `TIKET AKTIF / TERKONFIRMASI (${status})`}
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5 text-outline font-mono text-xs">
-          <span>● Offline Mode Ready</span>
+        <div className="flex items-center gap-1.5 text-secondary font-mono text-xs font-medium">
+          <span>{offlineReadyText}</span>
         </div>
       </div>
 
       {/* Main Ticket Body */}
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col md:flex-row flex-1">
         {/* Left Flight-Route Section */}
         <div className="flex-1 p-6 flex flex-col justify-between gap-5">
           {/* Header Strip */}
           <div className="flex items-start justify-between border-b border-paper-edge/50 pb-3">
             <div className="flex flex-col">
-              <span className="font-mono text-xs text-outline uppercase tracking-wider">
-                KODE TIKET PESANAN
+              <span className="font-mono text-xs text-secondary font-medium uppercase tracking-wider">
+                {orderCodeLabel}
               </span>
               <span className="font-mono text-base font-bold text-primary tracking-wider tnum">
                 {orderNumber}
@@ -90,7 +130,7 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
                 {isWifi ? 'W' : isEsim ? 'E' : 'S'}
               </span>
               <span className="font-mono text-xs font-bold text-primary">
-                {isWifi ? 'Pocket WiFi' : isEsim ? 'Digital eSIM' : 'Travel SIM'}
+                {productLabel || (isWifi ? 'Pocket WiFi' : isEsim ? 'Digital eSIM' : 'Travel SIM')}
               </span>
             </div>
           </div>
@@ -99,11 +139,13 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
           <div className="py-2 flex items-center justify-between">
             {/* Origin */}
             <div className="flex flex-col">
-              <span className="font-mono text-xs text-outline uppercase">ORIGIN</span>
-              <span className="text-3xl font-extrabold text-primary leading-none tracking-tight font-display-md tnum">
-                CGK
+              <span className="font-mono text-xs text-secondary font-medium uppercase">
+                {originLabel}
               </span>
-              <span className="text-xs text-secondary font-medium">Jakarta (T3)</span>
+              <span className="text-3xl font-extrabold text-primary leading-none tracking-tight font-display-md tnum">
+                {originCode}
+              </span>
+              <span className="text-xs text-secondary font-medium">{originCity}</span>
             </div>
 
             {/* Schematic Transit Path */}
@@ -116,33 +158,41 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
                 <span className="w-2.5 h-2.5 rounded-full bg-line-wifi z-10 shrink-0" />
               </div>
               <div className="mt-1 flex items-center gap-1">
-                <span className="font-mono text-xs text-outline font-bold tnum">
-                  GA874 • HND / KIX
+                <span className="font-mono text-xs text-secondary font-bold tnum">
+                  {routeNumber}
                 </span>
               </div>
             </div>
 
             {/* Destination */}
             <div className="flex flex-col items-end text-right">
-              <span className="font-mono text-xs text-outline uppercase">DESTINASI</span>
+              <span className="font-mono text-xs text-secondary font-medium uppercase">
+                {destinationLabel}
+              </span>
               <span className="text-3xl font-extrabold text-primary leading-none tracking-tight font-display-md truncate max-w-36 tnum">
                 {destText}
               </span>
-              <span className="text-xs text-secondary font-medium">Jepang Multi-City</span>
+              <span className="text-xs text-secondary font-medium">{destinationCity}</span>
             </div>
           </div>
 
           {/* Passenger & Schedule Grid */}
           <div className="grid grid-cols-2 gap-3 bg-surface p-3.5 rounded-xl border border-paper-edge font-mono text-xs">
             <div>
-              <span className="text-xs text-outline uppercase block">PEMEGANG UNIT</span>
+              <span className="text-xs text-secondary font-medium uppercase block">
+                {holderLabel}
+              </span>
               <span className="font-bold text-primary block truncate tnum">{travelerName}</span>
-              <span className="text-xs text-outline tnum">4 Wisatawan • 4 Perangkat</span>
+              <span className="text-xs text-secondary font-medium tnum">{partySizeText}</span>
             </div>
             <div className="text-right">
-              <span className="text-xs text-outline uppercase block">JADWAL AMBIL UNIT</span>
+              <span className="text-xs text-secondary font-medium uppercase block">
+                {scheduleLabel}
+              </span>
               <span className="font-bold text-primary block tnum">{startDate}</span>
-              <span className="text-xs text-outline tnum">s/d {endDate}</span>
+              <span className="text-xs text-secondary font-medium tnum">
+                {scheduleRangePrefix} {endDate}
+              </span>
             </div>
           </div>
         </div>
@@ -157,36 +207,39 @@ export const TripBoardingPass: React.FC<TripBoardingPassProps> = ({
         {/* Right Stub: Barcode & Quick Access */}
         <div className="w-full md:w-56 bg-surface p-6 flex flex-col items-center justify-center text-center border-t md:border-t-0 md:border-l border-paper-edge">
           {qrCodeUrl ? (
-            <div className="p-2 bg-white rounded-xl border border-paper-edge mb-2">
-              <img
-                src={qrCodeUrl}
-                alt="Ticket QR Code"
-                className="w-28 h-28 object-contain"
-              />
+            <div className="p-2 bg-paper rounded-xl border border-paper-edge mb-2">
+              <img src={qrCodeUrl} alt="Ticket QR Code" className="w-28 h-28 object-contain" />
             </div>
           ) : (
             <div className="w-28 h-28 rounded-xl border-2 border-dashed border-paper-edge bg-paper flex flex-col items-center justify-center mb-2">
               <QrCode className="w-8 h-8 text-secondary" />
-              <span className="font-mono text-xs text-outline mt-1">Ready</span>
+              <span className="font-mono text-xs text-secondary font-medium mt-1">Ready</span>
             </div>
           )}
 
           <span className="font-mono text-xs font-bold text-primary tracking-wider tnum">
             {orderNumber.slice(-8)}
           </span>
-          <span className="text-xs text-outline font-mono mt-0.5">
-            Tunjukkan di Booth Bandara
+          <span className="text-xs text-secondary font-medium font-mono mt-0.5">
+            {airportNoticeText}
           </span>
 
-          {onActionClick && (
+          {actionHref ? (
+            <a
+              href={actionHref}
+              className="mt-3 w-full min-h-12 rounded-xl bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary font-mono text-xs font-bold transition flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {actionLabel}
+            </a>
+          ) : onActionClick ? (
             <button
               type="button"
               onClick={onActionClick}
-              className="mt-3 w-full h-12 rounded-xl bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary font-mono text-xs font-bold transition flex items-center justify-center"
+              className="mt-3 w-full min-h-12 rounded-xl bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary font-mono text-xs font-bold transition flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               {actionLabel}
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

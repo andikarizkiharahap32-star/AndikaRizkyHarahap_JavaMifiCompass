@@ -1,0 +1,35 @@
+[
+  {
+    "id": "rev-001",
+    "placeId": "gold-jp-16",
+    "placeName": "Adversarial Injection Ramen Tokyo",
+    "countryIso2": "JP",
+    "type": "ADVERSARIAL_ALERT",
+    "currentTier": "NOT_HALAL",
+    "reason": "SECURITY ALERT: Prompt Injection pattern detected (/ignore previous instructions/i). Model bypassed; tier locked to NOT_HALAL.",
+    "status": "PENDING",
+    "createdAt": "2026-10-26T14:10:00.000Z"
+  },
+  {
+    "id": "rev-002",
+    "placeId": "gold-gb-18",
+    "placeName": "Unverified Google Review Cafe London",
+    "countryIso2": "GB",
+    "type": "QUOTE_MISMATCH",
+    "currentTier": "UNKNOWN",
+    "reason": "Klaim lisan dari pelayan tanpa sertifikat tertulis resmi. Memerlukan audit fisik atau kontak certifier.",
+    "status": "PENDING",
+    "createdAt": "2026-10-26T15:20:00.000Z"
+  },
+  {
+    "id": "rev-003",
+    "placeId": "dining-jp-004",
+    "placeName": "Halal Sakura Ginza",
+    "countryIso2": "JP",
+    "type": "USER_DISPUTE",
+    "currentTier": "OPTIONS",
+    "reason": "Pengguna melaporkan sajian seasonal dessert mengandung gelatin hewani tanpa label bebas babi.",
+    "status": "PENDING",
+    "createdAt": "2026-10-26T16:05:00.000Z"
+  }
+]

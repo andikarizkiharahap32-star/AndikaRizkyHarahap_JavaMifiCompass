@@ -1,0 +1,118 @@
+{
+  "id": "p8nM0ckP4ym3ntR3l4y",
+  "name": "12 - Mock Payment Gateway Relay & Verification",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mock-payment-gateway",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook-mock-payment",
+      "name": "Webhook: MockGateway Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [100, 300],
+      "webhookId": "mock-payment-gateway"
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = $json.body || {};\nconst orderNumber = payload.orderNumber || payload.order_id || payload.orderId || 'JMF-DEMO-2026';\nconst status = (payload.status || payload.result || 'SUCCESS').toUpperCase();\nconst amount = Number(payload.amount || payload.gross_amount || 150000);\nconst customer = payload.customer || payload.customerName || 'Budi Santoso';\n\n// Generate direct URLs for JavaMifi Compass\nconst webBaseUrl = 'http://localhost:3000';\nconst apiBaseUrl = 'http://localhost:3001';\n\nconst redirectCallbackUrl = `${webBaseUrl}/id/payment/callback?order_id=${encodeURIComponent(orderNumber)}&status=${encodeURIComponent(status)}`;\nconst tripHubUrl = `${webBaseUrl}/id/trip-hub/${encodeURIComponent(orderNumber)}`;\nconst mockSimulatorUrl = `${webBaseUrl}/id/checkout/mock-payment?orderNumber=${encodeURIComponent(orderNumber)}&amount=${amount}&customer=${encodeURIComponent(customer)}`;\n\nreturn {\n  json: {\n    orderNumber,\n    status,\n    amount,\n    customer,\n    redirectCallbackUrl,\n    tripHubUrl,\n    mockSimulatorUrl,\n    apiEndpoint: `${apiBaseUrl}/payments/mock/callback`,\n    isSuccess: status === 'SUCCESS' || status === 'SETTLEMENT'\n  }\n};"
+      },
+      "id": "node-parse-mock-payload",
+      "name": "Code: Resolve Payment Links",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3001/payments/mock/callback",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"orderNumber\": \"{{ $json.orderNumber }}\",\n  \"status\": \"{{ $json.status }}\",\n  \"amount\": {{ $json.amount }}\n}",
+        "options": {}
+      },
+      "id": "node-api-post-callback",
+      "name": "API: Post Settlement to Backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [560, 200],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "fromEmail": "payments@javamifi.com",
+        "toEmail": "admin-ops@javamifi.com",
+        "subject": "=[JavaMifi Payment] Transaction {{ $json.status }}: Order #{{ $json.orderNumber }}",
+        "text": "=Notifikasi Gerbang Pembayaran MockGateway:\n\n• Order Number: #{{ $json.orderNumber }}\n• Status: {{ $json.status }}\n• Nominal: Rp {{ $json.amount.toLocaleString('id-ID') }}\n\nTautan Terkait:\n- Redirect Callback URL: {{ $json.redirectCallbackUrl }}\n- Trip Hub Boarding Pass: {{ $json.tripHubUrl }}\n- Simulator Sandbox: {{ $json.mockSimulatorUrl }}\n\n#AntiSusahSinyal\nJavaMifi Compass Relay",
+        "options": {}
+      },
+      "id": "node-email-ops",
+      "name": "Mailpit: Notify Ops & Ledger",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [800, 200],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"orderNumber\": \"{{ $json.orderNumber }}\",\n  \"status\": \"{{ $json.status }}\",\n  \"redirectUrl\": \"{{ $json.redirectCallbackUrl }}\",\n  \"tripHubUrl\": \"{{ $json.tripHubUrl }}\"\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "node-respond-gateway",
+      "name": "Respond to Gateway with Redirect URL",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [560, 420]
+    }
+  ],
+  "connections": {
+    "Webhook: MockGateway Inbound": {
+      "main": [
+        [
+          {
+            "node": "Code: Resolve Payment Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Resolve Payment Links": {
+      "main": [
+        [
+          {
+            "node": "API: Post Settlement to Backend",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Gateway with Redirect URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API: Post Settlement to Backend": {
+      "main": [
+        [
+          {
+            "node": "Mailpit: Notify Ops & Ledger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

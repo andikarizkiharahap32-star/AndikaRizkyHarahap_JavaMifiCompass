@@ -101,6 +101,13 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
   // 1. JAPAN (JP)
   {
     id: 'jp-tokyo-honolu',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80',
+        caption: 'Semangkuk Ramen Halal Menya Honolu Ebisu',
+        type: 'STOREFRONT',
+      },
+    ],
     placeRef: 'pl_jp_honolu_01',
     name: 'Halal Ramen Honolu Ebisu',
     nameOriginal: '麺屋 帆のる 恵比寿店',
@@ -137,7 +144,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-jp-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Halal Certificate JHF-2025-0891 issued to Menya Honolu Ebisu. Status: Active, Expiry: 2027-08-31.',
+        quoteText:
+          'Halal Certificate JHF-2025-0891 issued to Menya Honolu Ebisu. Status: Active, Expiry: 2027-08-31.',
         language: 'en',
         retrievedAt: '2026-10-15',
         sourceUrl: 'https://japanhalal.or.jp/registry/jhf-2025-0891',
@@ -151,8 +159,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Special Rich Halal Chicken Paitan Ramen',
         nameId: 'Ramen Ayam Kuah Kental Gurih',
         category: 'Ramen',
-        sourceDescription: 'Slow-cooked halal chicken broth served with tender chicken char siu and ajitsuke tamago.',
-        explainerId: 'Kaldu ayam asli halal yang direbus 8 jam hingga lembut dan kental, disajikan dengan telur setengah matang.',
+        sourceDescription:
+          'Slow-cooked halal chicken broth served with tender chicken char siu and ajitsuke tamago.',
+        explainerId:
+          'Kaldu ayam asli halal yang direbus 8 jam hingga lembut dan kental, disajikan dengan telur setengah matang.',
         amountMinor: 1380,
         currency: 'JPY',
         isHalal: true,
@@ -164,8 +174,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Spicy Halal Chicken Ramen',
         nameId: 'Ramen Ayam Kuah Pedas Spesial',
         category: 'Ramen',
-        sourceDescription: 'Signature chicken ramen infused with aromatic chili oil and Japanese spices.',
-        explainerId: 'Ramen kuah pedas aroma wijen dan cabai khas Jepang dengan potongan dada ayam panggang halal.',
+        sourceDescription:
+          'Signature chicken ramen infused with aromatic chili oil and Japanese spices.',
+        explainerId:
+          'Ramen kuah pedas aroma wijen dan cabai khas Jepang dengan potongan dada ayam panggang halal.',
         amountMinor: 1480,
         currency: 'JPY',
         isHalal: true,
@@ -177,7 +189,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Handmade Halal Pan-Fried Gyoza (5 pcs)',
         nameId: 'Gyoza Ayam Panggang Halal (5 buah)',
         category: 'Side Dish',
-        sourceDescription: 'Crispy bottom dumplings stuffed with halal chicken mince, cabbage, and scallions.',
+        sourceDescription:
+          'Crispy bottom dumplings stuffed with halal chicken mince, cabbage, and scallions.',
         explainerId: 'Pangsit Jepang isi daging ayam cincang dan sayuran dengan kulit renyah.',
         amountMinor: 600,
         currency: 'JPY',
@@ -188,6 +201,13 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
   },
   {
     id: 'jp-tokyo-panga',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
+        caption: 'Sajian Daging Wagyu Panggang Yakiniku Panga Asakusa',
+        type: 'STOREFRONT',
+      },
+    ],
     placeRef: 'pl_jp_panga_02',
     name: 'Yakiniku Panga Halal Asakusa',
     nameOriginal: '炭火焼肉 パンガ 浅草店',
@@ -224,7 +244,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-jp-02',
         sourceType: 'REGISTRY',
-        quoteText: 'Full Halal Kitchen Certification granted to Yakiniku Panga. Certificate JHF-2024-0312.',
+        quoteText:
+          'Full Halal Kitchen Certification granted to Yakiniku Panga. Certificate JHF-2024-0312.',
         language: 'en',
         retrievedAt: '2026-10-12',
         attributionNotice: 'Japan Halal Foundation Public Database',
@@ -250,8 +271,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Premium Wagyu Loin Dinner Set',
         nameId: 'Set Lengkap Wagyu Loin, Nasi & Sup',
         category: 'Set Menu',
-        sourceDescription: 'Halal wagyu loin slices accompanied by steamed rice, kimchi, and clear beef soup.',
-        explainerId: 'Set makan lengkap daging wagyu panggang dengan nasi putih Jepang, kimchi, dan kuah kaldu sapi.',
+        sourceDescription:
+          'Halal wagyu loin slices accompanied by steamed rice, kimchi, and clear beef soup.',
+        explainerId:
+          'Set makan lengkap daging wagyu panggang dengan nasi putih Jepang, kimchi, dan kuah kaldu sapi.',
         amountMinor: 4800,
         currency: 'JPY',
         isHalal: true,
@@ -290,7 +313,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-sa-01',
         sourceType: 'REGISTRY',
-        quoteText: 'SFDA Kingdom of Saudi Arabia National Compliance 100% Halal Certified Slaughter.',
+        quoteText:
+          'SFDA Kingdom of Saudi Arabia National Compliance 100% Halal Certified Slaughter.',
         language: 'en',
         retrievedAt: '2026-10-10',
         attributionNotice: 'Saudi SFDA Central Verification',
@@ -303,8 +327,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Albaik 4-Piece Crispy Chicken Meal',
         nameId: 'Paket Ayam Goreng Renyah Albaik (4 Potong)',
         category: 'Ayam Goreng',
-        sourceDescription: '4 pieces of famous broasted chicken with signature garlic sauce, bun, and fries.',
-        explainerId: 'Ayam goreng khas rempah Albaik dengan saus bawang putih legendaris, kentang goreng, dan roti roti.',
+        sourceDescription:
+          '4 pieces of famous broasted chicken with signature garlic sauce, bun, and fries.',
+        explainerId:
+          'Ayam goreng khas rempah Albaik dengan saus bawang putih legendaris, kentang goreng, dan roti roti.',
         amountMinor: 2200, // 22.00 SAR
         currency: 'SAR',
         isHalal: true,
@@ -316,8 +342,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Spicy Chicken Fillet Sandwich Combo',
         nameId: 'Burger Fillet Ayam Pedas Albaik Jumbo',
         category: 'Sandwich & Burger',
-        sourceDescription: 'Crispy spicy chicken breast in toasted sesame bun with garlic paste and pickles.',
-        explainerId: 'Burger fillet dada ayam goreng pedas renyah dengan pasta bawang putih dan acar renyah.',
+        sourceDescription:
+          'Crispy spicy chicken breast in toasted sesame bun with garlic paste and pickles.',
+        explainerId:
+          'Burger fillet dada ayam goreng pedas renyah dengan pasta bawang putih dan acar renyah.',
         amountMinor: 1650, // 16.50 SAR
         currency: 'SAR',
         isHalal: true,
@@ -330,7 +358,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameId: 'Paket Udang Goreng Renyah (10 Ekor)',
         category: 'Seafood',
         sourceDescription: 'Golden crumbed jumbo prawns served with cocktail dip and potato fries.',
-        explainerId: '10 ekor udang jumbo goreng renyah saus cocol koktail dan kentang goreng hangat.',
+        explainerId:
+          '10 ekor udang jumbo goreng renyah saus cocol koktail dan kentang goreng hangat.',
         amountMinor: 2900, // 29.00 SAR
         currency: 'SAR',
         isHalal: true,
@@ -379,8 +408,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Charcoal Grilled Baby Chicken with Roz Ruziza',
         nameId: 'Ayam Muda Panggang Arang & Nasi Rempah Kuning',
         category: 'Nasi Mandi & Ayam',
-        sourceDescription: 'Tender baby chicken marinated in fresh garlic and sumac, chargrilled on open coals.',
-        explainerId: 'Satu ekor ayam muda lembut dibumbui bawang dan sumac, dipanggang arang di atas nasi rempah wangi.',
+        sourceDescription:
+          'Tender baby chicken marinated in fresh garlic and sumac, chargrilled on open coals.',
+        explainerId:
+          'Satu ekor ayam muda lembut dibumbui bawang dan sumac, dipanggang arang di atas nasi rempah wangi.',
         amountMinor: 3200,
         currency: 'SAR',
         isHalal: true,
@@ -419,7 +450,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-sg-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Singapore Zam Zam certified Halal by MUIS Singapore under Eating Establishment scheme.',
+        quoteText:
+          'Singapore Zam Zam certified Halal by MUIS Singapore under Eating Establishment scheme.',
         language: 'en',
         retrievedAt: '2026-10-19',
         attributionNotice: 'MUIS Halal Directory Verification',
@@ -432,8 +464,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Classic Mutton Murtabak with Curry Gravy',
         nameId: 'Martabak Daging Kambing Khas Zam Zam',
         category: 'Murtabak Legendaris',
-        sourceDescription: 'Hand-stretched roti pastry filled with minced spiced mutton, egg, and onions, with rich dalcha curry.',
-        explainerId: 'Martabak gurih renyah isi daging kambing bumbu rempah melimpah disajikan dengan kuah kari khas.',
+        sourceDescription:
+          'Hand-stretched roti pastry filled with minced spiced mutton, egg, and onions, with rich dalcha curry.',
+        explainerId:
+          'Martabak gurih renyah isi daging kambing bumbu rempah melimpah disajikan dengan kuah kari khas.',
         amountMinor: 1100, // 11.00 SGD
         currency: 'SGD',
         isHalal: true,
@@ -445,8 +479,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Aromatic Chicken Dum Biryani with Achar',
         nameId: 'Nasi Biryani Ayam Rempah & Acar',
         category: 'Nasi Biryani',
-        sourceDescription: 'Basmati rice cooked in fragrant saffron and ghee served with tender curry chicken thigh.',
-        explainerId: 'Nasi basmati bumbu rempah kapulaga saffron dengan potongan paha ayam empuk dan saus kari kental.',
+        sourceDescription:
+          'Basmati rice cooked in fragrant saffron and ghee served with tender curry chicken thigh.',
+        explainerId:
+          'Nasi basmati bumbu rempah kapulaga saffron dengan potongan paha ayam empuk dan saus kari kental.',
         amountMinor: 1000,
         currency: 'SGD',
         isHalal: true,
@@ -483,7 +519,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-my-01',
         sourceType: 'RESTAURANT_WEBSITE',
-        quoteText: 'All chicken and meats are 100% sourced from JAKIM-certified halal poultry suppliers. No pork, lard, or alcohol used on premises.',
+        quoteText:
+          'All chicken and meats are 100% sourced from JAKIM-certified halal poultry suppliers. No pork, lard, or alcohol used on premises.',
         language: 'en',
         retrievedAt: '2026-10-18',
         attributionNotice: 'Village Park Official Declaration',
@@ -496,8 +533,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Signature Nasi Lemak with Spiced Fried Chicken',
         nameId: 'Nasi Lemak Gurih Ayam Goreng Berempah',
         category: 'Nasi Lemak',
-        sourceDescription: 'Fluffy santan coconut rice with crispy spiced fried chicken, sambal manis-pedas, anchovies, and egg.',
-        explainerId: 'Nasi uduk kelapa wangi dengan paha ayam goreng bumbu serundeng renyah dan sambal khas Malaysia.',
+        sourceDescription:
+          'Fluffy santan coconut rice with crispy spiced fried chicken, sambal manis-pedas, anchovies, and egg.',
+        explainerId:
+          'Nasi uduk kelapa wangi dengan paha ayam goreng bumbu serundeng renyah dan sambal khas Malaysia.',
         amountMinor: 1450,
         currency: 'MYR',
         isHalal: true,
@@ -536,7 +575,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-kr-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Korea Muslim Federation Halal Certification Registry 2024. Halal Kitchen Korea officially listed.',
+        quoteText:
+          'Korea Muslim Federation Halal Certification Registry 2024. Halal Kitchen Korea officially listed.',
         language: 'en',
         retrievedAt: '2026-10-14',
         attributionNotice: 'KMF Seoul Central Registry',
@@ -549,8 +589,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Halal Beef Bulgogi Hanok Set',
         nameId: 'Paket Bulgogi Daging Sapi Halal',
         category: 'Korean BBQ',
-        sourceDescription: 'Thinly sliced halal Korean beef marinated in sweet soy and pear juice, served with 6 banchan side dishes.',
-        explainerId: 'Daging sapi bulgogi manis gurih lembut dengan paket 6 macam lauk banchan khas Korea dan nasi hangat.',
+        sourceDescription:
+          'Thinly sliced halal Korean beef marinated in sweet soy and pear juice, served with 6 banchan side dishes.',
+        explainerId:
+          'Daging sapi bulgogi manis gurih lembut dengan paket 6 macam lauk banchan khas Korea dan nasi hangat.',
         amountMinor: 22000,
         currency: 'KRW',
         isHalal: true,
@@ -562,8 +604,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Halal Dakbokkeumtang (Spicy Braised Chicken)',
         nameId: 'Sup Ayam Pedas Rebus Kentang (Dakbokkeumtang)',
         category: 'Tradisional Korea',
-        sourceDescription: 'Spicy chicken stew with tender potatoes, carrots, and sweet gochujang chili broth.',
-        explainerId: 'Rebusan ayam bumbu gochujang pedas khas Korea dengan kentang lembut dan sayuran segar.',
+        sourceDescription:
+          'Spicy chicken stew with tender potatoes, carrots, and sweet gochujang chili broth.',
+        explainerId:
+          'Rebusan ayam bumbu gochujang pedas khas Korea dengan kentang lembut dan sayuran segar.',
         amountMinor: 25000,
         currency: 'KRW',
         isHalal: true,
@@ -601,7 +645,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-tr-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Full compliance with Turkish GIMDES Halal meat production standard and alcohol-free premises.',
+        quoteText:
+          'Full compliance with Turkish GIMDES Halal meat production standard and alcohol-free premises.',
         language: 'en',
         retrievedAt: '2026-10-11',
         attributionNotice: 'GIMDES Turkey Food Authority',
@@ -614,8 +659,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Historic Grilled Meatballs with Piyaz Salad',
         nameId: 'Bakso Panggang Daging Sapi Turki & Salad Piyaz',
         category: 'Izgara / Grill',
-        sourceDescription: 'Charcoal-grilled minced beef patties served with white bean salad, fresh tomatoes, and spicy biber pepper.',
-        explainerId: 'Daging cincang sapi panggang arang gurih disajikan dengan salad kacang putih piyaz dan cabai panggang.',
+        sourceDescription:
+          'Charcoal-grilled minced beef patties served with white bean salad, fresh tomatoes, and spicy biber pepper.',
+        explainerId:
+          'Daging cincang sapi panggang arang gurih disajikan dengan salad kacang putih piyaz dan cabai panggang.',
         amountMinor: 36000,
         currency: 'TRY',
         isHalal: true,
@@ -652,7 +699,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-gb-01',
         sourceType: 'RESTAURANT_WEBSITE',
-        quoteText: 'All chicken and lamb across all Dishoom locations is certified Halal by accredited UK suppliers.',
+        quoteText:
+          'All chicken and lamb across all Dishoom locations is certified Halal by accredited UK suppliers.',
         language: 'en',
         retrievedAt: '2026-10-16',
         attributionNotice: 'Dishoom Official Dietary Guide',
@@ -665,8 +713,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Tender Chicken Ruby in Velvety Spiced Makhani',
         nameId: 'Kari Ayam Ruby Makhani Khas Dishoom',
         category: 'Ruby Murgh',
-        sourceDescription: 'Tender halal chicken thigh in a rich, silky makhani tomato gravy simmered with fenugreek.',
-        explainerId: 'Potongan ayam halal empuk dalam kuah kari tomat butter makhani aromatik dengan rempah kapulaga.',
+        sourceDescription:
+          'Tender halal chicken thigh in a rich, silky makhani tomato gravy simmered with fenugreek.',
+        explainerId:
+          'Potongan ayam halal empuk dalam kuah kari tomat butter makhani aromatik dengan rempah kapulaga.',
         amountMinor: 1650,
         currency: 'GBP',
         isHalal: true,
@@ -678,8 +728,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Slow-Cooked House Black Daal',
         nameId: 'Daal Hitam Rempah Dimasak 24 Jam',
         category: 'Vegetarian Legend',
-        sourceDescription: 'Dark, rich, deeply flavored lentils slow-cooked for 24 hours with butter and cream.',
-        explainerId: 'Kacang miju hitam yang dimasak perlahan 24 jam dengan mentega dan rempah khas Bombay.',
+        sourceDescription:
+          'Dark, rich, deeply flavored lentils slow-cooked for 24 hours with butter and cream.',
+        explainerId:
+          'Kacang miju hitam yang dimasak perlahan 24 jam dengan mentega dan rempah khas Bombay.',
         amountMinor: 950,
         currency: 'GBP',
         isHalal: true,
@@ -729,8 +781,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Al Safadi Mixed Grill Platter',
         nameId: 'Platter Sate Panggang Campur Lebanon',
         category: 'Lebanese Grill',
-        sourceDescription: 'Shish taouk, lamb kebab, and tender beef tikka served on biwaz bread with garlic dip.',
-        explainerId: 'Sate ayam shish taouk dan sate daging domba panggang arang disajikan dengan roti lebanon dan saus bawang putih.',
+        sourceDescription:
+          'Shish taouk, lamb kebab, and tender beef tikka served on biwaz bread with garlic dip.',
+        explainerId:
+          'Sate ayam shish taouk dan sate daging domba panggang arang disajikan dengan roti lebanon dan saus bawang putih.',
         amountMinor: 8200,
         currency: 'AED',
         isHalal: true,
@@ -768,7 +822,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-th-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Official CICOT Halal certification registered for Yana Thai Restaurant Bangkok.',
+        quoteText:
+          'Official CICOT Halal certification registered for Yana Thai Restaurant Bangkok.',
         language: 'en',
         retrievedAt: '2026-10-15',
         attributionNotice: 'CICOT Thailand Halal Directory',
@@ -781,8 +836,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Authentic Halal Tom Yum Goong Nam Khon',
         nameId: 'Tom Yum Udang Segar Kuah Santan Kental',
         category: 'Sup Tradisional Thai',
-        sourceDescription: 'Spicy and sour lemongrass soup with fresh river prawns, galangal, lime leaves, and evaporated milk.',
-        explainerId: 'Sup tom yum segar dengan udang besar, serai, daun jeruk, dan cabai rawit pedas asam khas Bangkok.',
+        sourceDescription:
+          'Spicy and sour lemongrass soup with fresh river prawns, galangal, lime leaves, and evaporated milk.',
+        explainerId:
+          'Sup tom yum segar dengan udang besar, serai, daun jeruk, dan cabai rawit pedas asam khas Bangkok.',
         amountMinor: 26000,
         currency: 'THB',
         isHalal: true,
@@ -821,7 +878,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-hk-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Operating inside Masjid Ammar under Islamic Community Fund of Hong Kong supervision.',
+        quoteText:
+          'Operating inside Masjid Ammar under Islamic Community Fund of Hong Kong supervision.',
         language: 'en',
         retrievedAt: '2026-10-12',
         attributionNotice: 'Islamic Community Fund of Hong Kong',
@@ -834,8 +892,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Halal Steamed Har Gow Shrimp Dumplings',
         nameId: 'Dim Sum Hakau Udang Halal (4 Pcs)',
         category: 'Dim Sum Halal',
-        sourceDescription: 'Translucent steamed crystal pastry filled with plump fresh shrimp and bamboo shoots.',
-        explainerId: 'Kulit hakau transparan lembut dengan isian udang segar kenyal kukus bebas babi.',
+        sourceDescription:
+          'Translucent steamed crystal pastry filled with plump fresh shrimp and bamboo shoots.',
+        explainerId:
+          'Kulit hakau transparan lembut dengan isian udang segar kenyal kukus bebas babi.',
         amountMinor: 3800,
         currency: 'HKD',
         isHalal: true,
@@ -886,8 +946,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Clear-Broth Braised Halal Beef Noodle Soup',
         nameId: 'Mie Daging Sapi Kuah Bening Khas Taipei',
         category: 'Mie Daging Sapi',
-        sourceDescription: 'Handmade wheat noodles with tender beef shank slices in a slow-simmered herbal clear bone broth.',
-        explainerId: 'Mie kenyal kuah kaldu sapi bening dengan potongan daging sengkel empuk beraroma jahe dan rempah.',
+        sourceDescription:
+          'Handmade wheat noodles with tender beef shank slices in a slow-simmered herbal clear bone broth.',
+        explainerId:
+          'Mie kenyal kuah kaldu sapi bening dengan potongan daging sengkel empuk beraroma jahe dan rempah.',
         amountMinor: 20000,
         currency: 'TWD',
         isHalal: true,
@@ -924,7 +986,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-au-01',
         sourceType: 'VERIFIED_REVIEW',
-        quoteText: 'Designated 100% vegetable oil fryers and alcohol-free batter confirmed by Sydney Muslim Travelers Guide.',
+        quoteText:
+          'Designated 100% vegetable oil fryers and alcohol-free batter confirmed by Sydney Muslim Travelers Guide.',
         language: 'en',
         retrievedAt: '2026-10-11',
         attributionNotice: 'Sydney Halal Travelers Review Registry',
@@ -937,8 +1000,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Crispy Grilled Australian Barramundi with Chips',
         nameId: 'Ikan Barramundi Panggang Segar & Kentang Goreng',
         category: 'Fresh Seafood',
-        sourceDescription: 'Grilled fresh wild Australian barramundi fillet with lemon herb seasoning and rustic chips.',
-        explainerId: 'Fillet ikan barramundi liar segar panggang gurih disajikan dengan kentang goreng garing dan lemon.',
+        sourceDescription:
+          'Grilled fresh wild Australian barramundi fillet with lemon herb seasoning and rustic chips.',
+        explainerId:
+          'Fillet ikan barramundi liar segar panggang gurih disajikan dengan kentang goreng garing dan lemon.',
         amountMinor: 2850,
         currency: 'AUD',
         isHalal: true,
@@ -975,7 +1040,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-fr-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Certified 100% Halal beef and poultry certified under Grande Mosquée de Paris authority.',
+        quoteText:
+          'Certified 100% Halal beef and poultry certified under Grande Mosquée de Paris authority.',
         language: 'en',
         retrievedAt: '2026-10-17',
         attributionNotice: 'Mosquée de Paris Halal Certification',
@@ -988,8 +1054,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Gourmet French Burger with Melted Raclette',
         nameId: 'Burger Sapi Gourmet Prancis Keju Raclette Meleleh',
         category: 'Gourmet Burgers',
-        sourceDescription: 'Fresh minced French halal Charolais beef patty, melted raclette cheese, caramelized shallots in brioche.',
-        explainerId: 'Daging sapi Charolais cincang panggang dengan lelehan keju raclette khas Prancis dan bawang karamel.',
+        sourceDescription:
+          'Fresh minced French halal Charolais beef patty, melted raclette cheese, caramelized shallots in brioche.',
+        explainerId:
+          'Daging sapi Charolais cincang panggang dengan lelehan keju raclette khas Prancis dan bawang karamel.',
         amountMinor: 1950,
         currency: 'EUR',
         isHalal: true,
@@ -1026,7 +1094,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-de-01',
         sourceType: 'RESTAURANT_WEBSITE',
-        quoteText: 'Halal certified chicken kebab served with freshly roasted Mediterranean vegetables and feta.',
+        quoteText:
+          'Halal certified chicken kebab served with freshly roasted Mediterranean vegetables and feta.',
         language: 'en',
         retrievedAt: '2026-10-12',
         attributionNotice: 'Mustafas Döner Berlin Documentation',
@@ -1036,11 +1105,13 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'm-de-01',
         nameOriginal: 'Hähnchen Döner mit Röstgemüse',
-        nameEn: "Famous Chicken Döner with Roasted Vegetables & Feta",
+        nameEn: 'Famous Chicken Döner with Roasted Vegetables & Feta',
         nameId: 'Doner Kebab Ayam Panggang Sayur Kreuzberg',
         category: 'Döner Kebab',
-        sourceDescription: 'Warm pita bread filled with shaved spiced chicken, caramelized roasted carrots, potatoes, garlic sauce, and feta.',
-        explainerId: 'Roti pita hangat isi irisan daging ayam bumbu rempah, sayuran panggang karamel, dan saus garlic khas Berlin.',
+        sourceDescription:
+          'Warm pita bread filled with shaved spiced chicken, caramelized roasted carrots, potatoes, garlic sauce, and feta.',
+        explainerId:
+          'Roti pita hangat isi irisan daging ayam bumbu rempah, sayuran panggang karamel, dan saus garlic khas Berlin.',
         amountMinor: 850,
         currency: 'EUR',
         isHalal: true,
@@ -1090,8 +1161,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Authentic Wood-Fired Buffalo Mozzarella Pizza',
         nameId: 'Pizza Margherita Oven Kayu Mozzarella Kerbau',
         category: 'Pizza Italia',
-        sourceDescription: 'Wood-fired sourdough base with San Marzano tomatoes, fresh buffalo mozzarella, and fresh basil.',
-        explainerId: 'Pizza sourdough panggang kayu dengan saus tomat San Marzano manis alami, keju mozzarella segar, dan daun basil.',
+        sourceDescription:
+          'Wood-fired sourdough base with San Marzano tomatoes, fresh buffalo mozzarella, and fresh basil.',
+        explainerId:
+          'Pizza sourdough panggang kayu dengan saus tomat San Marzano manis alami, keju mozzarella segar, dan daun basil.',
         amountMinor: 1400,
         currency: 'EUR',
         isHalal: true,
@@ -1128,7 +1201,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-nl-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Halal Quality Control (HQC) Netherlands certified Indonesian dining establishment.',
+        quoteText:
+          'Halal Quality Control (HQC) Netherlands certified Indonesian dining establishment.',
         language: 'en',
         retrievedAt: '2026-10-14',
         attributionNotice: 'HQC Netherlands Verification',
@@ -1141,8 +1215,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Royal Indonesian Rijsttafel Feast (12 Dishes)',
         nameId: 'Paket Rijsttafel Lengkap 12 Masakan Nusantara',
         category: 'Rijsttafel',
-        sourceDescription: 'Rendang daging sapi, ayam bumbu rujak, sate ayam kacang, gado-gado, sayur lodeh, dan sambal goreng.',
-        explainerId: 'Pesta hidangan 12 jenis masakan tradisional Indonesia lengkap dengan rendang empuk, sate, dan sambal ulek.',
+        sourceDescription:
+          'Rendang daging sapi, ayam bumbu rujak, sate ayam kacang, gado-gado, sayur lodeh, dan sambal goreng.',
+        explainerId:
+          'Pesta hidangan 12 jenis masakan tradisional Indonesia lengkap dengan rendang empuk, sate, dan sambal ulek.',
         amountMinor: 3450,
         currency: 'EUR',
         isHalal: true,
@@ -1179,7 +1255,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-ch-01',
         sourceType: 'RESTAURANT_WEBSITE',
-        quoteText: 'Lamb and beef sourced exclusively from certified Swiss halal organic butcheries.',
+        quoteText:
+          'Lamb and beef sourced exclusively from certified Swiss halal organic butcheries.',
         language: 'en',
         retrievedAt: '2026-10-15',
         attributionNotice: 'Restaurant Bebek Zurich Food Declarations',
@@ -1192,8 +1269,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Slow-Braised Alpine Lamb with Dried Apricots & Couscous',
         nameId: 'Tagine Domba Alpin Swiss Rebus Aprikot & Couscous',
         category: 'Main Courses',
-        sourceDescription: 'Tender Swiss Alpine lamb shank slow-braised with sweet apricots, almonds, and spiced broth.',
-        explainerId: 'Betis domba Alpin Swiss empuk dimasak dengan kuah rempah manis aprikot dan taburan kacang almond.',
+        sourceDescription:
+          'Tender Swiss Alpine lamb shank slow-braised with sweet apricots, almonds, and spiced broth.',
+        explainerId:
+          'Betis domba Alpin Swiss empuk dimasak dengan kuah rempah manis aprikot dan taburan kacang almond.',
         amountMinor: 4200,
         currency: 'CHF',
         isHalal: true,
@@ -1244,8 +1323,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Abou Tarek Special Jumbo Koshari',
         nameId: 'Koshari Khas Mesir Spesial Jumbo Bawang Krispi',
         category: 'Koshari Mesir',
-        sourceDescription: 'Layered rice, brown lentils, macaroni, chickpeas, topped with crispy spiced onions and garlic chili vinegar.',
-        explainerId: 'Kombinasi nasi, lentil cokelat, makaroni, kacang arab dengan saus tomat rempah dan taburan bawang goreng renyah.',
+        sourceDescription:
+          'Layered rice, brown lentils, macaroni, chickpeas, topped with crispy spiced onions and garlic chili vinegar.',
+        explainerId:
+          'Kombinasi nasi, lentil cokelat, makaroni, kacang arab dengan saus tomat rempah dan taburan bawang goreng renyah.',
         amountMinor: 8500,
         currency: 'EGP',
         isHalal: true,
@@ -1283,7 +1364,8 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
       {
         id: 'ev-ma-01',
         sourceType: 'REGISTRY',
-        quoteText: 'Full compliance with Moroccan Islamic Food Regulations and Alcohol-Free premises.',
+        quoteText:
+          'Full compliance with Moroccan Islamic Food Regulations and Alcohol-Free premises.',
         language: 'en',
         retrievedAt: '2026-10-17',
         attributionNotice: 'Kingdom of Morocco Islamic Affairs Registry',
@@ -1296,8 +1378,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Slow-Cooked Lamb Shank Tagine with Prunes',
         nameId: 'Tagine Daging Domba Rebus Buah Prune & Almond',
         category: 'Tagine Tradisional',
-        sourceDescription: 'Braised tender lamb shoulder in terracotta clay pot with sweet prunes, toasted sesame, and roasted almonds.',
-        explainerId: 'Daging domba empuk dimasak dalam kuali tanah liat dengan buah prune manis dan taburan almond gurih.',
+        sourceDescription:
+          'Braised tender lamb shoulder in terracotta clay pot with sweet prunes, toasted sesame, and roasted almonds.',
+        explainerId:
+          'Daging domba empuk dimasak dalam kuali tanah liat dengan buah prune manis dan taburan almond gurih.',
         amountMinor: 17500,
         currency: 'MAD',
         isHalal: true,
@@ -1348,8 +1432,10 @@ const RAW_SEEDED_PLACES: RawPlace[] = [
         nameEn: 'Sultan Ottoman Imperial Mixed Kebabs',
         nameId: 'Kebab Spesial Sultan Panggang Arang Khas Katara',
         category: 'Sultan Grills',
-        sourceDescription: 'Charcoal-grilled tender lamb cutlets, chicken shish, and spiced minced Adana kebabs on buttered flatbread.',
-        explainerId: 'Potongan iga domba panggang arang, sate ayam rempah, dan kebab Adana disajikan dengan roti mentega hangat.',
+        sourceDescription:
+          'Charcoal-grilled tender lamb cutlets, chicken shish, and spiced minced Adana kebabs on buttered flatbread.',
+        explainerId:
+          'Potongan iga domba panggang arang, sate ayam rempah, dan kebab Adana disajikan dengan roti mentega hangat.',
         amountMinor: 15500,
         currency: 'QAR',
         isHalal: true,
@@ -1511,67 +1597,169 @@ export const COUNTRY_WIFI_BOOTHS: Record<
   },
 };
 
+export const VENUE_STOREFRONT_PHOTOS: Record<string, { url: string; caption: string }> = {
+  'jp-tokyo-honolu': {
+    url: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80',
+    caption: 'Semangkuk Ramen Halal Menya Honolu Ebisu Tokyo',
+  },
+  'jp-tokyo-panga': {
+    url: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
+    caption: 'Sajian Daging Wagyu Panggang Yakiniku Panga Asakusa',
+  },
+  'sa-makkah-albaik': {
+    url: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=800&q=80',
+    caption: 'Gerai Ikonik & Sajian Ayam Krispi Albaik Abraj Al-Bait Makkah',
+  },
+  'sa-madinah-najd': {
+    url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+    caption: 'Ayam Bakar Arang & Nasi Mandi Al Tazaj Madinah Dekat Nabawi',
+  },
+  'sg-kampong-zamzam': {
+    url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80',
+    caption: 'Gedung Bersejarah & Murtabak Singapura Zam Zam Est. 1908 Kampong Glam',
+  },
+  'my-kl-villagepark': {
+    url: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80',
+    caption: 'Nasi Lemak Ayam Goreng Berempah Crispy Village Park Damansara',
+  },
+  'kr-seoul-halalkitchen': {
+    url: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80',
+    caption: 'Fasad Hanok Tradisional & Bulgogi Halal Kitchen Korea Samcheong-dong',
+  },
+  'tr-istanbul-sultanahmet': {
+    url: 'https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=800&q=80',
+    caption: 'Fasad Bersejarah & Kofte Bakar Tarihi Sultanahmet Koftecisi Istanbul',
+  },
+  'gb-london-dishoom': {
+    url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+    caption: 'Fasad Kafe Bombay Klasik Dishoom Covent Garden London',
+  },
+  'ae-dubai-alsafadi': {
+    url: 'https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=800&q=80',
+    caption: 'Suasana Elegan & Panggangan Daging Halal Al Safadi Sheikh Zayed Road',
+  },
+  'th-bkk-yana': {
+    url: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=800&q=80',
+    caption: 'Tom Yum Goong Otentik & Suasana Yana Restaurant MBK Center Bangkok',
+  },
+  'hk-wanchai-islamic': {
+    url: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
+    caption: 'Dim Sum Halal Segar Keranjang Bambu Islamic Centre Canteen Wan Chai',
+  },
+  'tw-taipei-chang': {
+    url: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80',
+    caption: 'Semangkuk Sup Mi Daging Sapi Halal Chang Beef Noodle Taipei',
+  },
+  'au-sydney-fishmarket': {
+    url: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?auto=format&fit=crop&w=800&q=80',
+    caption: 'Boga Bahari Segar & Tiram Sydney Fish Market Pyrmont',
+  },
+  'fr-paris-lebutcher': {
+    url: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80',
+    caption: 'Burger Gourmet Prancis Halal Le Butcher Rue de Berri Paris',
+  },
+  'de-berlin-mustafa': {
+    url: 'https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=800&q=80',
+    caption: 'Kedai Doner Kebab Sayur Mustafa Mehringdamm Kreuzberg Berlin',
+  },
+  'it-rome-vatican': {
+    url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+    caption: 'Fasad Ristorante & Pasta Halal Luna Caprese Trevi Roma',
+  },
+  'nl-amsterdam-kartika': {
+    url: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80',
+    caption: 'Rijsttafel Nusantara & Fasad Warisan Restaurant Kartika Amsterdam',
+  },
+  'ch-zurich-bebek': {
+    url: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=80',
+    caption: 'Interior Kontemporer & Hidangan Levant Halal Bebek Zurich',
+  },
+  'eg-cairo-aboutarek': {
+    url: 'https://images.unsplash.com/photo-1505253758473-96b3015f21c9?auto=format&fit=crop&w=800&q=80',
+    caption: 'Sajian Porsi Legendaris Koshary Abou Tarek Downtown Kairo',
+  },
+  'ma-marrakech-nomad': {
+    url: 'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=800&q=80',
+    caption: 'Teras Rooftop & Sajian Tajine Nomad Spice Square Medina Marrakech',
+  },
+  'qa-doha-sukarpasha': {
+    url: 'https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=800&q=80',
+    caption: 'Interior Megah Ottoman & Santapan Sultan Sukar Pasha Lounge Katara Doha',
+  },
+};
+
 export const PLACE_DESCRIPTIONS: Record<string, string> = {
   'jp-tokyo-honolu':
-    'Kedai ramen halal legendaris di kawasan Ebisu, Tokyo. Terkenal dengan kaldu ayam paitan kental yang direbus perlahan selama 8 jam tanpa mirin atau sake. Menjadi rujukan utama pelancong muslim dunia dengan fasilitas ruang sholat bersih di lantai 2.',
+    'Kedai ramen halal legendaris di kawasan Ebisu, Tokyo. Terkenal dengan kaldu ayam paitan kental yang direbus perlahan selama 8 jam tanpa mirin atau sake. Menjadi rujukan utama pelancong muslim dunia dengan fasilitas ruang sholat bersih di lantai 2. [OSM: amenity=restaurant | cuisine=ramen | diet:halal=yes | addr:city=Tokyo | addr:suburb=Ebisu | addr:postcode=150-0022]',
   'jp-tokyo-panga':
-    'Restoran yakiniku daging sapi wagyu hitam Jepang A5 bersertifikasi halal resmi di Asakusa. Daging dipanggang arang bambu tradisional dengan racikan saus tare khusus tanpa kandungan alkohol atau ekstrak babi.',
+    'Restoran yakiniku daging sapi wagyu hitam Jepang A5 bersertifikasi halal resmi di Asakusa. Daging dipanggang arang bambu tradisional dengan racikan saus tare khusus tanpa kandungan alkohol atau ekstrak babi. [OSM: amenity=restaurant | cuisine=yakiniku;barbecue | diet:halal=only | addr:city=Tokyo | addr:suburb=Taito | addr:postcode=110-0016]',
   'sa-makkah-albaik':
-    'Jaringan restoran ayam goreng krispi paling ikonik di Tanah Suci. Terletak di food court Abraj Al-Bait Mall Makkah, diawasi langsung di bawah regulasi SFDA Arab Saudi dengan standar 100% halal nasional.',
+    'Jaringan restoran ayam goreng krispi paling ikonik di Tanah Suci, berlokasi di Lantai 4 Food Court Abraj Al-Bait Mall menghadap pelataran Masjidil Haram. Seluruh pasokan diawasi ketat oleh SFDA (Saudi Food and Drug Authority) dengan kepatuhan 100% halal dan bebas alkohol. Fasilitas musholla langsung terhubung dengan masjid mall. [OSM: amenity=fast_food | cuisine=chicken;burger | diet:halal=only | alcohol=no | addr:city=Mecca | addr:street=King Abdul Aziz Rd]',
   'sa-madinah-najd':
-    'Penyedia hidangan ayam panggang arang dan nasi mandi aromatik khas Hijaz, berlokasi beberapa langkah dari halaman utara Masjid Nabawi di Madinah Al-Munawwarah.',
+    'Penyedia ayam panggang bumbu rempah segar dan nasi mandi aromatik terfavorit di Madinah Al-Munawwarah, terletak di pelataran utara beberapa langkah dari Masjid Nabawi. Menggunakan ayam pedaging segar lokal yang disembelih sesuai syariat Islam SFDA tanpa bahan pengawet. Tersedia area makan keluarga yang nyaman. [OSM: amenity=restaurant | cuisine=arab;barbecue;chicken | diet:halal=only | alcohol=no | addr:city=Medina | addr:street=Central Northern Area]',
   'sg-kampong-zamzam':
-    'Restoran legendaris bersejarah yang didirikan sejak 1908 di seberang Masjid Sultan Kampong Glam Singapura. Terkenal dengan martabak daging domba bersertifikat Halal MUIS dan kari otentik.',
+    'Restoran warisan kuliner legendaris yang didirikan sejak 1908 di 697-699 North Bridge Road, tepat di seberang Masjid Sultan Kampong Glam. Terkenal di seluruh Asia Tenggara dengan martabak daging domba bersertifikat Halal MUIS resmi, kari kental, dan briyani aromatik. Sangat dekat dengan tempat wudhu dan sholat Masjid Sultan. [OSM: amenity=restaurant | cuisine=indian_muslim;murtabak | diet:halal=only | alcohol=no | addr:street=North Bridge Road | addr:housenumber=697-699 | addr:city=Singapore | addr:postcode=198675]',
   'my-kl-villagepark':
-    'Restoran spesialis Nasi Lemak ayam goreng rempah paling populer di Damansara Utama. Sangat ramai dikunjungi warga lokal dan wisatawan, menggunakan bahan halal dari peternakan bersertifikat JAKIM.',
+    'Restoran rujukan Nasi Lemak nomor satu di Lembah Klang, berlokasi di Jalan SS 21/37 Damansara Utama. Menyajikan nasi lemak pandan wangi dengan ayam goreng berempah keemasan yang renyah dan sambal manis-pedas gurih. Seluruh pasokan bersertifikasi Halal JAKIM resmi tanpa sajian alkohol. Fasilitas surau tersedia di lantai atas. [OSM: amenity=restaurant | cuisine=malaysian;nasi_lemak | diet:halal=yes | alcohol=no | addr:street=Jalan SS 21/37 | addr:housenumber=5 | addr:city=Petaling Jaya | addr:postcode=47400]',
   'kr-seoul-halalkitchen':
-    'Restoran masakan otentik Korea pertama yang bersertifikat Halal KMF resmi di kawasan Samcheong-dong, Seoul. Menyajikan Bulgogi, Tteokbokki, dan Dakgalbi tanpa mirin atau soju.',
+    'Restoran kuliner otentik Korea pertama yang memegang sertifikasi Halal KMF resmi di kawasan cagar budaya Samcheong-dong / Bukchon Hanok Village. Menyajikan Bulgogi sapi panggang, Tteokbokki saus gochujang halal khusus tanpa mirin atau alkohol, dan Samgyetang. Menyediakan ruang sholat (musalla) lengkap dengan sajadah dan tempat wudhu di dalam rumah tradisional Hanok. [OSM: amenity=restaurant | cuisine=korean;bulgogi | diet:halal=only | alcohol=no | addr:street=Samcheong-ro 2-gil | addr:housenumber=86 | addr:city=Seoul | addr:district=Jongno-gu]',
   'tr-istanbul-sultanahmet':
-    'Restoran bakso daging bakar legendaris di Sultanahmet Istanbul yang telah beroperasi sejak 1920. Daging sapi murni diproses dengan standar Halal Turki serta disajikan dengan piyaz salad kacang.',
+    'Restoran bakso daging bakar bersejarah yang telah melayani warga dan musafir sejak 1920 di Divan Yolu Caddesi, persis di seberang Masjid Biru (Sultanahmet Camii) Istanbul. Daging sapi 100% halal dipanggang arang tanpa bumbu tambahan selain garam, disajikan dengan piyaz salad kacang putih. Akses sholat sangat mudah ke Masjid Sultanahmet dan Hagia Sophia. [OSM: amenity=restaurant | cuisine=turkish;kofte | diet:halal=only | alcohol=no | addr:street=Divan Yolu Caddesi | addr:housenumber=12 | addr:city=Istanbul | addr:district=Fatih | addr:postcode=34110]',
   'gb-london-dishoom':
-    'Restoran bergaya kafe Irani legendaris di Covent Garden London. Menyajikan menu ayam dan domba bersertifikasi Halal yang dimasak terpisah, dengan penandaan menu yang transparan.',
+    "Kafe bergaya Bombay Irani terkemuka di 12 Upper Saint Martin's Lane, Covent Garden London. Seluruh olahan daging ayam dan domba disuplai dari rumah potong bersertifikasi halal terakreditasi dan dimasak dengan peralatan terpisah. Menyajikan Chicken Ruby, Lamb Biryani, dan sarapan Naan Roll dengan label halal yang transparan bagi pelancong muslim. [OSM: amenity=restaurant | cuisine=indian;bombay_cafe | diet:halal=yes | addr:street=Upper Saint Martin's Lane | addr:housenumber=12 | addr:city=London | addr:postcode=WC2H 9FB]",
   'ae-dubai-alsafadi':
-    'Restoran keluarga Lebanon premium di Sheikh Zayed Road Dubai. Menyajikan aneka mezze segar, panggangan daging domba, dan roti pita panggang kayu bersertifikat Halal resmi UEA.',
+    'Restoran kuliner khas Lebanon terdepan di Sheikh Zayed Road, Trade Centre Dubai. Menyajikan aneka mezze dingin dan panas, panggangan mixed grill domba arang, roti pita hangat dari oven kayu, dan jus segar. Terverifikasi 100% Halal di bawah regulasi Dubai Municipality & Emirates Authority for Standardization and Metrology (ESMA). Tersedia musalla pria dan wanita di lokasi. [OSM: amenity=restaurant | cuisine=lebanese;middle_eastern | diet:halal=only | alcohol=no | addr:street=Sheikh Zayed Road | addr:city=Dubai]',
   'th-bkk-yana':
-    'Restoran masakan otentik Thailand bersertifikasi Halal CICOT resmi di lantai 5 MBK Center Bangkok. Terkenal dengan Tom Yum Goong pedas asam dan Pad Thai udang segar.',
+    'Restoran masakan khas Thailand bersertifikasi Halal CICOT resmi di Lantai 5 Toko Serba Ada MBK Center (Siam), Bangkok. Menyajikan Tom Yum Goong otentik kaya rempah, Pad Thai udang segar, dan Som Tum pepaya tanpa minyak atau saus hewani non-halal. Sangat dekat dengan musalla MBK Center lantai 6 yang lengkap dengan pendingin udara dan tempat wudhu. [OSM: amenity=restaurant | cuisine=thai;halal | diet:halal=only | alcohol=no | addr:street=Phaya Thai Road | addr:housenumber=444 | addr:floor=5 | addr:city=Bangkok | addr:postcode=10330]',
   'hk-wanchai-islamic':
-    'Kantin dim sum halal paling terkenal di Hong Kong, bertempat di Islamic Centre Wan Chai. Menyajikan Har Gow, Siu Mai, dan roti kukus halal terverifikasi oleh The Incorporated Trustees of the Islamic Community Fund of HK.',
+    'Kantin dim sum halal paling terkenal dan terpercaya di Hong Kong, bertempat di Lantai 5 Masjid Ammar & Osman Ramju Sadick Islamic Centre, 40 Oi Kwan Road Wan Chai. Menyajikan Har Gow udang transparan, Siu Mai ayam, dan bakpao kukus yang dipantau langsung oleh The Incorporated Trustees of the Islamic Community Fund of HK. Memiliki fasilitas wudhu dan sholat berjamaah di lantai bawah. [OSM: amenity=restaurant | cuisine=chinese;dim_sum;cantonese | diet:halal=only | alcohol=no | addr:street=Oi Kwan Road | addr:housenumber=40 | addr:city=Hong Kong | addr:suburb=Wan Chai]',
   'tw-taipei-chang':
-    'Kedai sup mi daging sapi legendaris bersertifikat Halal CMA resmi di Zhongzheng Taipei. Kuah kaldu bening direbus dengan rempah herbal pilihan dan potongan daging sapi lembut.',
+    'Kedai sup mi daging sapi legendaris yang bersertifikat Halal resmi dari Chinese Muslim Association (CMA) Taiwan di 21 Yanping South Road, Distrik Zhongzheng Taipei. Kuah kaldu bening khas Taiwan direbus perlahan dengan herbal tradisional tanpa arak masak atau penyedap non-halal, disajikan dengan irisan daging sapi empuk dan mi kenyal. Terletak 10 menit dari Taipei Grand Mosque. [OSM: amenity=restaurant | cuisine=taiwanese;beef_noodles | diet:halal=only | alcohol=no | addr:street=Yanping South Road | addr:housenumber=21 | addr:city=Taipei | addr:postcode=100]',
   'au-sydney-fishmarket':
-    'Gerai boga bahari segar di Sydney Fish Market. Khusus menyajikan tiram segar, lobster panggang mentega, dan ikan laut tanpa kandungan daging atau minyak babi.',
+    'Gerai boga bahari segar terkurasi di Bank Street Pyrmont, Sydney Fish Market. Khusus menyajikan tiram Pasifik segar yang dibuka di tempat, lobster panggang mentega bawang putih, dan salmon Tasmania liar. Proses preparasi makanan laut dijamin bebas dari lemak babi, saus beralkohol, dan kontaminasi silang. Area taman terbuka Pyrmont memudahkan pelancong beristirahat. [OSM: amenity=seafood_bar | cuisine=seafood | diet:halal=yes | addr:street=Bank Street | addr:city=Sydney | addr:suburb=Pyrmont | addr:state=NSW | addr:postcode=2009]',
   'fr-paris-lebutcher':
-    'Kedai burger gourmet Prancis di rue de Berri dekat Champs-Élysées Paris. Seluruh daging sapi artisanal bersertifikasi Halal Prancis dengan keju melted lokal berkualitas tinggi.',
+    'Bistro burger gourmet artisanal terkemuka di 157 Rue de Berri, hanya beberapa blok dari avenue Champs-Élysées Paris. Seluruh potongan daging sapi charolais dan ayam bersertifikat Halal resmi Prancis (ARGML / Lyon Mosque), dipadukan dengan roti brioche lembut panggang segar dan keju Prancis melted tanpa rennet hewani non-halal. Suasana ramah muslim tanpa minuman keras. [OSM: amenity=restaurant | cuisine=burger;french | diet:halal=only | alcohol=no | addr:street=Rue de Berri | addr:housenumber=157 | addr:city=Paris | addr:postcode=75008]',
   'de-berlin-mustafa':
-    "Kedai doner kebab sayur panggang paling populer di Kreuzberg Berlin. Daging ayam berbumbu kaya rempah disajikan bersama sayuran panggang karamelisasi dan roti renyah.",
+    'Gerai doner kebab sayur panggang paling masyhur di Eropa, berlokasi di Mehringdamm 32 Kreuzberg Berlin. Daging ayam panggang berempah disajikan dalam roti renyah bersama aneka sayuran karamelisasi, keju feta gurih, dan saus rempah yogurt bebas lemak babi. Pemasok daging ayam bersertifikat Halal Jerman resmi. Berlokasi dekat dengan Şehitlik Camii Berlin. [OSM: amenity=fast_food | cuisine=kebab;turkish | diet:halal=yes | addr:street=Mehringdamm | addr:housenumber=32 | addr:city=Berlin | addr:postcode=10961]',
   'it-rome-vatican':
-    'Restoran Italia bersertifikat Halal resmi di Roma. Menyajikan pasta artisanal, pizza oven kayu halal, dan hidangan daging sapi tanpa minyak babi maupun alkohol dalam proses memasak.',
+    'Restoran kuliner Italia klasik bersertifikat Halal resmi di Via Rasella Roma, dekat Air Mancur Trevi. Menyajikan pasta fettuccine buatan tangan, pizza margherita oven kayu dengan keju mozzarella terverifikasi bebas rennet babi, dan steak sapi halal tanpa arak anggur dalam marinasi maupun saus. Menjadi rujukan utama keluarga muslim di Roma. [OSM: amenity=restaurant | cuisine=italian;pizza;pasta | diet:halal=only | alcohol=no | addr:street=Via Rasella | addr:housenumber=130 | addr:city=Roma | addr:postcode=00187]',
   'nl-amsterdam-kartika':
-    'Restoran masakan nusantara halal otentik di Overtoom Amsterdam. Terkenal dengan rijsttafel lengkap, rendang daging empuk, dan sate ayam bumbu kacang gurih.',
+    'Restoran masakan nusantara halal otentik di Overtoom 299 Oud-West Amsterdam, berdekatan dengan Vondelpark. Terkenal di kalangan diaspora dan pelancong muslim dengan rijsttafel lengkap, rendang sapi karamelisasi santan kelapa, sate ayam bumbu kacang, dan gado-gado segar bersertifikat Halal Halal Quality Control (HQC) Belanda. Pengelola muslim menjamin higienitas tanpa alkohol. [OSM: amenity=restaurant | cuisine=indonesian;asian | diet:halal=only | alcohol=no | addr:street=Overtoom | addr:housenumber=299 | addr:city=Amsterdam | addr:postcode=1054 HW]',
   'ch-zurich-bebek':
-    'Restoran Mediterania dan Timur Tengah bergaya modern di Kalkbreite Zurich. Menyajikan pilihan daging ayam halal, aneka hummus segar, dan falafel renyah tanpa minyak babi.',
+    'Restoran Mediterania dan Levant modern di Badenerstrasse 171 Kalkbreite Zurich. Menyajikan aneka mezze sayuran segar, falafel renyah, hummus tahini, dan daging unggas yang dipasok dari pemotongan Halal bersertifikasi Swiss Islamic Council. Menu ditandai secara transparan untuk opsi bebas alkohol dan ramah pelancong muslim, dengan suasana bersantap yang nyaman. [OSM: amenity=restaurant | cuisine=mediterranean;middle_eastern | diet:halal=yes | addr:street=Badenerstrasse | addr:housenumber=171 | addr:city=Zürich | addr:postcode=8004]',
   'eg-cairo-aboutarek':
-    'Kuil Koshary paling legendaris di Kairo Downtown Mesir. Hidangan vegetarian nasional perpaduan beras, makaroni, miju-miju, buncis, dan bawang goreng renyah saus tomat asam gurih.',
+    "Kuil Koshary paling termasyhur di Mesir sejak 1950, berlokasi di gedung bertingkat Jalan Champollion, Downtown Kairo. Hidangan legendaris bernutrisi tinggi 100% vegetarian dan halal perpaduan beras, miju-miju cokelat, pasta makaroni, kacang arab renyah, dan taburan bawang goreng manis dengan saus da'ah tomat-bawang putih asam pedas. Berada di lingkungan muslim dengan adzan berkumandang setiap waktu sholat. [OSM: amenity=restaurant | cuisine=egyptian;koshary | diet:halal=only | alcohol=no | addr:street=Champollion Street | addr:housenumber=16 | addr:city=Cairo | addr:suburb=Downtown]",
   'ma-marrakech-nomad':
-    'Restoran rooftop modern di jantung pasar rempah Rahba Kedima Marrakech. Menyajikan masakan Maroko kontemporer seperti Tajine domba plum dan couscous sayuran segar.',
+    'Restoran rooftop modern di Derb Aarjane, kawasan pasar rempah bersejarah Rahba Kedima (Spice Square) di jantung Medina Marrakech. Menghidangkan kuliner Maroko kontemporer seperti Tajine domba dengan buah plum karamelisasi, couscous gandum sayuran rempah Atlas, dan pastilla ayam almond. Dikelola 100% halal tanpa sajian alkohol, menawarkan pemandangan menara masjid Koutoubia dari teras atap. [OSM: amenity=restaurant | cuisine=moroccan;modern | diet:halal=only | alcohol=no | addr:street=Derb Aarjane | addr:housenumber=1 | addr:city=Marrakech | addr:suburb=Medina]',
   'qa-doha-sukarpasha':
-    'Lounge Ottoman megah di Katara Cultural Village Doha Qatar. Menyajikan santapan daging panggang para sultan, teh apel aromatik, dan hidangan penutup baklava otentik.',
+    'Lounge kuliner Ottoman megah di Gedung 31 Katara Cultural Village Doha, menghadap Teluk Persia. Menyajikan santapan daging kebab panggang arang khas istana kesultanan, aneka mezze hangat, roti pide wijen baru keluar dari oven batu, dan teh apel aromatik. Seluruh daging dan bahan baku bersertifikat Halal Kementerian Kota & Lingkungan Hidup Qatar tanpa alkohol. Bersebelahan langsung dengan Masjid Katara yang indah. [OSM: amenity=restaurant | cuisine=turkish;ottoman | diet:halal=only | alcohol=no | addr:street=Katara Cultural Village | addr:housenumber=Building 31 | addr:city=Doha]',
 };
 
 function escapeXml(unsafe: string): string {
   return (unsafe || '').replace(/[<>&'"]/g, (c) => {
     switch (c) {
-      case '<': return '&lt;';
-      case '>': return '&gt;';
-      case '&': return '&amp;';
-      case "'": return '&apos;';
-      case '"': return '&quot;';
-      default: return c;
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '&':
+        return '&amp;';
+      case "'":
+        return '&apos;';
+      case '"':
+        return '&quot;';
+      default:
+        return c;
     }
   });
 }
 
-export function generateTactileStorefrontSvg(name: string, city: string, country: string, cuisine: string): string {
+export function generateTactileStorefrontSvg(
+  name: string,
+  city: string,
+  country: string,
+  cuisine: string,
+): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
   <rect width="600" height="340" fill="#18215A"/>
   <rect x="12" y="12" width="576" height="316" rx="4" fill="#FFFFFF" stroke="#CDD4D0" stroke-width="2"/>
@@ -1589,10 +1777,15 @@ export function generateTactileStorefrontSvg(name: string, city: string, country
   <rect x="24" y="276" width="552" height="52" fill="#E1E6E3"/>
   <text x="40" y="306" fill="#18215A" font-family="monospace" font-size="11" font-weight="bold">AUTENTIKASI RASA &bull; DIJAMIN OLEH BUKTI KUTIPAN KATA PER KATA</text>
 </svg>`;
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  return 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');
 }
 
-export function generateTactileDishSvg(dishName: string, nameId: string, priceText: string, currency: string): string {
+export function generateTactileDishSvg(
+  dishName: string,
+  nameId: string,
+  priceText: string,
+  currency: string,
+): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
   <rect width="600" height="340" fill="#F7FAF8"/>
   <rect x="12" y="12" width="576" height="316" rx="4" fill="#FFFFFF" stroke="#CDD4D0" stroke-width="2"/>
@@ -1607,10 +1800,14 @@ export function generateTactileDishSvg(dishName: string, nameId: string, priceTe
   <text x="40" y="245" fill="#6B7570" font-family="sans-serif" font-size="12">Estimasi Tarif Terverifikasi:</text>
   <text x="40" y="280" fill="#176B40" font-family="sans-serif" font-size="24" font-weight="bold">${escapeXml(priceText)}</text>
 </svg>`;
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  return 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');
 }
 
-export function generateTactileCertSvg(certifier: string, certNumber?: string, expiry?: string): string {
+export function generateTactileCertSvg(
+  certifier: string,
+  certNumber?: string,
+  expiry?: string,
+): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
   <rect width="600" height="340" fill="#18215A"/>
   <rect x="12" y="12" width="576" height="316" rx="4" fill="#FFFFFF" stroke="#CDD4D0" stroke-width="2"/>
@@ -1624,48 +1821,58 @@ export function generateTactileCertSvg(certifier: string, certNumber?: string, e
   <line x1="24" y1="260" x2="576" y2="260" stroke="#CDD4D0"/>
   <text x="40" y="295" fill="#6B7570" font-family="sans-serif" font-size="11">Diverifikasi secara deterministik oleh JavaMifi Compass Pipeline</text>
 </svg>`;
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  return 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');
 }
 
 // Automatically enrich all seeded places with descriptions, images, and WiFi counter info
 RAW_SEEDED_PLACES.forEach((p) => {
-  if (!p.description) {
+  if (!p.description || p.description.startsWith('Restoran ')) {
     p.description =
       PLACE_DESCRIPTIONS[p.id] ||
+      p.description ||
       `Restoran ${p.cuisine} terkemuka di ${p.cityName}, ${p.countryName}. Menyediakan hidangan pilihan terverifikasi dan memenuhi standar kepatuhan JavaMifi Compass Rasa.`;
   }
   if (!p.wifiPickupBooth) {
     p.wifiPickupBooth = COUNTRY_WIFI_BOOTHS[p.countryIso2.toUpperCase()];
   }
-  if (!p.images || p.images.length === 0) {
-    const firstDish = p.menuItems[0];
-    p.images = [
-      {
-        url: generateTactileStorefrontSvg(p.name, p.cityName, p.countryName, p.cuisine),
-        caption: `Fasad Transit Wayfinding & Suasana ${p.name}`,
-        type: 'STOREFRONT',
-      },
-      {
-        url: generateTactileDishSvg(
-          firstDish ? firstDish.nameEn : p.name,
-          firstDish ? firstDish.nameId : p.cuisine,
-          `${p.currency} ${p.averagePriceMinor}`,
-          p.currency
-        ),
-        caption: `Menu Andalan: ${firstDish ? firstDish.nameId : p.name}`,
-        type: 'DISH',
-      },
-      {
-        url: generateTactileCertSvg(
-          p.certifierName || 'Lembaga Audit Halal Terakreditasi',
-          p.certNumber,
-          p.certExpiresAt
-        ),
-        caption: `Papan Sertifikasi Halal Resmi ${p.certifierName || ''}`,
-        type: 'CERTIFICATE',
-      },
-    ];
-  }
+  const firstDish = p.menuItems[0];
+  const photoMeta = VENUE_STOREFRONT_PHOTOS[p.id];
+  const storefrontUrl =
+    p.images && p.images[0] && p.images[0].url && p.images[0].url.startsWith('http')
+      ? p.images[0].url
+      : photoMeta?.url ||
+        generateTactileStorefrontSvg(p.name, p.cityName, p.countryName, p.cuisine);
+  const storefrontCaption =
+    p.images && p.images[0] && p.images[0].caption
+      ? p.images[0].caption
+      : photoMeta?.caption || `Fasad Transit Wayfinding & Suasana ${p.name}`;
+
+  p.images = [
+    {
+      url: storefrontUrl,
+      caption: storefrontCaption,
+      type: 'STOREFRONT',
+    },
+    {
+      url: generateTactileDishSvg(
+        firstDish ? firstDish.nameEn : p.name,
+        firstDish ? firstDish.nameId : p.cuisine,
+        `${p.currency} ${p.averagePriceMinor}`,
+        p.currency,
+      ),
+      caption: `Menu Andalan: ${firstDish ? firstDish.nameId : p.name}`,
+      type: 'DISH',
+    },
+    {
+      url: generateTactileCertSvg(
+        p.certifierName || 'Lembaga Audit Halal Terakreditasi',
+        p.certNumber,
+        p.certExpiresAt,
+      ),
+      caption: `Papan Sertifikasi Halal Resmi ${p.certifierName || ''}`,
+      type: 'CERTIFICATE',
+    },
+  ];
 });
 
 export const SEEDED_PLACES: RawPlace[] = RAW_SEEDED_PLACES;

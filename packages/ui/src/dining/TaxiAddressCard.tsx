@@ -36,11 +36,7 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
   const [copied, setCopied] = useState(false);
   const isId = locale.startsWith('id');
 
-  const textToCopy = [
-    nameOriginal || name,
-    addressLocalScript || address,
-    postalCode,
-  ]
+  const textToCopy = [nameOriginal || name, addressLocalScript || address, postalCode]
     .filter(Boolean)
     .join('\n');
 
@@ -80,7 +76,7 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="w-12 h-12 rounded bg-surface hover:bg-paper-edge flex items-center justify-center text-primary text-sm font-bold border border-paper-edge"
+            className="min-h-12 w-12 h-12 rounded bg-surface hover:bg-paper-edge flex items-center justify-center text-primary text-sm font-bold border border-paper-edge focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             aria-label="Tutup"
           >
             <X className="w-4 h-4" />
@@ -93,9 +89,7 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
         <div className="text-xs uppercase font-bold text-outline tracking-wider">
           {isId ? 'Nama Tempat (Aksara Asli):' : 'Venue Name (Original Script):'}
         </div>
-        <p className="text-lg font-bold text-primary leading-snug m-0">
-          {nameOriginal || name}
-        </p>
+        <p className="text-lg font-bold text-primary leading-snug m-0">{nameOriginal || name}</p>
 
         <div className="pt-2 border-t border-paper-edge/60">
           <div className="text-xs uppercase font-bold text-outline tracking-wider">
@@ -107,7 +101,7 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
         </div>
 
         {/* Postal Code & Plus Code Waypoints */}
-        <div className="pt-2 flex flex-wrap items-center gap-2 text-xs font-mono">
+        <div className="pt-2 flex flex-wrap items-center gap-2 text-xs font-mono tnum">
           {postalCode && (
             <span className="bg-paper px-2 py-0.5 rounded border border-paper-edge font-bold text-primary">
               {postalCode}
@@ -125,7 +119,7 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
       <button
         type="button"
         onClick={handleCopy}
-        className={`w-full h-12 px-4 rounded text-xs font-sans font-bold uppercase tracking-wider transition flex items-center justify-center gap-2 ${
+        className={`min-h-12 w-full h-12 px-4 rounded text-xs font-sans font-bold uppercase tracking-wider transition flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
           copied
             ? 'bg-success text-on-primary'
             : 'bg-primary hover:bg-primary-hover text-on-primary'
@@ -138,8 +132,8 @@ export const TaxiAddressCard: React.FC<TaxiAddressCardProps> = ({
               ? 'Alamat Berhasil Disalin!'
               : 'Copied to Clipboard!'
             : isId
-            ? 'Salin Alamat Bahasa Asli'
-            : 'Copy Local Script Address'}
+              ? 'Salin Alamat Bahasa Asli'
+              : 'Copy Local Script Address'}
         </span>
       </button>
 

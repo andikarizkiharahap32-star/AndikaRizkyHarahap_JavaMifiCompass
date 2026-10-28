@@ -27,7 +27,18 @@
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:build": "docker compose build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint-staged": "lint-staged",
+    "license:report": "pnpm licenses list"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
@@ -36,6 +47,7 @@
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.57.0",
     "husky": "^9.0.0",
+    "lint-staged": "^17.6.0",
     "prettier": "^3.3.0",
     "rimraf": "^6.0.0",
     "turbo": "^2.1.0",

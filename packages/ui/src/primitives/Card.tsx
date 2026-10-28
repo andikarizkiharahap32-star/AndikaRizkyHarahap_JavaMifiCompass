@@ -1,20 +1,89 @@
 import React from 'react';
 
+export type CardVariant = 'card' | 'flat' | 'raised' | 'sunken';
+export type CardDensity = 'compact' | 'normal' | 'spacious';
+export type CardRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: CardVariant;
+  density?: CardDensity;
+  radius?: CardRadius;
   hoverable?: boolean;
+  interactive?: boolean;
+  disabled?: boolean;
 }
+
+const variantClasses: Record<CardVariant, string> = {
+  card: 'bg-paper border border-paper-edge border-b-2 text-primary',
+  flat: 'bg-paper border border-paper-edge text-primary',
+  raised: 'bg-paper border border-paper-edge border-b-4 text-primary',
+  sunken: 'bg-sunken border border-paper-edge text-primary',
+};
+
+const densityClasses: Record<CardDensity, string> = {
+  compact: 'p-4',
+  normal: 'p-6',
+  spacious: 'p-8',
+};
+
+const radiusClasses: Record<CardRadius, string> = {
+  none: 'rounded-none',
+  sm: 'rounded-sm',
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  xl: 'rounded-xl',
+  '2xl': 'rounded-2xl',
+};
+
+const interactiveClasses =
+  'cursor-pointer hover:border-primary active:translate-y-0 active:bg-sunken transition-all duration-150 ease-out motion-safe:hover:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
+
+const disabledClasses = 'opacity-60 cursor-not-allowed pointer-events-none';
 
 export const Card: React.FC<CardProps> = ({
   children,
+  variant = 'card',
+  density = 'normal',
+  radius = '2xl',
   hoverable = false,
+  interactive = false,
+  disabled = false,
   className = '',
+  onClick,
+  onKeyDown,
+  role,
+  tabIndex,
   ...props
 }) => {
+  const isInteractive = (interactive || hoverable) && !disabled;
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (isInteractive && onClick && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+    }
+    onKeyDown?.(e);
+  };
+
+  const classes = [
+    variantClasses[variant],
+    densityClasses[density],
+    radiusClasses[radius],
+    isInteractive ? interactiveClasses : '',
+    disabled ? disabledClasses : '',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <div
-      className={`bg-paper border border-paper-edge border-b-2 rounded-2xl p-6 ${
-        hoverable ? 'hover:border-primary transition-all' : ''
-      } ${className}`}
+      role={isInteractive && !role ? 'button' : role}
+      tabIndex={isInteractive && tabIndex === undefined ? 0 : tabIndex}
+      aria-disabled={disabled ? true : undefined}
+      onClick={disabled ? undefined : onClick}
+      onKeyDown={handleKeyDown}
+      className={classes}
       {...props}
     >
       {children}
@@ -32,12 +101,12 @@ export const Badge: React.FC<BadgeProps> = ({
   className = '',
   ...props
 }) => {
-  const variants = {
-    default: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200',
-    success: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800',
-    warning: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800',
-    danger: 'bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800',
-    info: 'bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border border-sky-200 dark:border-sky-800',
+  const variants: Record<NonNullable<BadgeProps['variant']>, string> = {
+    default: 'bg-sunken text-primary border border-paper-edge',
+    success: 'bg-success-surface text-success border border-success/30',
+    warning: 'bg-warning-surface text-warning border border-warning/30',
+    danger: 'bg-danger-surface text-danger border border-danger/30',
+    info: 'bg-primary-container text-on-primary border border-paper-edge',
   };
 
   return (

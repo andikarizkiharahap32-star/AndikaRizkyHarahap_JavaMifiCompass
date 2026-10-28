@@ -18,42 +18,64 @@ import {
   Compass,
   Database,
 } from 'lucide-react';
-import { SignalBadge, SignalMeter, RouteLine, TripBoardingPass, HalalCustomsStamp } from '@javamifi/ui';
+import {
+  SignalBadge,
+  SignalMeter,
+  RouteLine,
+  TripBoardingPass,
+  HalalCustomsStamp,
+} from '@javamifi/ui';
 
-export const TripHubView = ({
-  orderData,
-  locale = 'id',
-}: {
-  orderData: any;
-  locale?: string;
-}) => {
+export const TripHubView = ({ orderData, locale = 'id' }: { orderData: any; locale?: string }) => {
   const [activePlatformTab, setActivePlatformTab] = useState<'ios' | 'android'>('ios');
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [topUpSuccess, setTopUpSuccess] = useState(false);
 
-  const { orderNumber, status, fulfillmentType, contactName, items, esimAssets, deviceRentals, timeline } = orderData;
+  const {
+    orderNumber,
+    status,
+    fulfillmentType,
+    contactName,
+    items,
+    esimAssets,
+    deviceRentals,
+    timeline,
+  } = orderData;
   const esim = esimAssets && esimAssets.length > 0 ? esimAssets[0] : null;
   const rental = deviceRentals && deviceRentals.length > 0 ? deviceRentals[0] : null;
 
   // Derive destinations
-  const destinations = items?.map((i: any) => i.product?.nameEn || 'Global Connectivity') || ['Global'];
+  const destinations = items?.map((i: any) => i.product?.nameEn || 'Global Connectivity') || [
+    'Global',
+  ];
 
   const timelineSteps = [
     { title: 'Pembayaran Dikonfirmasi', done: true, desc: 'Pesanan telah terverifikasi' },
     {
       title: fulfillmentType === 'DIGITAL' ? 'eSIM Siap' : 'Perangkat Disiapkan',
       done: status !== 'PENDING_PAYMENT',
-      desc: fulfillmentType === 'DIGITAL' ? 'Kode QR aktif & siap di-scan' : 'Pengecekan baterai & unit',
+      desc:
+        fulfillmentType === 'DIGITAL'
+          ? 'Kode QR aktif & siap di-scan'
+          : 'Pengecekan baterai & unit',
     },
     {
       title: fulfillmentType === 'DIGITAL' ? 'Aktif Digunakan' : 'Dikirim ke Alamat',
-      done: ['SHIPPED', 'DELIVERED', 'IN_USE', 'RETURN_PENDING', 'RETURNED', 'COMPLETED'].includes(status),
-      desc: fulfillmentType === 'DIGITAL' ? 'Terhubung ke BTS lokal' : rental?.shippingTracker || 'No resi pengiriman',
+      done: ['SHIPPED', 'DELIVERED', 'IN_USE', 'RETURN_PENDING', 'RETURNED', 'COMPLETED'].includes(
+        status,
+      ),
+      desc:
+        fulfillmentType === 'DIGITAL'
+          ? 'Terhubung ke BTS lokal'
+          : rental?.shippingTracker || 'No resi pengiriman',
     },
     {
       title: 'Pengembalian & Deposit',
       done: ['RETURNED', 'INSPECTED', 'DEPOSIT_REFUNDED', 'COMPLETED'].includes(status),
-      desc: rental?.depositStatus === 'REFUNDED' ? 'Deposit telah dikembalikan' : 'Deposit Rp 500.000 disimpan aman',
+      desc:
+        rental?.depositStatus === 'REFUNDED'
+          ? 'Deposit telah dikembalikan'
+          : 'Deposit Rp 500.000 disimpan aman',
     },
   ];
 
@@ -68,7 +90,11 @@ export const TripHubView = ({
         endDate="2026-11-07"
         productType={items?.[0]?.product?.type || 'ESIM'}
         status={status}
-        qrCodeUrl={esim ? `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(esim.activationCode || orderNumber)}` : undefined}
+        qrCodeUrl={
+          esim
+            ? `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(esim.activationCode || orderNumber)}`
+            : undefined
+        }
       />
 
       {/* Grid: QR / Device Info & Usage Meter */}
@@ -103,7 +129,9 @@ export const TripHubView = ({
                 <button
                   onClick={() => setActivePlatformTab('ios')}
                   className={`flex-1 py-1.5 rounded-lg transition-colors ${
-                    activePlatformTab === 'ios' ? 'bg-white dark:bg-slate-700 text-sky-600' : 'text-slate-500'
+                    activePlatformTab === 'ios'
+                      ? 'bg-white dark:bg-slate-700 text-sky-600'
+                      : 'text-slate-500'
                   }`}
                 >
                   Panduan iOS (iPhone)
@@ -111,7 +139,9 @@ export const TripHubView = ({
                 <button
                   onClick={() => setActivePlatformTab('android')}
                   className={`flex-1 py-1.5 rounded-lg transition-colors ${
-                    activePlatformTab === 'android' ? 'bg-white dark:bg-slate-700 text-sky-600' : 'text-slate-500'
+                    activePlatformTab === 'android'
+                      ? 'bg-white dark:bg-slate-700 text-sky-600'
+                      : 'text-slate-500'
                   }`}
                 >
                   Panduan Android
@@ -121,17 +151,32 @@ export const TripHubView = ({
               <ol className="space-y-2 text-xs text-slate-600 dark:text-slate-300 list-decimal list-inside leading-relaxed">
                 {activePlatformTab === 'ios' ? (
                   <>
-                    <li>Buka <strong>Pengaturan &gt; Seluler</strong> di iPhone Anda.</li>
-                    <li>Ketuk <strong>Tambah eSIM (Add eSIM)</strong>.</li>
-                    <li>Pilih <strong>Gunakan Kode QR</strong> dan scan gambar QR di atas.</li>
-                    <li>Aktifkan <strong>Jelajah Data (Data Roaming)</strong> saat tiba di negara tujuan.</li>
+                    <li>
+                      Buka <strong>Pengaturan &gt; Seluler</strong> di iPhone Anda.
+                    </li>
+                    <li>
+                      Ketuk <strong>Tambah eSIM (Add eSIM)</strong>.
+                    </li>
+                    <li>
+                      Pilih <strong>Gunakan Kode QR</strong> dan scan gambar QR di atas.
+                    </li>
+                    <li>
+                      Aktifkan <strong>Jelajah Data (Data Roaming)</strong> saat tiba di negara
+                      tujuan.
+                    </li>
                   </>
                 ) : (
                   <>
-                    <li>Buka <strong>Setelan &gt; Jaringan & Internet &gt; SIM</strong>.</li>
-                    <li>Ketuk <strong>Download SIM</strong> atau tanda tambah (+).</li>
+                    <li>
+                      Buka <strong>Setelan &gt; Jaringan & Internet &gt; SIM</strong>.
+                    </li>
+                    <li>
+                      Ketuk <strong>Download SIM</strong> atau tanda tambah (+).
+                    </li>
                     <li>Scan kode QR di atas menggunakan kamera smartphone Anda.</li>
-                    <li>Pastikan APN diatur ke <strong>globaldata</strong> dan aktifkan Roaming.</li>
+                    <li>
+                      Pastikan APN diatur ke <strong>globaldata</strong> dan aktifkan Roaming.
+                    </li>
                   </>
                 )}
               </ol>
@@ -142,7 +187,9 @@ export const TripHubView = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Wifi className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-bold text-slate-900 dark:text-white">Pocket WiFi Rental Status</h3>
+                <h3 className="font-bold text-slate-900 dark:text-white">
+                  Pocket WiFi Rental Status
+                </h3>
               </div>
               <SignalBadge strength={4} label={rental?.status || 'Active'} />
             </div>
@@ -156,7 +203,9 @@ export const TripHubView = ({
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-slate-500">Batas Waktu Pengembalian:</span>
-                <span className="font-bold text-slate-900 dark:text-white">7 Hari setelah mendarat</span>
+                <span className="font-bold text-slate-900 dark:text-white">
+                  7 Hari setelah mendarat
+                </span>
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-slate-500">Deposit Jaminan:</span>
@@ -167,7 +216,8 @@ export const TripHubView = ({
             </div>
 
             <p className="text-xs text-slate-500 leading-relaxed">
-              Drop-box pengembalian tersedia di Terminal 2 & 3 Bandara Soekarno-Hatta (CGK) dan Bandara Internasional Ngurah Rai (DPS).
+              Drop-box pengembalian tersedia di Terminal 2 & 3 Bandara Soekarno-Hatta (CGK) dan
+              Bandara Internasional Ngurah Rai (DPS).
             </p>
           </div>
         )}
@@ -230,7 +280,10 @@ export const TripHubView = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 relative">
           {timelineSteps.map((step, idx) => (
-            <div key={idx} className="relative p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div
+              key={idx}
+              className="relative p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700"
+            >
               <div className="flex items-center gap-2 mb-2">
                 <div
                   className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
@@ -314,7 +367,10 @@ export const TripHubView = ({
                 Booth Pengembalian Modem JavaMifi: Shibuya Station
               </h4>
               <p className="text-xs text-secondary mt-1 leading-relaxed">
-                Kembalikan router JavaMifi Anda di drop-off booth Shibuya (Pintu Keluar Hachiko) sebelum pukul 21:00. Nikmati makan malam yakiniku halal resmi di <strong>Halal Sakura Ginza</strong> tepat di sebelah barat stasiun tanpa khawatir terlambat pengembalian.
+                Kembalikan router JavaMifi Anda di drop-off booth Shibuya (Pintu Keluar Hachiko)
+                sebelum pukul 21:00. Nikmati makan malam yakiniku halal resmi di{' '}
+                <strong>Halal Sakura Ginza</strong> tepat di sebelah barat stasiun tanpa khawatir
+                terlambat pengembalian.
               </p>
             </div>
 
@@ -324,7 +380,7 @@ export const TripHubView = ({
               </span>
               <Link
                 href={`/${locale}/dining`}
-                className="inline-flex items-center justify-center gap-2 px-4 min-h-[48px] rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono font-bold tracking-wider uppercase transition shrink-0"
+                className="inline-flex items-center justify-center gap-2 px-4 min-h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono font-bold tracking-wider uppercase transition shrink-0"
               >
                 <span>Buka Radar Lengkap</span>
                 <span>→</span>

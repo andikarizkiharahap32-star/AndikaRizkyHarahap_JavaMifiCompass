@@ -7,9 +7,34 @@
 const javamifiPreset = {
   darkMode: ['class', '[data-theme="night"]'],
   theme: {
+    boxShadow: {
+      none: 'none',
+    },
     extend: {
       spacing: {
         13: '3.25rem', // 52px transit form inputs and CTAs per DESIGN.md
+      },
+      transitionDuration: {
+        mechanical: '150ms',
+        transit: '200ms',
+      },
+      transitionTimingFunction: {
+        transit: 'cubic-bezier(0, 0, 0.2, 1)',
+      },
+      zIndex: {
+        surface: '0',
+        elevated: '10',
+        sticky: '20',
+        drawer: '30',
+        modal: '40',
+        toast: '50',
+      },
+      borderWidth: {
+        DEFAULT: '1px',
+        0: '0px',
+        1: '1px',
+        2: '2px',
+        4: '4px',
       },
       colors: {
         surface: 'var(--color-surface)',
@@ -73,6 +98,9 @@ const javamifiPreset = {
         'line-sim': 'var(--color-line-sim)',
         'line-sim-stroke': 'var(--color-line-sim-stroke)',
         'line-pro': 'var(--color-line-pro)',
+        'line-dining': 'var(--color-line-dining)',
+        'line-dining-stroke': 'var(--color-line-dining-stroke)',
+        'line-dining-surface': 'var(--color-line-dining-surface)',
 
         'night-ground': 'var(--color-night-ground)',
         'night-raised': 'var(--color-night-raised)',
@@ -81,6 +109,7 @@ const javamifiPreset = {
         'night-ink-soft': 'var(--color-night-ink-soft)',
       },
       fontFamily: {
+        display: ['Barlow Condensed', 'sans-serif'],
         'display-xl': ['Barlow Condensed', 'sans-serif'],
         'display-lg': ['Barlow Condensed', 'sans-serif'],
         'display-md': ['Barlow Condensed', 'sans-serif'],
@@ -88,6 +117,7 @@ const javamifiPreset = {
         'numeric-xl': ['Barlow Condensed', 'sans-serif'],
         'numeric-md': ['Barlow Condensed', 'sans-serif'],
         'bullet-letter': ['Barlow Condensed', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'sans-serif'],
         title: ['Plus Jakarta Sans', 'sans-serif'],
         'body-lg': ['Plus Jakarta Sans', 'sans-serif'],
         'body-md': ['Plus Jakarta Sans', 'sans-serif'],

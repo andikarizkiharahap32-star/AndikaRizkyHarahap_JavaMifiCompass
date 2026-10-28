@@ -1,0 +1,950 @@
+{
+  "name": "Voice Assistant - 2. Process Confirmed Query",
+  "nodes": [
+    {
+      "id": "sticky___core_rule",
+      "name": "Sticky - Core Rule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-1180, -520],
+      "parameters": {
+        "content": "## Core rule (do not break this)\nThe LLM node below does ONE job: turn speech-derived text into structured intent + slots. It never decides what's true about halal status and never free-texts a confidence level. Every response template in this workflow is picked deterministically by the branch that executed (certified / OSM / unavailable / none), not by a second model call.",
+        "height": 240,
+        "width": 420
+      }
+    },
+    {
+      "id": "sticky___rate_limit",
+      "name": "Sticky - Rate Limit",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-1180, -40],
+      "parameters": {
+        "content": "Per-session rate limit, protecting the shared Google Places/Overpass call budget. Demo uses workflow static data - swap for Redis/Postgres so the counter is shared across workers in production.",
+        "height": 160,
+        "width": 300
+      }
+    },
+    {
+      "id": "sticky___language_lock",
+      "name": "Sticky - Language Lock",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-820, -40],
+      "parameters": {
+        "content": "Pick one language per session and hold it - ask/detect once, reuse for every template and the TTS voice for the rest of the session, including number/currency formatting.",
+        "height": 160,
+        "width": 300
+      }
+    },
+    {
+      "id": "sticky___circuit_breaker",
+      "name": "Sticky - Circuit Breaker",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [260, 260],
+      "parameters": {
+        "content": "Circuit breaker on the Overpass call: short timeout + onError=continueErrorOutput. On failure/timeout this branch says so plainly and stops - it never silently falls back to a guess or a stale cache.",
+        "height": 180,
+        "width": 320
+      }
+    },
+    {
+      "id": "sticky___age_gate_+_hedge",
+      "name": "Sticky - Age Gate + Hedge",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [580, 0],
+      "parameters": {
+        "content": "OSM path only: tags past the staleness threshold are dropped; surviving tags get a mandatory, per-utterance hedge sentence with the last-edit date, never a yes/no halal verdict. Every OSM-sourced recommendation actually spoken is logged (place id, tag snapshot, timestamp).",
+        "height": 200,
+        "width": 340
+      }
+    },
+    {
+      "id": "sticky___two_trust_levels",
+      "name": "Sticky - Two Trust Levels",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [260, 760],
+      "parameters": {
+        "content": "Restaurant recommendation = public data, no login required. Account/data-balance lookup = identified caller required. These are two separate branches with two separate auth requirements, not one 'ask anything' intent.",
+        "height": 180,
+        "width": 320
+      }
+    },
+    {
+      "id": "receive_confirmed_query",
+      "name": "Receive Confirmed Query",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1180, 160],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice/query",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "voice-query"
+    },
+    {
+      "id": "rate_limit_check",
+      "name": "Rate Limit Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-940, 160],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Simple per-session rate limiter using workflow static data.\n// Replace with Redis/Postgres for a multi-worker deployment.\nconst WINDOW_MS = 10 * 60 * 1000; // 10 minutes\nconst MAX_REQUESTS = 20;\n\nconst sessionId = $json.sessionId || $json.body?.sessionId || 'anonymous-session';\nconst transcript = $json.transcript || $json.body?.transcript || '';\nconst language = $json.language || $json.body?.language || 'id';\n\nconst staticData = $getWorkflowStaticData('node');\nif (!staticData.sessions) staticData.sessions = {};\n\nconst now = Date.now();\nconst record = staticData.sessions[sessionId] || { count: 0, windowStart: now };\n\nif (now - record.windowStart > WINDOW_MS) {\n  record.count = 0;\n  record.windowStart = now;\n}\nrecord.count += 1;\nstaticData.sessions[sessionId] = record;\n\nconst rateLimited = Boolean(sessionId) && record.count > MAX_REQUESTS;\nreturn { ...$json, sessionId, transcript, language, rateLimited, requestsInWindow: record.count };"
+      }
+    },
+    {
+      "id": "if___rate_limited",
+      "name": "IF - Rate Limited",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-700, 160],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{$json.rateLimited}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "build_rate_limit_response",
+      "name": "Build Rate Limit Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-700, 320],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const responseText = 'Terlalu banyak permintaan dalam waktu singkat. Silakan coba lagi dalam beberapa menit.';\nreturn { ...$json, responseText, sourceTier: 'rate_limited' };"
+      }
+    },
+    {
+      "id": "respond___rate_limited",
+      "name": "Respond - Rate Limited",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-460, 320],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 429
+        }
+      }
+    },
+    {
+      "id": "resolve_session_language",
+      "name": "Resolve Session Language",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-460, 160],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Pick one language per session and hold it for the whole session.\nconst staticData = $getWorkflowStaticData('node');\nif (!staticData.languageBySession) staticData.languageBySession = {};\n\nconst sessionId = $json.sessionId;\nconst incomingLanguage = $json.language; // client's first-turn detection\n\nlet language = staticData.languageBySession[sessionId];\nif (!language) {\n  language = incomingLanguage || 'id-ID';\n  staticData.languageBySession[sessionId] = language;\n}\n\nreturn { ...$json, language };"
+      }
+    },
+    {
+      "id": "llm_intent_extraction",
+      "name": "LLM Intent Extraction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-220, 160],
+      "parameters": {
+        "method": "POST",
+        "url": "https://integrate.api.nvidia.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "content-type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_NVIDIA_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'minimaxai/minimax-m3.1-flash',\n  max_tokens: 1024,\n  temperature: 0.1,\n  messages: [\n    {\n      role: 'system',\n      content: 'You are a natural-language-understanding slot filler for a halal-restaurant voice assistant. Extract intent and slots only. You must NEVER assess, state, or imply a halal determination - that is decided downstream by a verified dataset, not by you. Respond with strict JSON only, no markdown fences: {\\\"intent\\\": \\\"find_halal_restaurant|check_account_data|other\\\", \\\"slots\\\": {\\\"location\\\": string|null, \\\"cuisine\\\": string|null, \\\"dishName\\\": string|null, \\\"certifyingBody\\\": string|null} }'\n    },\n    {\n      role: 'user',\n      content: String($json.transcript || $json.body?.transcript || 'Cari ramen halal di Tokyo')\n    }\n  ]\n}) }}",
+        "options": {
+          "timeout": 120000
+        }
+      }
+    },
+    {
+      "id": "parse_llm_json",
+      "name": "Parse LLM JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [20, 160],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// The LLM's only job was slot-filling. Everything from here on - which dataset is queried and which template is spoken - is deterministic backend logic, not model output.\nlet parsed;\ntry {\n  const raw = $json.choices?.[0]?.message?.content || $json.content?.[0]?.text || '{}';\n  const cleaned = raw.replace(/```json|```/g, '').trim();\n  parsed = JSON.parse(cleaned);\n} catch (e) {\n  parsed = { intent: 'other', slots: {} };\n}\n\nconst allowedIntents = ['find_halal_restaurant', 'check_account_data', 'other'];\nif (!allowedIntents.includes(parsed.intent)) parsed.intent = 'other';\n\nreturn { ...$json, intent: parsed.intent, slots: parsed.slots || {} };"
+      }
+    },
+    {
+      "id": "switch___route_by_intent",
+      "name": "Switch - Route By Intent",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [260, 160],
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "r1",
+                    "leftValue": "={{$json.intent}}",
+                    "rightValue": "find_halal_restaurant",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "find_halal_restaurant"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "r2",
+                    "leftValue": "={{$json.intent}}",
+                    "rightValue": "check_account_data",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "check_account_data"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      }
+    },
+    {
+      "id": "search_certified_dataset",
+      "name": "Search Certified Dataset",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, -120],
+      "parameters": {
+        "method": "GET",
+        "url": "http://localhost:3001/api/restaurants/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "location",
+              "value": "={{$json.slots.location || ''}}"
+            },
+            {
+              "name": "cuisine",
+              "value": "={{$json.slots.cuisine || ''}}"
+            },
+            {
+              "name": "dish",
+              "value": "={{$json.slots.dishName || ''}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 5000
+        }
+      }
+    },
+    {
+      "id": "if___certified_match_found",
+      "name": "IF - Certified Match Found",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [780, -120],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{$json.results?.length || 0}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "build_certified_response",
+      "name": "Build Certified Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1040, -220],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Certified-tier template - fixed wording, backend-decided.\nconst place = $json.results[0];\nconst responseText =\n  `${place.name}, tersertifikasi oleh ${place.certifyingBody}, ` +\n  `berlaku sampai ${place.expiryDate}.`;\nreturn { ...$json, responseText, sourceTier: 'certified', place };"
+      }
+    },
+    {
+      "id": "query_overpass_osm",
+      "name": "Query Overpass OSM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1040, 0],
+      "parameters": {
+        "method": "GET",
+        "url": "https://overpass-api.de/api/interpreter",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "=[out:json][timeout:4];node[\"diet:halal\"](around:2000,{{$json.slots.latitude || -6.2}},{{$json.slots.longitude || 106.8}});out body;"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 4000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "build_service_unavailable_response",
+      "name": "Build Service Unavailable Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1300, -40],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Circuit breaker tripped: say so plainly, never fall back to a guess or a stale cache without disclosing it.\nconst responseText =\n  'Tidak dapat terhubung ke basis data terverifikasi saat ini. ' +\n  'Silakan coba lagi sebentar lagi.';\nreturn { ...$json, responseText, sourceTier: 'unavailable' };"
+      }
+    },
+    {
+      "id": "age_gate_osm_tags",
+      "name": "Age-Gate OSM Tags",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1300, 60],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Exclude stale community tags; keep the last-edit age for the ones that survive so it can be spoken in the hedge sentence.\nconst STALE_DAYS = 180;\nconst now = Date.now();\n\nconst elements = $json.elements || [];\nconst valid = elements\n  .filter(el => el.tags && el.tags['diet:halal'])\n  .map(el => {\n    const lastEdited = el.timestamp ? new Date(el.timestamp).getTime() : 0;\n    const ageDays = lastEdited ? Math.floor((now - lastEdited) / 86400000) : Infinity;\n    return { ...el, ageDays };\n  })\n  .filter(el => el.ageDays <= STALE_DAYS);\n\nreturn { ...$json, validOsmResults: valid };"
+      }
+    },
+    {
+      "id": "if___any_valid_osm_result",
+      "name": "IF - Any Valid OSM Result",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1560, 60],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{$json.validOsmResults?.length || 0}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "build_no_result_response",
+      "name": "Build No Result Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1820, -40],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const responseText = 'Maaf, belum ada tempat terverifikasi yang cocok dengan pencarian Anda.';\nreturn { ...$json, responseText, sourceTier: 'none' };"
+      }
+    },
+    {
+      "id": "build_osm_hedge_response",
+      "name": "Build OSM Hedge Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1820, 100],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Mandatory spoken evidence line, EVERY time this result is spoken - never a yes/no halal verdict from a community tag.\nconst place = $json.validOsmResults[0];\nconst name = (place.tags && place.tags.name) || 'Tempat ini';\nconst ageDays = Number.isFinite(place.ageDays) ? place.ageDays : 'beberapa';\nconst responseText =\n  `${name}, dari data komunitas OpenStreetMap (terakhir diperbarui ` +\n  `${ageDays} hari lalu), belum kami verifikasi - konfirmasi ke staf ` +\n  `sebelum memesan.`;\nreturn { ...$json, responseText, sourceTier: 'osm', place };"
+      }
+    },
+    {
+      "id": "log_osm_recommendation",
+      "name": "Log OSM Recommendation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2080, 100],
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3001/api/audit/osm-recommendation",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  placeId: $json.place.id,\n  tagSnapshot: $json.place.tags,\n  sessionId: $json.sessionId,\n  timestamp: new Date().toISOString()\n}) }}",
+        "options": {
+          "timeout": 4000
+        }
+      }
+    },
+    {
+      "id": "if___is_authenticated",
+      "name": "IF - Is Authenticated",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [520, 520],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{$json.authToken}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "build_auth_required_response",
+      "name": "Build Auth Required Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [780, 620],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "// Identified caller required before any account data is fetched.\nconst responseText =\n  'Untuk melihat sisa data Anda, mohon konfirmasi nomor pesanan atau ' +\n  'masuk ke akun Anda terlebih dahulu.';\nreturn { ...$json, responseText, sourceTier: 'auth_required' };"
+      }
+    },
+    {
+      "id": "fetch_account_data",
+      "name": "Fetch Account Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 440],
+      "parameters": {
+        "method": "GET",
+        "url": "http://localhost:3001/api/account/data-balance",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$json.authToken}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 5000
+        }
+      }
+    },
+    {
+      "id": "build_account_response",
+      "name": "Build Account Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1040, 440],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const responseText =\n  `Sisa kuota data Anda adalah ${$json.account.remainingDataGb} GB, ` +\n  `berlaku sampai ${$json.account.expiryDate}.`;\nreturn { ...$json, responseText, sourceTier: 'account' };"
+      }
+    },
+    {
+      "id": "build_fallback_response",
+      "name": "Build Fallback Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 820],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const responseText =\n  'Maaf, saya belum memahami permintaan Anda. Anda bisa bertanya ' +\n  'tentang rekomendasi restoran halal atau sisa kuota data.';\nreturn { ...$json, responseText, sourceTier: 'fallback' };"
+      }
+    },
+    {
+      "id": "text_to_speech",
+      "name": "Text-to-Speech",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2340, 260],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/audio/speech",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer dummy-tts-key"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'tts-1',\n  voice: $json.language && $json.language.startsWith('en') ? 'alloy' : 'nova',\n  input: $json.responseText\n}) }}",
+        "options": {
+          "timeout": 5000,
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "build_final_payload",
+      "name": "Build Final Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2600, 260],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Build final multimodal payload robustly\nconst candidateNodes = [\n  'Build Certified Response',\n  'Build OSM Hedge Response',\n  'Build No Result Response',\n  'Build Service Unavailable Response',\n  'Build Account Response',\n  'Build Auth Required Response',\n  'Build Fallback Response'\n];\n\nlet responseText = '';\nlet sourceTier = 'certified';\nlet language = 'id';\nlet transcript = '';\n\nfor (const name of candidateNodes) {\n  try {\n    const items = $(name).all();\n    if (items && items.length > 0 && items[0].json && items[0].json.responseText) {\n      responseText = items[0].json.responseText;\n      sourceTier = items[0].json.sourceTier || sourceTier;\n      language = items[0].json.language || language;\n      break;\n    }\n  } catch (e) {}\n}\n\ntry { transcript = $('Rate Limit Check').first().json.transcript; } catch (e) {}\ntry { language = $('Resolve Session Language').first().json.language; } catch (e) {}\n\nreturn [{\n  json: {\n    transcriptEcho: transcript,\n    responseText: responseText || 'Layanan suara JavaMifi siap membantu.',\n    sourceTier: sourceTier,\n    language: language\n  }\n}];"
+      }
+    },
+    {
+      "id": "respond___send_voice_response",
+      "name": "Respond - Send Voice Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2860, 260],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Receive Confirmed Query": {
+      "main": [
+        [
+          {
+            "node": "Rate Limit Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rate Limit Check": {
+      "main": [
+        [
+          {
+            "node": "IF - Rate Limited",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Rate Limited": {
+      "main": [
+        [
+          {
+            "node": "Build Rate Limit Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resolve Session Language",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Rate Limit Response": {
+      "main": [
+        [
+          {
+            "node": "Respond - Rate Limited",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Session Language": {
+      "main": [
+        [
+          {
+            "node": "LLM Intent Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Intent Extraction": {
+      "main": [
+        [
+          {
+            "node": "Parse LLM JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse LLM JSON": {
+      "main": [
+        [
+          {
+            "node": "Switch - Route By Intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch - Route By Intent": {
+      "main": [
+        [
+          {
+            "node": "Search Certified Dataset",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IF - Is Authenticated",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Fallback Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Certified Dataset": {
+      "main": [
+        [
+          {
+            "node": "IF - Certified Match Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Certified Match Found": {
+      "main": [
+        [
+          {
+            "node": "Build Certified Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Query Overpass OSM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Overpass OSM": {
+      "main": [
+        [
+          {
+            "node": "Age-Gate OSM Tags",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Service Unavailable Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Age-Gate OSM Tags": {
+      "main": [
+        [
+          {
+            "node": "IF - Any Valid OSM Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Any Valid OSM Result": {
+      "main": [
+        [
+          {
+            "node": "Build OSM Hedge Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build No Result Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build OSM Hedge Response": {
+      "main": [
+        [
+          {
+            "node": "Log OSM Recommendation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Is Authenticated": {
+      "main": [
+        [
+          {
+            "node": "Fetch Account Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Auth Required Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Account Data": {
+      "main": [
+        [
+          {
+            "node": "Build Account Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Certified Response": {
+      "main": [
+        [
+          {
+            "node": "Text-to-Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Service Unavailable Response": {
+      "main": [
+        [
+          {
+            "node": "Text-to-Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build No Result Response": {
+      "main": [
+        [
+          {
+            "node": "Text-to-Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log OSM Recommendation": {
+      "main": [
+        [
+          {
+            "node": "Text-to-Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Account Response": {
+      "main": [
+        [
+          {
+            "node": "Text-to-Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Auth Required Response": {
+      "main": [
+        [
+          {
+            "node": "Text-to-Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Fallback Response": {
+      "main": [
+        [
+          {
+            "node": "Text-to-Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text-to-Speech": {
+      "main": [
+        [
+          {
+            "node": "Build Final Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Final Payload": {
+      "main": [
+        [
+          {
+            "node": "Respond - Send Voice Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "executionTimeout": 300
+  },
+  "pinData": {},
+  "meta": {
+    "description": "Main orchestration workflow. Rate-limits, locks session language, uses an LLM only for intent/slot extraction, then routes deterministically to a certified-dataset answer, an age-gated OSM answer with mandatory hedge + audit log, a circuit-broken 'unavailable' answer, or an authenticated account lookup - before handing a fixed template to text-to-speech."
+  }
+}

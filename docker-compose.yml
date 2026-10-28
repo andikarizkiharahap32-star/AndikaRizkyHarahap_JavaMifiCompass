@@ -17,7 +17,7 @@ services:
     container_name: javamifi-postgres
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     environment:
       POSTGRES_USER: javamifi
       POSTGRES_PASSWORD: javamifi_dev
@@ -39,7 +39,7 @@ services:
     container_name: javamifi-redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
       - redis_data:/data
@@ -54,12 +54,12 @@ services:
 
   # ── Mailpit (dev email) ────────────────────────────────────
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.21.8
     container_name: javamifi-mailpit
     restart: unless-stopped
     ports:
-      - "8025:8025"   # Web UI
-      - "1025:1025"   # SMTP
+      - "127.0.0.1:8025:8025"   # Web UI
+      - "127.0.0.1:1025:1025"   # SMTP
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: "true"
       MP_SMTP_AUTH_ALLOW_INSECURE: "true"
@@ -68,11 +68,11 @@ services:
 
   # ── n8n (workflow automation) ──────────────────────────────
   n8n:
-    image: n8nio/n8n:latest
+    image: n8nio/n8n:1.64.3
     container_name: javamifi-n8n
     restart: unless-stopped
     ports:
-      - "5678:5678"
+      - "127.0.0.1:5678:5678"
     environment:
       N8N_BASIC_AUTH_ACTIVE: "true"
       N8N_BASIC_AUTH_USER: admin
@@ -86,6 +86,8 @@ services:
       DB_POSTGRESDB_PASSWORD: javamifi_dev
       N8N_DEFAULT_BINARY_DATA_MODE: filesystem
       GENERIC_TIMEZONE: Asia/Jakarta
+      BACKEND_INTERNAL_URL: http://api:3001
+      BACKEND_URL: http://api:3001
     volumes:
       - n8n_data:/home/node/.n8n
       - ./automation/n8n:/home/node/n8n-workflows
@@ -105,7 +107,7 @@ services:
     container_name: javamifi-api
     restart: unless-stopped
     ports:
-      - "3001:3001"
+      - "127.0.0.1:3001:3001"
     env_file:
       - .env
     environment:
@@ -133,7 +135,7 @@ services:
     container_name: javamifi-web
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     env_file:
       - .env
     environment:
@@ -151,7 +153,7 @@ services:
     container_name: javamifi-admin
     restart: unless-stopped
     ports:
-      - "3002:3002"
+      - "127.0.0.1:3002:3002"
     env_file:
       - .env
     depends_on:

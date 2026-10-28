@@ -1,0 +1,49 @@
+{
+  "Version": "2012-10-17",
+  "Id": "JavaMifiMediaStoragePolicy",
+  "Statement": [
+    {
+      "Sid": "EnforceMaxUploadSize8MB",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::javamifi-media/uploads/*",
+      "Condition": {
+        "NumericGreaterThan": {
+          "s3:content-length-range": 8388608
+        }
+      }
+    },
+    {
+      "Sid": "AllowCdnOriginReadAccessOnly",
+      "Effect": "Allow",
+      "Principal": {
+        "CanonicalUser": "cloudflare-or-cloudfront-origin-access-identity"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::javamifi-media/uploads/*"
+    },
+    {
+      "Sid": "DenyPublicBucketListing",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::javamifi-media"
+    }
+  ],
+  "CorsConfiguration": {
+    "CorsRules": [
+      {
+        "AllowedOrigins": [
+          "https://media.javamifi.com",
+          "https://javamifi.com",
+          "https://admin.javamifi.com"
+        ],
+        "AllowedMethods": ["PUT", "GET", "HEAD"],
+        "AllowedHeaders": ["Content-Type", "x-amz-server-side-encryption"],
+        "ExposeHeaders": ["ETag"],
+        "MaxAgeSeconds": 3600
+      }
+    ]
+  }
+}

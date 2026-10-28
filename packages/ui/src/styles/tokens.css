@@ -17,18 +17,18 @@
   --color-on-surface-variant: #464650;
   --color-inverse-surface: #2d3130;
   --color-inverse-on-surface: #eef1ef;
-  --color-outline: #6B7570;
+  --color-outline: #6b7570;
   --color-outline-variant: #c6c5d1;
   --color-surface-tint: #515a95;
 
   /* Primary Structural Ink */
   --color-primary: #000846;
-  --color-on-primary: #EDF0EE;
+  --color-on-primary: #edf0ee;
   --color-primary-container: #18215a;
   --color-on-primary-container: #818ac9;
   --color-inverse-primary: #bbc3ff;
-  --color-primary-hover: #2B3A8C;
-  --color-primary-pressed: #0E1440;
+  --color-primary-hover: #2b3a8c;
+  --color-primary-pressed: #0e1440;
 
   /* Secondary & Tertiary */
   --color-secondary: #535c89;
@@ -45,12 +45,12 @@
   --color-on-error: #ffffff;
   --color-error-container: #ffdad6;
   --color-on-error-container: #93000a;
-  --color-success: #176B40;
-  --color-success-surface: #D7EBDF;
-  --color-warning: #7A4F00;
-  --color-warning-surface: #F7E8C2;
-  --color-danger: #A8231B;
-  --color-danger-surface: #F6D9D6;
+  --color-success: #176b40;
+  --color-success-surface: #d7ebdf;
+  --color-warning: #7a4f00;
+  --color-warning-surface: #f7e8c2;
+  --color-danger: #a8231b;
+  --color-danger-surface: #f6d9d6;
 
   /* Fixed & Semantic */
   --color-primary-fixed: #dfe0ff;
@@ -65,48 +65,128 @@
   --color-tertiary-fixed-dim: #bfc9c3;
   --color-on-tertiary-fixed: #141d1a;
   --color-on-tertiary-fixed-variant: #3f4944;
-  --color-background: #EDF0EE;
+  --color-background: #edf0ee;
   --color-on-background: #181c1b;
   --color-surface-variant: #e0e3e1;
 
   /* Tactile Paper Materials */
-  --color-paper: #FFFFFF;
-  --color-paper-edge: #CDD4D0;
-  --color-sunken: #E1E6E3;
-  --color-selection: #D3D9F0;
+  --color-paper: #ffffff;
+  --color-paper-edge: #cdd4d0;
+  --color-sunken: #e1e6e3;
+  --color-selection: #d3d9f0;
   --color-scrim: rgba(24, 33, 90, 0.48);
 
   /* Product Lines (Strictly Connectivity Only) */
-  --color-line-wifi: #F27B2A;
-  --color-line-wifi-stroke: #C95A0A;
-  --color-line-esim: #4C97FF;
-  --color-line-esim-stroke: #2468E0;
-  --color-line-sim: #E96BB0;
-  --color-line-sim-stroke: #C23A86;
-  --color-line-pro: #18215A;
+  --color-line-wifi: #f27b2a;
+  --color-line-wifi-stroke: #c95a0a;
+  --color-line-esim: #4c97ff;
+  --color-line-esim-stroke: #2468e0;
+  --color-line-sim: #e96bb0;
+  --color-line-sim-stroke: #c23a86;
+  --color-line-pro: #18215a;
+
+  /* Compass Rasa Halal Dining Line (Strictly Isolated Jade, Never Connectivity Colorways) */
+  --color-line-dining: #059669;
+  --color-line-dining-stroke: #047857;
+  --color-line-dining-surface: #d1fae5;
 
   /* Night Mode Token Primitives */
-  --color-night-ground: #0E1438;
-  --color-night-raised: #171F54;
-  --color-night-edge: #2B357A;
-  --color-night-ink: #E9ECF8;
-  --color-night-ink-soft: #A7AFD6;
+  --color-night-ground: #0e1438;
+  --color-night-raised: #171f54;
+  --color-night-edge: #2b357a;
+  --color-night-ink: #e9ecf8;
+  --color-night-ink-soft: #a7afd6;
 
   /* Spacing */
   --spacing-gutter: 1.5rem;
   --spacing-gutter-mobile: 1rem;
   --spacing-margin: 1.5rem;
   --spacing-margin-mobile: 1rem;
+
+  /* Motion & Duration (GEMINI.md, P02-WS11/12, P17-WS01/02/03) */
+  --duration-instant: 0ms;
+  --duration-micro: 100ms;
+  --duration-mechanical: 150ms;
+  --duration-transit: 200ms;
+  --duration-deliberate: 300ms;
+  --ease-transit: cubic-bezier(0, 0, 0.2, 1);
+  --ease-mechanical: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Z-Index Hierarchy (P02-WS14) */
+  --z-surface: 0;
+  --z-elevated: 10;
+  --z-sticky: 20;
+  --z-drawer: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+
+  /* Focus Ring (P02-WS13) */
+  --focus-ring-color: #18215a;
+  --focus-ring-offset: 2px;
+  --focus-ring-width: 2px;
+
+  /* Section 3 Spacing Tokens (4px base, 8px rhythm) */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-24: 96px;
+
+  /* Section 3 Radius Tokens */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Section 3 Typography Scale (1.2 ratio) */
+  --font-size-12: 12px;
+  --font-size-14: 14px;
+  --font-size-16: 16px;
+  --font-size-19: 19px;
+  --font-size-23: 23px;
+  --font-size-28: 28px;
+  --font-size-34: 34px;
+  --font-size-41: 41px;
+
+  /* Section 3 Semantic Colors (Light Mode) */
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --text: #0b1033;
+  --text-muted: #4a5470;
+  --brand: #0b1033;
+  --accent-halal: #14733a;
+  --warning: #8a5a00;
+  --warning-bg: #fff4d6;
+  --danger: #b42318;
+  --border: #dde1ea;
+
+  /* Section 3 Elevation Tokens */
+  --elevation-e1: 0 1px 2px rgb(11 16 51 / 0.06);
+  --elevation-e2: 0 4px 16px rgb(11 16 51 / 0.1);
+  --elevation-e3: 0 12px 32px rgb(11 16 51 / 0.16);
+
+  /* Section 3 Motion Tokens */
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
 /* Night Theme Activation */
 .dark,
-[data-theme="night"] {
+[data-theme='night'] {
   --color-background: var(--color-night-ground);
   --color-surface: var(--color-night-ground);
   --color-surface-container-low: #101740;
-  --color-surface-container: #171F54;
-  --color-surface-container-high: #1E286B;
+  --color-surface-container: #171f54;
+  --color-surface-container-high: #1e286b;
   --color-surface-container-highest: #263384;
   --color-on-surface: var(--color-night-ink);
   --color-on-surface-variant: var(--color-night-ink-soft);
@@ -122,21 +202,60 @@
   --color-success-surface: rgba(23, 107, 64, 0.25);
   --color-warning-surface: rgba(122, 79, 0, 0.25);
   --color-danger-surface: rgba(168, 35, 27, 0.25);
+  --color-line-dining-surface: rgba(5, 150, 105, 0.25);
+  --focus-ring-color: var(--color-night-ink);
+
+  /* Section 3 Semantic Colors (Dark Mode) */
+  --bg: #0b0f1a;
+  --surface: #131a2a;
+  --text: #e8ecf5;
+  --text-muted: #a3adc4;
+  --brand: #8fa8ff;
+  --accent-halal: #4ade80;
+  --warning: #fbbf24;
+  --warning-bg: #2b2008;
+  --danger: #f97066;
+  --border: #26304a;
+
+  /* In dark mode, use surface lightening instead of shadows */
+  --elevation-e1: none;
+  --elevation-e2: none;
+  --elevation-e3: none;
+  --surface-e1: #171f54;
+  --surface-e2: #1e286b;
+  --surface-e3: #263384;
 }
 
 /* Tabular Numerics Utility */
 .tnum,
 .font-tnum {
-  font-feature-settings: "tnum" 1;
+  font-feature-settings: 'tnum' 1;
   font-variant-numeric: tabular-nums;
 }
 
-/* Wayfinding Paper Card with Tactile 2px Lower Lip */
+/* Elevation Without Shadows (GEMINI.md Hard Rule & P02-WS05) */
+.elevation-flat {
+  border: 1px solid var(--color-paper-edge);
+}
+
+.elevation-card,
 .wayfinding-card {
   background-color: var(--color-paper);
   border: 1px solid var(--color-paper-edge);
   border-bottom: 2px solid var(--color-paper-edge);
   border-radius: 4px;
+}
+
+.elevation-raised {
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-paper-edge);
+  border-bottom: 4px solid var(--color-paper-edge);
+  border-radius: 4px;
+}
+
+.elevation-sunken {
+  background-color: var(--color-sunken);
+  border: 1px solid var(--color-paper-edge);
 }
 
 /* Interactive Touch Targets */

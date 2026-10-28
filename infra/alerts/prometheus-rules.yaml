@@ -1,0 +1,114 @@
+# ==============================================================================
+# P28: Symptom-Based SLO Burn Alert Rules & Runbook Registry
+# Every alert links to an authoritative runbook.
+# Paging is reserved strictly for actionable user-facing impact (no noise).
+# ==============================================================================
+
+groups:
+  - name: javamifi_slo_burn_alerts
+    rules:
+      # 1. Error Budget Fast Burn (1h)
+      - alert: HighErrorBudgetBurn1h
+        expr: (rate(http_requests_total{status=~"5.."}[1h]) / rate(http_requests_total[1h])) > (14.4 * 0.005)
+        for: 2m
+        labels:
+          severity: critical
+          tier: api
+          page: "true"
+        annotations:
+          summary: "1-hour error budget burn rate is 14.4x above SLO limit (5xx rate > 7.2%)"
+          description: "Production API is burning error budget at an alarming rate. Immediate intervention required."
+          runbook_url: "https://ops.javamifi.com/runbooks/rollback"
+
+      # 2. Latency Budget Fast Burn (1h)
+      - alert: HighLatencyBudgetBurn1h
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1h])) by (le)) > 0.3
+        for: 5m
+        labels:
+          severity: critical
+          tier: api
+          page: "true"
+        annotations:
+          summary: "P95 latency exceeded 300ms SLO target over 1-hour evaluation window"
+          description: "Elevated response times detected on search and checkout hot paths."
+          runbook_url: "https://ops.javamifi.com/runbooks/rollback"
+
+  - name: javamifi_operational_subsystems
+    rules:
+      # 3. Database Failover Required
+      - alert: DatabaseFailoverRequired
+        expr: pg_up == 0 or pg_replication_lag_seconds > 60
+        for: 1m
+        labels:
+          severity: critical
+          tier: database
+          page: "true"
+        annotations:
+          summary: "PostgreSQL primary node is unreachable or replication lag exceeds 60s"
+          description: "Database health probe failed. Promote warm replica in secondary availability zone."
+          runbook_url: "https://ops.javamifi.com/runbooks/db-failover"
+
+      # 4. Queue Backlog Critical
+      - alert: QueueBacklogCritical
+        expr: sum(bullmq_queue_waiting_jobs) > 10000 or bullmq_queue_latency_seconds > 300
+        for: 3m
+        labels:
+          severity: critical
+          tier: worker
+          page: "true"
+        annotations:
+          summary: "BullMQ queue backlog exceeded 10,000 jobs or latency exceeds 5 minutes"
+          description: "Background workers are lagging behind ingestion and notification job arrival rates."
+          runbook_url: "https://ops.javamifi.com/runbooks/queue-backlog"
+
+      # 5. FX Provider Divergence
+      - alert: FxDivergenceDetected
+        expr: javamifi_fx_divergence_ratio > 0.005
+        for: 15m
+        labels:
+          severity: warning
+          tier: integration
+          page: "false" # Non-paging: Fail-closed fallback prevents financial loss
+        annotations:
+          summary: "Dual FX providers diverged by more than 0.5% (50 bps)"
+          description: "FX rate discrepancy detected between primary and secondary feeds. Fail-closed circuit active."
+          runbook_url: "https://ops.javamifi.com/runbooks/fx-divergence"
+
+      # 6. Downstream Places Provider Outage
+      - alert: DownstreamPlacesProviderOutage
+        expr: (rate(places_provider_requests_failed_total[5m]) / rate(places_provider_requests_total[5m])) > 0.5
+        for: 10m
+        labels:
+          severity: warning
+          tier: ingestion
+          page: "false"
+        annotations:
+          summary: "Downstream places provider error rate exceeded 50%"
+          description: "Upstream places ingestion provider is degraded. Ingestion queue paused to avoid rate limits."
+          runbook_url: "https://ops.javamifi.com/runbooks/provider-outage"
+
+      # 7. Webhook Secret Rotation Imminent
+      - alert: WebhookSecretRotationImminent
+        expr: javamifi_webhook_secret_age_days > 80
+        for: 24h
+        labels:
+          severity: warning
+          tier: security
+          page: "false"
+        annotations:
+          summary: "Webhook HMAC signing secret age is greater than 80 days"
+          description: "Scheduled secret rotation required before 90-day validity window expires."
+          runbook_url: "https://ops.javamifi.com/runbooks/secret-rotation"
+
+      # 8. Deployment Canary Rollback Triggered
+      - alert: DeploymentCanaryRollbackTriggered
+        expr: javamifi_canary_auto_rollback_total > 0
+        for: 1m
+        labels:
+          severity: critical
+          tier: deployment
+          page: "true"
+        annotations:
+          summary: "Canary progressive delivery triggered automatic rollback to previous stable version"
+          description: "SLO degradation during canary rollout initiated emergency rollback to 0% traffic."
+          runbook_url: "https://ops.javamifi.com/runbooks/rollback"

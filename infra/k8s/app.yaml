@@ -1,0 +1,139 @@
+# ==============================================================================
+# P25: Kubernetes Manifests (API, Worker, & PodDisruptionBudgets)
+# Hardened SecurityContext, Resource Limits, and PodDisruptionBudgets
+# ==============================================================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javamifi-api
+  namespace: javamifi
+  labels:
+    app: javamifi-api
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: javamifi-api
+  template:
+    metadata:
+      labels:
+        app: javamifi-api
+    spec:
+      # P25: Strict non-root pod security context
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: api
+          image: javamifi/api:v1.0.0
+          imagePullPolicy: IfNotPresent
+          # P25: Hardened container security context
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - containerPort: 3001
+              name: http
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1024Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javamifi-worker
+  namespace: javamifi
+  labels:
+    app: javamifi-worker
+    tier: background
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: javamifi-worker
+  template:
+    metadata:
+      labels:
+        app: javamifi-worker
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: worker
+          image: javamifi/worker:v1.0.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1024Mi"
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+---
+# P25: PodDisruptionBudget for API Service
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: javamifi-api-pdb
+  namespace: javamifi
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: javamifi-api
+---
+# P25: PodDisruptionBudget for Background Worker
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: javamifi-worker-pdb
+  namespace: javamifi
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: javamifi-worker

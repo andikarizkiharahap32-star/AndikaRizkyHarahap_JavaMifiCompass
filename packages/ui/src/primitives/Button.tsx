@@ -13,37 +13,67 @@ export const Button: React.FC<ButtonProps> = ({
   isLoading = false,
   className = '',
   disabled,
+  type = 'button',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  // Base styles strictly honoring DESIGN.md (rounded token, min-h-12 house touch-target, focus ring)
+  const baseStyles =
+    'inline-flex items-center justify-center font-bold font-sans uppercase tracking-wider rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer select-none';
 
+  // Semantic token color variants (P16-WS01 to WS03, WS21 to WS26)
   const variants = {
-    primary: 'bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary focus:ring-primary',
-    secondary: 'bg-secondary hover:bg-secondary/90 text-on-secondary active:scale-[0.98]',
-    outline: 'border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-slate-400',
-    ghost: 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:ring-slate-400',
-    danger: 'bg-rose-600 hover:bg-rose-700 text-white focus:ring-rose-500',
+    primary:
+      'bg-primary hover:bg-primary-hover active:bg-primary-pressed text-on-primary border border-primary',
+    secondary: 'bg-surface hover:bg-paper active:bg-surface text-primary border border-paper-edge',
+    outline:
+      'bg-transparent hover:bg-paper active:bg-surface text-primary border border-paper-edge',
+    ghost:
+      'bg-transparent hover:bg-paper active:bg-surface text-secondary hover:text-primary border border-transparent',
+    danger: 'bg-danger hover:bg-danger text-on-error active:bg-danger border border-danger',
   };
 
+  // Touch target sizing (P16-WS12, WS31 - minimum 48px house touch target across all sizes)
   const sizes = {
-    sm: 'px-3 py-1.5 text-xs',
-    md: 'px-4 py-2 text-sm',
-    lg: 'px-6 py-3 text-base',
+    sm: 'min-h-12 h-12 px-4 text-xs',
+    md: 'min-h-12 h-12 px-6 text-xs',
+    lg: 'min-h-13 h-13 px-8 text-sm',
   };
+
+  const isDisabled = disabled || isLoading;
 
   return (
     <button
+      type={type}
+      aria-busy={isLoading}
+      aria-disabled={isDisabled}
+      disabled={isDisabled}
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
-      disabled={disabled || isLoading}
       {...props}
     >
       {isLoading ? (
-        <span className="inline-flex items-center gap-2">
-          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        <span className="inline-flex items-center gap-2" role="status" aria-live="polite">
+          <svg
+            className="animate-spin motion-reduce:animate-none h-4 w-4 shrink-0 text-current"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
           </svg>
-          Loading...
+          <span className="sr-only">Loading...</span>
+          <span>{children}</span>
         </span>
       ) : (
         children

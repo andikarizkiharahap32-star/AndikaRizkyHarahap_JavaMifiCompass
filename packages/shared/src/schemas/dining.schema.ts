@@ -126,12 +126,14 @@ export const diningPlaceSummarySchema = z.object({
   images: z.array(venueImageSchema).default([]),
   wifiPickupBooth: wifiPickupBoothSchema.optional(),
   isSimulated: z.boolean().default(true),
-  prayerContext: z.object({
-    nearestPrayerName: z.string(),
-    nearestPrayerTime: z.string(),
-    minutesRemaining: z.number(),
-    statusText: z.string(),
-  }).optional(),
+  prayerContext: z
+    .object({
+      nearestPrayerName: z.string(),
+      nearestPrayerTime: z.string(),
+      minutesRemaining: z.number(),
+      statusText: z.string(),
+    })
+    .optional(),
 });
 export type DiningPlaceSummary = z.infer<typeof diningPlaceSummarySchema>;
 
@@ -144,12 +146,18 @@ export const diningPlaceDetailSchema = diningPlaceSummarySchema.extend({
     z.object({
       category: z.string(),
       items: z.array(menuItemSchema),
-    })
+    }),
   ),
   whyHalalExplanation: z.string().optional(),
   lastAssessedAt: z.string(),
 });
 export type DiningPlaceDetail = z.infer<typeof diningPlaceDetailSchema>;
+
+export const diningSortBySchema = z.enum(['relevance', 'rating', 'distance']);
+export type DiningSortBy = z.infer<typeof diningSortBySchema>;
+
+export const diningSortOrderSchema = z.enum(['asc', 'desc']);
+export type DiningSortOrder = z.infer<typeof diningSortOrderSchema>;
 
 /** Query parameters for searching places. */
 export const diningQuerySchema = z.object({
@@ -160,6 +168,8 @@ export const diningQuerySchema = z.object({
   radiusKm: z.coerce.number().positive().max(50).default(5),
   includeUnverified: z.coerce.boolean().default(false),
   search: z.string().max(100).optional(),
+  sortBy: diningSortBySchema.default('relevance'),
+  sortOrder: diningSortOrderSchema.default('desc'),
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(50).default(20),
 });
@@ -191,7 +201,7 @@ export const llmSignalsOutputSchema = z.object({
         quote: z.string(),
         source: z.string(),
         claimedBy: z.enum(['OWNER', 'REGISTRY', 'REVIEWER', 'THIRD_PARTY']),
-      })
+      }),
     )
     .default([]),
   porkFlags: z
@@ -199,7 +209,7 @@ export const llmSignalsOutputSchema = z.object({
       z.object({
         quote: z.string(),
         dishOrIngredient: z.string(),
-      })
+      }),
     )
     .default([]),
   alcoholFlags: z
@@ -207,7 +217,7 @@ export const llmSignalsOutputSchema = z.object({
       z.object({
         quote: z.string(),
         detail: z.string(),
-      })
+      }),
     )
     .default([]),
   cookwareNotes: z.string().nullable().optional(),
@@ -256,7 +266,7 @@ export const validationResultSchema = z.object({
         term: z.string(),
         language: z.string(),
         matchedIn: z.string(),
-      })
+      }),
     ),
   }),
   priceSanity: z.object({
@@ -319,5 +329,3 @@ export const diningSafetyStatusSchema = z.object({
   lastResetAt: z.string(),
 });
 export type DiningSafetyStatus = z.infer<typeof diningSafetyStatusSchema>;
-
-

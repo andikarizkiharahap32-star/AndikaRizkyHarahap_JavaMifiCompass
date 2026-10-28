@@ -3,14 +3,25 @@
 // ─────────────────────────────────────────────────────────────
 
 /**
- * Indonesian Rupiah is zero-decimal. For currencies with decimals (USD, EUR, SGD),
- * minor unit is 100x. For IDR, minor unit is 1:1.
+ * Returns the minor unit decimal places for ISO currencies per PRD & DESIGN.md
+ */
+export function getCurrencyDecimals(currency: string): number {
+  const zeroDecimal = ['IDR', 'JPY', 'KRW', 'VND', 'UGX', 'CLP', 'PYG', 'RWF'];
+  const threeDecimal = ['KWD', 'BHD', 'JOD', 'OMR', 'TND', 'LYD'];
+  const upper = (currency || '').toUpperCase();
+
+  if (zeroDecimal.includes(upper)) return 0;
+  if (threeDecimal.includes(upper)) return 3;
+  return 2;
+}
+
+/**
+ * Indonesian Rupiah is zero-decimal. For currencies with decimals (USD, EUR, SGD, KWD),
+ * minor unit is scaled by 10^decimals. For zero-decimal currencies, minor unit is 1:1.
  */
 export function toMinorUnit(amount: number, currency = 'IDR'): number {
-  if (currency.toUpperCase() === 'IDR') {
-    return Math.round(amount);
-  }
-  return Math.round(amount * 100);
+  const decimals = getCurrencyDecimals(currency);
+  return Math.round(amount * Math.pow(10, decimals));
 }
 
 /**
@@ -66,7 +77,11 @@ export function calculatePerPersonPerDay(totalIdr: number, persons: number, days
 /**
  * Apply percentage discount (0-100) and return discounted integer amount
  */
-export function applyDiscount(amount: number, discountPercent: number, maxDiscountIdr?: number): number {
+export function applyDiscount(
+  amount: number,
+  discountPercent: number,
+  maxDiscountIdr?: number,
+): number {
   if (discountPercent <= 0) return amount;
   let discount = Math.round((amount * Math.min(discountPercent, 100)) / 100);
   if (maxDiscountIdr && discount > maxDiscountIdr) {
@@ -84,22 +99,13 @@ export function applyFixedDiscount(amount: number, fixedDiscountIdr: number): nu
 }
 
 /**
- * Returns the minor unit decimal places for ISO currencies per PRD & DESIGN.md
- */
-export function getCurrencyDecimals(currency: string): number {
-  const zeroDecimal = ['JPY', 'KRW', 'VND', 'UGX', 'CLP', 'PYG', 'RWF'];
-  const threeDecimal = ['KWD', 'BHD', 'JOD', 'OMR', 'TND', 'LYD'];
-  const upper = (currency || '').toUpperCase();
-
-  if (zeroDecimal.includes(upper)) return 0;
-  if (threeDecimal.includes(upper)) return 3;
-  return 2;
-}
-
-/**
  * Formats a minor amount into a major currency representation
  */
-export function formatLocalAmount(amountMinor: number, currency: string, locale: string = 'en-US'): string {
+export function formatLocalAmount(
+  amountMinor: number,
+  currency: string,
+  locale: string = 'en-US',
+): string {
   const decimals = getCurrencyDecimals(currency);
   const factor = Math.pow(10, decimals);
   const majorValue = amountMinor / factor;
@@ -132,7 +138,7 @@ export function formatLocalPriceRange(
   minMinor: number,
   maxMinor: number,
   currency: string,
-  locale: string = 'en-US'
+  locale: string = 'en-US',
 ): string {
   const minFormatted = formatLocalAmount(minMinor, currency, locale);
   const maxFormatted = formatLocalAmount(maxMinor, currency, locale);

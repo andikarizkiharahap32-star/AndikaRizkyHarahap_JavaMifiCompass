@@ -1,7 +1,10 @@
 import React from 'react';
-import { Car, Languages, Info } from 'lucide-react';
+import { Car, Languages, Info, UtensilsCrossed } from 'lucide-react';
 import { HalalBadge, HalalTierType } from './HalalBadge';
 import { DualPrice } from './DualPrice';
+import { MediaThumbnail } from '../wayfinding/MediaThumbnail';
+
+declare const process: { env: Record<string, string | undefined> };
 
 export interface RestaurantCardProps {
   id: string;
@@ -41,6 +44,7 @@ export interface RestaurantCardProps {
     type: string;
   }>;
   isSimulated?: boolean;
+  phraseCardLabel?: string;
   onShowTaxiCard?: () => void;
   onShowPhraseCard?: () => void;
   onClick?: () => void;
@@ -79,6 +83,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
   dietaryFlags = [],
   images = [],
   isSimulated = true,
+  phraseCardLabel = 'Kartu Tanya Mirin & Babi',
   onShowTaxiCard,
   onShowPhraseCard,
   onClick,
@@ -97,7 +102,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           onClick?.();
         }
       }}
-      className={`group relative bg-paper border border-paper-edge border-b-2 hover:border-primary rounded p-4 transition-colors cursor-pointer flex flex-col justify-between gap-3.5 min-h-48 ${className}`}
+      className={`group relative bg-paper border border-paper-edge border-b-2 hover:border-primary rounded p-4 transition-all duration-150 ease-out motion-safe:hover:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none cursor-pointer flex flex-col justify-between gap-3.5 min-h-48 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${className}`}
     >
       <div className="flex flex-col gap-3">
         {/* Row 1: Waypoint Station Header Bar (Non-clipping 'T' transit mark & status) */}
@@ -118,7 +123,8 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
               </span>
             )}
           </div>
-          {isSimulated && (
+          {/* Environment-guarded Data simulasi badge: only visible in non-production development */}
+          {process.env.NODE_ENV !== 'production' && isSimulated && (
             <span className="text-xs font-sans font-bold uppercase tracking-wider text-outline bg-sunken px-2.5 py-1 rounded border border-paper-edge shrink-0">
               Data simulasi
             </span>
@@ -137,26 +143,53 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           />
         </div>
 
-        {/* Row 3: Photo Thumbnail (Visual Evidence) */}
-        {thumbnail && (
-          <div className="w-full h-36 rounded overflow-hidden border border-paper-edge bg-surface relative">
+        {/* Row 3: Photo Thumbnail (Visual Evidence with dominant-color solid container & branded fallback) */}
+        {thumbnail ? (
+          <div className="w-full h-36 rounded overflow-hidden border border-paper-edge bg-sunken relative flex items-center justify-center">
+            {/* Base branded station placeholder in solid container if image is loading or fails */}
+            <div
+              className="flex flex-col items-center justify-center gap-1.5 text-outline text-xs font-sans text-center px-4 select-none pointer-events-none"
+              aria-hidden="true"
+            >
+              <div className="w-8 h-8 rounded bg-paper border border-paper-edge flex items-center justify-center shrink-0">
+                <UtensilsCrossed className="w-4 h-4 text-outline" />
+              </div>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider">
+                Dokumentasi Visual Tersedia di Lokasi
+              </span>
+            </div>
             <img
               src={thumbnail.url}
               alt={thumbnail.caption || name}
-              className="w-full h-full object-cover select-none"
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover select-none"
+              onError={(e) => {
+                // Dominant-color block fallback prevents broken alt text leak
+                (e.currentTarget as HTMLElement).style.display = 'none';
+              }}
             />
-            <div className="absolute top-2 right-2 bg-primary text-on-primary text-xs font-sans font-bold px-2 py-0.5 rounded uppercase">
+            <div className="absolute top-2 right-2 bg-primary text-on-primary text-xs font-sans font-bold px-2 py-0.5 rounded uppercase pointer-events-none">
               {thumbnail.type === 'STOREFRONT'
                 ? 'Fasad Depan'
                 : thumbnail.type === 'DISH'
-                ? 'Menu Andalan'
-                : 'Sertifikat'}
+                  ? 'Menu Andalan'
+                  : 'Sertifikat'}
             </div>
             {thumbnail.caption && (
-              <div className="absolute bottom-0 inset-x-0 bg-primary/90 text-on-primary px-2.5 py-1 text-xs font-sans truncate">
+              <div className="absolute bottom-0 inset-x-0 bg-primary/90 text-on-primary px-2.5 py-1 text-xs font-sans truncate pointer-events-none">
                 {thumbnail.caption}
               </div>
             )}
+          </div>
+        ) : (
+          <div className="w-full h-36 rounded border border-paper-edge bg-sunken flex flex-col items-center justify-center gap-1.5 text-outline text-xs select-none">
+            <div className="w-8 h-8 rounded bg-paper border border-paper-edge flex items-center justify-center shrink-0">
+              <UtensilsCrossed className="w-4 h-4 text-outline" />
+            </div>
+            <span className="font-mono text-xs font-bold uppercase tracking-wider">
+              Dokumentasi Visual Tersedia di Lokasi
+            </span>
           </div>
         )}
 
@@ -165,9 +198,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           <h3 className="text-base font-bold text-primary leading-snug m-0">
             {name}{' '}
             {nameOriginal && nameOriginal !== name && (
-              <span className="text-xs font-normal text-outline">
-                ({nameOriginal})
-              </span>
+              <span className="text-xs font-normal text-outline">({nameOriginal})</span>
             )}
           </h3>
         </div>
@@ -198,7 +229,8 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
           <p className="m-0 line-clamp-1">{address}</p>
           {addressLocalScript && (
             <p className="m-0 text-xs text-outline font-sans line-clamp-1 mt-0.5">
-              {addressLocalScript} {postalCode && `(${postalCode})`}
+              {addressLocalScript}{' '}
+              {postalCode && <span className="font-mono tnum">({postalCode})</span>}
             </p>
           )}
         </div>
@@ -209,7 +241,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
             <button
               type="button"
               onClick={onShowTaxiCard}
-              className="h-12 px-3 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-semibold text-primary flex items-center gap-1.5 transition"
+              className="min-h-12 h-12 px-3 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-semibold text-primary flex items-center gap-1.5 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <Car className="w-3.5 h-3.5 text-secondary" />
               <span>Kartu Taksi</span>
@@ -219,10 +251,10 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
             <button
               type="button"
               onClick={onShowPhraseCard}
-              className="h-12 px-3 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-semibold text-primary flex items-center gap-1.5 transition"
+              className="min-h-12 h-12 px-3 rounded bg-surface hover:bg-paper-edge border border-paper-edge text-xs font-sans font-semibold text-primary flex items-center gap-1.5 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <Languages className="w-3.5 h-3.5 text-secondary" />
-              <span>Cek Mirin/Sake</span>
+              <span>{phraseCardLabel}</span>
             </button>
           )}
         </div>
@@ -231,7 +263,8 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
         <div className="p-2.5 rounded bg-sunken border border-paper-edge text-xs font-sans text-secondary leading-snug flex items-start gap-1.5">
           <Info className="w-4 h-4 text-outline shrink-0 mt-0.5" />
           <p className="m-0">
-            Harap selalu konfirmasi status kehalalan bahan dan alat masak langsung ke staf restoran sebelum memesan.
+            Harap selalu konfirmasi status kehalalan bahan dan alat masak langsung ke staf restoran
+            sebelum memesan.
           </p>
         </div>
       </div>

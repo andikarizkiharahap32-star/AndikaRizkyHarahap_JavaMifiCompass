@@ -103,29 +103,100 @@ export const App = () => {
   }
 
   const allNavItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE', 'EDITOR', 'SUPPORT'] },
-    { id: 'dining', label: 'Audit Halal & AI Discovery', icon: <UtensilsCrossed className="w-4 h-4 text-emerald-400" />, roles: ['SUPER_ADMIN', 'ADMIN'] },
-    { id: 'orders', label: 'Pesanan & Ledger', icon: <Package className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE'] },
-    { id: 'catalog', label: 'Katalog & Paket Kuota', icon: <Tag className="w-4 h-4 text-amber-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
-    { id: 'devices', label: 'Armada Modem WiFi', icon: <Wifi className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
-    { id: 'customers', label: 'Pelanggan & Traveler', icon: <Users className="w-4 h-4 text-sky-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT', 'FINANCE'] },
-    { id: 'content', label: 'Editor Konten CMS', icon: <FileText className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
-    { id: 'media', label: 'Pustaka Media & Aset', icon: <Image className="w-4 h-4 text-indigo-400" />, roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'] },
-    { id: 'automation', label: 'Konsol Otomasi n8n', icon: <Activity className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
-    { id: 'support', label: 'Tiket Dukungan', icon: <Headphones className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT'] },
-    { id: 'integrations', label: 'Kesehatan & Adapter', icon: <Sliders className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'] },
-    { id: 'audit', label: 'Audit Log', icon: <ShieldCheck className="w-4 h-4" />, roles: ['SUPER_ADMIN', 'ADMIN', 'FINANCE'] },
+    {
+      id: 'dashboard',
+      label: 'Dashboard',
+      icon: <LayoutDashboard className="w-4 h-4" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE', 'EDITOR', 'SUPPORT'],
+    },
+    {
+      id: 'dining',
+      label: 'Audit Halal & AI Discovery',
+      icon: <UtensilsCrossed className="w-4 h-4 text-emerald-400" />,
+      roles: ['SUPER_ADMIN', 'ADMIN'],
+    },
+    {
+      id: 'orders',
+      label: 'Pesanan & Ledger',
+      icon: <Package className="w-4 h-4" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'FINANCE'],
+    },
+    {
+      id: 'catalog',
+      label: 'Katalog & Paket Kuota',
+      icon: <Tag className="w-4 h-4 text-amber-400" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
+    },
+    {
+      id: 'devices',
+      label: 'Armada Modem WiFi',
+      icon: <Wifi className="w-4 h-4" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'],
+    },
+    {
+      id: 'customers',
+      label: 'Pelanggan & Traveler',
+      icon: <Users className="w-4 h-4 text-sky-400" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT', 'FINANCE'],
+    },
+    {
+      id: 'content',
+      label: 'Editor Konten CMS',
+      icon: <FileText className="w-4 h-4" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
+    },
+    {
+      id: 'media',
+      label: 'Pustaka Media & Aset',
+      icon: <Image className="w-4 h-4 text-indigo-400" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
+    },
+    {
+      id: 'automation',
+      label: 'Konsol Otomasi n8n',
+      icon: <Activity className="w-4 h-4" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'],
+    },
+    {
+      id: 'support',
+      label: 'Tiket Dukungan',
+      icon: <Headphones className="w-4 h-4" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS', 'SUPPORT'],
+    },
+    {
+      id: 'integrations',
+      label: 'Kesehatan & Adapter',
+      icon: <Sliders className="w-4 h-4" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'OPS'],
+    },
+    {
+      id: 'audit',
+      label: 'Audit Log',
+      icon: <ShieldCheck className="w-4 h-4" />,
+      roles: ['SUPER_ADMIN', 'ADMIN', 'FINANCE'],
+    },
   ];
 
   const currentRole = user?.role || 'SUPER_ADMIN';
-  const navItems = allNavItems.filter((item) =>
-    currentRole === 'SUPER_ADMIN' || item.roles.includes(currentRole),
+  const navItems = allNavItems.filter(
+    (item) => currentRole === 'SUPER_ADMIN' || item.roles.includes(currentRole),
   );
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
+      {/* Skip to Main Content Link (WCAG 2.4.1 Bypass Blocks) */}
+      <a
+        href="#admin-main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-sky-600 focus:text-white focus:rounded focus:outline-none focus:ring-2 focus:ring-white text-xs font-bold font-mono uppercase"
+      >
+        Lewati ke konten utama
+      </a>
+
       {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 shrink-0">
+      <aside
+        aria-label="Navigasi Samping Admin"
+        className="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-4 border-r border-slate-800 shrink-0"
+      >
         <div className="space-y-6">
           {/* Brand header */}
           <div className="flex items-center gap-3 px-2 py-3">
@@ -139,12 +210,14 @@ export const App = () => {
           </div>
 
           {/* Navigation Items */}
-          <nav className="space-y-1">
+          <nav aria-label="Navigasi Menu Admin" className="space-y-1">
             {navItems.map((item) => (
               <button
                 key={item.id}
+                type="button"
                 onClick={() => setActiveTab(item.id as any)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors text-left ${
+                aria-current={activeTab === item.id ? 'page' : undefined}
+                className={`w-full min-h-12 flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
                   activeTab === item.id
                     ? 'bg-sky-600 text-white'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -164,14 +237,17 @@ export const App = () => {
               {user.fullName ? user.fullName.charAt(0) : 'U'}
             </div>
             <div className="overflow-hidden">
-              <span className="text-xs font-bold text-white truncate block">{user.fullName || user.email}</span>
+              <span className="text-xs font-bold text-white truncate block">
+                {user.fullName || user.email}
+              </span>
               <span className="text-xs text-sky-400 font-mono block">{user.role}</span>
             </div>
           </div>
 
           <button
+            type="button"
             onClick={handleLogout}
-            className="w-full py-2 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-rose-400 hover:bg-slate-800 flex items-center gap-2 transition-colors"
+            className="w-full min-h-12 py-2 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-rose-400 hover:bg-slate-800 flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Keluar Akun</span>
@@ -180,7 +256,34 @@ export const App = () => {
       </aside>
 
       {/* Main Screen Content */}
-      <main className="flex-1 p-6 sm:p-10 overflow-y-auto">
+      <main
+        id="admin-main-content"
+        tabIndex={-1}
+        className="flex-1 p-6 sm:p-10 overflow-y-auto focus:outline-none"
+      >
+        {/* Operations Header with Breadcrumbs, Environment Banner & Live Telemetry (P22-WS01, WS03, WS06, WS12) */}
+        <header className="mb-6 pb-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 text-xs font-mono text-slate-500"
+          >
+            <span>JavaMifi CMS</span>
+            <span aria-hidden="true">/</span>
+            <span className="font-bold text-slate-900 uppercase">
+              {navItems.find((n) => n.id === activeTab)?.label || activeTab}
+            </span>
+          </nav>
+          <div className="flex items-center gap-3">
+            <span
+              role="status"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-50 border border-amber-300 text-amber-800 text-xs font-mono font-semibold"
+            >
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+              SANDBOX OPS ACTIVE
+            </span>
+          </div>
+        </header>
+
         {activeTab === 'dashboard' && <DashboardScreen />}
         {activeTab === 'dining' && <DiningReviewQueueScreen />}
         {activeTab === 'orders' && <OrdersScreen />}

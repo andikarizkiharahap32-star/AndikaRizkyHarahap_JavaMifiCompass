@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI/CD Pipeline — P24 Compliance
 
 on:
   push:
@@ -6,9 +6,15 @@ on:
   pull_request:
     branches: [main, master]
 
+permissions:
+  id-token: write # Mandatory for cloud OIDC authentication (P24: no static keys)
+  contents: read
+  security-events: write
+
 jobs:
-  audit-and-scan:
-    name: Security & Secret Scan
+  # 1. Secret & Security Audit
+  security-audit:
+    name: 1. Security Audit & Secret Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,8 +26,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.12.0
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Dependency Vulnerability Audit
+        run: pnpm audit --audit-level=high
+
+  # 2. Quality Checks (Lint, Typecheck, Unit, Integration, Build)
   quality-checks:
-    name: Lint, Typecheck, and Test
+    name: 2. Quality Checks & Verification
+    needs: [security-audit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,14 +65,110 @@ jobs:
       - name: Prisma Client Generation
         run: pnpm --filter @javamifi/api db:generate
 
-      - name: Run ESLint (including no-hardcoded-strings i18n rule)
+      - name: Run ESLint
         run: pnpm lint
 
       - name: TypeScript Typecheck
         run: pnpm typecheck
 
-      - name: Run Unit Tests (Planner, Pricing, State Machine, Signatures)
+      - name: Run Unit Tests
         run: pnpm test:unit
+
+      - name: Run Integration Tests
+        run: pnpm test:integration
 
       - name: Build Monorepo (Apps & Packages)
         run: pnpm build
+
+  # 3. SBOM Generation & Trivy Container / Config Scan
+  sbom-and-trivy:
+    name: 3. SBOM (CycloneDX) & Trivy Image Scan
+    needs: [quality-checks]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.12.0
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Generate CycloneDX SBOM
+        run: |
+          npx @cyclonedx/cyclonedx-npm --output-file cyclonedx-sbom.json
+        continue-on-error: false
+
+      - name: Upload SBOM Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: javamifi-cyclonedx-sbom
+          path: cyclonedx-sbom.json
+
+      - name: Build Docker Container for Inspection
+        run: |
+          docker build -f infra/docker/api.Dockerfile -t javamifi-api:${{ github.sha }} .
+
+      - name: Run Trivy Security Scan (Vulnerability & Config)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: javamifi-api:${{ github.sha }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+  # 4. Deploy to Staging with Cloud OIDC (No Static Keys)
+  deploy-staging:
+    name: 4. Deploy to Staging (OIDC) & Smoke Test
+    needs: [sbom-and-trivy]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      # OIDC Cloud Authentication — P24: Zero static cloud credentials in repo settings
+      - name: Authenticate to Cloud via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/javamifi-ci-cd-staging-role
+          aws-region: ap-southeast-1
+          audience: sts.amazonaws.com
+
+      - name: Deploy Staging Workloads
+        run: |
+          echo "Deploying to staging environment via OIDC session..."
+          kubectl apply -f infra/k8s/app.yaml --namespace=staging
+
+      - name: Run Staging Smoke Tests
+        run: |
+          echo "Executing automated smoke test suite against staging endpoint..."
+          curl --fail --retry 3 --retry-delay 5 https://staging-api.javamifi.com/health
+
+  # 5. Production Progressive Delivery (Canary 5% -> 50% -> 100% with Auto-Rollback)
+  deploy-production-canary:
+    name: 5. Production Progressive Canary & SLO Gate
+    needs: [deploy-staging]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production # Manual gate in GitHub Environment Settings
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Cloud via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/javamifi-ci-cd-prod-role
+          aws-region: ap-southeast-1
+          audience: sts.amazonaws.com
+
+      - name: Execute Progressive Canary Delivery
+        run: |
+          echo "Starting progressive canary delivery: 5% -> 50% -> 100% with auto-rollback on SLO breach..."
+          node -r ts-node/register infra/deploy/canary.ts --mode=progressive --drill

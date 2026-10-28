@@ -1,10 +1,10 @@
 # JavaMifi Compass — Automation with n8n
 
-Eight n8n workflows orchestrate the order, device, and communication lifecycle. The API remains the single source of truth: **n8n orchestrates and notifies, but never reads or writes the database directly**.
+Twelve production-grade n8n workflows orchestrate the order, device, dining intelligence, payment, and communication lifecycle. The API remains the single source of truth: **n8n orchestrates and notifies, but never reads or writes the database directly**.
 
 ---
 
-## 1. The Eight Automation Workflows
+## 1. The Twelve Automation Workflows
 
 | # | Workflow Name | Trigger | Action & Responsibilities | Written Back to API |
 |---|---|---|---|---|
@@ -16,6 +16,10 @@ Eight n8n workflows orchestrate the order, device, and communication lifecycle. 
 | **06** | **Content Publish** | `article.published` event | Triggers marketing campaign draft and prepares newsletter distribution. | Content distribution log |
 | **07** | **Support Intake & Triage** | `ticket.created` event | Evaluates inquiry text for urgent keywords (`darurat`, `no signal`, `airport`) and escalates priority to URGENT. | Ticket priority |
 | **08** | **Global Error Handler** | Any node failure | Captures workflow execution errors, notifies devops, and logs dead-letter events for CMS manual retry. | Dead-letter record |
+| **09** | **Dining Enrichment Fan-Out** | Cron: daily 02:00 UTC | Fans out candidate dining venues to Gemini 3.8 Flash for verification against licensed registry sources and signs callback with HMAC-SHA256. | Halal tier updates, quote verification |
+| **10** | **Dining Concierge Chat Assistant** | Webhook: WhatsApp/Telegram | Safe AI concierge providing strictly quote-grounded dining assistance and directions without computing deterministic tiers. | Concierge conversation log |
+| **11** | **Voice-to-Halal & Place Enrichment** | Audio/Webhook | Ingests voice queries (Whisper/Speech API), queries licensed OpenStreetMap and Google Places APIs (conforming to API licensing & attribution policies, no raw HTML scraping), and enriches venue metadata. | Voice inquiry resolution |
+| **12** | **Mock Payment Gateway Relay** | Webhook: Payment Simulator | Simulates asynchronous payment gateway notification webhooks (Midtrans/Stripe mock) with HMAC-SHA256 signature verification. | Payment status & settlement |
 
 ---
 

@@ -67,8 +67,8 @@
       "parameters": {
         "fromEmail": "reminders@javamifi.com",
         "toEmail": "={{ $json.contactEmail }}",
-        "subject": "=[JavaMifi] Complete your connectivity reservation for {{ $json.destinationName }}",
-        "text": "=Halo {{ $json.contactName }},\n\nPesanan koneksi Anda masih tersimpan di keranjang. Selesaikan pembayaran sebelum batas waktu 24 jam untuk menjamin ketersediaan kuota dan perangkat:\n\nhttp://localhost:3000/checkout?order={{ $json.orderNumber }}\n\n#AntiSusahSinyal\nJavaMifi",
+        "subject": "=[JavaMifi] Complete your connectivity reservation for {{ $json.destinationName }} (Order #{{ $json.orderNumber }})",
+        "text": "=Halo {{ $json.contactName }},\n\nPesanan koneksi Anda #{{ $json.orderNumber }} masih tersimpan di antrean JavaMifi.\n\nSelesaikan pembayaran sebelum batas waktu 24 jam untuk menjamin ketersediaan kuota dan modem:\n\n1. Selesaikan Pembayaran (MockGateway Simulator):\nhttp://localhost:3000/id/checkout/mock-payment?orderNumber={{ $json.orderNumber }}&amount={{ $json.totalIdr }}&customer={{ encodeURIComponent($json.contactName) }}\n\n2. Verifikasi Status Pembayaran (Payment Callback):\nhttp://localhost:3000/id/payment/callback?order_id={{ $json.orderNumber }}&status=SUCCESS\n\n3. Akses Tiket Digital (Trip Hub Boarding Pass):\nhttp://localhost:3000/id/trip-hub/{{ $json.orderNumber }}\n\n#AntiSusahSinyal\nTim JavaMifi",
         "options": {}
       },
       "id": "node-send-reminder",
