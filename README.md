@@ -214,14 +214,27 @@ NVIDIA_API_KEY=your_nvidia_api_key_here
 
 ## Screenshots
 
-| View | Screenshot |
-|---|---|
-| **Public Home & Wayfinding** | *(Add screenshot: `docs/screenshots/home.png`)* |
-| **Trip Planner Wizard** | *(Add screenshot: `docs/screenshots/planner.png`)* |
-| **Compass Rasa Halal Dining** | *(Add screenshot: `docs/screenshots/halal-dining.png`)* |
-| **Trip Hub Boarding Pass** | *(Add screenshot: `docs/screenshots/trip-hub.png`)* |
-| **Admin Operations Dashboard** | *(Add screenshot: `docs/screenshots/admin-dashboard.png`)* |
-| **n8n Voice Automation Workflow** | *(Add screenshot: `docs/screenshots/n8n-workflow.png`)* |
+### Destination Hub & Network Readiness
+Regional hubs with per-device daily pricing and VPN-inclusion flags (`/id/destinations`).
+
+![Destination Hub](docs/screenshots/destinations-hub.png)
+
+### Home — How It Works (Motion Demo)
+Three-step journey flow with the 25-second motion demo and live transit telemetry bar.
+
+![Home how it works](docs/screenshots/home-how-it-works.png)
+
+### Compass Rasa — Halal Restaurant Detail
+Certified venue detail with certifier body, opening hours, coordinates, taxi/phrase cards, and the halal evidence passport stamp.
+
+![Halal restaurant detail](docs/screenshots/halal-restaurant-detail.png)
+
+### n8n — Voice Assistant Query Processor
+Workflow 14: rate limiting → NVIDIA NIM MiniMax intent extraction → intent switch → certified dataset / OSM fallback / account data → text-to-speech → final payload.
+
+![n8n voice query workflow](docs/screenshots/n8n-voice-query-workflow.png)
+
+<!-- Still to add: Trip Planner Wizard, Trip Hub Boarding Pass, Admin Operations Dashboard -->
 
 ---
 
