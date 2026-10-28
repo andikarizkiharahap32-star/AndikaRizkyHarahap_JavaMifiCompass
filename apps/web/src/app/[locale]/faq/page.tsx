@@ -4,11 +4,8 @@ import Link from 'next/link';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { HelpCircle, MessageSquare } from 'lucide-react';
 import { apiClient } from '../../../lib/api';
-import {
-  FaqInteractiveAccordion,
-  FALLBACK_FAQS,
-  type FaqItem,
-} from '../../../components/FaqInteractiveAccordion';
+import { FaqInteractiveAccordion } from '../../../components/FaqInteractiveAccordion';
+import { FALLBACK_FAQS, type FaqItem } from '../../../lib/faq-data';
 
 export async function generateMetadata({
   params: { locale },
