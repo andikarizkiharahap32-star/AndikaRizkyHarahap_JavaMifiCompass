@@ -36,7 +36,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
 
       - name: Dependency Vulnerability Audit
         run: pnpm audit --audit-level=high || true
